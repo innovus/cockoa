@@ -28,8 +28,8 @@ function getAllAreas(req, res, next) {
 //
 
 module.exports = {
-  getAllAreas: getAllAreas/* ,
- getSingleArea: getSingleArea,
+  getAllAreas: getAllAreas ,
+ /*getSingleArea: getSingleArea,
   createArea: createArea,
   updateArea: updateArea,
   removeArea: removeArea*/
