@@ -5,10 +5,10 @@ var db = require('../queries');
 
 
 router.get('/areas', db.getAllAreas);
-/*router.get('/api/areas/:id', db.getSingleArea);
-router.post('/api/areas', db.createArea);
-router.put('/api/areas/:id', db.updateArea);
-router.delete('/api/areas/:id', db.removeArea);
-*/
+router.get('/areas/:id', db.getSingleArea);
+router.post('/areas', db.createArea);
+router.put('/areas/:id', db.updateArea);
+router.delete('/areas/:id', db.removeArea);
+
 
 module.exports = router;
