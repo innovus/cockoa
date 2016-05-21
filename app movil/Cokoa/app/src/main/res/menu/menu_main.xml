@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_perfil"
+        android:title="@string/perfil"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_calificacion"
+        android:title="@string/calificacion"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_asistencia"
+        android:title="@string/asistencia"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_eventos"
+        android:title="@string/eventos"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_notificacion"
+        android:title="@string/notificacion"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_horario_atencion"
+        android:title="@string/horario_atencion"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+</menu>
