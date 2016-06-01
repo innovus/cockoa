@@ -1,0 +1,1473 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.1
+-- Dumped by pg_dump version 9.5.1
+
+-- Started on 2016-06-01 17:27:10 COT
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 1 (class 3079 OID 12623)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2618 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 193 (class 1259 OID 18085)
+-- Name: anio_lectivo; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE anio_lectivo (
+    id_anio_lectivo integer NOT NULL,
+    id_estado_anio_lectivo integer NOT NULL,
+    descripcion_anio_lectivo character varying(45),
+    anio_actual integer
+);
+
+
+ALTER TABLE anio_lectivo OWNER TO personal;
+
+--
+-- TOC entry 190 (class 1259 OID 18070)
+-- Name: area; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE area (
+    id_area integer NOT NULL,
+    nombre_area character varying(30)
+);
+
+
+ALTER TABLE area OWNER TO personal;
+
+--
+-- TOC entry 206 (class 1259 OID 18298)
+-- Name: carga_docente; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE carga_docente (
+    id_carga_docente integer NOT NULL,
+    id_usuario integer NOT NULL,
+    id_materia character varying(5) NOT NULL,
+    id_periodo integer NOT NULL,
+    id_anio_lectivo integer NOT NULL,
+    id_curso integer NOT NULL,
+    id_sede integer NOT NULL,
+    id_docente character varying(15) NOT NULL,
+    fecha_registro_carga_docente timestamp without time zone,
+    fecha_efecto_carga_docente timestamp without time zone,
+    vigente_carga_docente character(1)
+);
+
+
+ALTER TABLE carga_docente OWNER TO personal;
+
+--
+-- TOC entry 199 (class 1259 OID 18170)
+-- Name: curso; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE curso (
+    id_curso integer NOT NULL,
+    id_sede integer NOT NULL,
+    id_anio_lectivo integer NOT NULL,
+    id_jornada integer NOT NULL,
+    grado integer,
+    grupo character varying(2)
+);
+
+
+ALTER TABLE curso OWNER TO personal;
+
+--
+-- TOC entry 200 (class 1259 OID 18190)
+-- Name: director_grupo; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE director_grupo (
+    id_curso integer NOT NULL,
+    id_anio_lectivo integer NOT NULL,
+    id_docente character varying(15) NOT NULL
+);
+
+
+ALTER TABLE director_grupo OWNER TO personal;
+
+--
+-- TOC entry 197 (class 1259 OID 18140)
+-- Name: docente; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE docente (
+    id_docente character varying(15) NOT NULL,
+    id_estado_docente integer NOT NULL,
+    identificacion character varying(15) NOT NULL,
+    titulo character varying(45),
+    fecha_registro_docente timestamp without time zone,
+    fecha_efecto_docente timestamp without time zone,
+    vigente character(1)
+);
+
+
+ALTER TABLE docente OWNER TO personal;
+
+--
+-- TOC entry 191 (class 1259 OID 18075)
+-- Name: estado_anio_lectivo; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE estado_anio_lectivo (
+    id_estado_anio_lectivo integer NOT NULL,
+    descripcion_estado_anio_lectivo character varying(45)
+);
+
+
+ALTER TABLE estado_anio_lectivo OWNER TO personal;
+
+--
+-- TOC entry 188 (class 1259 OID 18060)
+-- Name: estado_docente; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE estado_docente (
+    id_estado_docente integer NOT NULL,
+    descripcion_estado_docente character varying(45)
+);
+
+
+ALTER TABLE estado_docente OWNER TO personal;
+
+--
+-- TOC entry 183 (class 1259 OID 18032)
+-- Name: estado_estudiante; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE estado_estudiante (
+    id_estado_estudiante integer NOT NULL,
+    descripcion_estado_estudiante character varying(45)
+);
+
+
+ALTER TABLE estado_estudiante OWNER TO personal;
+
+--
+-- TOC entry 182 (class 1259 OID 18027)
+-- Name: estado_matricula; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE estado_matricula (
+    id_estado_matricula integer NOT NULL,
+    descripcion_estado_matricula character varying(45)
+);
+
+
+ALTER TABLE estado_matricula OWNER TO personal;
+
+--
+-- TOC entry 196 (class 1259 OID 18125)
+-- Name: estudiante; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE estudiante (
+    id_estudiante character varying(15) NOT NULL,
+    estado_estudiante_id_estado_estudiante integer NOT NULL,
+    identificacion character varying(15) NOT NULL,
+    fecha_registro_estudiante timestamp without time zone,
+    fecha_efecto_estudiante timestamp without time zone,
+    vigente_estudiante character(1)
+);
+
+
+ALTER TABLE estudiante OWNER TO personal;
+
+--
+-- TOC entry 208 (class 1259 OID 18356)
+-- Name: estudiante_proyecto; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE estudiante_proyecto (
+    id_estudiante_proyecto integer NOT NULL,
+    id_usuario integer NOT NULL,
+    id_carga_docente integer NOT NULL,
+    id_estudiante character varying(15) NOT NULL,
+    fecha_registro_estudiante_proyecto timestamp without time zone
+);
+
+
+ALTER TABLE estudiante_proyecto OWNER TO personal;
+
+--
+-- TOC entry 210 (class 1259 OID 18717)
+-- Name: inasistencia_id_inasistencia_seq; Type: SEQUENCE; Schema: public; Owner: personal
+--
+
+CREATE SEQUENCE inasistencia_id_inasistencia_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE inasistencia_id_inasistencia_seq OWNER TO personal;
+
+--
+-- TOC entry 203 (class 1259 OID 18235)
+-- Name: inasistencia; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE inasistencia (
+    id_inasistencia integer DEFAULT nextval('inasistencia_id_inasistencia_seq'::regclass) NOT NULL,
+    id_periodo integer NOT NULL,
+    id_estudiante character varying(15) NOT NULL,
+    estado_inasistencia integer,
+    fecha_inasistencia date,
+    id_carga integer
+);
+
+
+ALTER TABLE inasistencia OWNER TO personal;
+
+--
+-- TOC entry 187 (class 1259 OID 18055)
+-- Name: jornada; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE jornada (
+    id_jornada integer NOT NULL,
+    descripcion_jornada character varying(45)
+);
+
+
+ALTER TABLE jornada OWNER TO personal;
+
+--
+-- TOC entry 207 (class 1259 OID 18338)
+-- Name: logro; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE logro (
+    id_logro integer NOT NULL,
+    id_carga_docente integer NOT NULL,
+    id_periodo integer NOT NULL,
+    nombre_logro character varying(45),
+    descripcion_logro character varying(45),
+    porcentaje_logro numeric
+);
+
+
+ALTER TABLE logro OWNER TO personal;
+
+--
+-- TOC entry 198 (class 1259 OID 18155)
+-- Name: materia; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE materia (
+    id_materia character varying(5) NOT NULL,
+    id_tipo_materia integer NOT NULL,
+    id_area integer NOT NULL,
+    nombre_materia character varying(40)
+);
+
+
+ALTER TABLE materia OWNER TO personal;
+
+--
+-- TOC entry 204 (class 1259 OID 18250)
+-- Name: materia_porcentaje; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE materia_porcentaje (
+    id_materia_porcentaje integer NOT NULL,
+    id_curso integer NOT NULL,
+    id_materia character varying(5) NOT NULL,
+    materia_porcentaje numeric
+);
+
+
+ALTER TABLE materia_porcentaje OWNER TO personal;
+
+--
+-- TOC entry 205 (class 1259 OID 18268)
+-- Name: matricula; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE matricula (
+    id_matricula integer NOT NULL,
+    id_estado_matricula integer NOT NULL,
+    id_usuario integer NOT NULL,
+    id_estudiante character varying(15) NOT NULL,
+    id_anio_lectivo integer NOT NULL,
+    id_curso integer NOT NULL,
+    fecha_ingreso_matricula timestamp without time zone,
+    vigente_matricula character(1)
+);
+
+
+ALTER TABLE matricula OWNER TO personal;
+
+--
+-- TOC entry 185 (class 1259 OID 18042)
+-- Name: municipio; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE municipio (
+    id_municipio integer NOT NULL,
+    descripcion_municipio character varying
+);
+
+
+ALTER TABLE municipio OWNER TO personal;
+
+--
+-- TOC entry 209 (class 1259 OID 18376)
+-- Name: nota_logro; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE nota_logro (
+    id_nota_logro integer NOT NULL,
+    id_logro integer NOT NULL,
+    id_estudiante character varying(15) NOT NULL,
+    nota_logro numeric
+);
+
+
+ALTER TABLE nota_logro OWNER TO personal;
+
+--
+-- TOC entry 201 (class 1259 OID 18210)
+-- Name: periodo; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE periodo (
+    id_periodo integer NOT NULL,
+    id_anio_lectivo integer NOT NULL,
+    numero_periodo integer,
+    fecha_inicio_perido date,
+    fecha_fin_periodo date
+);
+
+
+ALTER TABLE periodo OWNER TO personal;
+
+--
+-- TOC entry 186 (class 1259 OID 18050)
+-- Name: permiso; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE permiso (
+    id_permiso integer NOT NULL,
+    nombre_permiso character varying(45),
+    descripcion_permiso character varying(45),
+    consultar boolean,
+    actualizar boolean,
+    insertar boolean,
+    eliminar boolean
+);
+
+
+ALTER TABLE permiso OWNER TO personal;
+
+--
+-- TOC entry 194 (class 1259 OID 18095)
+-- Name: persona; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE persona (
+    identificacion character varying(15) NOT NULL,
+    lugar_residencia integer NOT NULL,
+    id_tipo_identificacion integer NOT NULL,
+    lugar_nacimiento integer,
+    fecha_nacimiento integer,
+    nombre1 character varying(20),
+    nombre2 character varying(20),
+    apellido1 character varying(20),
+    apellido2 character varying(20),
+    sexo character(1),
+    direccion character varying(50),
+    telefono character varying(10),
+    celular character varying(10),
+    email character varying(50)
+);
+
+
+ALTER TABLE persona OWNER TO personal;
+
+--
+-- TOC entry 184 (class 1259 OID 18037)
+-- Name: sede; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE sede (
+    id_sede integer NOT NULL,
+    nombre_sede character varying(45),
+    descripcion_sede character varying(45),
+    direccion_sede character varying(45),
+    telefono_sede character varying(10)
+);
+
+
+ALTER TABLE sede OWNER TO personal;
+
+--
+-- TOC entry 181 (class 1259 OID 18022)
+-- Name: tipo_identificacion; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE tipo_identificacion (
+    id_tipo_identificacion integer NOT NULL,
+    descripcion_tipo_identificacion character varying(45)
+);
+
+
+ALTER TABLE tipo_identificacion OWNER TO personal;
+
+--
+-- TOC entry 192 (class 1259 OID 18080)
+-- Name: tipo_materia; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE tipo_materia (
+    id_tipo_materia integer NOT NULL,
+    descripcion_tipo_materia character varying(45)
+);
+
+
+ALTER TABLE tipo_materia OWNER TO personal;
+
+--
+-- TOC entry 189 (class 1259 OID 18065)
+-- Name: tipo_usuario; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE tipo_usuario (
+    id_tipo_usuario integer NOT NULL,
+    nombre_tipo_usuario character varying(45),
+    descripcion_tipo_usuario character varying(45)
+);
+
+
+ALTER TABLE tipo_usuario OWNER TO personal;
+
+--
+-- TOC entry 202 (class 1259 OID 18220)
+-- Name: usuario; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE usuario (
+    id_usuario integer NOT NULL,
+    identificacion character varying(15) NOT NULL,
+    id_tipo_usuario integer NOT NULL,
+    estado_usuario integer NOT NULL,
+    password_usuario character varying(255)
+);
+
+
+ALTER TABLE usuario OWNER TO personal;
+
+--
+-- TOC entry 195 (class 1259 OID 18110)
+-- Name: usuario_permiso; Type: TABLE; Schema: public; Owner: personal
+--
+
+CREATE TABLE usuario_permiso (
+    id_tipo_usuario integer NOT NULL,
+    id_permiso integer NOT NULL
+);
+
+
+ALTER TABLE usuario_permiso OWNER TO personal;
+
+--
+-- TOC entry 2593 (class 0 OID 18085)
+-- Dependencies: 193
+-- Data for Name: anio_lectivo; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO anio_lectivo VALUES (1, 1, '2016', 1);
+
+
+--
+-- TOC entry 2590 (class 0 OID 18070)
+-- Dependencies: 190
+-- Data for Name: area; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO area VALUES (1, 'Ciencias Naturales');
+INSERT INTO area VALUES (2, 'Matematicas');
+INSERT INTO area VALUES (3, 'Humanidades');
+
+
+--
+-- TOC entry 2606 (class 0 OID 18298)
+-- Dependencies: 206
+-- Data for Name: carga_docente; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO carga_docente VALUES (1, 1, '1', 1, 1, 1, 1, '1', NULL, NULL, '1');
+
+
+--
+-- TOC entry 2599 (class 0 OID 18170)
+-- Dependencies: 199
+-- Data for Name: curso; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO curso VALUES (1, 1, 1, 1, 6, '1');
+INSERT INTO curso VALUES (2, 1, 1, 1, 6, '2');
+INSERT INTO curso VALUES (3, 1, 1, 1, 7, '1');
+
+
+--
+-- TOC entry 2600 (class 0 OID 18190)
+-- Dependencies: 200
+-- Data for Name: director_grupo; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+
+
+--
+-- TOC entry 2597 (class 0 OID 18140)
+-- Dependencies: 197
+-- Data for Name: docente; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO docente VALUES ('1', 1, '27103411', 'licenciado en informatica', NULL, NULL, '1');
+
+
+--
+-- TOC entry 2591 (class 0 OID 18075)
+-- Dependencies: 191
+-- Data for Name: estado_anio_lectivo; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO estado_anio_lectivo VALUES (1, 'activo');
+INSERT INTO estado_anio_lectivo VALUES (2, 'suspendido');
+
+
+--
+-- TOC entry 2588 (class 0 OID 18060)
+-- Dependencies: 188
+-- Data for Name: estado_docente; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO estado_docente VALUES (1, 'activo');
+
+
+--
+-- TOC entry 2583 (class 0 OID 18032)
+-- Dependencies: 183
+-- Data for Name: estado_estudiante; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO estado_estudiante VALUES (1, 'activo');
+
+
+--
+-- TOC entry 2582 (class 0 OID 18027)
+-- Dependencies: 182
+-- Data for Name: estado_matricula; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO estado_matricula VALUES (1, 'activo');
+
+
+--
+-- TOC entry 2596 (class 0 OID 18125)
+-- Dependencies: 196
+-- Data for Name: estudiante; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO estudiante VALUES ('1', 1, '1085292951', NULL, NULL, '1');
+INSERT INTO estudiante VALUES ('2', 1, '1085270823', NULL, NULL, '1');
+
+
+--
+-- TOC entry 2608 (class 0 OID 18356)
+-- Dependencies: 208
+-- Data for Name: estudiante_proyecto; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+
+
+--
+-- TOC entry 2603 (class 0 OID 18235)
+-- Dependencies: 203
+-- Data for Name: inasistencia; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO inasistencia VALUES (1, 1, '1', 1, '2015-07-07', 1);
+
+
+--
+-- TOC entry 2619 (class 0 OID 0)
+-- Dependencies: 210
+-- Name: inasistencia_id_inasistencia_seq; Type: SEQUENCE SET; Schema: public; Owner: personal
+--
+
+SELECT pg_catalog.setval('inasistencia_id_inasistencia_seq', 1, false);
+
+
+--
+-- TOC entry 2587 (class 0 OID 18055)
+-- Dependencies: 187
+-- Data for Name: jornada; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO jornada VALUES (1, 'mañana');
+INSERT INTO jornada VALUES (2, 'tarde');
+INSERT INTO jornada VALUES (3, 'noche');
+
+
+--
+-- TOC entry 2607 (class 0 OID 18338)
+-- Dependencies: 207
+-- Data for Name: logro; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+
+
+--
+-- TOC entry 2598 (class 0 OID 18155)
+-- Dependencies: 198
+-- Data for Name: materia; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO materia VALUES ('1', 1, 1, 'Fisica');
+INSERT INTO materia VALUES ('2', 1, 1, 'Quimica');
+INSERT INTO materia VALUES ('3', 1, 1, 'Biologia');
+INSERT INTO materia VALUES ('4', 1, 2, 'Matematicas');
+INSERT INTO materia VALUES ('5', 1, 3, 'Humanidades');
+
+
+--
+-- TOC entry 2604 (class 0 OID 18250)
+-- Dependencies: 204
+-- Data for Name: materia_porcentaje; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+
+
+--
+-- TOC entry 2605 (class 0 OID 18268)
+-- Dependencies: 205
+-- Data for Name: matricula; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO matricula VALUES (1, 1, 2, '1', 1, 1, NULL, '1');
+INSERT INTO matricula VALUES (2, 1, 2, '2', 1, 1, NULL, '1');
+
+
+--
+-- TOC entry 2585 (class 0 OID 18042)
+-- Dependencies: 185
+-- Data for Name: municipio; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO municipio VALUES (1, 'pasto');
+
+
+--
+-- TOC entry 2609 (class 0 OID 18376)
+-- Dependencies: 209
+-- Data for Name: nota_logro; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+
+
+--
+-- TOC entry 2601 (class 0 OID 18210)
+-- Dependencies: 201
+-- Data for Name: periodo; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO periodo VALUES (1, 1, 1, NULL, NULL);
+
+
+--
+-- TOC entry 2586 (class 0 OID 18050)
+-- Dependencies: 186
+-- Data for Name: permiso; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+
+
+--
+-- TOC entry 2594 (class 0 OID 18095)
+-- Dependencies: 194
+-- Data for Name: persona; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO persona VALUES ('1085292951', 1, 1, 1, 1, 'jorge', 'luis', 'viveros', 'arcos', 'm', 'calle 12a #41a - 74', '3113805576', '3113805576', 'jorge.innovus@gmail.com');
+INSERT INTO persona VALUES ('27103411', 1, 1, 1, 1, 'janeth', NULL, 'arcos', 'silva', 'f', 'calle 12a #41a -74', '3117201267', NULL, NULL);
+INSERT INTO persona VALUES ('1085270823', 1, 1, 1, 1, 'juan', 'carlos ', 'pantoja', NULL, 'm', 'calle 12a 234 -34', '3111234567', NULL, 'chojuaing@hotmail.com');
+
+
+--
+-- TOC entry 2584 (class 0 OID 18037)
+-- Dependencies: 184
+-- Data for Name: sede; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO sede VALUES (1, 'Central', NULL, NULL, NULL);
+
+
+--
+-- TOC entry 2581 (class 0 OID 18022)
+-- Dependencies: 181
+-- Data for Name: tipo_identificacion; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO tipo_identificacion VALUES (1, 'cedula de ciudadania');
+
+
+--
+-- TOC entry 2592 (class 0 OID 18080)
+-- Dependencies: 192
+-- Data for Name: tipo_materia; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO tipo_materia VALUES (1, 'Normal');
+INSERT INTO tipo_materia VALUES (2, 'Proyecto');
+
+
+--
+-- TOC entry 2589 (class 0 OID 18065)
+-- Dependencies: 189
+-- Data for Name: tipo_usuario; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO tipo_usuario VALUES (1, 'Estudiante', 'Estudiante');
+INSERT INTO tipo_usuario VALUES (2, 'Profesor', 'Profesor');
+INSERT INTO tipo_usuario VALUES (3, 'Admin', 'Admin');
+
+
+--
+-- TOC entry 2602 (class 0 OID 18220)
+-- Dependencies: 202
+-- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+INSERT INTO usuario VALUES (1, '1085292951', 1, 1, '123456');
+INSERT INTO usuario VALUES (2, '27103411', 2, 1, '123456');
+INSERT INTO usuario VALUES (3, '1085270823', 1, 1, '123456');
+
+
+--
+-- TOC entry 2595 (class 0 OID 18110)
+-- Dependencies: 195
+-- Data for Name: usuario_permiso; Type: TABLE DATA; Schema: public; Owner: personal
+--
+
+
+
+--
+-- TOC entry 2389 (class 2606 OID 18089)
+-- Name: anio_lectivo_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY anio_lectivo
+    ADD CONSTRAINT anio_lectivo_pkey PRIMARY KEY (id_anio_lectivo);
+
+
+--
+-- TOC entry 2383 (class 2606 OID 18074)
+-- Name: area_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY area
+    ADD CONSTRAINT area_pkey PRIMARY KEY (id_area);
+
+
+--
+-- TOC entry 2416 (class 2606 OID 18302)
+-- Name: carga_docente_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY carga_docente
+    ADD CONSTRAINT carga_docente_pkey PRIMARY KEY (id_carga_docente);
+
+
+--
+-- TOC entry 2401 (class 2606 OID 18174)
+-- Name: curso_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY curso
+    ADD CONSTRAINT curso_pkey PRIMARY KEY (id_curso);
+
+
+--
+-- TOC entry 2403 (class 2606 OID 18194)
+-- Name: director_grupo_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY director_grupo
+    ADD CONSTRAINT director_grupo_pkey PRIMARY KEY (id_curso);
+
+
+--
+-- TOC entry 2397 (class 2606 OID 18144)
+-- Name: docente_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY docente
+    ADD CONSTRAINT docente_pkey PRIMARY KEY (id_docente);
+
+
+--
+-- TOC entry 2385 (class 2606 OID 18079)
+-- Name: estado_anio_lectivo_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY estado_anio_lectivo
+    ADD CONSTRAINT estado_anio_lectivo_pkey PRIMARY KEY (id_estado_anio_lectivo);
+
+
+--
+-- TOC entry 2379 (class 2606 OID 18064)
+-- Name: estado_docente_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY estado_docente
+    ADD CONSTRAINT estado_docente_pkey PRIMARY KEY (id_estado_docente);
+
+
+--
+-- TOC entry 2369 (class 2606 OID 18036)
+-- Name: estado_estudiante_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY estado_estudiante
+    ADD CONSTRAINT estado_estudiante_pkey PRIMARY KEY (id_estado_estudiante);
+
+
+--
+-- TOC entry 2367 (class 2606 OID 18031)
+-- Name: estado_matricula_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY estado_matricula
+    ADD CONSTRAINT estado_matricula_pkey PRIMARY KEY (id_estado_matricula);
+
+
+--
+-- TOC entry 2395 (class 2606 OID 18129)
+-- Name: estudiante_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY estudiante
+    ADD CONSTRAINT estudiante_pkey PRIMARY KEY (id_estudiante);
+
+
+--
+-- TOC entry 2420 (class 2606 OID 18360)
+-- Name: estudiante_proyecto_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY estudiante_proyecto
+    ADD CONSTRAINT estudiante_proyecto_pkey PRIMARY KEY (id_estudiante_proyecto);
+
+
+--
+-- TOC entry 2410 (class 2606 OID 18239)
+-- Name: inasistencia_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY inasistencia
+    ADD CONSTRAINT inasistencia_pkey PRIMARY KEY (id_inasistencia);
+
+
+--
+-- TOC entry 2377 (class 2606 OID 18059)
+-- Name: jornada_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY jornada
+    ADD CONSTRAINT jornada_pkey PRIMARY KEY (id_jornada);
+
+
+--
+-- TOC entry 2418 (class 2606 OID 18345)
+-- Name: logro_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY logro
+    ADD CONSTRAINT logro_pkey PRIMARY KEY (id_logro);
+
+
+--
+-- TOC entry 2399 (class 2606 OID 18159)
+-- Name: materia_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY materia
+    ADD CONSTRAINT materia_pkey PRIMARY KEY (id_materia);
+
+
+--
+-- TOC entry 2412 (class 2606 OID 18257)
+-- Name: materia_porcentaje_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY materia_porcentaje
+    ADD CONSTRAINT materia_porcentaje_pkey PRIMARY KEY (id_materia_porcentaje);
+
+
+--
+-- TOC entry 2414 (class 2606 OID 18272)
+-- Name: matricula_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY matricula
+    ADD CONSTRAINT matricula_pkey PRIMARY KEY (id_matricula);
+
+
+--
+-- TOC entry 2373 (class 2606 OID 18049)
+-- Name: municipio_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY municipio
+    ADD CONSTRAINT municipio_pkey PRIMARY KEY (id_municipio);
+
+
+--
+-- TOC entry 2422 (class 2606 OID 18383)
+-- Name: nota_logro_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY nota_logro
+    ADD CONSTRAINT nota_logro_pkey PRIMARY KEY (id_nota_logro);
+
+
+--
+-- TOC entry 2405 (class 2606 OID 18214)
+-- Name: periodo_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY periodo
+    ADD CONSTRAINT periodo_pkey PRIMARY KEY (id_periodo);
+
+
+--
+-- TOC entry 2375 (class 2606 OID 18054)
+-- Name: permiso_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY permiso
+    ADD CONSTRAINT permiso_pkey PRIMARY KEY (id_permiso);
+
+
+--
+-- TOC entry 2391 (class 2606 OID 18099)
+-- Name: persona_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY persona
+    ADD CONSTRAINT persona_pkey PRIMARY KEY (identificacion);
+
+
+--
+-- TOC entry 2371 (class 2606 OID 18041)
+-- Name: sede_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY sede
+    ADD CONSTRAINT sede_pkey PRIMARY KEY (id_sede);
+
+
+--
+-- TOC entry 2365 (class 2606 OID 18026)
+-- Name: tipo_identificacion_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY tipo_identificacion
+    ADD CONSTRAINT tipo_identificacion_pkey PRIMARY KEY (id_tipo_identificacion);
+
+
+--
+-- TOC entry 2387 (class 2606 OID 18084)
+-- Name: tipo_materia_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY tipo_materia
+    ADD CONSTRAINT tipo_materia_pkey PRIMARY KEY (id_tipo_materia);
+
+
+--
+-- TOC entry 2381 (class 2606 OID 18069)
+-- Name: tipo_usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY tipo_usuario
+    ADD CONSTRAINT tipo_usuario_pkey PRIMARY KEY (id_tipo_usuario);
+
+
+--
+-- TOC entry 2393 (class 2606 OID 18114)
+-- Name: usuario_permiso_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY usuario_permiso
+    ADD CONSTRAINT usuario_permiso_pkey PRIMARY KEY (id_tipo_usuario, id_permiso);
+
+
+--
+-- TOC entry 2407 (class 2606 OID 18224)
+-- Name: usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY usuario
+    ADD CONSTRAINT usuario_pkey PRIMARY KEY (id_usuario);
+
+
+--
+-- TOC entry 2408 (class 1259 OID 18708)
+-- Name: fki_inasistencia_id_carga; Type: INDEX; Schema: public; Owner: personal
+--
+
+CREATE INDEX fki_inasistencia_id_carga ON inasistencia USING btree (id_carga);
+
+
+--
+-- TOC entry 2423 (class 2606 OID 18090)
+-- Name: anio_lectivo_id_estado_anio_lectivo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY anio_lectivo
+    ADD CONSTRAINT anio_lectivo_id_estado_anio_lectivo_fkey FOREIGN KEY (id_estado_anio_lectivo) REFERENCES estado_anio_lectivo(id_estado_anio_lectivo);
+
+
+--
+-- TOC entry 2456 (class 2606 OID 18318)
+-- Name: carga_docente_id_anio_lectivo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY carga_docente
+    ADD CONSTRAINT carga_docente_id_anio_lectivo_fkey FOREIGN KEY (id_anio_lectivo) REFERENCES anio_lectivo(id_anio_lectivo);
+
+
+--
+-- TOC entry 2455 (class 2606 OID 18313)
+-- Name: carga_docente_id_curso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY carga_docente
+    ADD CONSTRAINT carga_docente_id_curso_fkey FOREIGN KEY (id_curso) REFERENCES curso(id_curso);
+
+
+--
+-- TOC entry 2453 (class 2606 OID 18303)
+-- Name: carga_docente_id_docente_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY carga_docente
+    ADD CONSTRAINT carga_docente_id_docente_fkey FOREIGN KEY (id_docente) REFERENCES docente(id_docente);
+
+
+--
+-- TOC entry 2458 (class 2606 OID 18328)
+-- Name: carga_docente_id_materia_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY carga_docente
+    ADD CONSTRAINT carga_docente_id_materia_fkey FOREIGN KEY (id_materia) REFERENCES materia(id_materia);
+
+
+--
+-- TOC entry 2457 (class 2606 OID 18323)
+-- Name: carga_docente_id_periodo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY carga_docente
+    ADD CONSTRAINT carga_docente_id_periodo_fkey FOREIGN KEY (id_periodo) REFERENCES periodo(id_periodo);
+
+
+--
+-- TOC entry 2454 (class 2606 OID 18308)
+-- Name: carga_docente_id_sede_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY carga_docente
+    ADD CONSTRAINT carga_docente_id_sede_fkey FOREIGN KEY (id_sede) REFERENCES sede(id_sede);
+
+
+--
+-- TOC entry 2459 (class 2606 OID 18333)
+-- Name: carga_docente_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY carga_docente
+    ADD CONSTRAINT carga_docente_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario);
+
+
+--
+-- TOC entry 2435 (class 2606 OID 18180)
+-- Name: curso_id_anio_lectivo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY curso
+    ADD CONSTRAINT curso_id_anio_lectivo_fkey FOREIGN KEY (id_anio_lectivo) REFERENCES anio_lectivo(id_anio_lectivo);
+
+
+--
+-- TOC entry 2434 (class 2606 OID 18175)
+-- Name: curso_id_jornada_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY curso
+    ADD CONSTRAINT curso_id_jornada_fkey FOREIGN KEY (id_jornada) REFERENCES jornada(id_jornada);
+
+
+--
+-- TOC entry 2436 (class 2606 OID 18185)
+-- Name: curso_id_sede_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY curso
+    ADD CONSTRAINT curso_id_sede_fkey FOREIGN KEY (id_sede) REFERENCES sede(id_sede);
+
+
+--
+-- TOC entry 2439 (class 2606 OID 18205)
+-- Name: director_grupo_id_anio_lectivo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY director_grupo
+    ADD CONSTRAINT director_grupo_id_anio_lectivo_fkey FOREIGN KEY (id_anio_lectivo) REFERENCES anio_lectivo(id_anio_lectivo);
+
+
+--
+-- TOC entry 2438 (class 2606 OID 18200)
+-- Name: director_grupo_id_curso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY director_grupo
+    ADD CONSTRAINT director_grupo_id_curso_fkey FOREIGN KEY (id_curso) REFERENCES curso(id_curso);
+
+
+--
+-- TOC entry 2437 (class 2606 OID 18195)
+-- Name: director_grupo_id_docente_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY director_grupo
+    ADD CONSTRAINT director_grupo_id_docente_fkey FOREIGN KEY (id_docente) REFERENCES docente(id_docente);
+
+
+--
+-- TOC entry 2431 (class 2606 OID 18150)
+-- Name: docente_id_estado_docente_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY docente
+    ADD CONSTRAINT docente_id_estado_docente_fkey FOREIGN KEY (id_estado_docente) REFERENCES estado_docente(id_estado_docente);
+
+
+--
+-- TOC entry 2430 (class 2606 OID 18145)
+-- Name: docente_identificacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY docente
+    ADD CONSTRAINT docente_identificacion_fkey FOREIGN KEY (identificacion) REFERENCES persona(identificacion);
+
+
+--
+-- TOC entry 2429 (class 2606 OID 18135)
+-- Name: estudiante_estado_estudiante_id_estado_estudiante_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY estudiante
+    ADD CONSTRAINT estudiante_estado_estudiante_id_estado_estudiante_fkey FOREIGN KEY (estado_estudiante_id_estado_estudiante) REFERENCES estado_estudiante(id_estado_estudiante);
+
+
+--
+-- TOC entry 2428 (class 2606 OID 18130)
+-- Name: estudiante_identificacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY estudiante
+    ADD CONSTRAINT estudiante_identificacion_fkey FOREIGN KEY (identificacion) REFERENCES persona(identificacion);
+
+
+--
+-- TOC entry 2463 (class 2606 OID 18366)
+-- Name: estudiante_proyecto_id_carga_docente_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY estudiante_proyecto
+    ADD CONSTRAINT estudiante_proyecto_id_carga_docente_fkey FOREIGN KEY (id_carga_docente) REFERENCES carga_docente(id_carga_docente);
+
+
+--
+-- TOC entry 2462 (class 2606 OID 18361)
+-- Name: estudiante_proyecto_id_estudiante_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY estudiante_proyecto
+    ADD CONSTRAINT estudiante_proyecto_id_estudiante_fkey FOREIGN KEY (id_estudiante) REFERENCES estudiante(id_estudiante);
+
+
+--
+-- TOC entry 2464 (class 2606 OID 18371)
+-- Name: estudiante_proyecto_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY estudiante_proyecto
+    ADD CONSTRAINT estudiante_proyecto_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario);
+
+
+--
+-- TOC entry 2445 (class 2606 OID 18703)
+-- Name: inasistencia_id_carga; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY inasistencia
+    ADD CONSTRAINT inasistencia_id_carga FOREIGN KEY (id_carga) REFERENCES carga_docente(id_carga_docente);
+
+
+--
+-- TOC entry 2443 (class 2606 OID 18240)
+-- Name: inasistencia_id_estudiante_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY inasistencia
+    ADD CONSTRAINT inasistencia_id_estudiante_fkey FOREIGN KEY (id_estudiante) REFERENCES estudiante(id_estudiante);
+
+
+--
+-- TOC entry 2444 (class 2606 OID 18245)
+-- Name: inasistencia_id_periodo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY inasistencia
+    ADD CONSTRAINT inasistencia_id_periodo_fkey FOREIGN KEY (id_periodo) REFERENCES periodo(id_periodo);
+
+
+--
+-- TOC entry 2461 (class 2606 OID 18351)
+-- Name: logro_id_carga_docente_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY logro
+    ADD CONSTRAINT logro_id_carga_docente_fkey FOREIGN KEY (id_carga_docente) REFERENCES carga_docente(id_carga_docente);
+
+
+--
+-- TOC entry 2460 (class 2606 OID 18346)
+-- Name: logro_id_periodo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY logro
+    ADD CONSTRAINT logro_id_periodo_fkey FOREIGN KEY (id_periodo) REFERENCES periodo(id_periodo);
+
+
+--
+-- TOC entry 2432 (class 2606 OID 18160)
+-- Name: materia_id_area_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY materia
+    ADD CONSTRAINT materia_id_area_fkey FOREIGN KEY (id_area) REFERENCES area(id_area);
+
+
+--
+-- TOC entry 2433 (class 2606 OID 18165)
+-- Name: materia_id_tipo_materia_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY materia
+    ADD CONSTRAINT materia_id_tipo_materia_fkey FOREIGN KEY (id_tipo_materia) REFERENCES tipo_materia(id_tipo_materia);
+
+
+--
+-- TOC entry 2447 (class 2606 OID 18263)
+-- Name: materia_porcentaje_id_curso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY materia_porcentaje
+    ADD CONSTRAINT materia_porcentaje_id_curso_fkey FOREIGN KEY (id_curso) REFERENCES curso(id_curso);
+
+
+--
+-- TOC entry 2446 (class 2606 OID 18258)
+-- Name: materia_porcentaje_id_materia_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY materia_porcentaje
+    ADD CONSTRAINT materia_porcentaje_id_materia_fkey FOREIGN KEY (id_materia) REFERENCES materia(id_materia);
+
+
+--
+-- TOC entry 2449 (class 2606 OID 18278)
+-- Name: matricula_id_anio_lectivo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY matricula
+    ADD CONSTRAINT matricula_id_anio_lectivo_fkey FOREIGN KEY (id_anio_lectivo) REFERENCES anio_lectivo(id_anio_lectivo);
+
+
+--
+-- TOC entry 2448 (class 2606 OID 18273)
+-- Name: matricula_id_curso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY matricula
+    ADD CONSTRAINT matricula_id_curso_fkey FOREIGN KEY (id_curso) REFERENCES curso(id_curso);
+
+
+--
+-- TOC entry 2452 (class 2606 OID 18293)
+-- Name: matricula_id_estado_matricula_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY matricula
+    ADD CONSTRAINT matricula_id_estado_matricula_fkey FOREIGN KEY (id_estado_matricula) REFERENCES estado_matricula(id_estado_matricula);
+
+
+--
+-- TOC entry 2450 (class 2606 OID 18283)
+-- Name: matricula_id_estudiante_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY matricula
+    ADD CONSTRAINT matricula_id_estudiante_fkey FOREIGN KEY (id_estudiante) REFERENCES estudiante(id_estudiante);
+
+
+--
+-- TOC entry 2451 (class 2606 OID 18288)
+-- Name: matricula_id_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY matricula
+    ADD CONSTRAINT matricula_id_usuario_fkey FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario);
+
+
+--
+-- TOC entry 2465 (class 2606 OID 18384)
+-- Name: nota_logro_id_estudiante_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY nota_logro
+    ADD CONSTRAINT nota_logro_id_estudiante_fkey FOREIGN KEY (id_estudiante) REFERENCES estudiante(id_estudiante);
+
+
+--
+-- TOC entry 2466 (class 2606 OID 18389)
+-- Name: nota_logro_id_logro_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY nota_logro
+    ADD CONSTRAINT nota_logro_id_logro_fkey FOREIGN KEY (id_logro) REFERENCES logro(id_logro);
+
+
+--
+-- TOC entry 2440 (class 2606 OID 18215)
+-- Name: periodo_id_anio_lectivo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY periodo
+    ADD CONSTRAINT periodo_id_anio_lectivo_fkey FOREIGN KEY (id_anio_lectivo) REFERENCES anio_lectivo(id_anio_lectivo);
+
+
+--
+-- TOC entry 2424 (class 2606 OID 18100)
+-- Name: persona_id_tipo_identificacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY persona
+    ADD CONSTRAINT persona_id_tipo_identificacion_fkey FOREIGN KEY (id_tipo_identificacion) REFERENCES tipo_identificacion(id_tipo_identificacion);
+
+
+--
+-- TOC entry 2425 (class 2606 OID 18105)
+-- Name: persona_lugar_residencia_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY persona
+    ADD CONSTRAINT persona_lugar_residencia_fkey FOREIGN KEY (lugar_residencia) REFERENCES municipio(id_municipio);
+
+
+--
+-- TOC entry 2441 (class 2606 OID 18225)
+-- Name: usuario_id_tipo_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY usuario
+    ADD CONSTRAINT usuario_id_tipo_usuario_fkey FOREIGN KEY (id_tipo_usuario) REFERENCES tipo_usuario(id_tipo_usuario);
+
+
+--
+-- TOC entry 2442 (class 2606 OID 18230)
+-- Name: usuario_identificacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY usuario
+    ADD CONSTRAINT usuario_identificacion_fkey FOREIGN KEY (identificacion) REFERENCES persona(identificacion);
+
+
+--
+-- TOC entry 2427 (class 2606 OID 18120)
+-- Name: usuario_permiso_id_permiso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY usuario_permiso
+    ADD CONSTRAINT usuario_permiso_id_permiso_fkey FOREIGN KEY (id_permiso) REFERENCES permiso(id_permiso);
+
+
+--
+-- TOC entry 2426 (class 2606 OID 18115)
+-- Name: usuario_permiso_id_tipo_usuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: personal
+--
+
+ALTER TABLE ONLY usuario_permiso
+    ADD CONSTRAINT usuario_permiso_id_tipo_usuario_fkey FOREIGN KEY (id_tipo_usuario) REFERENCES tipo_usuario(id_tipo_usuario);
+
+
+--
+-- TOC entry 2617 (class 0 OID 0)
+-- Dependencies: 6
+-- Name: public; Type: ACL; Schema: -; Owner: personal
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM personal;
+GRANT ALL ON SCHEMA public TO personal;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2016-06-01 17:27:10 COT
+
+--
+-- PostgreSQL database dump complete
+--
+
