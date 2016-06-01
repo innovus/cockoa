@@ -11,7 +11,7 @@ var inasistencias = require('./routes/api/inasistencia');
 
 var apis = require('./routes/api/index');
 var auth = require('./routes/api/auth').router;
-var flash = require('connect-flash');
+
 
 var app = express();
 
@@ -27,7 +27,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(flash());
 app.use('/', routes);
 app.use('/users', users);
 app.use('/api',apis );

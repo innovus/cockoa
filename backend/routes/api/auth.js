@@ -94,7 +94,7 @@ app.get('/login', function(req, res, next) {
 
 
 
-router.post('/login', passport.initialize(), passport.authenticate(
+router.post('/login', prueba, passport.initialize(), passport.authenticate(
     'local', {
       session: false,
      // failureFlash: true,
@@ -157,7 +157,7 @@ router.get('/tipo/:id', authenticate, function(req, res) {
 /////////////
 
 function prueba(req,res,next){
-
+ console.log("entro")
   next();
 
 }
