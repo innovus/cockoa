@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var inasistencias = require('./routes/api/inasistencia');
+var cursos = require('./routes/api/cursos');
+var estudiantes = require('./routes/api/estudiantes');
 
 var apis = require('./routes/api/index');
 var auth = require('./routes/api/auth').router;
@@ -32,6 +34,8 @@ app.use('/users', users);
 app.use('/api',apis );
 app.use('/auth',auth );
 app.use('/inasistencias', inasistencias);
+app.use('/cursos', cursos);
+app.use('/estudiantes', estudiantes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

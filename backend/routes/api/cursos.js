@@ -3,7 +3,7 @@ var router = express.Router();
 //var users = require('../queries/users');
 
 
-var inasistenciaController = require('../../controllers/inasistenciaController');
+var cursoController = require('../../controllers/cursoController');
 var authenticate = require('./auth').authenticate;
 
 var promise = require('bluebird');
@@ -16,20 +16,15 @@ var pgp = require('pg-promise')(options);
 var connectionString = 'postgres://localhost:5432/liceo1';
 var db = pgp(connectionString);
 
-router.get('/mi_inasistencia', authenticate, function(req, res) {
+
+
+router.get('/:id_curso/estudiantes', authenticate, function(req, res) {
   //console.log(req.user);
-  inasistenciaController.getMiInasistencia(req.user.id,function(data){
+  cursoController.getEstudiantesCurso(req.params.id_curso,function(data){
     res.json(data);
 
   })
   
 });
-
-router.post('/inasitecia',authenticate, function(req,res){
-	inasistenciaController.addInasistencia
-})
-
-
-
 
 module.exports = router;
