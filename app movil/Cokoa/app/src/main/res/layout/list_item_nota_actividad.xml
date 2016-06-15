@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:orientation="vertical">
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:paddingBottom="5dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_titulo_actividad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="titulo logro"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/text_des_actividad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descripcion Logro"
+                android:textSize="12sp"
+                android:textColor="@color/secondary_text"/>
+            <TextView
+                android:id="@+id/text_nota_actividad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="nota actividad"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/divider" />
+
+
+
+</LinearLayout>

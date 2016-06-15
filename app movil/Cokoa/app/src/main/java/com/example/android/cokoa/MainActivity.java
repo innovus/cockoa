@@ -2,7 +2,6 @@ package com.example.android.cokoa;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -10,11 +9,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.android.cokoa.Fragments.AsistenciaFragment;
 import com.example.android.cokoa.Fragments.CalificacionesFragment;
@@ -22,17 +18,24 @@ import com.example.android.cokoa.Fragments.EventosFragment;
 import com.example.android.cokoa.Fragments.HorarioAtencionFragment;
 import com.example.android.cokoa.Fragments.NotificacionFragment;
 import com.example.android.cokoa.Fragments.PerfilFragment;
+import com.example.android.cokoa.SessionManager.SessionManager;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     DrawerLayout drawerLayout;
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment, new CalificacionesFragment())
+                    .commit();
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -99,6 +102,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             item.setChecked(true);
             setFragment(5);
             drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_logOut) {
+
+            sessionManager = new SessionManager(getApplication());
+            sessionManager.logoutUser();
+            finish();
+
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -151,16 +160,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public static class InboxFragments extends Fragment {
-        public InboxFragments() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-            View rootView = inflater.inflate(R.layout.content_main, container, false);
-            ((MainActivity) getActivity()).getSupportActionBar().setTitle("content main");
-            return rootView;
-        }
-    }
 }

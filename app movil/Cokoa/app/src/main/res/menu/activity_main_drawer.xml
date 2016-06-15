@@ -3,10 +3,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_perfil"
-            android:icon="@drawable/ic_person_black_24dp"
-            android:title="@string/perfil" />
-        <item
             android:id="@+id/nav_calificaciones"
             android:icon="@drawable/ic_book_black_24dp"
             android:title="@string/calificacion" />
@@ -31,7 +27,11 @@
     <item android:title="@string/configuracion">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_perfil"
+                android:icon="@drawable/ic_person_black_24dp"
+                android:title="@string/perfil" />
+            <item
+                android:id="@+id/nav_logOut"
                 android:icon="@drawable/ic_highlight_off_black_24dp"
                 android:title="@string/cerrarSesion" />
         </menu>

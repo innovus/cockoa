@@ -12,18 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.cokoa.Adapters.MateriaAdapters;
-import com.example.android.cokoa.Asyntask.MateriaAsyntask;
-import com.example.android.cokoa.MainActivity;
-import com.example.android.cokoa.Models.Materia;
+import com.example.android.cokoa.Adapters.LogrosAdapters;
+import com.example.android.cokoa.Asyntask.LogrosAsyntask;
+import com.example.android.cokoa.Models.Logro;
 import com.example.android.cokoa.R;
 
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 20/05/2016.
+ * Created by ASUS on 09/06/2016.
  */
-public class CalificacionesFragment extends Fragment {
+public class LogrosFragment extends Fragment {
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     private RecyclerView mRecyclerView;
@@ -31,18 +30,18 @@ public class CalificacionesFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.calificaciones_fragment, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Calificaciones");
+        View rootView = inflater.inflate(R.layout.recycler, container, false);
+//        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Logros");
         return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ArrayList<Materia> areas = new ArrayList<>();
-        new MateriaAsyntask(this.getActivity()).execute();
+        ArrayList<Logro> areas = new ArrayList<>();
+        new LogrosAsyntask(this.getActivity()).execute();
         //obtenemos el recycler
-        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view);
+        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view_logro);
         mRecyclerView.setHasFixedSize(true);
         // mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //usar UN ADMINISTRADOR PARA LINEARLAYOUT
@@ -51,7 +50,7 @@ public class CalificacionesFragment extends Fragment {
         //recyclerView.setItemAnimator(ItemAnimator animator);
         // mRecyclerView.setItemAnimator(ItemAnimator animator);
         // specify an adapter (see also next example)
-        mAdapter = new MateriaAdapters(areas,getActivity());
+        mAdapter = new LogrosAdapters(areas,getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
         //getView().setFocusableInTouchMode(true);

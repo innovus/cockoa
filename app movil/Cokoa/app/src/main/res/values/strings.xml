@@ -8,7 +8,9 @@
     <string name="horario_atencion">Horario de Atención</string>
     <string name="asistencia">Asistencia</string>
 
+    <string name="codigo">Código</string>
     <string name="configuracion">Configuración</string>
+    <string name="iniciarSesion">Iniciar Sesión</string>
     <string name="cerrarSesion">Cerrar Sesión</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
