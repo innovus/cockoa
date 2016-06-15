@@ -42,6 +42,14 @@ const respond = {
     });
     //res.status(401).json({ prueba:3})
   },
+  authweb: function(req, res) {
+    
+    res.status(200).json({
+      user: req.user,
+      token: req.token
+    });
+    //res.status(401).json({ prueba:3})
+  },
   token: function(req, res) {
     res.status(201).json({
       token: req.token
@@ -65,14 +73,26 @@ function(identificacion, password, done) {
 }));
 
 
-/*
+
 router.get('/registrar', function(req, res) {
   res.sendfile('./views/login.html');
 });
-router.post('/signin', users.signin);
+
+router.get('/loginn', function(req, res , next) {
+  res.render('login.ejs');
+});
+
+
+router.post('/loginn', prueba, passport.initialize(), passport.authenticate(
+    'local', {
+      session: false,
+     // failureFlash: true,
+      scope: []
+    }), serializeUser, generateAccessToken, respond.auth);
+/*
 router.post('/login',users.login);
 
-
+/*
 
 router.post('/login1',passport.initialize(), passport.authenticate(
   'local', {

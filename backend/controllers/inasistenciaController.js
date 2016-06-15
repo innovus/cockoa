@@ -24,6 +24,24 @@ function getTipoUsuario(id, cb){
 		return cb(err);
 	})
 }
+function getInasistencias(cb){
+	db.many("select nombre_materia, nombre1, nombre2, apellido1, apellido2, estado_inasistencia, fecha_inasistencia, numero_periodo "+
+	 "from inasistencia "+
+	 "join carga_docente on inasistencia.id_carga = carga_docente.id_carga_docente "+ 
+	 "join usuario on usuario.id_usuario =  carga_docente.id_usuario "+
+	 "join materia on materia.id_materia = carga_docente.id_materia "+
+	 "join periodo on periodo.id_periodo = carga_docente.id_periodo "+
+	 "join docente on docente.id_docente = carga_docente.id_docente "+
+	 "join persona on persona.identificacion = docente.identificacion ")
+	.then(function(data){
+			console.log(data)
+		cb(data)
+	}).catch(function(err){
+		console.log(err)
+		return cb(err);
+	})
+
+}
 
 function getMiInasistencia (id,cb){
 
@@ -72,6 +90,7 @@ function getListadoEstudiantesCurso(id_curso, cb){
 }
 module.exports = {
 	getMiInasistencia: getMiInasistencia,
+	getInasistencias: getInasistencias,
 	addInasistencia: addInasistencia,
 	getListadoEstudiantesCurso: getListadoEstudiantesCurso
 }

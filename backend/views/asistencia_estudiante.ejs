@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="asistencia">
+<head>
+  <title>Test</title>
+
+  <link href="../stylesheets/bootstrap.css" rel="stylesheet">
+  <link href="../stylesheets/style.css" rel="stylesheet">
+  <link rel="stylesheet"  href="../angular-bootstrap/ui-bootstrap-csp.css">
+</head>
+<body>
+
+  
+<% include navbar %>
+
+
+    
+  
+<div class="container">
+
+<section id="app-body" ng-controller="AsistenciaController">
+    <div>
+    <h1>Asistencia</h1>
+    <div ng-grid ="gridOptions">
+    </div>
+    <table class="table">
+      <thead>
+          <tr>
+              <th>Fecha</th>
+              <th>Periodo</th>
+              <th>Docente</th>
+              <th>Materia</th>
+              <th>Justificada</th>
+          </tr>
+        </thead>
+        <tbody >
+           <tr ng-repeat="inasistencia in inasistencias">
+              <th>{{inasistencia.fecha_inasistencia}}</th>
+              <th>{{inasistencia.numero_periodo}}</th>
+              <th>{{inasistencia.nombrecompleto}}</th>
+              <th>{{inasistencia.nombre_materia}}</th>
+              <th>{{inasistencia.estado_inasistencia}}</th>
+          </tr>
+        </tbody>
+    </table>
+    </div>
+  </section>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
+  <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.2.js"></script>
+  
+  <script src='../javascripts/asistencias.js'></script>
+
+</body>
+</html>
+
+<% include foot%>

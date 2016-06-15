@@ -131,21 +131,21 @@ function encriptar(user, pass) {
 }
 
 function login(req, res,next){
-	var emaili = req.body.email;
-	var passwordi = req.body.password;
-	var passwordEncriptada = encriptar(emaili,passwordi);
+	var identificacion = req.body.identificacion;
+	var password = req.body.password;
+	//var passwordEncriptada = encriptar(emaili,passwordi);
 
 //consulto primero el usuario
-	db.one("select * from users where email = ${email}",
+	db.one("select * from usuario where identificacion = ${identificacion}",
 		{
-			email:emaili
+			identificacion:identificacion
 		})
 	.then(function(data){
 		//si entro aqui es por que  el usuario existe, y  va a revisar la contraseña
-		db.one("select email,id_usuario from users where email = ${email} and password = ${password}",
+		db.one("select identificacion,id_usuario from usuario where identificacion = ${identificacion} and password = ${password}",
 		{
-			email:emaili,
-			password:passwordEncriptada
+			identificacion:identificacion,
+			password:password
 		})
 		.then(function(data){
 			//si la contraseña coincide entra aqui
@@ -164,9 +164,7 @@ function login(req, res,next){
 		if (err.code == 0){
 			res.send("usuario no existe");
 		
-		}else return next(err);
-		
-		 
+		}else return next(err);	 
 		
 	});
 }

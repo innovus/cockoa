@@ -29,6 +29,12 @@ router.post('/inasitecia',authenticate, function(req,res){
 	inasistenciaController.addInasistencia
 })
 
+router.get('/inasistencias', function(req,res){
+	inasistenciaController.getInasistencias(function(data){
+		res.json(data);
+	})
+})
+
 
 
 
