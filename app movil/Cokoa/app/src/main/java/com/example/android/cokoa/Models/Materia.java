@@ -46,6 +46,15 @@ public class Materia {
         this.apellido2_docente = apellido2_docente;
     }
 
+    public String getId_materia() {
+        return id_materia;
+    }
+
+    public void setId_materia(String id_materia) {
+        this.id_materia = id_materia;
+    }
+
+    private String id_materia;
     private String nombre1_docente;
     private String nombre2_docente;
     private String apellido1_docente;

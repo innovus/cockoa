@@ -8,6 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.cokoa.Adapters.LogrosAdapters;
 import com.example.android.cokoa.AppConstants.AppConstants;
@@ -30,10 +33,12 @@ import java.util.ArrayList;
 /**
  * Created by ASUS on 09/06/2016.
  */
-public class LogrosAsyntask extends AsyncTask<Void, Void, ArrayList<Logro>> {
+public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private ImageView imageView;
+    private TextView textView;
     SessionManager sessionManager;
     String serverUrls = AppConstants.serverUrl;
     private Activity activity;
@@ -45,7 +50,7 @@ public class LogrosAsyntask extends AsyncTask<Void, Void, ArrayList<Logro>> {
     }
 
     @Override
-    protected ArrayList<Logro> doInBackground(Void... params) {
+    protected ArrayList<Logro> doInBackground(String... params) {
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -58,7 +63,7 @@ public class LogrosAsyntask extends AsyncTask<Void, Void, ArrayList<Logro>> {
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "estudiantes/materias/logros");
+            URL url = new URL(serverUrls + "estudiantes/materias/logros/"+params[0]);
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -95,11 +100,25 @@ public class LogrosAsyntask extends AsyncTask<Void, Void, ArrayList<Logro>> {
             }
             forecastJsonStr = buffer.toString();
 
-            Log.v("revisar json ", "Json String" + forecastJsonStr);
+            Log.v("notaLogros", "Json String" + forecastJsonStr);
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
-            // Si el código no consiguió con éxito los datos del area,
+            // Si el código no consiguió con éxito los datos del logro,
+            int statuss = 0;
+            try {
+                statuss = urlConnection.getResponseCode();
+                Log.v("status", "Json String" + statuss);
+                if (statuss == 400) {
+                    ArrayList a = new ArrayList();
+                    a.add(0,"400");
+                    return a;
+                }
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -123,46 +142,39 @@ public class LogrosAsyntask extends AsyncTask<Void, Void, ArrayList<Logro>> {
         return null;
     }
 
-    /*[
-  {
-    "id_periodo": 1,
-    "id_materia": "1",
-    "id_logro": 500,
-    "nombre_logro": "logro periodo ",
-    "descripcion_logro": "aplica los conceptos fundamentas"
-  },
-  {
-    "id_periodo": 2,
-    "id_materia": "1",
-    "id_logro": 400,
-    "nombre_logro": "Logro periodo 3 ",
-    "descripcion_logro": "demuestre una actitud responsable"
-  },
 
-  {
-    "identificacion": "1085292951",
-    "grado": 6,
-    "grupo": "1",
-    "nombre_materia": "Quimica"
-  },*/
 
     @Override
     protected void onPostExecute(ArrayList<Logro> result) {
         if (result != null) {
-            mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_logro);
-            mRecyclerView.setHasFixedSize(true);
-            //usR UN ADMINISTRADOR PARA LINEARLAYOUT
-            mLayoutManager = new LinearLayoutManager(activity);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new LogrosAdapters(result, activity);
-            mRecyclerView.setAdapter(mAdapter);
+
+            ArrayList<String> status = new  ArrayList(result);
+            if(status.get(0)=="400"){
+                Toast toast1 =
+                        Toast.makeText(activity, "status 400 sql vacio", Toast.LENGTH_SHORT);
+                toast1.show();
+
+            }else {
+                mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_logro);
+                imageView = (ImageView) activity.findViewById(R.id.id_img_logros_visibility);
+                textView = (TextView) activity.findViewById(R.id.id_text_logro_done);
+                imageView.setVisibility(View.GONE);
+                textView.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mRecyclerView.setHasFixedSize(true);
+                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
+                mLayoutManager = new LinearLayoutManager(activity);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new LogrosAdapters(result, activity);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
         } else {
             Snackbar.make(activity.findViewById(android.R.id.content), "No tienes conexión", Snackbar.LENGTH_LONG)
                     .setAction("VOLVER A INTENTARLO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            LogrosAsyntask logrosAsyntask = new LogrosAsyntask(activity);
-                            logrosAsyntask.execute();
+
                         }
                     })
                     .setActionTextColor(Color.YELLOW)
@@ -186,9 +198,13 @@ public class LogrosAsyntask extends AsyncTask<Void, Void, ArrayList<Logro>> {
 
             for (int i = 0; i < logroArray.length(); i++) {
                 JSONObject logro = logroArray.getJSONObject(i);
+                String id_materia = logro.getString("id_materia");
+                String id_logro = logro.getString("id_logro");
                 String titleLogro = logro.getString("nombre_logro");
                 String descLogro = logro.getString("descripcion_logro");
                 Logro logro1 = new Logro();
+                logro1.setId_materia(id_materia);
+                logro1.setId_logro(id_logro);
                 logro1.setTitulo_logro(titleLogro);
                 logro1.setDesc_logro(descLogro);
                 logroArrayList.add(logro1);

@@ -12,6 +12,9 @@
     <string name="configuracion">Configuración</string>
     <string name="iniciarSesion">Iniciar Sesión</string>
     <string name="cerrarSesion">Cerrar Sesión</string>
+    <string name="emptyLogro">A la materia aún no se le asignan indicadores de logros</string>
+    <string name="emptyNotasActividades">El indicador de logro aún no tiene actividades</string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

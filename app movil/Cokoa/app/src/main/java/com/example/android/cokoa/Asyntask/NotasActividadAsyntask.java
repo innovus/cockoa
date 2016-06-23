@@ -8,6 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.cokoa.Adapters.NotasActividadAdapters;
 import com.example.android.cokoa.AppConstants.AppConstants;
@@ -30,11 +33,12 @@ import java.util.ArrayList;
 /**
  * Created by ASUS on 10/06/2016.
  */
-public class NotasActividadAsyntask extends AsyncTask<Void,Void,ArrayList<NotaActividad>>{
-    //extends AsyncTask<Void, Void, ArrayList<Logro>> {
+public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<NotaActividad>>{
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private ImageView imageView;
+    private TextView textView;
     SessionManager sessionManager;
     String serverUrls = AppConstants.serverUrl;
     private Activity activity;
@@ -48,7 +52,7 @@ public class NotasActividadAsyntask extends AsyncTask<Void,Void,ArrayList<NotaAc
     }
 
     @Override
-    protected ArrayList<NotaActividad> doInBackground(Void... params) {
+    protected ArrayList<NotaActividad> doInBackground(String... params) {
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -61,7 +65,8 @@ public class NotasActividadAsyntask extends AsyncTask<Void,Void,ArrayList<NotaAc
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "estudiantes/materias/logros/notas");
+            //http://localhost:3000/estudiantes/materias/notalogro/1-200
+            URL url = new URL(serverUrls + "estudiantes/materias/notalogro/"+params[0]+"-"+params[1]);
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -102,7 +107,20 @@ public class NotasActividadAsyntask extends AsyncTask<Void,Void,ArrayList<NotaAc
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
-            // Si el código no consiguió con éxito los datos del area,
+            // Si el código no consiguió con éxito los datos de la actividad,
+            int statuss = 0;
+            try {
+                statuss = urlConnection.getResponseCode();
+                Log.v("status", "Json String" + statuss);
+                if (statuss == 400) {
+                    ArrayList a = new ArrayList();
+                    a.add(0,"400");
+                    return a;
+                }
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -129,20 +147,45 @@ public class NotasActividadAsyntask extends AsyncTask<Void,Void,ArrayList<NotaAc
     @Override
     protected void onPostExecute(ArrayList<NotaActividad> result) {
         if (result != null) {
-            mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_logro);
-            mRecyclerView.setHasFixedSize(true);
-            //usR UN ADMINISTRADOR PARA LINEARLAYOUT
-            mLayoutManager = new LinearLayoutManager(activity);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new NotasActividadAdapters(result, activity);
-            mRecyclerView.setAdapter(mAdapter);
+            ArrayList<String> status = new  ArrayList(result);
+            if(status.get(0)=="400"){
+                Toast toast1 =
+                        Toast.makeText(activity, "status 400 sql vacio", Toast.LENGTH_SHORT);
+                toast1.show();
+                mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_logro);
+                imageView = (ImageView) activity.findViewById(R.id.id_img_logros_visibility);
+                textView = (TextView) activity.findViewById(R.id.id_text_logro_done);
+                textView.setText(activity.getResources().getString(R.string.emptyNotasActividades));
+
+
+                imageView.setVisibility(View.VISIBLE);
+                textView.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.GONE);
+
+            }else {
+                mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_logro);
+                imageView = (ImageView) activity.findViewById(R.id.id_img_logros_visibility);
+                textView = (TextView) activity.findViewById(R.id.id_text_logro_done);
+                imageView.setVisibility(View.GONE);
+                textView.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mRecyclerView.setHasFixedSize(true);
+                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
+                mLayoutManager = new LinearLayoutManager(activity);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new NotasActividadAdapters(result, activity);
+                mRecyclerView.setAdapter(mAdapter);
+
+            }
+
+
         } else {
             Snackbar.make(activity.findViewById(android.R.id.content), "No tienes conexión", Snackbar.LENGTH_LONG)
                     .setAction("VOLVER A INTENTARLO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            NotasActividadAsyntask notasActividadAsyntask = new NotasActividadAsyntask(activity);
-                            notasActividadAsyntask.execute();
+                           /* NotasActividadAsyntask notasActividadAsyntask = new NotasActividadAsyntask(activity);
+                            notasActividadAsyntask.execute();*/
                         }
                     })
                     .setActionTextColor(Color.YELLOW)
@@ -165,9 +208,9 @@ public class NotasActividadAsyntask extends AsyncTask<Void,Void,ArrayList<NotaAc
 
              for (int i = 0; i < notasActividadArray.length(); i++) {
                  JSONObject notaActividad = notasActividadArray.getJSONObject(i);
-                 String titleActividad = notaActividad.getString("nombre_logro");
-                 String descActividad = notaActividad.getString("descripcion_logro");
-                 String notaActividads = notaActividad.getString("nota_logro");
+                 String titleActividad = notaActividad.getString("nombre_actividad");
+                 String descActividad = notaActividad.getString("descripcion_actividad");
+                 String notaActividads = notaActividad.getString("nota_actividad");
                  NotaActividad  notaActividad1 = new NotaActividad();
                  notaActividad1.setNombreActividad(titleActividad);
                  notaActividad1.setDescActividad(descActividad);

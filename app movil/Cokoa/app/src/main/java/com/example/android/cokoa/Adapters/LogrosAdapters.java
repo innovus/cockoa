@@ -28,19 +28,18 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tituloLogro, descLogro;
+        Logro logro;
+
         public ViewHolder(View itemView) {
             super(itemView);
             tituloLogro = (TextView) itemView.findViewById(R.id.text_titulo_logro);
             descLogro = (TextView) itemView.findViewById(R.id.text_des_logro);
 
-            itemView.setOnClickListener(new View.OnClickListener(){
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*LogrosAsyntask logrosAsyntask = new LogrosAsyntask(activity);
-                    logrosAsyntask.execute();*/
                     NotasActividadAsyntask notasActividadAsyntask = new NotasActividadAsyntask(activity);
-                    notasActividadAsyntask.execute();
-
+                    notasActividadAsyntask.execute(logro.getId_materia(), logro.getId_logro());
                 }
             });
 
@@ -50,7 +49,7 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_logros,viewGroup,false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_logros, viewGroup, false);
         return new ViewHolder(v);
     }
 
@@ -58,6 +57,8 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.tituloLogro.setText(logros.get(position).getTitulo_logro());
         viewHolder.descLogro.setText(logros.get(position).getDesc_logro());
+        //viewHolder.feed = materia.get(position);
+        viewHolder.logro = logros.get(position);
     }
 
     @Override

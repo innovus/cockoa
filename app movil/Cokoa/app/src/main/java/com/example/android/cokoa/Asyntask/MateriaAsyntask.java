@@ -157,8 +157,6 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
             // En una jerarquía de objetos para nosotros .
             // Estos son los nombres de los objetos JSON que necesitan ser extraídos .
             // La información de ubicación
-
-
             Log.v("getArea", "Json String" + areaJsonStr);
             JSONArray areaArray = new JSONArray(areaJsonStr);
             Log.v("areaArray", "Json String" + areaArray);
@@ -166,47 +164,40 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
 
             for (int i = 0; i < areaArray.length(); i++) {
                 JSONObject areas = areaArray.getJSONObject(i);
-                String nombre1_docente= "";
+                String nombre1_docente = "";
                 String nombre2_docente = "";
-                String apellido1_docente= "";
+                String apellido1_docente = "";
                 String apellido2_docente = "";
 
 
-
-
-                if(areas.isNull("nombre1")){
-                     nombre1_docente ="";
-                }else{
+                if (areas.isNull("nombre1")) {
+                    nombre1_docente = "";
+                } else {
                     nombre1_docente = areas.getString("nombre1");
                 }
 
-                if(areas.isNull("nombre2")){
-                    nombre2_docente ="";
-                }else{
-                    nombre2_docente = (" "+areas.getString("nombre2"));
+                if (areas.isNull("nombre2")) {
+                    nombre2_docente = "";
+                } else {
+                    nombre2_docente = (" " + areas.getString("nombre2"));
                 }
 
-                if(areas.isNull("apellido1")){
-                    apellido1_docente ="";
-                }else{
-                    apellido1_docente = (" "+areas.getString("apellido1"));
+                if (areas.isNull("apellido1")) {
+                    apellido1_docente = "";
+                } else {
+                    apellido1_docente = (" " + areas.getString("apellido1"));
                 }
 
-                if(areas.isNull("apellido2")){
-                    apellido2_docente ="";
-                }else{
-                    apellido2_docente = (" "+areas.getString("apellido2"));
+                if (areas.isNull("apellido2")) {
+                    apellido2_docente = "";
+                } else {
+                    apellido2_docente = (" " + areas.getString("apellido2"));
                 }
 
-
-                //jsonObject.isNull("AverageRating")
-
-                Log.v("nombre2_docente" ," hd "+ nombre2_docente);
-
-
-
+                String id_materia = areas.getString("id_materia");
                 String title = areas.getString("nombre_materia");
                 Materia materia = new Materia();
+                materia.setId_materia(id_materia);
                 materia.setNombre1_docente(nombre1_docente);
                 materia.setNombre2_docente(nombre2_docente);
                 materia.setApellido1_docente(apellido1_docente);
@@ -217,8 +208,6 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
             }
 
             return areaArrayList;
-
-
         }
         return null;
     }

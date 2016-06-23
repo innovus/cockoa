@@ -28,6 +28,12 @@ public class LogrosFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private String id_materia;
+
+
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recycler, container, false);
@@ -39,7 +45,9 @@ public class LogrosFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ArrayList<Logro> areas = new ArrayList<>();
-        new LogrosAsyntask(this.getActivity()).execute();
+        Bundle args = getArguments();
+        String id_materia = args.getString("id_materia");
+        new LogrosAsyntask(this.getActivity()).execute(id_materia);
         //obtenemos el recycler
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view_logro);
         mRecyclerView.setHasFixedSize(true);

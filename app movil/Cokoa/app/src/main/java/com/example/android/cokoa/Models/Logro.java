@@ -22,4 +22,23 @@ public class Logro {
 
     private String titulo_logro;
     private String desc_logro;
+
+    public String getId_materia() {
+        return id_materia;
+    }
+
+    public void setId_materia(String id_materia) {
+        this.id_materia = id_materia;
+    }
+
+    public String getId_logro() {
+        return id_logro;
+    }
+
+    public void setId_logro(String id_logro) {
+        this.id_logro = id_logro;
+    }
+
+    private String id_materia;
+    private String id_logro;
 }

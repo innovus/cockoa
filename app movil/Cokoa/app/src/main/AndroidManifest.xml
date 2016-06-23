@@ -23,7 +23,9 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.LogrosActivity"></activity>
+        <activity android:name=".Activities.LogrosActivity"
+            android:label="Indicadores de logros"
+            ></activity>
     </application>
 
 </manifest>
