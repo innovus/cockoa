@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html ng-app="estudiantes">
+<html ng-app="profesores">
 <head>
   <title>Test</title>
 
@@ -15,31 +15,15 @@
 
 <div class="container">
 
-<section id="app-body" ng-controller="asistenciaController">
+<section id="app-body" ng-controller="cargaController">
     <div>
     <h1>Asistencia</h1>
     <div ng-grid ="gridOptions">
     </div>
-    <table class="table">
-      <thead>
-          <tr>
-              <th>Fecha</th>
-              <th>Periodo</th>
-              <th>Docente</th>
-              <th>Materia</th>
-              <th>Justificada</th>
-          </tr>
-        </thead>
-        <tbody >
-           <tr ng-repeat="inasistencia in inasistencias">
-              <th>{{inasistencia.fecha_inasistencia}}</th>
-              <th>{{inasistencia.numero_periodo}}</th>
-              <th>{{inasistencia.nombrecompleto}}</th>
-              <th>{{inasistencia.nombre_materia}}</th>
-              <th>{{inasistencia.estado_inasistencia}}</th>
-          </tr>
-        </tbody>
-    </table>
+    <ul>
+      <li ng-repeat="carga in cargas"><a href="/{{carga.id_curso}}">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a></li>
+    </ul>
+
     </div>
   </section>
 
@@ -51,7 +35,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-resource.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-cookies.js"></script>
   
-  <script src='../javascripts/scripts/controllers/asistenciaController.js'></script>
+  <script src='../javascripts/scripts/controllers/profesorController.js'></script>
 
 </body>
 </html>

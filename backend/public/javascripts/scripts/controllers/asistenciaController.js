@@ -1,6 +1,6 @@
 //una function javascript q se llama asi misma
 (function (){
-    var app = angular.module('asistencia', []);//creamos el modulo pokedex y le pasamos array con las dependencias
+    var app = angular.module('estudiantes', ['ui.bootstrap','ngCookies']);//creamos el modulo pokedex y le pasamos array con las dependencias
 
 
 //creamos un controlador
@@ -8,7 +8,7 @@
     //del controlador y le pasamos una function javascript
 
 //Agregamos el objecto pokemon asociado al controlador
-app.controller('AsistenciaController',function($scope,$http){
+app.controller('asistenciaController',['$scope','$http','$cookieStore', '$cookies',function($scope,$http,$cookieStore,$cookies){
 
   //  $scope.formData = {};
 
@@ -18,6 +18,7 @@ app.controller('AsistenciaController',function($scope,$http){
             //JSON.stringify(data).replace(/null/i, "\"\""); 
             $scope.inasistencias = data;
             console.log(data)
+            console.log($cookies.accessToken);
             
             for (var i = $scope.inasistencias.length - 1; i >= 0; i--) {
                 $scope.inasistencias[i].nombre1 = delNull($scope.inasistencias[i].nombre1);
@@ -38,7 +39,7 @@ app.controller('AsistenciaController',function($scope,$http){
          $scope.gridOptions = {
             data: 'inasistencias'
         };  
-    });
+    }]);
 })();
 function delNull(item){
   if(item == null){
@@ -47,4 +48,17 @@ function delNull(item){
     return item;
   }
 }
+
+function setCookieData(cookies, accesstoken){
+         var accessToken = accesstoken;
+         cookies.put("accessToken", accesstoken);
+     }
+     function getCookieData(cookies){
+        var accessToken = cookies.get("accessToken");
+        return accessToken;
+     }
+     function clearCookieData(cookies){
+        var accessToken = "";
+        cookies.remove("accessToken");
+     }
 

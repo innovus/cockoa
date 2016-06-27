@@ -7,11 +7,15 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 var config = require('./config/config');
+
+
 var routes = require('./routes/index');
+
 var users = require('./routes/users');
 var inasistencias = require('./routes/api/inasistencia');
 var cursos = require('./routes/api/cursos');
 var estudiantes = require('./routes/api/estudiantes');
+var docentes = require('./routes/api/profesores');
 
 var apis = require('./routes/api/index');
 var auth = require('./routes/api/auth').router;
@@ -27,6 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(session({
   saveUninitialized: true,
   resave: true,
@@ -40,6 +45,17 @@ app.use('/auth',auth );
 app.use('/inasistencias', inasistencias);
 app.use('/cursos', cursos);
 app.use('/estudiantes', estudiantes);
+app.use('/api/docentes', docentes);
+
+app.set('views', path.join(__dirname, '/views'));
+app.set('view engine', 'ejs');
+
+/*
+app.get('/', index);
+app.get('/partials/:filename', partials);
+//app.use(index);
+
+app.get('*', index);*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -49,8 +65,6 @@ app.use(function(req, res, next) {
 });
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
 
 

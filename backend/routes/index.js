@@ -24,18 +24,35 @@ router.post('/', function(req, res, next) {
 	}
 	
 });
+/*
+function partials(req, res){
+  var filename = req.params.filename;
+  if(!filename) return;  // might want to change this
+  res.render("partials/" + filename );
+};
+function index(req, res){
+  res.render('index', {message:"Hello!!!"});
+};*/
 
-router.get('/estudiantes/asistencias', function(req, res, next) {
+router.get('/estudiantes/asistencias', validarSession,function(req, res, next) {
   res.render('asistencia_estudiante');
+});
+
+router.get('/docentes/cargas', validarSession,function(req, res, next) {
+  res.render('index_profesor');
+});
+
+router.get('/estudiantes/notas', validarSession,function(req, res, next) {
+  res.render('notas');
 });
 
 function validarSession(req,res,next){
 	if(req.session.token){
 		next();
 	}else{
-		
-	 	res.redirect('/auth/loginn');
-	 }
+		res.redirect('/auth/loginn');
+	}
 }
 
 module.exports = router;
+
