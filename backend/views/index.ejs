@@ -5,14 +5,33 @@
 
 	<link href="../stylesheets/bootstrap.css" rel="stylesheet">
 	<link href="../stylesheets/style.css" rel="stylesheet">
+
+    <!-- Css j -->
+  <link href="../stylesheets/metisMenu.min.css" rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+    <link href="../stylesheets/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+  <div id="wrapper">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <% include navbar %>
+      <% include lateralEstudiante %>
+    </nav>  
 
-	
-<% include navbar %>
-<div class = "container">
-  <div ng-view></div>
-</div>
+    <div id="page-wrapper">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">TABLAS EJEMPLOS</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 
     
@@ -57,6 +76,18 @@
 	<link rel="stylesheet"  href="../angular-bootstrap/ui-bootstrap-csp.css">
    <script src='../javascripts/scripts/controllers/asistenciaController.js'></script>
     <script src='../javascripts/scripts/controllers/loginController.js'></script>
+
+
+    <script src="../javascripts/j/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../javascripts/j/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../javascripts/j/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../javascripts/j/sb-admin-2.js"></script>
 
 
 </body>

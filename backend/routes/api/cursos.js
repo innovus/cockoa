@@ -18,7 +18,7 @@ var db = pgp(connectionString);
 
 
 
-router.get('/:id_curso/estudiantes', authenticate, function(req, res) {
+router.get('/:id_curso/estudiantes',/* authenticate,*/ function(req, res) {
   //console.log(req.user);
   cursoController.getEstudiantesCurso(req.params.id_curso,function(data){
     res.json(data);

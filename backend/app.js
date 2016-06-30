@@ -43,7 +43,7 @@ app.use('/users', users);
 app.use('/api',apis );
 app.use('/auth',auth );
 app.use('/inasistencias', inasistencias);
-app.use('/cursos', cursos);
+app.use('/api/cursos', cursos);
 app.use('/estudiantes', estudiantes);
 app.use('/api/docentes', docentes);
 

@@ -25,7 +25,9 @@ function getMAterias(req,res){
     console.log(req.materias);
     next();
   })*/
-  estudiantesController.getMateriasYLogrosE(req.user.id,function(data){
+  //estudiantesController.getMateriasYLogrosE(req.user.id,function(data){
+    estudiantesController.getMateriasEstudiante(/*req.user.id*/1,function(data){
+    
     console.log('response')
     res.status(200).json(data);
 }
@@ -66,6 +68,20 @@ function getNotas(req,res, next){
   
 
 }
+function getLogrosApi(req,res){
+  /*
+  estudiantesController.getMateriasEstudiante(req.user.id,function(data){
+    req.materias = data;
+    console.log(req.materias);
+    next();
+  })*/
+  estudiantesController.getLogrosEstudiante(/*req.user.id*/1,req.params.id_materia,function(data){
+    console.log('response')
+    res.status(200).json(data);
+}
+  );
+
+}
 function response(req,res){
   console.log('response')
   res.status(200).json(req.respuesta);
@@ -99,7 +115,8 @@ function addJsonLogros(materia,cb){
 
 }
 //router.get('/materias', authenticate, getMAterias,getNotas, response);
-router.get('/materias', authenticate, getMAterias);
+router.get('/materias', /*authenticate,*/ getMAterias);
+router.get('/materias/:id_materia/logros', /*authenticate,*/getLogrosApi);
 
 /*
 

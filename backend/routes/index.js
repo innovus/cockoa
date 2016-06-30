@@ -42,9 +42,10 @@ router.get('/docentes/cargas', validarSession,function(req, res, next) {
   res.render('index_profesor');
 });
 
-router.get('/estudiantes/notas', validarSession,function(req, res, next) {
+router.get('/estudiantes/notas', /*validarSession,*/function(req, res, next) {
   res.render('notas');
 });
+
 
 function validarSession(req,res,next){
 	if(req.session.token){

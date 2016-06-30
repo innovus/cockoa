@@ -1,492 +1,137 @@
-<html>
+<!DOCTYPE html>
+<html ng-app="estudiantes">
 <head>
 	<title>Notas</title>
+  <link href="../stylesheets/bootstrap.css" rel="stylesheet">
+  <link href="../stylesheets/style.css" rel="stylesheet">
+  <link rel="stylesheet"  href="../angular-bootstrap/ui-bootstrap-csp.css">
+
+  <!-- Css j -->
+  <link href="../stylesheets/metisMenu.min.css" rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+    <link href="../stylesheets/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
-<body>
-	<header id="app-header">
-		<h1>Cockoa</h1>
-	</header>
+<body ng-controller="materiasController">
+	<div id="wrapper">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <% include navbar %>
+      <% include lateralEstudiante %>
+    </nav>  
 
-	<section id="app-body">
+
+  <div id="page-wrapper">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">TABLAS EJEMPLOS</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+
+      <ul class="nav nav-pills nav-stacked">
+        <li  ng-repeat="materia in materias"><a ng-click="getLogros(materia.id_materia)">{{materia.nombre_materia}} </a></li>
+      </ul>
+
+
 	
-		<h1>Notas</h1>
-    <p>Periodo</p><select>
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-    </select>
-    <div class ="area">
-      <h2>Ciencias Naturales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr>
-          <tr>
-              <th>25%</th>
-              <th>Fisica</th>
-              <th><a data-id="1" href="horarioatencion.html">Juan Carlos Pantoja</a></th>
-              <th>4.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr>  
-          <tr>
-              <th>50%</th>
-              <th>Quimica</th>
-              <th><a data-id="1" href="horarioatencion.html">Jorge Luis Viveros</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-    </div>
 
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
+    <div class ="area" >
+      <h4>Ciencias Sociales</h4>
+      <h5>Docente: Janeth Arcos Silva</h5>
+      <div class ="materias" >
+      <table class="table  table-bordered" >
         <thead>
           <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
+              <th style="text-align:center;">Porcentaje</th>
+              <th style="text-align:center;">Logros</th>
+              <th style="text-align:center;" >Actividades</th>
+              <th style="text-align:center;" >Asistencias</th>
               <th colspan="3"></th>
           </tr>
         </thead>
         <tbody>
-           <tr>
+          <tr ng-repeat="logro in logros">
+            <td>{{logro.porcentaje_logro}} %</td>
+            <td>{{logro.descripcion_logro}}</td>
+            <td>
+              <table class="table  table-bordered" >
+                <thead>
+                  <tr>
+                    <th>50% Actividad</th>
+                    <th>50% Actividad</th>
+                    <th>50% Actividad</th>
+                    <th>Final</th>
+                  </tr>
+
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>4,2</th>
+                    <th>4,2</th>
+                    <th> - </th>
+                    <th> - </th>
+                  </tr>
+
+                </tbody>
+              </table>
+            </td>
+            
+          </tr>
+          <!-- <tr ng-repeat="materia in materias">
               <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
+              <th>{{materia.nombre_materia}}</th>
+              <th><a data-id="1" href="horarioatencion.html">{{materia.nombrecompleto}}</a></th>
               <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
+              <th>
+                <ul>
+                  <li ng-repeat="logro in materia.logros"> {{logro.nombre_logro}}</li>
+                </ul>
+              </th>
             
           </tr> 
+        -->
         </tbody>
+        <tr>
+          <th>Final</th>
+          <th style="text-align:right;"colspan="2"> 5 </th>
+        </tr>
       </table>
       </div >
       
 
     </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
 
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
-    <div class ="area">
-      <h2>Ciencias Sociales</h2>
-      <div class ="materias">
-      <table>
-        <thead>
-          <tr>
-              <th>Porcentaje</th>
-              <th>Materia</th>
-              <th>Docente</th>
-              <th>Calificacion</th>
-              <th colspan="3"></th>
-          </tr>
-        </thead>
-        <tbody>
-           <tr>
-              <th>50%</th>
-              <th>Biologia</th>
-              <th><a data-id="1" href="horarioatencion.html">Andrea Palacios Arcos</a></th>
-              <th>2.3</th>
-              <th><a data-id="1" href="logros.html">Logros</a></th>
-            
-          </tr> 
-        </tbody>
-      </table>
-      </div >
-      
-
-    </div>
 		
 
-	</section>
 
-	<footer id="app-footer">
-		<p>Este es el footer</p>
-	</footer>
+</div>
+</div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
+  <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.2.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-resource.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-cookies.js"></script>
+  
+  <script src='../javascripts/scripts/controllers/materiasController.js'></script>
+
+   <script src="../javascripts/j/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../javascripts/j/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../javascripts/j/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../javascripts/j/sb-admin-2.js"></script>
 
 </body>
 </html>

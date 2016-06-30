@@ -7,13 +7,36 @@
   <link href="../stylesheets/bootstrap.css" rel="stylesheet">
   <link href="../stylesheets/style.css" rel="stylesheet">
   <link rel="stylesheet"  href="../angular-bootstrap/ui-bootstrap-csp.css">
+   <link href="../stylesheets/metisMenu.min.css" rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+    <link href="../stylesheets/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+   <div id="wrapper">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <% include navbar %>
+      <% include lateralEstudiante %>
+    </nav>  
+
+
+      <div id="page-wrapper">
+
+        <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">TABLAS EJEMPLOS</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
 
   
-<% include navbar %>
 
-<div class="container">
+
+
 
 <section id="app-body" ng-controller="asistenciaController">
     <div>
@@ -44,6 +67,7 @@
   </section>
 
   </div>
+</div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
@@ -52,6 +76,17 @@
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-cookies.js"></script>
   
   <script src='../javascripts/scripts/controllers/asistenciaController.js'></script>
+
+    <script src="../javascripts/j/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../javascripts/j/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../javascripts/j/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../javascripts/j/sb-admin-2.js"></script>
 
 </body>
 </html>

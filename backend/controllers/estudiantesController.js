@@ -10,7 +10,7 @@ var connectionString = 'postgres://localhost:5432/liceo1';
 var db = pgp(connectionString);
 
 function getMateriasEstudiante(id_usuario, cb){
-var hoy = new Date();	
+	
 	/*var dia = hoy.getDate(); 
 	var mes = hoy.getMonth()+1;
 	var anio= hoy.getFullYear();
@@ -38,7 +38,7 @@ function getLogrosEstudiante(id_usuario, id_materia,cb){
 		cb(data)
 	}).catch(function(err){
 		console.log('error: ' +err)
-		cb("");
+		cb([]);
 		
 	})
 
