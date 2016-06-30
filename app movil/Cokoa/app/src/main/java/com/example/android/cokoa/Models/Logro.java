@@ -41,4 +41,15 @@ public class Logro {
 
     private String id_materia;
     private String id_logro;
+    private String numero_periodo;
+
+    public String getNumero_periodo() {
+        return numero_periodo;
+    }
+
+    public void setNumero_periodo(String numero_periodo) {
+        this.numero_periodo = numero_periodo;
+    }
+
+
 }

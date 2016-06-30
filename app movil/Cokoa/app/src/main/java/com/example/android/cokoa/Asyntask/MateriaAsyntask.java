@@ -196,7 +196,9 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
 
                 String id_materia = areas.getString("id_materia");
                 String title = areas.getString("nombre_materia");
+                String periodo_actual = areas.getString("periodo_actual");
                 Materia materia = new Materia();
+                materia.setPeriodo_actual(periodo_actual);
                 materia.setId_materia(id_materia);
                 materia.setNombre1_docente(nombre1_docente);
                 materia.setNombre2_docente(nombre2_docente);

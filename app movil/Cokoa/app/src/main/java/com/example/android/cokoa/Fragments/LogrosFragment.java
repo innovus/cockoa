@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.android.cokoa.Adapters.LogrosAdapters;
 import com.example.android.cokoa.Asyntask.LogrosAsyntask;
+import com.example.android.cokoa.Asyntask.LogrosPeriodoAsyntask;
 import com.example.android.cokoa.Models.Logro;
 import com.example.android.cokoa.R;
 
@@ -47,7 +48,13 @@ public class LogrosFragment extends Fragment {
         ArrayList<Logro> areas = new ArrayList<>();
         Bundle args = getArguments();
         String id_materia = args.getString("id_materia");
-        new LogrosAsyntask(this.getActivity()).execute(id_materia);
+        String numero_periodo = args.getString("periodo_actual");
+        if(numero_periodo.equals("null")){
+            new LogrosAsyntask(this.getActivity()).execute(id_materia);
+        }else {
+            new LogrosPeriodoAsyntask(this.getActivity()).execute(id_materia,numero_periodo);
+        }
+
         //obtenemos el recycler
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view_logro);
         mRecyclerView.setHasFixedSize(true);

@@ -58,7 +58,6 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
         // Fin de que puedan ser cerradas en el bloque finally .
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-
         // Contendra las respuesta del JSON en un Araylist
         String forecastJsonStr = null;
 

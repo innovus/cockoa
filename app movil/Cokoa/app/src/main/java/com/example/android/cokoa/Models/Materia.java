@@ -59,5 +59,13 @@ public class Materia {
     private String nombre2_docente;
     private String apellido1_docente;
     private String apellido2_docente;
+    private String periodo_actual;
 
+    public String getPeriodo_actual() {
+        return periodo_actual;
+    }
+
+    public void setPeriodo_actual(String periodo_actual) {
+        this.periodo_actual = periodo_actual;
+    }
 }

@@ -62,6 +62,7 @@ public class MateriaAdapters extends RecyclerView.Adapter<MateriaAdapters.ViewHo
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, LogrosActivity.class);
                     intent.putExtra("id_materia", feed.getId_materia());
+                    intent.putExtra("periodo_actual",feed.getPeriodo_actual());
                     activity.startActivity(intent);
                 }
             });

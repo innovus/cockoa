@@ -31,9 +31,9 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 09/06/2016.
+ * Created by ASUS on 27/06/2016.
  */
-public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
+public class LogrosPeriodoAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -42,12 +42,18 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
     SessionManager sessionManager;
     String serverUrls = AppConstants.serverUrl;
     private Activity activity;
-    private final String LOG_TAG = LogrosAsyntask.class.getSimpleName();
+    private final String LOG_TAG = LogrosPeriodoAsyntask.class.getSimpleName();
 
-    public LogrosAsyntask(Activity activity) {
+    /*public LogrosAsyntask(Activity activity) {
+        super();
+        this.activity = activity;
+    }*/
+
+    public  LogrosPeriodoAsyntask(Activity activity){
         super();
         this.activity = activity;
     }
+
 
     @Override
     protected ArrayList<Logro> doInBackground(String... params) {
@@ -63,7 +69,9 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "estudiantes/materias/logros/"+params[0]);
+            //estudiantes/materias/notalogro/"+params[0]+"-"+params[1]
+            //estudiantes/materias/logro/periodo/
+            URL url = new URL(serverUrls + "estudiantes/materias/logro/periodo/"+params[0]+"-"+params[1]);
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -220,3 +228,4 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
 
 
 }
+
