@@ -18,39 +18,46 @@
     <!-- Custom Fonts -->
     <link href="../stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body ng-controller="cargaController">
   <div id="wrapper">
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
       <% include navbar %>
-      <% include lateralEstudiante %>
+      <!-- barra lateral -->
+      <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+              <li ng-repeat="carga in cargas"><a ng-click="selectCurso(carga.id_curso)">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a></li>
+            </ul>
+        </div>
+      </div>
+      
     </nav>  
+
+
 
 
 <div id="page-wrapper">
 
-
-    <div class="row">
+  <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">TABLAS EJEMPLOS</h1>
+            <h1 class="page-header">Estudiantes</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
 
-
-<section id="app-body" ng-controller="cargaController">
-    <div id="Carga">
-    <h1>Cursos</h1>
-    <div ng-grid ="gridOptions">
-    </div>
-    <ul>
-      <li ng-repeat="carga in cargas"><a ng-click="selectCurso(carga.id_curso)">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a></li>
-    </ul>
-
-    </div>
-    <div id="estudiantes">
-      <table class="table">
-      <thead>
-          <tr>
+  <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    tabla ejemplo
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                       
+                           <div id="estudiantes">
+                            <table class="table">
+                              <thead>
+                        <tr>
               <th>No</th>
               <th>Codigo</th>
               <th>Nombres</th>
@@ -69,6 +76,34 @@
         </tbody>
     </table>
     </div>
+                    
+
+                        <!-- /.col-lg-6 (nested) -->
+                    </div>
+                    <!-- /.row (nested) -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+
+    
+
+
+<section id="app-body" >
+    <div id="Carga">
+    <h1>Cursos</h1>
+    <div ng-grid ="gridOptions">
+    </div>
+    <ul>
+      
+    </ul>
+
+    </div>
+    
 
   </section>
 

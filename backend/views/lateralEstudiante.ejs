@@ -17,8 +17,7 @@
                 <li>
                     <a href="#"> ASISTENCIAS</a>
                 </li>
-                <li>
-                    <a href="#">MATRICULA</a>
+                <li  ng-repeat="materia in materias"><a ng-click="getLogros(materia.id_materia)">{{materia.nombre_materia}} </a>
                 </li>
                 <li>
                     <a href="#">CURSOS</a>

@@ -26,11 +26,7 @@ app.controller('asistenciaController',['$scope','$http','$cookieStore', '$cookie
                 $scope.inasistencias[i].apellido1 = delNull($scope.inasistencias[i].apellido1);
                 $scope.inasistencias[i].apellido2 = delNull($scope.inasistencias[i].apellido2);
                 $scope.inasistencias[i].nombrecompleto = $scope.inasistencias[i].nombre1 + " "+ $scope.inasistencias[i].nombre2 + " " + $scope.inasistencias[i].apellido1 + " "+  $scope.inasistencias[i].apellido2; 
-
-               
             };
-
-            
         })
         .error(function(data) {
             console.log('Error: ' + data);
@@ -50,15 +46,15 @@ function delNull(item){
 }
 
 function setCookieData(cookies, accesstoken){
-         var accessToken = accesstoken;
-         cookies.put("accessToken", accesstoken);
-     }
-     function getCookieData(cookies){
-        var accessToken = cookies.get("accessToken");
-        return accessToken;
-     }
-     function clearCookieData(cookies){
-        var accessToken = "";
-        cookies.remove("accessToken");
-     }
+  var accessToken = accesstoken;
+  cookies.put("accessToken", accesstoken);
+}
+function getCookieData(cookies){
+  var accessToken = cookies.get("accessToken");
+  return accessToken;
+}
+function clearCookieData(cookies){
+  var accessToken = "";
+  cookies.remove("accessToken");
+}
 
