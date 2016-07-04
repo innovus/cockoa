@@ -19,6 +19,6 @@ function getCursosMaterias(req,res){
     });
 }
 
-router.get('/carga'/*, authenticate*/, getCursosMaterias);
+router.get('/cargas'/*, authenticate*/, getCursosMaterias);
 
 module.exports = router;

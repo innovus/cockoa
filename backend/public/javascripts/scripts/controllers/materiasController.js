@@ -54,14 +54,13 @@ app.controller('materiasController',['$scope','$http','$cookieStore', '$cookies'
 
         $scope.getLogros = function(id_materia){
           $scope.logros = [];
-
           $http.get('/estudiantes/materias/'+id_materia +'/logros')
-                  .success(function(logros){                    
-                    $scope.logros = logros;
-                  })
-                  .error(function(error){
-                    console.log('Error: '+ error)
-                  })
+            .success(function(logros){                    
+              $scope.logros = logros;
+            })
+            .error(function(error){
+              console.log('Error: '+ error)
+            })
         }
 
     }]);

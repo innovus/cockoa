@@ -38,7 +38,7 @@ router.get('/estudiantes/asistencias', validarSession,function(req, res, next) {
   res.render('asistencia_estudiante');
 });
 
-router.get('/docentes/cargas', validarSession,function(req, res, next) {
+router.get('/docentes/cargas', /*validarSession,*/function(req, res, next) {
   res.render('index_profesor');
 });
 

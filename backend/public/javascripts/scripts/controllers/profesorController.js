@@ -13,11 +13,11 @@ app.controller('cargaController',['$scope','$http',function($scope,$http){
   //  $scope.formData = {};
   $scope.estudiantes=[];
 // Cuando se cargue la página, pide del API todos los TODOs
-  $http.get('/api/docentes/carga')
+  $http.get('/api/docentes/cargas')
     .success(function(data) {
     //JSON.stringify(data).replace(/null/i, "\"\""); 
         $scope.cargas = data;
-        console.log(data);
+        //console.log(data);
 
 
            // console.log($cookies.accessToken);     
@@ -26,25 +26,91 @@ app.controller('cargaController',['$scope','$http',function($scope,$http){
         console.log('Error: ' + data);
     });
 
-    $scope.selectCurso = function (id_curso){
+    $scope.selectCurso = function (id_curso,id_carga){
+      $scope.estudiantes = [];
+      $scope.cantidad = {};
+      getCursos(id_curso,function(estudiantes){
+        getInasistencias(id_carga,function(cantidad){
+          $scope.cantidad = cantidad;
+          console.log("antes del for")
+          console.log(cantidad);
+          console.log($scope.cantidad)
+          $scope.estudiantes = estudiantes;
+          
+          for (var i = $scope.estudiantes.length - 1; i >= 0; i--) {
+            if(typeof $scope.cantidad[$scope.estudiantes[i].id_estudiante] === 'undefined' ){
+              $scope.estudiantes[i].inasistencias = 0;
+            }else{
+              console.log("entro al else");
+              console.log($scope.cantidad);
+
+              console.log($scope.estudiantes[i]);
+              
+              $scope.estudiantes[i].inasistencias = $scope.cantidad[$scope.estudiantes[i].id_estudiante];
+
+            }
+            console.log("despues del for")
+            console.log($scope.estudiantes);
+  
+
+          } //cierra for       
+        })
+      
+
+      })
+
+
+      function getCursos(id_curso,cb){
         $http.get('/api/cursos/'+id_curso+'/estudiantes')
         .success(function(est){
-            $scope.estudiantes = est;
-             for (var i = $scope.estudiantes.length - 1; i >= 0; i--) {
-                $scope.estudiantes[i].nombre1 = delNull($scope.estudiantes[i].nombre1);
-                $scope.estudiantes[i].nombre2 = delNull($scope.estudiantes[i].nombre2);
-                $scope.estudiantes[i].apellido1 = delNull($scope.estudiantes[i].apellido1);
-                $scope.estudiantes[i].apellido2 = delNull($scope.estudiantes[i].apellido2);
-                $scope.estudiantes[i].nombrecompleto = $scope.estudiantes[i].nombre1 + " "+ $scope.estudiantes[i].nombre2 + " " + $scope.estudiantes[i].apellido1 + " "+  $scope.estudiantes[i].apellido2; 
-
-               
+          console.log("hizo la consulta y sige estudiantes")
+            //$scope.estudiantes = est;
+             for (var i = est.length - 1; i >= 0; i--) {
+                est[i].nombre1 = delNull(est[i].nombre1);
+                est[i].nombre2 = delNull(est[i].nombre2);
+                est[i].apellido1 = delNull(est[i].apellido1);
+                est[i].apellido2 = delNull(est[i].apellido2);
+                est[i].nombrecompleto = est[i].nombre1 + " "+ est[i].nombre2 + " " + est[i].apellido1 + " "+  est[i].apellido2;                
             };
-            console.log($scope.estudiantes);
+
+            cb(est)
+            //console.log($scope.estudiantes);
         }).error(function(error){
-            $scope.estudiantes = [];
+            cb([]);
             console.log('Error: ' + error);
+        });
+
+
+      }
+      function getInasistencias(id_carga,cb){
+        $http.get('/inasistencias/cargas/'+id_carga)
+        .success(function(cantidad){
+          cb(cantidad);
+          console.log("hizo la consulta y sige cantidad");
+         // console.log($scope.cantidad);
         })
+        .error(function(error){
+          cb([]);
+         
+          console.log('Error: ' + error);
+        });
+      }
+        
+
+        
+
+       
+        
+
+        /*for(var i = $scope.estudiantes.length - 1; i >= 0; i--){
+          $scope.cantidad[$scope];
+
+
+          //$scope.estudiantes[i].id_estudiante
+
+        }*/
     }
+
 }]);
 //})();
 function delNull(item){

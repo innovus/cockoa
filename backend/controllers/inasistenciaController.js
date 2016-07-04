@@ -24,16 +24,20 @@ function getTipoUsuario(id, cb){
 		return cb(err);
 	})
 }
-function getInasistencias(cb){
-	db.many("select nombre_materia, nombre1, nombre2, apellido1, apellido2, estado_inasistencia, fecha_inasistencia, numero_periodo "+
+
+//inasistencias de una carga
+function getInasistenciasCarga(id_carga, cb){
+	var prueba = "select nombre_materia, nombre1, nombre2, apellido1, apellido2, estado_inasistencia, fecha_inasistencia, numero_periodo "+
 	 "from inasistencia "+
 	 "join carga_docente on inasistencia.id_carga = carga_docente.id_carga_docente "+ 
 	 "join usuario on usuario.id_usuario =  carga_docente.id_usuario "+
 	 "join materia on materia.id_materia = carga_docente.id_materia "+
 	 "join periodo on periodo.id_periodo = carga_docente.id_periodo "+
 	 "join docente on docente.id_docente = carga_docente.id_docente "+
-	 "join persona on persona.identificacion = docente.identificacion ")
+	 "join persona on persona.identificacion = docente.identificacion  where id_carga = "+id_carga;
+	db.many(prueba)
 	.then(function(data){
+		console.log(prueba)
 			console.log(data)
 		cb(data)
 	}).catch(function(err){
@@ -42,6 +46,38 @@ function getInasistencias(cb){
 	})
 
 }
+
+//cantidad de inasistencias de una carga para un estudiante
+function getCantidadInasistenciasCarga(id_carga, cb){
+
+	var query = "select estudiante.id_estudiante, count(estudiante.id_estudiante) as cantidad from inasistencia "+
+	 "right join estudiante on inasistencia.id_estudiante = estudiante.id_estudiante "+
+	 "join carga_docente on inasistencia.id_carga = carga_docente.id_carga_docente "+
+	 "where carga_docente.id_carga_docente = "+id_carga+" group by estudiante.id_estudiante";
+	 db.many(query)
+	.then(function(data){
+		var data1 = {};
+		//(function(i){
+			console.log("antes del for")
+			for (var i = data.length - 1; i >= 0; i--) {
+
+				console.log("entro al for " + i )
+				data1[data[i].id_estudiante] = data[i].cantidad;
+			}
+
+
+		//})(i);
+		
+		
+		console.log(data1)		
+		cb(data1)
+	}).catch(function(err){
+		console.log(err)
+		return cb({});
+	})
+
+}
+
 
 function getMiInasistencia (id,cb){
 
@@ -90,7 +126,8 @@ function getListadoEstudiantesCurso(id_curso, cb){
 }
 module.exports = {
 	getMiInasistencia: getMiInasistencia,
-	getInasistencias: getInasistencias,
+	getInasistenciasCarga: getInasistenciasCarga,
 	addInasistencia: addInasistencia,
-	getListadoEstudiantesCurso: getListadoEstudiantesCurso
+	getListadoEstudiantesCurso: getListadoEstudiantesCurso,
+	getCantidadInasistenciasCarga: getCantidadInasistenciasCarga
 }

@@ -28,11 +28,18 @@ router.get('/mi_inasistencia', authenticate, function(req, res) {
 router.post('/inasitecia',authenticate, function(req,res){
 	inasistenciaController.addInasistencia
 })
-
-router.get('/inasistencias', function(req,res){
-	inasistenciaController.getInasistencias(function(data){
+/*
+router.get('/cargas/:id_carga', function(req,res){
+	inasistenciaController.getInasistenciasCarga(req.params.id_carga, function(data){
 		res.json(data);
 	})
+})*/
+
+
+router.get('/cargas/:id_carga', function(req,res){
+  inasistenciaController.getCantidadInasistenciasCarga(req.params.id_carga, function(data){
+    res.json(data);
+  })
 })
 
 
