@@ -10,9 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.android.cokoa.Adapters.MateriaAdapters;
+import com.example.android.cokoa.Adapters.TotalInsasitenciaAdapter;
 import com.example.android.cokoa.AppConstants.AppConstants;
-import com.example.android.cokoa.Models.Materia;
+import com.example.android.cokoa.Models.Inasistencia;
 import com.example.android.cokoa.R;
 import com.example.android.cokoa.SessionManager.SessionManager;
 
@@ -29,25 +29,26 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 08/06/2016.
+ * Created by ASUS on 30/06/2016.
  */
-public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
+//AsyncTask<Void, Void, ArrayList<Materia>> {
+public class TotalInasistenciaAsyntask extends AsyncTask<Void, Void, ArrayList<Inasistencia>> {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SessionManager sessionManager;
     String serverUrls = AppConstants.serverUrl;
-
     private Activity activity;
-    private final String LOG_TAG = MateriaAsyntask.class.getSimpleName();
+    private final String LOG_TAG = TotalInasistenciaAsyntask.class.getSimpleName();
 
-    public MateriaAsyntask(Activity activity) {
+    public TotalInasistenciaAsyntask(Activity activity) {
         super();
         this.activity = activity;
     }
 
+
     @Override
-    protected ArrayList<Materia> doInBackground(Void... params) {
+    protected ArrayList<Inasistencia> doInBackground(Void... params) {
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -60,7 +61,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "estudiantes/materias/");
+            URL url = new URL(serverUrls + "inasistencias/total_inasistencia/");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -128,7 +129,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
             }
         }
         try {
-            return getAreas(forecastJsonStr);
+            return getTotalInasistecia(forecastJsonStr);
             //return  null;
         } catch (JSONException e) {
             Log.e("error", e.getMessage(), e);
@@ -139,105 +140,75 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Materia> result) {
+    protected void onPostExecute(ArrayList<Inasistencia> result) {
+
+
         if (result != null) {
 
             ArrayList<String> status = new ArrayList(result);
             if (status.get(0) == "400") {
                 Toast toast1 =
-                        Toast.makeText(activity, "Aun no se le asignan materias", Toast.LENGTH_SHORT);
+                        Toast.makeText(activity, "No tiene inasistencias", Toast.LENGTH_SHORT);
                 toast1.show();
 
-            }else{
+            } else {
                 mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view);
                 mRecyclerView.setHasFixedSize(true);
                 //usR UN ADMINISTRADOR PARA LINEARLAYOUT
                 mLayoutManager = new LinearLayoutManager(activity);
                 mRecyclerView.setLayoutManager(mLayoutManager);
-                mAdapter = new MateriaAdapters(result, activity);
+                mAdapter = new TotalInsasitenciaAdapter(result, activity);
                 mRecyclerView.setAdapter(mAdapter);
             }
-
 
         } else {
             Snackbar.make(activity.findViewById(android.R.id.content), "No tienes conexión", Snackbar.LENGTH_LONG)
                     .setAction("VOLVER A INTENTARLO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            MateriaAsyntask areaAsyntask = new MateriaAsyntask(activity);
-                            areaAsyntask.execute();
+                            TotalInasistenciaAsyntask totalInasistenciaAsyntask = new TotalInasistenciaAsyntask(activity);
+                            totalInasistenciaAsyntask.execute();
                         }
                     })
                     .setActionTextColor(Color.YELLOW)
                     .show();
         }
+
+
     }
 
+    public static ArrayList<Inasistencia> getTotalInasistecia(String inasistenciaJsonStr) throws JSONException {
 
-    public static ArrayList<Materia> getAreas(String areaJsonStr) throws JSONException {
-
-        if (areaJsonStr != null) {
+        if (inasistenciaJsonStr != null) {
             // Ahora tenemos una cadena que representa todas las areas en formato JSON .
             // Afortunadamente análisis es fácil: constructor toma la cadena JSON y lo convierte
             // En una jerarquía de objetos para nosotros .
             // Estos son los nombres de los objetos JSON que necesitan ser extraídos .
             // La información de ubicación
-            Log.v("getArea", "Json String" + areaJsonStr);
-            JSONArray areaArray = new JSONArray(areaJsonStr);
-            Log.v("areaArray", "Json String" + areaArray);
-            ArrayList<Materia> areaArrayList = new ArrayList<Materia>();
+            Log.v("getArea", "Json String" + inasistenciaJsonStr);
+            JSONArray inasistenciaArray = new JSONArray(inasistenciaJsonStr);
+            Log.v("areaArray", "Json String" + inasistenciaArray);
+            ArrayList<Inasistencia> inasistenciasArray = new ArrayList<Inasistencia>();
 
-            for (int i = 0; i < areaArray.length(); i++) {
-                JSONObject areas = areaArray.getJSONObject(i);
-                String nombre1_docente = "";
-                String nombre2_docente = "";
-                String apellido1_docente = "";
-                String apellido2_docente = "";
+            for (int i = 0; i < inasistenciaArray.length(); i++) {
+                JSONObject inasistenciaTotal = inasistenciaArray.getJSONObject(i);
 
 
-                if (areas.isNull("nombre1")) {
-                    nombre1_docente = "";
-                } else {
-                    nombre1_docente = areas.getString("nombre1");
-                }
+                String id_materia = inasistenciaTotal.getString("id_materia");
+                String title = inasistenciaTotal.getString("nombre_materia");
+                String total = inasistenciaTotal.getString("total_inasistencia");
+                Inasistencia inasistencia = new Inasistencia();
 
-                if (areas.isNull("nombre2")) {
-                    nombre2_docente = "";
-                } else {
-                    nombre2_docente = (" " + areas.getString("nombre2"));
-                }
+                inasistencia.setIdMateria(id_materia);
+                inasistencia.setNombreMateria(title);
+                inasistencia.setTotalInasistencia(total);
 
-                if (areas.isNull("apellido1")) {
-                    apellido1_docente = "";
-                } else {
-                    apellido1_docente = (" " + areas.getString("apellido1"));
-                }
-
-                if (areas.isNull("apellido2")) {
-                    apellido2_docente = "";
-                } else {
-                    apellido2_docente = (" " + areas.getString("apellido2"));
-                }
-
-                String id_materia = areas.getString("id_materia");
-                String title = areas.getString("nombre_materia");
-                String periodo_actual = areas.getString("periodo_actual");
-                Materia materia = new Materia();
-                materia.setPeriodo_actual(periodo_actual);
-                materia.setId_materia(id_materia);
-                materia.setNombre1_docente(nombre1_docente);
-                materia.setNombre2_docente(nombre2_docente);
-                materia.setApellido1_docente(apellido1_docente);
-                materia.setApellido2_docente(apellido2_docente);
-                materia.setNombre_materia(title);
-                areaArrayList.add(materia);
+                inasistenciasArray.add(inasistencia);
 
             }
 
-            return areaArrayList;
+            return inasistenciasArray;
         }
         return null;
     }
-
-
 }

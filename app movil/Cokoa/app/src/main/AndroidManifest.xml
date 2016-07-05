@@ -26,7 +26,8 @@
         <activity
             android:name=".Activities.LogrosActivity"
             android:label="Indicadores de logros" />
-        <activity android:name=".Activities.NotasActivity"></activity>
+        <activity android:name=".Activities.NotasActivity" />
+        <activity android:name=".Activities.InasistenciaMateriaActivity"></activity>
     </application>
 
 </manifest>
