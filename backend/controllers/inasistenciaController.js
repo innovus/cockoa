@@ -102,13 +102,15 @@ function getMiInasistencia (id,cb){
 	})
 }
 
-function addInasistencia (id_tipo_usuario,id_perdiodo,id_estudiante,estado_inasistencia, fecha_inasistencia, id_carga, cb){
+function addInasistencia (id_tipo_usuario,id_periodo,id_estudiante,estado_inasistencia, fecha_inasistencia, id_carga, cb){
 	var queri = "insert into inasistencia(id_periodo,id_estudiante,estado_inasistencia, fecha_inasistencia, id_carga) values ("+id_periodo+", "+id_estudiante+", "+estado_inasistencia+", '"+fecha_inasistencia+"', "+id_carga+")";
+	console.log(queri)
 	db.none(queri)
-	.then(function(data){
-		cb('{"message":"insertado"}')
-	}).catch(function(err){
-		return next(err);
+	.then(function(){
+		
+		cb({'mensaje':'Inasistencia insertada'})
+	}).catch(function(error){
+		console.log("Error" , error.message || error);
 	});
 	
 }

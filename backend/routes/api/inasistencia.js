@@ -25,8 +25,11 @@ router.get('/mi_inasistencia', authenticate, function(req, res) {
   
 });
 
-router.post('/inasitecia',authenticate, function(req,res){
-	inasistenciaController.addInasistencia
+router.post('/inasistencia',/*authenticate,*/ function(req,res){
+ 
+	inasistenciaController.addInasistencia(1,req.body.id_periodo,req.body.id_estudiante,1,req.body.fecha_inasistencia,req.body.id_carga, function(data){
+    res.json(data);
+  });
 })
 /*
 router.get('/cargas/:id_carga', function(req,res){
@@ -37,6 +40,8 @@ router.get('/cargas/:id_carga', function(req,res){
 
 
 router.get('/cargas/:id_carga', function(req,res){
+  
+
   inasistenciaController.getCantidadInasistenciasCarga(req.params.id_carga, function(data){
     res.json(data);
   })
