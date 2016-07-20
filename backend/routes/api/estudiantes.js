@@ -26,21 +26,20 @@ function getMAterias(req,res){
     next();
   })*/
   //estudiantesController.getMateriasYLogrosE(req.user.id,function(data){
-    estudiantesController.getMateriasEstudiante(/*req.user.id*/1,function(data){
+  estudiantesController.getMateriasEstudiante(/*req.user.id*/1,function(data){
     
     console.log('response')
     res.status(200).json(data);
-}
-  );
+  });
 
 }
 function getNotas(req,res, next){
   //req.materias 
   materias = []
   addJsonLogros(req.materias[0],function(nuevaMateria){
-        console.log("entra a addJsonLogros")
-        materias.push(nuevaMateria);
-      })
+    console.log("entra a addJsonLogros")
+    materias.push(nuevaMateria);
+  })
 
 //console.log("antes del for");
   
@@ -75,13 +74,42 @@ function getLogrosApi(req,res){
     console.log(req.materias);
     next();
   })*/
-  estudiantesController.getLogrosEstudiante(/*req.user.id*/1,req.params.id_materia,function(data){
+  estudiantesController.getLogrosEstudiante(/*req.user.id*/1,req.params.id_materia,req.params.id_periodo,function(data){
     console.log('response')
     res.status(200).json(data);
+  });
 }
-  );
+
+function getActividadesApi(req,res){
+  /*
+  estudiantesController.getMateriasEstudiante(req.user.id,function(data){
+    req.materias = data;
+    console.log(req.materias);
+    next();
+  })*/
+  estudiantesController.getActividadesEstudiante(req.params.id_logro,function(data){
+    console.log('response')
+    res.status(200).json(data);
+  });
 
 }
+function getNotasEstudiantes(req,res){
+  estudiantesController.getNotasLogros(/*req.user.id*/1,req.params.id_materia,req.params.id_periodo,function(data){
+    res.status(200).json(data);
+  });
+
+
+}
+
+function getNotasActividadesEstudiantes(req,res){
+  estudiantesController.getNotasActividades(/*req.user.id*/1,req.params.id_logro,function(data){
+    res.status(200).json(data);
+  });
+
+
+}
+
+
 function response(req,res){
   console.log('response')
   res.status(200).json(req.respuesta);
@@ -116,7 +144,11 @@ function addJsonLogros(materia,cb){
 }
 //router.get('/materias', authenticate, getMAterias,getNotas, response);
 router.get('/materias', /*authenticate,*/ getMAterias);
-router.get('/materias/:id_materia/logros', /*authenticate,*/getLogrosApi);
+router.get('/materias/:id_materia/logros/periodos/:id_periodo', /*authenticate,*/getLogrosApi);
+router.get('/materias/:id_materia/notas/periodos/:id_periodo', /*authenticate,*/getNotasEstudiantes);
+router.get('/logros/:id_logro/actividades', /*authenticate,*/getActividadesApi);
+router.get('/logros/:id_logro/actividades/notas', /*authenticate,*/getNotasActividadesEstudiantes);
+
 
 /*
 

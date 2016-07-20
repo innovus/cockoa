@@ -25,7 +25,7 @@
       <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
-              <li  ng-repeat="materia in materias"><a ng-click="getLogros(materia.id_materia)">{{materia.nombre_materia}} </a>
+              <li  ng-repeat="materia in materias"><a ng-click="getMateriasYLogros(materia)">{{materia.nombre_materia}} </a>
               </li>
             </ul>
         </div>
@@ -44,10 +44,16 @@
         <!-- /.col-lg-12 -->
     </div>
 
+    <hr />
 
-    <div class ="area" >
-      <h4>Ciencias Sociales</h4>
-      <h5>Docente: Janeth Arcos Silva</h5>
+  <uib-tabset  active="activeTabIndex">
+
+
+   
+    <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{periodo.numero_periodo}}" ng-click="getPeriodoId($index)" active="2">
+      <div class ="area" >
+      <h4>{{materia_seleccionada.nombre_materia}}</h4>
+      <h5>Docente: {{materia_seleccionada.nombrecompleto}}</h5>
       <div class ="materias" >
       <table class="table  table-bordered" >
         <thead>
@@ -55,8 +61,6 @@
               <th style="text-align:center;">Porcentaje</th>
               <th style="text-align:center;">Logros</th>
               <th style="text-align:center;" >Actividades</th>
-              <th style="text-align:center;" >Asistencias</th>
-              <th colspan="3"></th>
           </tr>
         </thead>
         <tbody>
@@ -67,19 +71,18 @@
               <table class="table  table-bordered" >
                 <thead>
                   <tr>
-                    <th>50% Actividad</th>
-                    <th>50% Actividad</th>
-                    <th>50% Actividad</th>
+                    <th ng-repeat="actividad in logro.actividades">{{actividad.porcentaje_actividad}}%  - Actividad {{$index + 1 }}</th>
+                   
                     <th>Final</th>
+                  
                   </tr>
 
                 </thead>
                 <tbody>
                   <tr>
-                    <th>4,2</th>
-                    <th>4,2</th>
-                    <th> - </th>
-                    <th> - </th>
+                    <th ng-repeat="actividad in logro.actividades">{{actividad.nota}}</th>
+
+                    <th> {{logro.nota}} </th>
                   </tr>
 
                 </tbody>
@@ -110,6 +113,13 @@
       
 
     </div>
+    </uib-tab>
+  </uib-tabset>
+
+  <hr />
+
+
+    
 
 		
 

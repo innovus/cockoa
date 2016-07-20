@@ -9,13 +9,16 @@ var session = require('express-session');
 var config = require('./config/config');
 
 
-var routes = require('./routes/index');
+var routes = require('./routes/index').router;
+var index = require('./routes/index').index;
+var partials = require('./routes/index').partials;
 
 var users = require('./routes/users');
 var inasistencias = require('./routes/api/inasistencia');
 var cursos = require('./routes/api/cursos');
 var estudiantes = require('./routes/api/estudiantes');
 var docentes = require('./routes/api/profesores');
+var todos = require('./routes/api/todos');
 
 var apis = require('./routes/api/index');
 var auth = require('./routes/api/auth').router;
@@ -46,16 +49,17 @@ app.use('/inasistencias', inasistencias);
 app.use('/api/cursos', cursos);
 app.use('/estudiantes', estudiantes);
 app.use('/api/docentes', docentes);
+app.use('/api/todos', todos);
 
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
-/*
+
 app.get('/', index);
 app.get('/partials/:filename', partials);
 //app.use(index);
 
-app.get('*', index);*/
+//app.get('*', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

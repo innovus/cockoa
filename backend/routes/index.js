@@ -24,7 +24,7 @@ router.post('/', function(req, res, next) {
 	}
 	
 });
-/*
+
 function partials(req, res){
   var filename = req.params.filename;
   if(!filename) return;  // might want to change this
@@ -32,7 +32,7 @@ function partials(req, res){
 };
 function index(req, res){
   res.render('index', {message:"Hello!!!"});
-};*/
+};
 
 router.get('/estudiantes/asistencias', validarSession,function(req, res, next) {
   res.render('asistencia_estudiante');
@@ -46,6 +46,9 @@ router.get('/estudiantes/notas', /*validarSession,*/function(req, res, next) {
   res.render('notas');
 });
 
+router.get('/docentes/notas', /*validarSession,*/function(req, res, next) {
+  res.render('notas_docentes');
+});
 
 function validarSession(req,res,next){
 	if(req.session.token){
@@ -55,5 +58,5 @@ function validarSession(req,res,next){
 	}
 }
 
-module.exports = router;
+module.exports = {router: router, partials: partials,index: index};
 

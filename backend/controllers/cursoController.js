@@ -22,11 +22,8 @@ function getEstudiantesCurso(id_curso, cb){
 			cb([]);
 		}else{
 			console.log(err.message)
-
 		}
-		
 	})
-
 }
 module.exports = {
 	getEstudiantesCurso: getEstudiantesCurso

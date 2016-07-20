@@ -29,9 +29,9 @@ function getMateriasEstudiante(id_usuario, cb){
 	})
 
 }
-function getLogrosEstudiante(id_usuario, id_materia,cb){
+function getLogrosEstudiante(id_usuario, id_materia,id_periodo,cb){
 	console.log("entro a getLogrosEStudiantes");
-	var queri = "select id_logro,id_nota_logro,porcentaje_logro, nombre_logro, descripcion_logro from nota_logro natural join logro natural join carga_docente where id_estudiante = '1' and id_materia = '"+id_materia+"' ";
+	var queri = "select id_logro,nombre_logro, descripcion_logro, porcentaje_logro from logro natural join carga_docente where  id_materia = '"+id_materia+"' and id_periodo= "+id_periodo;
 	db.many(queri)
 	.then(function(data){ 
 		console.log("la fucnion salio bn" + data)
@@ -41,6 +41,74 @@ function getLogrosEstudiante(id_usuario, id_materia,cb){
 		cb([]);
 		
 	})
+
+}
+
+function getActividadesEstudiante(id_logro,cb){
+
+	var queri = "select id_actividad,id_logro,nombre_actividad,descripcion_actividad,porcentaje_actividad from actividad where id_logro =  "+id_logro;
+	db.many(queri)
+	.then(function(data){ 
+		console.log("la fucnion salio bn" + data)
+		cb(data)
+	}).catch(function(err){
+		console.log('error: ' +err)
+		cb([]);
+		
+	})
+
+}
+function getNotasLogros(id_usuario,id_materia,id_periodo,cb){
+	console.log("entro a getLogrosEStudiantes");
+	var queri = "select id_logro, nota_logro from nota_logro natural join logro  natural join carga_docente where id_estudiante = '"+id_usuario+"' and id_materia= '"+id_materia+"' and id_periodo= "+id_periodo;
+	console.log(queri)
+	db.many(queri)
+	.then(function(data){ 
+		var data1 = {};
+		//(function(i){
+			console.log("antes del for")
+			for (var i = data.length - 1; i >= 0; i--) {
+
+				data1[data[i].id_logro] = data[i].nota_logro;
+			}
+
+		console.log(data1)		
+		cb(data1)
+
+		
+	}).catch(function(err){
+		console.log('error: ' +err);
+		cb([]);
+		
+	})
+
+
+}
+
+function getNotasActividades(id_usuario,id_logro,cb){
+	
+	var queri = "select id_actividad, nota_actividad from nota_actividad  natural join actividad where id_estudiante = '"+id_usuario+"' and id_logro = "+id_logro;
+	console.log(queri)
+	db.many(queri)
+	.then(function(data){ 
+		var data1 = {};
+		//(function(i){
+			console.log("antes del for")
+			for (var i = data.length - 1; i >= 0; i--) {
+
+				data1[data[i].id_actividad] = data[i].nota_actividad;
+			}
+
+		console.log(data1)		
+		cb(data1)
+
+		
+	}).catch(function(err){
+		console.log('error: ' +err);
+		cb([]);
+		
+	})
+
 
 }
 function getMateriasYLogrosE(id_usuario, cb){
@@ -58,8 +126,6 @@ function getMateriasYLogrosE(id_usuario, cb){
 			queri = "select id_logro,id_nota_logro,porcentaje_logro, nombre_logro, descripcion_logro from nota_logro natural join logro natural join carga_docente where id_estudiante = '1' and id_materia = '"+materia.id_materia+"' ";
 			db.many(queri)
 			.then(function(logros){
-
-			
       			aux['logros']= logros;
       			materias.push(aux);
       			console.log("materias ciclo" + JSON.stringify(materias))
@@ -70,15 +136,11 @@ function getMateriasYLogrosE(id_usuario, cb){
 				aux['logros'] = dataLogros;
 				materias.push(aux);
 				console.log("materias ciclo" + JSON.stringify(materias))
-				
-
 			})
 
 		//});
 		console.log(materias);
 		cb(materias)
-
-
 	}).then(function(data){
 		console.log(data);
 	}).catch(function(err){
@@ -135,5 +197,8 @@ function getMateriasEstudiante(id_usuario, cb){
 module.exports = {
 	getMateriasEstudiante: getMateriasEstudiante,
 	getLogrosEstudiante: getLogrosEstudiante,
-	getMateriasYLogrosE: getMateriasYLogrosE
+	getMateriasYLogrosE: getMateriasYLogrosE,
+	getNotasLogros: getNotasLogros,
+	getActividadesEstudiante: getActividadesEstudiante,
+	getNotasActividades: getNotasActividades
 }

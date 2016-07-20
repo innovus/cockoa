@@ -1,1 +1,28 @@
-asistencia
+<div class="modal-header">
+    <h3 class="modal-title">Faltas de </h3>
+<div class="modal-body">
+  <h1>Asistencia</h1>
+  <div ng-grid ="gridOptions">
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+          <th>Fecha</th>
+          <th>id</th>
+          <th>Justificada</th>
+      </tr>
+    </thead>
+    <tbody >
+        <tr ng-repeat="fecha in fechas">
+          <th>{{fecha.fecha_inasistencia}}</th>
+          <th>{{fecha.id_inasistencia}}</th>
+          <th>{{fecha.estado_inasistencia}}</th>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

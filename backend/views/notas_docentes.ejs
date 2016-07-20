@@ -1,12 +1,11 @@
-
 <!DOCTYPE html>
-<html ng-app="profesores">
+<html ng-app="docentes">
 <head>
   <title>Test</title>
 
   <link href="../stylesheets/bootstrap.css" rel="stylesheet">
   <link href="../stylesheets/style.css" rel="stylesheet">
- 
+
 
   <!-- Css j -->
   <link href="../stylesheets/metisMenu.min.css" rel="stylesheet">
@@ -18,7 +17,7 @@
   <!-- Custom Fonts -->
   <link href="../stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
-<body ng-controller="cargaController">
+<body ng-controller="docentes_notasController">
   <div id="wrapper">
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
       <% include navbar %>
@@ -49,37 +48,45 @@
       <uib-tabset  active="activeTabIndex">
       <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{periodo.numero_periodo}}" ng-click="getPeriodoId($index)">
 
-
       <div class="row">
         <div class="col-lg-12">
-           <form >
+
 
           <div class="panel panel-default">
             <div class="panel-heading">
-              Listado {{carga_seleccionada.nombre_materia}}
+              Listado
             </div>
             <div class="panel-body">
-             
+
               <div class="row">
 
                <div id="estudiantes">
-                
 
-
-
-                <table class="table">
+                <table class="table table-bordered">
                   <thead>
                     <tr>
-                      <th colspan="1"></th>
-                      <th>No</th>
-                      <th>Codigo</th>
-                      <th>Nombres</th>
-                      <th>Faltas</th>
-                      <th colspan="1"></th>
-
+                      <th rowspan="2">No</th>
+                      <th rowspan="2">Nombres Apellidos</th>
+                     
+                      <th ng-repeat="logro in logros " colspan = "{{logro.actividades.length + 1}}">Logro {{$index + 1}} </th>
+                      
                     </tr>
+                    <tr>
+                          
+                        <th ng-repeat="cabecera in cabeceras track by $index">{{cabecera}}</th>
+                  
+                    </tr>
+
                   </thead>
                   <tbody>
+                    <tr ng-repeat="estudiante in estudiantes">
+                     <td>1</td>
+                     <td>{{estudiante.nombrecompleto}}</td>
+
+                     
+                   </tr>
+                   
+                    <!--
                    <tr ng-repeat="estudiante in estudiantes">
                     <th><input type="checkbox" checklist-model="selected.ids_estudiantes" checklist-value="estudiante.id_estudiante"></th>
                     <th>1</th>
@@ -90,61 +97,59 @@
 
                   </tr>
 
-                </tbody>
-              </table>
-              {{selected.ids_estudiantes}}
-
-              
-              
-            </div>
+                --> 
+              </tbody>
+            </table>
 
 
-            <!-- /.col-lg-6 (nested) -->
+
+
           </div>
-          <!-- /.row (nested) -->
-         
-          
+
+
+          <!-- /.col-lg-6 (nested) -->
         </div>
-        <!-- /.panel-body -->
+        <!-- /.row (nested) -->
+
+
       </div>
-      <!-- /.panel -->
-       <div class="input-group">
-  <input type="date" ng-model="date_asistencia" class="form-control" aria-label="Fecha" >
-  <div class="input-group-btn">
-    <button class="btn btn-default" type="submit" ng-click="addInasistencia()">Agregar</button>
-
-  </div>
-</div>
-      </form>
+      <!-- /.panel-body -->
     </div>
-    <!-- /.col-lg-12 -->
-  </div>
+    <!-- /.panel -->
 
-  </uib-tab>
+
+  </div>
+  <!-- /.col-lg-12 -->
+</div>
+</uib-tab>
 </uib-tabset>
 
 
 
 
 
-  <section id="app-body" >
-    <div id="Carga">
-      <h1>Cursos</h1>
-      <div ng-grid ="gridOptions">
-      </div>
-      <ul>
 
-      </ul>
 
+
+
+<section id="app-body" >
+  <div id="Carga">
+
+    <div ng-grid ="gridOptions">
     </div>
-    
+    <ul>
 
-  </section>
+    </ul>
+
+  </div>
+
+
+</section>
 
 </div>
 </div>
 
-  
+
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
 <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.2.js"></script>
@@ -152,7 +157,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-cookies.js"></script>
 <script src="http://cdn.jsdelivr.net/angular.checklist-model/0.1.3/checklist-model.min.js"></script>
 
-<script src='../javascripts/scripts/controllers/profesorController.js'></script>
+<script src='../javascripts/scripts/controllers/docentes_notasController.js'></script>
 
 <script src="../javascripts/j/jquery.min.js"></script>
 

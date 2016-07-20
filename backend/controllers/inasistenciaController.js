@@ -65,10 +65,6 @@ function getCantidadInasistenciasCarga(id_carga, cb){
 				data1[data[i].id_estudiante] = data[i].cantidad;
 			}
 
-
-		//})(i);
-		
-		
 		console.log(data1)		
 		cb(data1)
 	}).catch(function(err){
@@ -92,6 +88,21 @@ function getMiInasistencia (id,cb){
 	 "where usuario.id_usuario = ${id}",
 	 {
 	 	id:id
+	 })
+	.then(function(data){
+		//console.log(data)
+		cb(data)
+	}).catch(function(err){
+		console.log(err)
+		return cb(err);
+	})
+}
+function getInasistenciaPorCarga(id_carga,id_estudiante,cb){
+	db.many("select id_inasistencia, fecha_inasistencia, estado_inasistencia from inasistencia"+
+	 " where id_carga = ${id_carga} and id_estudiante = ${id_estudiante}",
+	 {
+	 	id_estudiante:id_estudiante,
+	 	id_carga:id_carga
 	 })
 	.then(function(data){
 		//console.log(data)
@@ -126,10 +137,12 @@ function getListadoEstudiantesCurso(id_curso, cb){
 	})
 
 }
+
 module.exports = {
 	getMiInasistencia: getMiInasistencia,
 	getInasistenciasCarga: getInasistenciasCarga,
 	addInasistencia: addInasistencia,
 	getListadoEstudiantesCurso: getListadoEstudiantesCurso,
-	getCantidadInasistenciasCarga: getCantidadInasistenciasCarga
+	getCantidadInasistenciasCarga: getCantidadInasistenciasCarga,
+	getInasistenciaPorCarga: getInasistenciaPorCarga
 }

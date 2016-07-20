@@ -1,12 +1,17 @@
 //una function javascript q se llama asi misma
-//(function (){
-var app = angular.module('profesores', ['ngAnimate','ui.bootstrap','checklist-model']);//creamos el modulo pokedex y le pasamos array con las dependencias
+(function (){
+
+var app = angular.module('docentes', ['ui.bootstrap','ngCookies']);//creamos el modulo pokedex y le pasamos array con las dependencias
 
 
+//creamos un controlador
+//definimos el primer controlador, le pasamos el nombre
+    //del controlador y le pasamos una function javascript
 
-app.controller('cargaController',['$scope','$http','$uibModal','$log',function($scope,$http,$uibModal,$log){
+//Agregamos el objecto pokemon asociado al controlador
+app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$cookies',function($scope,$http,$cookieStore,$cookies){
 
-  $scope.fechas = [];
+
   $scope.estudiantes=[];
   $scope.date_asistencia = new Date();
   $scope.carga_seleccionada = null;
@@ -14,22 +19,13 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
     ids_estudiantes:[]
   };
 
-
-  $scope.materia_seleccionada = null;
+  $scope.carga_seleccionada = null;
   $scope.periodos = [];
   $scope.periodo_sel = null;
   $scope.activeTabIndex = 0;
   $scope.periodo_actual = null;
-
-  //Trae el periodo Actual
-  $http.get('/api/todos/periodos/actual')
-  .success(function(data){
-    $scope.periodo_actual = data;
-
-    console.log(data);
-  }).error(function(error){
-    console.log(error);
-  });
+  $scope.logros = [];
+  $scope.cabeceras=[];
 
   //Trae todos los periodos y pone el actual
   $http.get('/api/todos/periodos')
@@ -59,10 +55,15 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
     $scope.periodos = []
   });
    /////////////////////
+  //////// fin trae cargas
+
+  /////prueba
 
 
 
-  //funcion que se la usa cuando le da click en un tab
+  ////////
+
+    //funcion que se la usa cuando le da click en un tab
   $scope.getPeriodoId = function(index){
     $scope.periodo_sel = $scope.periodos[index];
     $http.get('/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
@@ -102,68 +103,51 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
 
   };
 
-  //funcion q abre ventana modal
-  $scope.open = function (size,id_carga,id_estudiante) {
-
-    $http.get('/inasistencias/cargas/'+id_carga+'/estudiantes/'+id_estudiante)
-    .success(function(data){
-      var modalInstance = $uibModal.open({
-        animation: true,
-        templateUrl: '/partials/asistencia.ejs',
-        controller: 'ModalInstanceCtrl',
-        size: size,
-        resolve: {
-          fechas: function () {
-            return data
-          }
-        }
-      });
-    }).error(function(error){
-      console.log(error);
-    });
-  };
   $scope.selectCurso = function (carga){
     seleccionarCarga(carga);
   }
 
   function seleccionarCarga(carga){
+    $scope.cabeceras = [];
     $scope.carga_seleccionada = carga;
     $scope.estudiantes = [];
     $scope.cantidad = {};
     $scope.selected.ids_estudiantes = [];
-    getCursos(carga.id_curso,function(estudiantes){
-      getInasistencias(carga.id_carga_docente,function(cantidad){
-        $scope.cantidad = cantidad;
-        console.log("antes del for");
-        console.log(cantidad);
-        console.log($scope.cantidad);
-        $scope.estudiantes = estudiantes;
+    getEstudiantes(carga.id_curso,function(estudiantes){
+      $scope.estudiantes=estudiantes;
+      getLogros(carga.id_carga_docente, function(logros){
+        $scope.logros = logros;
+        console.log("logros");
+        console.log($scope.logros);
 
-        for (var i = $scope.estudiantes.length - 1; i >= 0; i--) {
-          if(typeof $scope.cantidad[$scope.estudiantes[i].id_estudiante] === 'undefined' ){
-            $scope.estudiantes[i].inasistencias = 0;
-          }//CIERRA IF
-        else{
-            $scope.estudiantes[i].inasistencias = $scope.cantidad[$scope.estudiantes[i].id_estudiante];
-          } //CIERRA ELSE
+        //fpor para recorrer osgros y agregarle actividades
+        for (var i =0; i < logros.length ; i++) {
+          (function(i){
+            console.log("entro a for");
+            getActividades(logros[i].id_logro,function(actividades){
+              $scope.logros[i].actividades = actividades;
+              console.log('agrego logros' + i );
 
-        } //cierra for       
-      });//CIERRA GERINASISTENCIAS
+              //for para llenar las cabeceras segun el numero de actividades
+              for (var j =0; j < actividades.length; j++) {
+                (function(j){
+                 $scope.cabeceras.push("A"+ (j+1));
+                })(j);
+
+              }
+              $scope.cabeceras.push("Final");
+              console.log($scope.cabeceras)
+
+            });
+          })(i);
+        };
+
+      });
+
     });//CIERRA GETCURSOS
   }//CIERA FUNCION SELECIONAR CARGA
-  $scope.addInasistencia = function(){
-    for (var i = $scope.selected.ids_estudiantes.length - 1; i >= 0; i--) {
-      $http.post("/inasistencias/inasistencia",{'id_periodo': 1, 'id_estudiante':$scope.selected.ids_estudiantes[i] ,'fecha_inasistencia': $scope.date_asistencia,'id_carga': $scope.carga_seleccionada.id_carga_docente})
-      .success(function(response){
-        console.log($scope.carga_seleccionada.id_carga_docente)
-        console.log(response);
-      }).error(function(error){
-        console.log('Error: ' + error);
-      });
-    }//cierra for
-  }
 
-  function getCursos(id_curso,cb){
+  function getEstudiantes(id_curso,cb){
     $http.get('/api/cursos/'+id_curso+'/estudiantes')
     .success(function(est){
       console.log("hizo la consulta y sige estudiantes");
@@ -180,18 +164,62 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
       console.log('Error: ' + error);
     });//cierra get
   }//cierra funcion
-  function getInasistencias(id_carga,cb){
-    $http.get('/inasistencias/cargas/'+id_carga)
-    .success(function(cantidad){
-      cb(cantidad);
+
+
+  $scope.getMateriasYLogros = function(materia){
+    $scope.materia_seleccionada = materia;
+    getNotasYLogros($scope.materia_seleccionada,$scope.periodo_sel);
+  };
+
+  function getLogros (id_carga,cb){
+    $http.get('/api/docentes/cargas/'+id_carga+'/logros')
+    .success(function(logros){ 
+      cb(logros);                   
+      //$scope.logros = logros;
     })
     .error(function(error){
+      console.log('Error: '+ error);
       cb([]);
-      console.log('Error: ' + error);
+    });
+
+  }
+  function getNotas(id_materia,id_periodo,cb){
+    $http.get('/estudiantes/materias/'+id_materia +'/notas/periodos/'+ id_periodo)
+    .success(function(notas){ 
+      cb(notas);                   
+      //$scope.logros = logros;
+    })
+    .error(function(error){
+      console.log('Error: '+ error);
+      cb({});
+    });
+  }
+  function getActividades (id_logro,cb){
+    $http.get('/api/docentes/logros/'+id_logro+'/actividades')
+    .success(function(actividades){ 
+      cb(actividades);                   
+      //$scope.logros = logros;
+    })
+    .error(function(error){
+      console.log('Error: '+ error);
+      cb([]);
+    });
+
+  }
+  function getNotasActividades(id_logro,cb){
+    $http.get('/estudiantes/logros/'+id_logro +'/actividades/notas')
+    .success(function(notas){ 
+      cb(notas);                   
+      //$scope.logros = logros;
+    })
+    .error(function(error){
+      console.log('Error: '+ error);
+      cb({});
     });
   }
 }]);
-
+      
+})();
 function delNull(item){
   if(item == null){
     return "";
@@ -200,38 +228,5 @@ function delNull(item){
   }
 }
 
-function setCookieData(cookies, accesstoken){
- var accessToken = accesstoken;
- cookies.put("accessToken", accesstoken);
-}
-function getCookieData(cookies){
-  var accessToken = cookies.get("accessToken");
-  return accessToken;
-}
-function clearCookieData(cookies){
-  var accessToken = "";
-  cookies.remove("accessToken");
-}
-
-angular.module('profesores').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, fechas) {
-
-  $scope.fechas = fechas;
-
-
-  console.log("en el modulo modal")
-  console.log($scope.fechas);
- // $scope.fechas = fechas;
-  /*$scope.selected = {
-    fecha: $scope.fechas[0]
-  };*/
-
-  $scope.ok = function () {
-    $uibModalInstance.close();
-  };
-
-  $scope.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
-  };
-});
 
 
