@@ -50,6 +50,10 @@ router.get('/docentes/notas', /*validarSession,*/function(req, res, next) {
   res.render('notas_docentes');
 });
 
+router.get('/docentes/logros', /*validarSession,*/function(req, res, next) {
+  res.render('crud_logros');
+});
+
 function validarSession(req,res,next){
 	if(req.session.token){
 		next();

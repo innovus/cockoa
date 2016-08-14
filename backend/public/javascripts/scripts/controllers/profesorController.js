@@ -99,7 +99,6 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
     .error(function(data) {
       console.log('Error: ' + data);
     });
-
   };
 
   //funcion q abre ventana modal
@@ -213,7 +212,7 @@ function clearCookieData(cookies){
   cookies.remove("accessToken");
 }
 
-angular.module('profesores').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, fechas) {
+app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, fechas) {
 
   $scope.fechas = fechas;
 

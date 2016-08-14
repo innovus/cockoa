@@ -8,15 +8,14 @@
     <thead>
       <tr>
           <th>Fecha</th>
-          <th>id</th>
           <th>Justificada</th>
+          <th>Acciones</th>
       </tr>
     </thead>
     <tbody >
         <tr ng-repeat="fecha in fechas">
-          <th>{{fecha.fecha_inasistencia}}</th>
-          <th>{{fecha.id_inasistencia}}</th>
-          <th>{{fecha.estado_inasistencia}}</th>
+          <th>{{fecha.fecha_inasistencia | date : format : shortDate}}</th>
+          <th>{{fecha.estado_inasistencia === 1 ? "justificada" : "No justificada"}}</th>
 
       </tr>
     </tbody>

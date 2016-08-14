@@ -1,0 +1,64 @@
+<div class="modal-header">
+  <h3 class="modal-title">Actividades </h3>
+  <div class="modal-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Descripcion</th>
+          <th>Porcentaje
+            <form editable-form name="nameform" onaftersave="saveColumn('porcentaje_actividad')" ng-show="nameform.$visible">
+              <button type="submit" ng-disabled="nameform.$waiting" class="btn btn-primary">save</button>
+              <button type="button" ng-disabled="nameform.$waiting" ng-click="nameform.$cancel()" class="btn btn-default">cancel</button>
+            </form>  
+            <button class="btn btn-default" ng-show="!nameform.$visible" ng-click="nameform.$show()">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+
+            </button>
+          </th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody >
+        <tr ng-repeat="actividad in actividades">
+          <th>{{($index + 1)}}</th>
+          <th>
+            <!-- editable username (text with validation) -->
+            <span editable-text="actividad.descripcion_actividad" e-name="descripcion_actividad" e-form="rowform" onbeforesave="checkName($data, user.id)">
+              {{ actividad.descripcion_actividad || 'empty' }}
+            </span>
+          
+          </th>
+          <th>
+            <span editable-text="actividad.porcentaje_actividad" e-name="porcentaje_actividad" e-form="nameform" e-form="rowform" onbeforesave="checkPorcentaje('porcentaje_actividad')">
+              {{ actividad.porcentaje_actividad || 'empty' }}%
+            </span>
+       
+          </th>
+          <th><!-- form -->
+            <form editable-form name="rowform" onbeforesave="saveUser($data, user.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == user">
+              <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                save
+              </button>
+              <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                cancel
+              </button>
+            </form>
+            <div class="buttons" ng-show="!rowform.$visible">
+              <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+              <button class="btn btn-danger" ng-click="removeUser($index)">del</button>
+            </div>  
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <div ng-show="form.$submitted || form.uEmail.$touched">
+      <span ng-show="form.uEmail.$error.email">This is not a valid email.</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+  </div>

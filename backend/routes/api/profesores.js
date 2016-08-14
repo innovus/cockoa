@@ -44,6 +44,26 @@ function getActividades(req, res){
 	});
 }
 
+function getNotasLogros(req,res){
+	profesoresController.getNotasLogros(req.params.id_carga,function(data){
+		console.log('response')
+    	res.status(200).json(data);
+	})
+}
+function getNotasActividades(req,res){
+	profesoresController.getNotasActividades(req.params.id_carga,function(data){
+		console.log('response')
+    	res.status(200).json(data);
+	})
+
+}
+function prueba(req,res){
+	profesoresController.prueba(function(data){
+		console.log('response')
+    	res.status(200).json(data);
+	});
+}
+
 function getLogrosyActividades(req,res){
 	profesoresController.getLogros(req.params.id_carga,function(logros){
 
@@ -51,14 +71,13 @@ function getLogrosyActividades(req,res){
 			(function(i){
 				profesoresController.getActividades(logros[i].id_logro,function(actividades){
 					logros[i].actividades = actividades;
-					console.log('agrego logros' + i )
+					console.log('agrego logros ' + i )
 
 				});
 				if(i == 0){
 					console.log("responde")
 					res.status(200).json(logros);
 				}
-
 
 			})(i);
 			logros[i]
@@ -67,10 +86,51 @@ function getLogrosyActividades(req,res){
 
 
 }
+function updatePorcentajesActividades(req,res){
+	profesoresController.updatePorcentajesActividades(req.body,function(porcentajes){
+	
+		if(porcentajes.status == 0){
+			res.status(200).json(porcentajes)
+
+		}else{
+			res.status(500).json(porcentajes)
+		}
+
+	});
+
+}
+function insertNota(req,res){
+	profesoresController.insertNota(req.body,req.params.tabla,function(respuesta){
+		if(respuesta.status == 0){
+			res.status(200).json(respuesta)
+
+		}else{
+			res.status(500).json(respuesta)
+		}
+	});
+}
+
+function updateNota(req,res){
+	profesoresController.updateNota(req.body,req.params.tabla,function(respuesta){
+		if(respuesta.status == 0){
+			res.status(200).json(respuesta)
+
+		}else{
+			res.status(500).json(respuesta)
+		}
+	});
+}
+
 router.get('/cargas/periodos/:id_periodo'/*, authenticate*/, getCursosMateriasPorPeriodo);
 router.get('/cargas'/*, authenticate*/, getCursosMaterias);
 router.get('/cargas/:id_carga/logros'/*, authenticate*/, getLogros);
 router.get('/logros/:id_logro/actividades'/*, authenticate*/, getActividades);
+router.get('/cargas/:id_carga/logros/notas'/*, authenticate*/, getNotasLogros);
+router.get('/cargas/:id_carga/logros/actividades/notas'/*, authenticate*/, getNotasActividades);
+router.put('/actividades/porcentajes'/*, authenticate*/,updatePorcentajesActividades);
+router.put('/:tabla/notas'/*, authenticate*/,updateNota);
+router.post('/:tabla/notas'/*, authenticate*/,insertNota);
+router.get('/prueba'/*, authenticate*/, prueba);
 
 
 module.exports = router;

@@ -16,6 +16,10 @@
 
   <!-- Custom Fonts -->
   <link href="../stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+  <!-- xEditable -->
+  <link href="../stylesheets/xeditable/xeditable.css" rel="stylesheet">
 </head>
 <body ng-controller="docentes_notasController">
   <div id="wrapper">
@@ -65,39 +69,35 @@
                 <table class="table table-bordered">
                   <thead>
                     <tr>
-                      <th rowspan="2">No</th>
-                      <th rowspan="2">Nombres Apellidos</th>
+                      <th rowspan="2">Cod</th>
+                      <th rowspan="2">Nombres y Apellidos</th>
                      
                       <th ng-repeat="logro in logros " colspan = "{{logro.actividades.length + 1}}">Logro {{$index + 1}} </th>
                       
                     </tr>
                     <tr>
                           
-                        <th ng-repeat="cabecera in cabeceras track by $index">{{cabecera}}</th>
+                        <th ng-repeat="cabecera in cabeceras track by $index">{{cabecera.mostrar}}</th>
                   
                     </tr>
 
                   </thead>
                   <tbody>
                     <tr ng-repeat="estudiante in estudiantes">
-                     <td>1</td>
+                     <td>{{estudiante.id_estudiante}}</td>
                      <td>{{estudiante.nombrecompleto}}</td>
+                     <td ng-repeat="nota in estudiante.notas track by $index">
+                        <a href="#" editable-text="nota.mostrar" onbeforesave="before(nota)" onaftersave="after(nota)"
+                        >{{ nota.mostrar || 'empty' }}</a>
+                      </td>
+                      
+
+
+
 
                      
                    </tr>
-                   
-                    <!--
-                   <tr ng-repeat="estudiante in estudiantes">
-                    <th><input type="checkbox" checklist-model="selected.ids_estudiantes" checklist-value="estudiante.id_estudiante"></th>
-                    <th>1</th>
-                    <th>{{estudiante.id_estudiante}}</th>
-                    <th>{{estudiante.nombrecompleto}}</th>
-                    <th>{{estudiante.inasistencias}}</th>
-                    <th><a ng-click="open('lg',carga_seleccionada.id_carga_docente,estudiante.id_estudiante)">Ver</a></th>
 
-                  </tr>
-
-                --> 
               </tbody>
             </table>
 
@@ -169,6 +169,7 @@
 
 <!-- Custom Theme JavaScript -->
 <script src="../javascripts/j/sb-admin-2.js"></script>
+<script src="../javascripts/xeditable/xeditable.js"></script>
 
 </body>
 </html>
