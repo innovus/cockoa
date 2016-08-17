@@ -8,6 +8,7 @@ var options = {
 var pgp = require('pg-promise')(options);
 var connectionString = 'postgres://localhost:5432/liceo1';
 var db = pgp(connectionString);
+var pgp2 = require('pg-promise')();
 
 function getTipoUsuario(id, cb){
 	db.one("select id_tipo_usuario "+
@@ -113,13 +114,15 @@ function getInasistenciaPorCarga(id_carga,id_estudiante,cb){
 	})
 }
 
-function addInasistencia (id_tipo_usuario,id_periodo,id_estudiante,estado_inasistencia, fecha_inasistencia, id_carga, cb){
-	var queri = "insert into inasistencia(id_periodo,id_estudiante,estado_inasistencia, fecha_inasistencia, id_carga) values ("+id_periodo+", "+id_estudiante+", "+estado_inasistencia+", '"+fecha_inasistencia+"', "+id_carga+")";
-	console.log(queri)
+function addInasistencias (dataMulti, cb){
+
+
+	var queri = pgp.helpers.insert(dataMulti, ['id_periodo', 'id_estudiante','estado_inasistencia','fecha_inasistencia','id_carga'], 'inasistencia');
+
 	db.none(queri)
 	.then(function(){
 		
-		cb({'mensaje':'Inasistencia insertada'})
+		cb({'mensaje':'Inasistencias insertada'})
 	}).catch(function(error){
 		console.log("Error" , error.message || error);
 	});
@@ -141,7 +144,7 @@ function getListadoEstudiantesCurso(id_curso, cb){
 module.exports = {
 	getMiInasistencia: getMiInasistencia,
 	getInasistenciasCarga: getInasistenciasCarga,
-	addInasistencia: addInasistencia,
+	addInasistencias: addInasistencias,
 	getListadoEstudiantesCurso: getListadoEstudiantesCurso,
 	getCantidadInasistenciasCarga: getCantidadInasistenciasCarga,
 	getInasistenciaPorCarga: getInasistenciaPorCarga

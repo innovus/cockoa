@@ -36,7 +36,7 @@ router.get('/cargas/:id_carga/estudiantes/:id_estudiante',/* authenticate,*/ fun
 });
 
 router.post('/inasistencia',/*authenticate,*/ function(req,res){
-	inasistenciaController.addInasistencia(1,req.body.id_periodo,req.body.id_estudiante,1,req.body.fecha_inasistencia,req.body.id_carga, function(data){
+	inasistenciaController.addInasistencias(req.body, function(data){
     res.json(data);
   });
 })
