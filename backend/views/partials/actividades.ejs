@@ -24,7 +24,7 @@
           <th>{{($index + 1)}}</th>
           <th>
             <!-- editable username (text with validation) -->
-            <span editable-text="actividad.descripcion_actividad" e-name="descripcion_actividad" e-form="rowform" onbeforesave="checkName($data, user.id)">
+            <span editable-text="actividad.descripcion_actividad" e-name="descripcion_actividad" e-form="rowform" >
               {{ actividad.descripcion_actividad || 'empty' }}
             </span>
           
@@ -36,7 +36,7 @@
        
           </th>
           <th><!-- form -->
-            <form editable-form name="rowform" onbeforesave="saveUser($data, user.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == user">
+            <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == user">
               <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
                 save
               </button>
@@ -53,12 +53,8 @@
       </tbody>
     </table>
   </div>
-  <div>
-    <div ng-show="form.$submitted || form.uEmail.$touched">
-      <span ng-show="form.uEmail.$error.email">This is not a valid email.</span>
-    </div>
-  </div>
   <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
     <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
   </div>
+</div>

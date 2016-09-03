@@ -1,6 +1,6 @@
 //una function javascript q se llama asi misma
 //(function (){
-var app = angular.module('profesores', ['ngAnimate','ui.bootstrap','checklist-model']);//creamos el modulo pokedex y le pasamos array con las dependencias
+var app = angular.module('profesores', ['ngAnimate','ui.bootstrap','checklist-model','xeditable']);//creamos el modulo pokedex y le pasamos array con las dependencias
 
 
 
@@ -21,12 +21,18 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
   $scope.activeTabIndex = 0;
   $scope.periodo_actual = null;
 
+  //option de faltas justificada o no
+
+  $scope.estado_inasistencia = [
+    {value: 0, text: 'Justificada'},
+    {value: 1, text: 'No justificada'}
+  ]; 
+
   //Trae el periodo Actual
   $http.get('/api/todos/periodos/actual')
   .success(function(data){
-    $scope.periodo_actual = data;
+    $scope.periodo_actual = data[0];
 
-    console.log(data);
   }).error(function(error){
     console.log(error);
   });
@@ -35,6 +41,10 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
   $http.get('/api/todos/periodos')
   .success(function(data){
     $scope.periodos = data;  
+
+    console.log("periodo actual")
+
+    console.log($scope.periodo_actual);
     //recorre el vector de todos los periodos 
     for (var i = 0; i < data.length ; i++) {
       //entra cuando el periodo actual es encontrado en el vector
@@ -151,15 +161,24 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
     });//CIERRA GETCURSOS
   }//CIERA FUNCION SELECIONAR CARGA
   $scope.addInasistencia = function(){
+    var jsonenviar = [];
+
+
+
     for (var i = $scope.selected.ids_estudiantes.length - 1; i >= 0; i--) {
-      $http.post("/inasistencias/inasistencia",{'id_periodo': 1, 'id_estudiante':$scope.selected.ids_estudiantes[i] ,'fecha_inasistencia': $scope.date_asistencia,'id_carga': $scope.carga_seleccionada.id_carga_docente})
+      var jsonsolo={"id_periodo": 1, "id_estudiante":$scope.selected.ids_estudiantes[i] ,"estado_inasistencia":1,"fecha_inasistencia":$scope.date_asistencia ,"id_carga": $scope.carga_seleccionada.id_carga_docente}
+      jsonenviar.push(jsonsolo);
+    } //cierra for
+
+
+      $http.post("/inasistencias/inasistencia",jsonenviar)
       .success(function(response){
         console.log($scope.carga_seleccionada.id_carga_docente)
         console.log(response);
       }).error(function(error){
         console.log('Error: ' + error);
       });
-    }//cierra for
+   
   }
 
   function getCursos(id_curso,cb){

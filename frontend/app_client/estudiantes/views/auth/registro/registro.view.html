@@ -1,0 +1,46 @@
+<navigation></navigation>
+<div class="container">
+    <div id="banner" class="page-header">
+        <div class="row">
+            <div class="col-lg-6"></div>
+            <h1>
+                {{pageHeader.title }}
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+        <p class="lead">ya esta registrado? <a href="/#/login?page={{returnPage}}">Ingresar</a>
+        de lo contrario</p>
+        <form ng-submit="onSubmit()">
+            <div role="alert" ng-show="formError" class="alert alert-danger">{{ formError }}</div>
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" placeholder="Nombres" ng-model="credenciales.nombre">
+            </div>
+            <div class="form-group">
+                <label for="apellido">Apellido</label>
+                <input type="text" class="form-control" id="apellido" placeholder="Apellidos" ng-model="credenciales.apellido">
+            </div>
+            <div class="form-group">
+                <label for="usuario">Usuario</label>
+                <input type="text" class="form-control" id="usuario" placeholder="usuario" ng-model="credenciales.usuario">
+            </div>
+            <div class="form-group">
+                <label for="numdoc">Numero documento</label>
+                <input type="text" class="form-control" id="numdoc" placeholder="numero documento" ng-model="credenciales.num_documento">
+            </div>
+
+          
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" ng-model="credenciales.password">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Register!</button>
+            </div>
+        </form>
+      </div>
+    </div>
+    <footer-generic></footer-generic>        
+</div>

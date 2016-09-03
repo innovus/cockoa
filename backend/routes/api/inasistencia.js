@@ -6,55 +6,15 @@ var router = express.Router();
 var inasistenciaController = require('../../controllers/inasistenciaController');
 var authenticate = require('./auth').authenticate;
 
-var promise = require('bluebird');
-var options = {
-  // Initialization Options
-  promiseLib: promise
-};
-
-var pgp = require('pg-promise')(options);
-var connectionString = 'postgres://localhost:5432/liceo1';
-var db = pgp(connectionString);
-
-router.get('/mi_inasistencia', authenticate, function(req, res) {
-  //console.log(req.user);
-  inasistenciaController.getMiInasistencia(req.user.id,function(data){
-    res.json(data);
-
-  })
-  
-});
-
-
-router.get('/cargas/:id_carga/estudiantes/:id_estudiante',/* authenticate,*/ function(req, res) {
-  //console.log(req.user);
-  inasistenciaController.getInasistenciaPorCarga(req.params.id_carga,req.params.id_estudiante,function(data){
-    res.json(data);
-
-  })
-  
-});
-
-router.post('/inasistencia',/*authenticate,*/ function(req,res){
-	inasistenciaController.addInasistencias(req.body, function(data){
-    res.json(data);
-  });
-})
+router.get('/mi_inasistencia', /*authenticate,*/inasistenciaController.getMiInasistencia);
+router.get('/cargas/:id_carga/estudiantes/:id_estudiante',/* authenticate,*/ inasistenciaController.getInasistenciaPorCarga);
+router.post('/inasistencia',/*authenticate,*/ inasistenciaController.addInasistencias)
+router.get('/cargas/:id_carga',inasistenciaController.getCantidadInasistenciasCarga);
 /*
 router.get('/cargas/:id_carga', function(req,res){
 	inasistenciaController.getInasistenciasCarga(req.params.id_carga, function(data){
 		res.json(data);
 	})
 })*/
-
-
-router.get('/cargas/:id_carga', function(req,res){
-  inasistenciaController.getCantidadInasistenciasCarga(req.params.id_carga, function(data){
-    res.json(data);
-  })
-})
-
-
-
 
 module.exports = router;

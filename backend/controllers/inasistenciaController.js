@@ -4,58 +4,40 @@ var options = {
   // Initialization Options
   promiseLib: promise
 };
+var respuesta= require("../helpers/respuesta");
+
 
 var pgp = require('pg-promise')(options);
 var connectionString = 'postgres://localhost:5432/liceo1';
 var db = pgp(connectionString);
 var pgp2 = require('pg-promise')();
 
-function getTipoUsuario(id, cb){
-	db.one("select id_tipo_usuario "+
-	 "from usuario "+
-	 "where usuario.id_usuario = ${id}",
-	 {
-	 	id:id
-	 })
-	.then(function(data){
-		console.log(data);
-		cb(data)
-	}).catch(function(err){
-		console.log(err)
-		return cb(err);
-	})
-}
+var InasistenciaDao = require("../app_core/dao/inasistenciaDao");
+
 
 //inasistencias de una carga
-function getInasistenciasCarga(id_carga, cb){
-	var prueba = "select nombre_materia, nombre1, nombre2, apellido1, apellido2, estado_inasistencia, fecha_inasistencia, numero_periodo "+
-	 "from inasistencia "+
-	 "join carga_docente on inasistencia.id_carga = carga_docente.id_carga_docente "+ 
-	 "join usuario on usuario.id_usuario =  carga_docente.id_usuario "+
-	 "join materia on materia.id_materia = carga_docente.id_materia "+
-	 "join periodo on periodo.id_periodo = carga_docente.id_periodo "+
-	 "join docente on docente.id_docente = carga_docente.id_docente "+
-	 "join persona on persona.identificacion = docente.identificacion  where id_carga = "+id_carga;
-	db.many(prueba)
+function getInasistenciasCarga(id_carga){
+
+	InasistenciaDao.findInasistenciasByCarga(req.params.id_carga)
 	.then(function(data){
-		console.log(prueba)
-			console.log(data)
-		cb(data)
+		respuesta.sendJsonResponse(res,200,data);
+		console.log("la fucnion salio bn" + data)
+
 	}).catch(function(err){
-		console.log(err)
-		return cb(err);
-	})
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
 
 }
 
 //cantidad de inasistencias de una carga para un estudiante
-function getCantidadInasistenciasCarga(id_carga, cb){
+function getCantidadInasistenciasCarga(req,res){
 
-	var query = "select estudiante.id_estudiante, count(estudiante.id_estudiante) as cantidad from inasistencia "+
-	 "right join estudiante on inasistencia.id_estudiante = estudiante.id_estudiante "+
-	 "join carga_docente on inasistencia.id_carga = carga_docente.id_carga_docente "+
-	 "where carga_docente.id_carga_docente = "+id_carga+" group by estudiante.id_estudiante";
-	 db.many(query)
+	 InasistenciaDao.findCantidadInasistenciasByCarga(req.params.id_carga)
 	.then(function(data){
 		var data1 = {};
 		//(function(i){
@@ -66,86 +48,70 @@ function getCantidadInasistenciasCarga(id_carga, cb){
 				data1[data[i].id_estudiante] = data[i].cantidad;
 			}
 
-		console.log(data1)		
-		cb(data1)
+		respuesta.sendJsonResponse(res,200,data1);
+		console.log("la fucnion salio bn" + data1)
 	}).catch(function(err){
-		console.log(err)
-		return cb({});
-	})
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
 
 }
 
 
-function getMiInasistencia (id,cb){
+function getMiInasistencia (req,res){
 
-	db.one("select nombre_materia, nombre1, nombre2, apellido1, apellido2, estado_inasistencia, fecha_inasistencia, numero_periodo "+
-	 "from inasistencia "+
-	 "join carga_docente on inasistencia.id_carga = carga_docente.id_carga_docente "+ 
-	 "join usuario on usuario.id_usuario =  carga_docente.id_usuario "+
-	 "join materia on materia.id_materia = carga_docente.id_materia "+
-	 "join periodo on periodo.id_periodo = carga_docente.id_periodo "+
-	 "join docente on docente.id_docente = carga_docente.id_docente "+
-	 "join persona on persona.identificacion = docente.identificacion "+
-	 "where usuario.id_usuario = ${id}",
-	 {
-	 	id:id
-	 })
+	InasistenciaDao.findInasistenciasByEstudiante(1)
 	.then(function(data){
-		//console.log(data)
-		cb(data)
+		respuesta.sendJsonResponse(res,200,data);
+		console.log("la fucnion salio bn" + data)
+
 	}).catch(function(err){
-		console.log(err)
-		return cb(err);
-	})
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
 }
-function getInasistenciaPorCarga(id_carga,id_estudiante,cb){
-	db.many("select id_inasistencia, fecha_inasistencia, estado_inasistencia from inasistencia"+
-	 " where id_carga = ${id_carga} and id_estudiante = ${id_estudiante}",
-	 {
-	 	id_estudiante:id_estudiante,
-	 	id_carga:id_carga
-	 })
+function getInasistenciaPorCarga(req,res){
+	InasistenciaDao.findInasistenciasByCarga(req.params.id_estudiante,req.params.id_carga)
 	.then(function(data){
-		//console.log(data)
-		cb(data)
+		respuesta.sendJsonResponse(res,200,data);
+		console.log("la fucnion salio bn" + data)
+
 	}).catch(function(err){
-		console.log(err)
-		return cb(err);
-	})
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
 }
 
-function addInasistencias (dataMulti, cb){
+function addInasistencias (req,res){
 
-
-	var queri = pgp.helpers.insert(dataMulti, ['id_periodo', 'id_estudiante','estado_inasistencia','fecha_inasistencia','id_carga'], 'inasistencia');
-
+	var queri = pgp.helpers.insert(req.body, ['id_periodo', 'id_estudiante','estado_inasistencia','fecha_inasistencia','id_carga'], 'inasistencia');
 	db.none(queri)
 	.then(function(){
-		
-		cb({'mensaje':'Inasistencias insertada'})
+		respuesta.sendJsonResponse(res,200,{'mensaje':'Inasistencias insertada'});
 	}).catch(function(error){
+		respuesta.sendJsonResponse(res,500,[]);
 		console.log("Error" , error.message || error);
 	});
 	
 }
 
-function getListadoEstudiantesCurso(id_curso, cb){
-	var queri = "select nombre1,nombre2, apellido1, apellido2 from curso join matricula on curso.id_curso = matricula.id_curso join estudiante on estudiante.id_estudiante = matricula.id_estudiante join persona on estudiante.identificacion = persona.identificacion where curso.id_curso = " + id_curso;
-	console.log(queri)
-	db.many(queri)
-	.then(function(data){
-		cb(data)
-	}).catch(function(err){
-		return next(err)
-	})
-
-}
 
 module.exports = {
 	getMiInasistencia: getMiInasistencia,
 	getInasistenciasCarga: getInasistenciasCarga,
 	addInasistencias: addInasistencias,
-	getListadoEstudiantesCurso: getListadoEstudiantesCurso,
 	getCantidadInasistenciasCarga: getCantidadInasistenciasCarga,
 	getInasistenciaPorCarga: getInasistenciaPorCarga
 }

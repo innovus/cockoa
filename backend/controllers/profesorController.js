@@ -9,56 +9,81 @@ var pgp = require('pg-promise')(options);
 var pgp2 = require('pg-promise')(); 
 var connectionString = 'postgres://localhost:5432/liceo1';
 var db = pgp(connectionString);
+var respuesta= require("../helpers/respuesta");
 
+var carga_docenteDao = require("../app_core/dao/carga_docenteDao");
+var logroDao = require("../app_core/dao/logroDao");
+var actividadDao = require("../app_core/dao/actividadDao");
+var Nota_logroDao = require("../app_core/dao/nota_logroDao");
+var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 
-function getCursosMaterias(id_usuario,fecha_actual,cb){
-	
-	var queri = "select id_carga_docente, id_docente, id_materia, nombre_materia, id_curso, grado, grupo from carga_docente natural join materia natural join curso where vigente_carga_docente = '1' and id_docente = '1' and id_periodo = (select distinct id_periodo from carga_docente natural join periodo where fecha_inicio_periodo <= '"+fecha_actual+"' and fecha_fin_periodo >= '"+fecha_actual+"' ) order by grado, grupo ";
-	db.many(queri)
-	.then(function(data){ 
-		console.log("la funion salio bn" + data)
-		cb(data)
+function getCursosMaterias(req,res){
+	var hoy = new Date();
+	var dia = hoy.getDate(); 
+	var mes = hoy.getMonth()+1;
+	var anio= hoy.getFullYear();
+	var fecha_actual = String(anio+"-"+mes+"-"+dia);
+
+	carga_docenteDao.findCursosMateriasByFechaActual(fecha_actual)
+	.then(function(data){
+		respuesta.sendJsonResponse(res,200,data);
+		console.log("la fucnion salio bn" + data)
+
 	}).catch(function(err){
-		console.log('error: ' +err)
-		cb([]);	
-	})
-
-}
-function getCursosMateriasPorPeriodo(id_usuario,id_periodo,cb){
-	
-	var queri = "select id_carga_docente, id_docente, id_materia, nombre_materia, id_curso, grado, grupo from carga_docente natural join materia natural join curso where vigente_carga_docente = '1' and id_docente = '1' and id_periodo = "+id_periodo+" order by grado, grupo ";
-	db.many(queri)
-	.then(function(data){ 
-		console.log("la funion salio bn" + data);
-		cb(data);
-	}).catch(function(err){
-		console.log('error: ' +err);
-		cb([]);	
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
 	});
 
 }
-function getLogros(id_carga,cb){
-	var queri = "select * from logro where id_carga_docente = "+id_carga;
-	db.many(queri)
-	.then(function(data){ 
-		console.log("la funion salio bn" + data);
-		cb(data);
+function getCursosMateriasPorPeriodo(req,res){
+	carga_docenteDao.findCursosMateriasByPeriodo(req.params.id_periodo)
+	.then(function(data){
+		respuesta.sendJsonResponse(res,200,data);
+		console.log("la fucnion salio bn" + data)
+
 	}).catch(function(err){
-		console.log('error: ' +err);
-		cb([]);	
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
+}
+function getLogros(req,res){
+	logroDao.findLogrosByCargaDocente(req.params.id_carga)
+	.then(function(data){
+		respuesta.sendJsonResponse(res,200,data);
+		console.log("la fucnion salio bn" + data)
+
+	}).catch(function(err){
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
 	});
 }
 
  
-function getActividades(id_logro,cb){
-	var queri = "select * from actividad where id_logro  = "+id_logro + " order by id_actividad";
-	db.many(queri)
-	.then(function(data){ 
-		console.log("la funion salio bn" + data);
-		cb(data);
+function getActividades(req,res){
+	actividadDao.findActividadesByLogro(req.params.id_logro)
+	.then(function(data){
+		respuesta.sendJsonResponse(res,200,data);
+		console.log("la fucnion salio bn" + data)
+
 	}).catch(function(err){
-		console.log('error: ' +err);
-		cb([]);	
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
 	});
 }
 
@@ -74,16 +99,16 @@ function getActividades(id_logro,cb){
 }
 */
 
-
-function getNotasActividades(id_carga_docente,cb){
-	var queri = "select  id_estudiante,id_logro, id_actividad, nota_actividad from actividad natural join nota_actividad natural join logro where id_carga_docente = "+id_carga_docente+" order by id_estudiante, id_logro";
-	db.many(queri)
+function getNotasActividades(req,res){
+	Nota_actividadDao.findNotasActividadesByCarga(req.params.id_carga)
 	.then(function(data){ 
 		var estudiantes = {};
 		var logros = {};
 		var notas_actividades = {};
 		var auxEstudiante=null;
 		var auxLogro=null;
+
+		//inicia for que recorre la consulta
 		for (var i =0; i < data.length; i++) {
 			var estudiante = data[i].id_estudiante;
 			var logro = data[i].id_logro;
@@ -105,11 +130,6 @@ function getNotasActividades(id_carga_docente,cb){
 					auxLogro = logro;
 					notas_actividades[data[i].id_actividad] = data[i].nota_actividad;
 					
-					//no va
-					//logros[data[i].id_logro] = notas_actividades;
-
-		
-
 			}else{
 				if(logro != auxLogro){
 					logros[auxLogro] = notas_actividades;
@@ -119,10 +139,6 @@ function getNotasActividades(id_carga_docente,cb){
 
 				}else{
 					notas_actividades[data[i].id_actividad] = data[i].nota_actividad;
-					
-
-
-
 				}
 			}
 			if(i == (data.length-1)){
@@ -134,10 +150,15 @@ function getNotasActividades(id_carga_docente,cb){
 			}
 		}
 
-		cb(estudiantes);
+		respuesta.sendJsonResponse(res,200,estudiantes);
+		
 	}).catch(function(err){
-		console.log('error: ' +err);
-		cb([]);	
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
 	});
 }
 //donde se organiza primero el id de el estudiante que tiene un objeto
@@ -153,19 +174,22 @@ function getNotasActividades(id_carga_docente,cb){
 }
 */
 
-function updatePorcentajesActividades(data_multi,cb){
-	console.log(data_multi);
+function updatePorcentajesActividades(req,res){
+	//console.log(data_multi);
 
-	var queri= pgp2.helpers.update(data_multi,['?id_actividad','porcentaje_actividad'],'actividad') + 'WHERE v.id_actividad = t.id_actividad';
+	/*var queri= pgp2.helpers.update(req.body,['?id_actividad','porcentaje_actividad'],'actividad') + 'WHERE v.id_actividad = t.id_actividad';
+	console.log(queri);
 	db.none(queri)
+	*/
+	actividadDao.updatePorcentajesActividades(req.body)
 	.then(function(){
-		console.log("bien")
-		cb({'status':0,'msg':'Todos los ingresos correctos'});
+		
+		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Todos los ingresos correctos'})		
 
 	})
 	.catch(function(error){
 		console.log(error)
-		cb({'status':1,'msg':error});
+		respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
 	})
 
 }
@@ -184,53 +208,52 @@ function prueba(cb){
 
 //inserto la nota, mando en data_simple los campos que voy a ingresas,
 // y en table el nombre de la tabla donde los voy a insertar
-function insertNota(data_simple,table,cb){
+function insertNota(req,res){
 	var queri= '';
-	if(table == "logros"){
-		queri= pgp2.helpers.insert(data_simple,null,'nota_logro');
+	if(req.params.table == "logros"){
+		queri= pgp2.helpers.insert(req.body,null,'nota_logro');
 
-	}else if(table == "actividades"){
-		queri= pgp2.helpers.insert(data_simple,null,'nota_actividad');
+	}else if(req.params.table == "actividades"){
+		queri= pgp2.helpers.insert(req.body,null,'nota_actividad');
 
 	}
 	db.none(queri)
 	.then(function(){
 		console.log("bien")
-		cb({'status':0,'msg':'La nota se ingreso correctamente'});
+		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'La nota se ingreso correctamente'})		
 
 	})
 	.catch(function(error){
 		console.log(error)
-		cb({'status':1,'msg':error});
+		respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
 	})
 }
-function updateNota(data_simple,table,cb){
+
+
+function updateNota(req,res){
 	var queri = "";
 
-	if(table == "logros"){
-		queri= pgp2.helpers.update(data_simple,['nota_logro'],'nota_logro') + " WHERE id_logro= "+ data_simple.id_logro +" and id_estudiante= '"+data_simple.id_estudiante+"'";
+	if(req.params.table == "logros"){
+		queri= pgp2.helpers.update(req.body,['nota_logro'],'nota_logro') + " WHERE id_logro= "+ req.params.id_logro +" and id_estudiante= '"+req.params.id_estudiante+"'";
 
-	}else if(table == "actividades"){
-		queri = pgp2.helpers.update(data_simple,['nota_actividad'],'nota_actividad') + " WHERE id_actividad= "+ data_simple.id_actividad +" and id_estudiante= '"+data_simple.id_estudiante+"'";
-
-
+	}else if(req.params.table == "actividades"){
+		queri = pgp2.helpers.update(req.body,['nota_actividad'],'nota_actividad') + " WHERE id_actividad= "+ req.params.id_actividad +" and id_estudiante= '"+req.params.id_estudiante+"'";
 	}
 	console.log(queri);
 	db.none(queri)
 	.then(function(){
 		console.log("bien")
-		cb({'status':0,'msg':'La nota se actualizo correctamente'});
+		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'La nota se actualizo correctamente'})		
 
 	})
 	.catch(function(error){
 		console.log(error)
-		cb({'status':1,'msg':error});
+		respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
 	})
 }
 
-function getNotasLogros(id_carga_docente,cb){
-	var queri = "select id_estudiante,id_logro, nota_logro from nota_logro natural join logro where id_carga_docente = "+id_carga_docente+" order by id_estudiante";
-	db.many(queri)
+function getNotasLogros(req,res){
+	Nota_logroDao.findNotasLogrosByCarga(req.params.id_carga)
 	.then(function(data){ 
 
 		var estudiantes = {};
@@ -264,18 +287,20 @@ function getNotasLogros(id_carga_docente,cb){
 					
 					//notas_logros[data[i].id_logro] = data[i].nota_logro;
 					estudiantes[aux]= notas_logros;
-
 				}
-
-				
+			
 			}
 
-		console.log(estudiantes)		
-		cb(estudiantes)
+		respuesta.sendJsonResponse(res,200,estudiantes);
+		console.log(estudiantes);
 		
 	}).catch(function(err){
-		console.log('error: ' +err);
-		cb([]);	
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
 	});
 	
 }
