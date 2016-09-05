@@ -27,7 +27,10 @@
             android:name=".Activities.LogrosActivity"
             android:label="Indicadores de logros" />
         <activity android:name=".Activities.NotasActivity" />
-        <activity android:name=".Activities.InasistenciaMateriaActivity"></activity>
+        <activity android:name=".Activities.InasistenciaMateriaActivity" />
+        <activity android:name=".ActivityProfesor.EstudiantesCursoActivity" />
+        <activity android:name=".ActivityProfesor.LogrosMateriaEstudianteProfesorActivity" />
+        <activity android:name=".ActivityProfesor.LlamarListaActivity"></activity>
     </application>
 
 </manifest>

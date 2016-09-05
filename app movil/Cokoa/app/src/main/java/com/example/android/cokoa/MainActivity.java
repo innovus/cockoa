@@ -18,6 +18,8 @@ import com.example.android.cokoa.Fragments.EventosFragment;
 import com.example.android.cokoa.Fragments.HorarioAtencionFragment;
 import com.example.android.cokoa.Fragments.NotificacionFragment;
 import com.example.android.cokoa.Fragments.PerfilFragment;
+import com.example.android.cokoa.FragmentsProfesor.CursosProfesorFragment;
+import com.example.android.cokoa.FragmentsProfesor.LlamarListaFragment;
 import com.example.android.cokoa.SessionManager.SessionManager;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,20 +33,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sessionManager = new SessionManager(getApplication());
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment, new CalificacionesFragment())
-                    .commit();
+
+            if(sessionManager.getUser().equals("1")){
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment, new CalificacionesFragment())
+                        .commit();
+
+            }else {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment, new CursosProfesorFragment())
+                        .commit();
+            }
+
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //drawer.closeDrawer(GravityCompat.START);
+        /* DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);*/
+        drawerLayout.openDrawer(GravityCompat.START);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.inflateMenu(R.menu.navigation_with_teacher);
+
+
+
+        if(sessionManager.getUser().equals("1")){
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.activity_main_drawer);
+        }else {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.navigation_with_teacher);
+        }
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -108,6 +136,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             sessionManager.logoutUser();
             finish();
 
+        }else if (id==R.id.nav_calificaciones_profesor){
+            item.setChecked(true);
+            setFragment(6);
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }else if(id==R.id.nav_asistencia_profesor){
+            item.setChecked(true);
+            setFragment(7);
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else if (id == R.id.offProfesor) {
+
+            sessionManager = new SessionManager(getApplication());
+            sessionManager.logoutUser();
+            finish();
+
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -157,6 +200,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction.replace(R.id.fragment, horarioAtencionFragment);
                 fragmentTransaction.commit();
                 break;
+            case 6:
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                CursosProfesorFragment cursosProfesorFragment = new CursosProfesorFragment();
+                fragmentTransaction.replace(R.id.fragment, cursosProfesorFragment);
+                fragmentTransaction.commit();
+                break;
+            case 7:
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                LlamarListaFragment llamarListaFragment = new LlamarListaFragment();
+                fragmentTransaction.replace(R.id.fragment, llamarListaFragment);
+                fragmentTransaction.commit();
+
+                break;
+
         }
     }
 

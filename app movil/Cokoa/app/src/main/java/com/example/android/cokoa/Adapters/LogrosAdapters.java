@@ -46,8 +46,7 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
                     intent.putExtra("id_logro",logro.getId_logro());
                     activity.startActivity(intent);
 
-                   // NotasActividadAsyntask notasActividadAsyntask = new NotasActividadAsyntask(activity);
-                    //notasActividadAsyntask.execute(logro.getId_materia(), logro.getId_logro());
+
                 }
             });
 

@@ -92,13 +92,11 @@ public class LogrosActivity extends AppCompatActivity {
                 if(position!=0){
                     Toast.makeText(parent.getContext(), "Selected: " + s, Toast.LENGTH_LONG).show();
                     aux = 1;
-
                     id_materia = getIntent().getStringExtra("id_materia");
                     periodo_actual = getIntent().getStringExtra("id_materia");
                     Bundle parametro = new Bundle();
                     parametro.putString("id_materia", id_materia);
                     parametro.putString("periodo_actual", Integer.toString(position));
-
                     fragmentManager = getSupportFragmentManager();
                     fragmentTransaction = fragmentManager.beginTransaction();
                     LogrosFragment logrosFragment = new LogrosFragment();
@@ -110,7 +108,6 @@ public class LogrosActivity extends AppCompatActivity {
                     if(aux==1){
                         Toast.makeText(parent.getContext(), "Selected: " + s, Toast.LENGTH_LONG).show();
                         id_materia = getIntent().getStringExtra("id_materia");
-
                         Bundle parametro = new Bundle();
                         parametro.putString("id_materia", id_materia);
                         parametro.putString("periodo_actual", "null");
