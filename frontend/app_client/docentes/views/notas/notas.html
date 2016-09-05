@@ -1,30 +1,32 @@
-<!DOCTYPE html>
-<html ng-app="docentes">
-<head>
-  <title>Test</title>
 
-  <link href="../stylesheets/bootstrap.css" rel="stylesheet">
-  <link href="../stylesheets/style.css" rel="stylesheet">
-
-
-  <!-- Css j -->
-  <link href="../stylesheets/metisMenu.min.css" rel="stylesheet">
-
-
-  <!-- Custom CSS -->
-  <link href="../stylesheets/sb-admin-2.css" rel="stylesheet">
-
-  <!-- Custom Fonts -->
-  <link href="../stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-
-  <!-- xEditable -->
-  <link href="../stylesheets/xeditable/xeditable.css" rel="stylesheet">
-</head>
-<body ng-controller="docentes_notasController">
+<body>
   <div id="wrapper">
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+
+      <!-- navbar 
       <% include navbar %>
+      -->
+      <!-- navbar-->
+      <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Cockoa</a>
+        </div>
+      <!-- cierra navbar-->
+
+        <!--aqui ponemos el menu de arriba  -->
+        <ul class="nav navbar-top-links navbar-right">
+            <li><a href="#">Asistencia</a></li>
+            <li><a href="#">Notas</a></li>
+            <li><a href="#">Perfil</a></li>
+            <li><a href="#">Ayuda</a></li>
+        </ul>
+
+
       <!-- barra lateral -->
       <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
@@ -150,26 +152,4 @@
 </div>
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
-<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.2.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-resource.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-cookies.js"></script>
-<script src="http://cdn.jsdelivr.net/angular.checklist-model/0.1.3/checklist-model.min.js"></script>
-
-<script src='../javascripts/scripts/controllers/docentes_notasController.js'></script>
-
-<script src="../javascripts/j/jquery.min.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="../javascripts/j/bootstrap.min.js"></script>
-
-<!-- Metis Menu Plugin JavaScript -->
-<script src="../javascripts/j/metisMenu.min.js"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="../javascripts/j/sb-admin-2.js"></script>
-<script src="../javascripts/xeditable/xeditable.js"></script>
-
 </body>
-</html>

@@ -17,7 +17,7 @@ var queryFindCursosMateriasByFechaActual = "SELECT id_carga_docente, id_docente,
 var queries={
 	"carga_docente":{
 		'findCursosMateriasByPeriodo':queryFindCursosMateriasByPeriodo,
-		'findCursosMateriasByFechaActual':queryFindCursosMateriasByFechaActual
+		'findCursosMateriasByFechaActual':queryFindCursosMateriasByFechaActual,
 	}
 
 };
