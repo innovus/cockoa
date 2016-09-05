@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html ng-app="profesores">
+<head>
+  <title>Test</title>
+
+  <link href="../stylesheets/bootstrap.css" rel="stylesheet">
+  <link href="../stylesheets/style.css" rel="stylesheet">
+ 
+
+  <!-- Css j -->
+  <link href="../stylesheets/metisMenu.min.css" rel="stylesheet">
+
+
+  <!-- Custom CSS -->
+  <link href="../stylesheets/sb-admin-2.css" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <link href="../stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- xEditable -->
+  <link href="../stylesheets/xeditable/xeditable.css" rel="stylesheet">
+  
+</head>
+<body ng-controller="cargaController">
+  <div id="wrapper">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <% include navbar %>
+      <!-- barra lateral -->
+      <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+          <ul class="nav" id="side-menu">
+            <li ng-repeat="carga in cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a></li>
+          </ul>
+        </div>
+      </div>
+      
+    </nav>  
+
+
+
+
+    <div id="page-wrapper">
+
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">Estudiantes</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+      </div>
+      <hr />
+
+      <uib-tabset  active="activeTabIndex">
+      <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{periodo.numero_periodo}}" ng-click="getPeriodoId($index)">
+
+
+      <div class="row">
+        <div class="col-lg-12">
+           <form >
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              Listado {{carga_seleccionada.nombre_materia}}
+            </div>
+            <div class="panel-body">
+             
+              <div class="row">
+
+               <div id="estudiantes">
+                
+
+
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th colspan="1"></th>
+                      <th>No</th>
+                      <th>Codigo</th>
+                      <th>Nombres</th>
+                      <th>Faltas</th>
+                      <th colspan="1"></th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                   <tr ng-repeat="estudiante in estudiantes">
+                    <th><input type="checkbox" checklist-model="selected.ids_estudiantes" checklist-value="estudiante.id_estudiante"></th>
+                    <th>1</th>
+                    <th>{{estudiante.id_estudiante}}</th>
+                    <th>{{estudiante.nombrecompleto}}</th>
+                    <th>{{estudiante.inasistencias}}</th>
+                    <th><a ng-click="open('lg',carga_seleccionada.id_carga_docente,estudiante.id_estudiante)">Ver</a></th>
+
+                  </tr>
+
+                </tbody>
+              </table>
+              {{selected.ids_estudiantes}}
+
+              
+              
+            </div>
+
+
+            <!-- /.col-lg-6 (nested) -->
+          </div>
+          <!-- /.row (nested) -->
+         
+          
+        </div>
+        <!-- /.panel-body -->
+      </div>
+      <!-- /.panel -->
+       <div class="input-group">
+  <input type="date" ng-model="date_asistencia" class="form-control" aria-label="Fecha" >
+  <div class="input-group-btn">
+    <button class="btn btn-default" type="submit" ng-click="addInasistencia()">Agregar</button>
+
+  </div>
+</div>
+      </form>
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+
+  </uib-tab>
+</uib-tabset>
+
+
+
+
+
+  <section id="app-body" >
+    <div id="Carga">
+      <h1>Cursos</h1>
+      <div ng-grid ="gridOptions">
+      </div>
+      <ul>
+
+      </ul>
+
+    </div>
+    
+
+  </section>
+
+</div>
+</div>
+
+  
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
+<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.2.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-resource.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-cookies.js"></script>
+<script src="http://cdn.jsdelivr.net/angular.checklist-model/0.1.3/checklist-model.min.js"></script>
+
+<script src='../javascripts/scripts/controllers/profesorController.js'></script>
+
+<script src="../javascripts/j/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="../javascripts/j/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../javascripts/j/metisMenu.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="../javascripts/j/sb-admin-2.js"></script>
+
+<script src="../javascripts/xeditable/xeditable.js"></script>
+
+</body>
+</html>
