@@ -1,10 +1,8 @@
 //una function javascript q se llama asi misma
 //(function (){
-var app = angular.module('profesores', ['ngAnimate','ui.bootstrap','checklist-model','xeditable']);//creamos el modulo pokedex y le pasamos array con las dependencias
+var app = angular.module('docentes');//creamos el modulo pokedex y le pasamos array con las dependencias
 
-
-
-app.controller('cargaController',['$scope','$http','$uibModal','$log',function($scope,$http,$uibModal,$log){
+app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CONFIG','periodoData','inasistenciaData',function($scope,$http,$uibModal,$log,CONFIG,periodoData,inasistenciaData){
 
   $scope.fechas = [];
   $scope.estudiantes=[];
@@ -29,7 +27,7 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
   ]; 
 
   //Trae el periodo Actual
-  $http.get('/api/todos/periodos/actual')
+  periodoData.findPeriodoActual()
   .success(function(data){
     $scope.periodo_actual = data[0];
 
@@ -38,7 +36,7 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
   });
 
   //Trae todos los periodos y pone el actual
-  $http.get('/api/todos/periodos')
+  periodoData.findPeriodos()
   .success(function(data){
     $scope.periodos = data;  
 
@@ -55,7 +53,7 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
         $scope.periodo_sel = $scope.periodos[i];
 
          // Trae todas las cargas de un periodo seleccionado
-        $http.get('/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
+        periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo)
         .success(function(data) {
           $scope.cargas = data;
         })
@@ -75,7 +73,7 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
   //funcion que se la usa cuando le da click en un tab
   $scope.getPeriodoId = function(index){
     $scope.periodo_sel = $scope.periodos[index];
-    $http.get('/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
+    periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo)
     .success(function(data) {
       $scope.cargas = data;
       var encontrado = false;
@@ -114,12 +112,13 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
   //funcion q abre ventana modal
   $scope.open = function (size,id_carga,id_estudiante) {
 
-    $http.get('/inasistencias/cargas/'+id_carga+'/estudiantes/'+id_estudiante)
+    //$http.get(CONFIG.http_address+'/inasistencias/cargas/'+id_carga+'/estudiantes/'+id_estudiante)
+    inasistenciaData.findInasistenciasByCargaAndEstudiante(id_carga,id_estudiante)
     .success(function(data){
       var modalInstance = $uibModal.open({
         animation: true,
-        templateUrl: '/partials/asistencia.ejs',
-        controller: 'ModalInstanceCtrl',
+        templateUrl: '/views/inasistencia/inasistencia_detalle.html',
+        controller: 'ModalInasistenciaCtrl',
         size: size,
         resolve: {
           fechas: function () {
@@ -171,7 +170,7 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
     } //cierra for
 
 
-      $http.post("/inasistencias/inasistencia",jsonenviar)
+      inasistenciaData.createInasistenciasEstudiantes(jsonenviar)
       .success(function(response){
         console.log($scope.carga_seleccionada.id_carga_docente)
         console.log(response);
@@ -182,7 +181,7 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
   }
 
   function getCursos(id_curso,cb){
-    $http.get('/api/cursos/'+id_curso+'/estudiantes')
+    $http.get(CONFIG.http_address+'/api/cursos/'+id_curso+'/estudiantes')
     .success(function(est){
       console.log("hizo la consulta y sige estudiantes");
       for (var i = est.length - 1; i >= 0; i--) {
@@ -199,7 +198,8 @@ app.controller('cargaController',['$scope','$http','$uibModal','$log',function($
     });//cierra get
   }//cierra funcion
   function getInasistencias(id_carga,cb){
-    $http.get('/inasistencias/cargas/'+id_carga)
+    
+    inasistenciaData.findInasistenciasByCarga(id_carga)
     .success(function(cantidad){
       cb(cantidad);
     })
@@ -231,7 +231,7 @@ function clearCookieData(cookies){
   cookies.remove("accessToken");
 }
 
-app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, fechas) {
+app.controller('ModalInasistenciaCtrl', function ($scope, $uibModalInstance, fechas) {
 
   $scope.fechas = fechas;
 

@@ -16,7 +16,7 @@ var InasistenciaDao = require("../app_core/dao/inasistenciaDao");
 
 
 //inasistencias de una carga
-function getInasistenciasCarga(id_carga){
+function getInasistenciasCarga(req,res){
 
 	InasistenciaDao.findInasistenciasByCarga(req.params.id_carga)
 	.then(function(data){

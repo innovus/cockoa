@@ -1,33 +1,28 @@
 (function(){
     angular
-    .module('compras')
+    .module('docentes')
     .config(config);
     
     config.$inject=['$routeProvider','$locationProvider'];
     function config($routeProvider, $locationProvider){
         $routeProvider
-        .when('/home',{
-            templateUrl:'/views/home/home.view.html',
-            controller:'homeCtrl',
-            controllerAs:"hm"
+        
+        .when("/notas",{
+            templateUrl: "/views/notas/notas.html",
+            controller: "docentes_notasController"
         })
-        .when("/about",{
-            templateUrl: "/common/views/genericText.view.html",
-            controller:"aboutCtrl"
+        .when("/logros",{
+            templateUrl: "/views/logros/crud_logros.html",
+            controller: "crudLogrosController"
         })
-        .when("/producto/:productoid",{
-            templateUrl: "/views/detalle_producto/detalle_producto.view.html",
-            controller: "detalleProductoCtrl"
+        .when("/inasistencias",{
+            templateUrl: "/views/inasistencia/inasistencia.html",
+            controller: "inasistenciaController"
         })
-        .when("/registro",{
-            templateUrl:"/views/auth/registro/registro.view.html",
-            controller:"registroCtrl"
-        })
-        .when("/login",{
-            templateUrl: "/views/auth/login/login.view.html",
-            controller: "loginCtrl"
-        })
-        .otherwise({redirectTo:"/login"});
+        
+
+        
+        .otherwise({redirectTo:"/notas"});
 
         $locationProvider.html5Mode({
           enabled: true,

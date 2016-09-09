@@ -1,17 +1,9 @@
-//una function javascript q se llama asi misma
+var app = angular.module('docentes');//creamos el modulo pokedex y le pasamos array con las dependencias
 
-    var app = angular.module('docentes', ['ngAnimate','ui.bootstrap','ngCookies','xeditable']);//creamos el modulo pokedex y le pasamos array con las dependencias
-
-
-//creamos un controlador
-//definimos el primer controlador, le pasamos el nombre
-    //del controlador y le pasamos una function javascript
-
-//Agregamos el objecto pokemon asociado al controlador
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
-app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStore', '$cookies',function($scope,$http,$uibModal,$cookieStore,$cookies){
+app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStore', '$cookies','CONFIG','periodoData','actividadData','logroData',function($scope,$http,$uibModal,$cookieStore,$cookies,CONFIG,periodoData,actividadData,logroData){
 
   $scope.carga_seleccionada = null;
   $scope.periodos = [];
@@ -19,7 +11,6 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
   $scope.activeTabIndex = 0;
   $scope.periodo_actual = null;
   $scope.logros = [];
-
   $scope.estudiantes=[];
   $scope.date_asistencia = new Date();
   $scope.carga_seleccionada = null;
@@ -28,33 +19,47 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
   };
 
     //Trae el periodo Actual
-  $http.get('/api/todos/periodos/actual')
+  //periodoData.findPeriodoActual()
+   //$http.get(CONFIG.http_address+'/api/todos/periodos/actual')
+   periodoData.findPeriodoActual()
   .success(function(data){
-    $scope.periodo_actual = data;
+    console.log("entro al succes del controller")
+    $scope.periodo_actual = data[0];
 
     console.log(data);
   }).error(function(error){
+    console.log("entro al error del controller")
     console.log(error);
   });
 
   //Trae todos los periodos y pone el actual
-  $http.get('/api/todos/periodos')
+  //$http.get(CONFIG.http_address+'/api/todos/periodos')
+  periodoData.findPeriodos()
   .success(function(data){
     $scope.periodos = data; 
+    console.log("succes findPeriodos")
+    console.log($scope.periodos)
 
     //recorre el vector de todos los periodos 
     for (var i = 0; i < data.length ; i++) {
+
       //entra cuando el periodo actual es encontrado en el vector
+     // console.log(data[i].id_periodo)
+      console.log($scope.periodo_actual)
+
       if(data[i].id_periodo == $scope.periodo_actual.id_periodo){
+
         //selecciona el periodo actual en las tabs
         $scope.activeTabIndex = i;
         //
         $scope.periodo_sel = $scope.periodos[i];
 
          // Trae todas las cargas de un periodo seleccionado
-        $http.get('/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
+        //$http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
+        periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo)
         .success(function(data) {
           $scope.cargas = data;
+
         })
         .error(function(data) {
           console.log('Error: ' + data);
@@ -70,11 +75,12 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
      //funcion q abre ventana modal
   $scope.open = function (size,id_logro) {
 
-    $http.get('/api/docentes/logros/'+id_logro+'/actividades/')
+    //$http.get(CONFIG.http_address+'/api/docentes/logros/'+id_logro+'/actividades/')
+     actividadData.findActividadesByLogro(id_logro)
     .success(function(data){
       var modalInstance = $uibModal.open({
         animation: true,
-        templateUrl: '/partials/actividades.ejs',
+        templateUrl: '/views/logros/actividades.html',
         controller: 'ModalInstanceCtrl',
         size: size,
         resolve: {
@@ -109,7 +115,8 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
       //funcion que se la usa cuando le da click en un tab
   $scope.getPeriodoId = function(index){
     $scope.periodo_sel = $scope.periodos[index];
-    $http.get('/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
+    //$http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
+    periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo)
     .success(function(data) {
       $scope.cargas = data;
       var encontrado = false;
@@ -158,7 +165,9 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
   }//CIERA FUNCION SELECIONAR CARGA
 
   function getLogros (id_carga,cb){
-    $http.get('/api/docentes/cargas/'+id_carga+'/logros')
+   // $http.get(CONFIG.http_address+'/api/docentes/cargas/'+id_carga+'/logros')
+
+   logroData.findLogrosByCarga(id_carga)
     .success(function(logros){ 
       cb(logros);                   
       //$scope.logros = logros;
@@ -206,7 +215,7 @@ app.controller('ModalInstanceCtrl', function ($http,$scope,$q, $uibModalInstance
       console.log(results);
       $http({
         method: 'PUT',
-        url: '/api/docentes/actividades/porcentajes',
+        url: CONFIG.http_address+'/api/docentes/actividades/porcentajes',
         headers:{
           'Content-Type':'application/json'
         },

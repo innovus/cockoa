@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var cors = require('cors')
 
 var config = require('./config/config');
 
@@ -25,6 +26,7 @@ var auth = require('./routes/api/auth').router;
 
 
 var app = express();
+app.use(cors());
 
 
 // uncomment after placing your favicon in /public
@@ -67,6 +69,8 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+
 
 // view engine setup
 

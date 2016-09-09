@@ -13,11 +13,12 @@ var fs= require("fs");
 var app = express();
 
 var appClientFiles=[
-  'app_client/estudiantes/app.js',
+  'app_client/docentes/app.js',
 ];
 var appClientFiles2=[
   'app_client/app.js',
 ];
+/*
 var uglified= uglifyJs.minify(appClientFiles, {compress:false});
 fs.writeFile('public/angular/tienda.min.js', uglified.code, function(err){
   if(err){
@@ -28,7 +29,7 @@ fs.writeFile('public/angular/tienda.min.js', uglified.code, function(err){
   }
 });
 
-
+*/
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
@@ -36,11 +37,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'app_client/estudiantes')));
+//app.use(express.static(path.join(__dirname, 'app_client/estudiantes')));
+app.use(express.static(path.join(__dirname, 'app_client/docentes')));
 
-
+/*
 app.use(function(req,res){
     res.sendFile(path.join(__dirname,'app_client/estudiantes','index.html'));
+});
+*/
+app.use(function(req,res){
+    res.sendFile(path.join(__dirname,'app_client/docentes','index.html'));
 });
 
 

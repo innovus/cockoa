@@ -2,48 +2,52 @@
 <html ng-app="docentes">
 <head>
   <title>Notas</title>
-  <link href="../stylesheets/bootstrap.css" rel="stylesheet">
-  <link href="../stylesheets/style.css" rel="stylesheet">
+  <link href="/css/bootstrap.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
   <link rel="stylesheet"  href="../angular-bootstrap/ui-bootstrap-csp.css">
-
   <!-- Css j -->
-  <link href="../stylesheets/metisMenu.min.css" rel="stylesheet">
+  <link href="/css/metisMenu.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="/css/sb-admin-2.css" rel="stylesheet">
+  <!-- Custom Fonts -->
+  <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+  <script src="/lib/angular.min.js"></script>
+  <script src="/lib/angular-sanitize.min.js"></script>
+  <script src="/lib/angular-route.min.js"></script>
+  <script src="/lib/angular-cookies.min.js"></script>
+  <script src="/lib/angular-animate.min.js"></script>
+  <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.2.js"></script>
+  <script src="/lib/xeditable/xeditable.min.js"></script>
+  <script src='/app.js'></script>
+  <script src='/config/configuracion.js'></script>
+  <script src="/config/routes.js"></script>
 
-    <!-- Custom CSS -->
-    <link href="../stylesheets/sb-admin-2.css" rel="stylesheet">
+  <script src='/common/services/periodoData.js'></script>
+  <script src='/common/services/actividadData.js'></script>
+  <script src='/common/services/logroData.js'></script>
+  <script src='/common/services/inasistenciaData.js'></script>
 
-    <!-- Custom Fonts -->
-    <link href="../stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <script src='/common/directives/navbar/navbar.directive.js'></script>
+  
+  <script src='/views/notas/notas.controller.js'></script>
+  <script src='/views/inasistencia/inasistencia.controller.js'></script>
+  <script src='/views/logros/crud_logros.controller.js'></script>
+
+  <script src="/lib/j/jquery.min.js"></script>
+  <!-- Bootstrap Core JavaScript -->
+  <script src="/lib/bootstrap.min.js"></script>
+
+  <!-- Metis Menu Plugin JavaScript -->
+  <script src="/lib/j/metisMenu.min.js"></script>
+
+  <!-- Custom Theme JavaScript -->
+  <script src="/lib/j/sb-admin-2.js"></script>
+  <!--<script src="/lib/xeditable/xeditable.js"></script>-->
 </head>
 <body>
 
   <div ng-view></div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
-  <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.2.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-resource.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-cookies.js"></script>
-  
-  <script src='../javascripts/scripts/controllers/materiasController.js'></script>
-
-   <script src="../javascripts/j/jquery.min.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="../javascripts/j/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="../javascripts/j/metisMenu.min.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="../javascripts/j/sb-admin-2.js"></script>
-
-    <script src='/views/notas/notas.controller.js'></script>
-    <script src='/views/inasistencias/inasistencias.controller.js'></script>
-    <script src='/views/logros/crud_logros.controller.js'></script>
-  <script src='/views/about/about.controller.js'></script>  
-
 
 </body>
 </html>

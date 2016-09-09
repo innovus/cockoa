@@ -1,20 +1,22 @@
 //una function javascript q se llama asi misma
 (function (){
 
-var app = angular.module('docentes', ['ui.bootstrap','ngCookies','xeditable']);//creamos el modulo pokedex y le pasamos array con las dependencias
-
-
-//creamos un controlador
-//definimos el primer controlador, le pasamos el nombre
-    //del controlador y le pasamos una function javascript
-
-//Agregamos el objecto pokemon asociado al controlador
-app.run(function(editableOptions) {
+angular
+.module('docentes')
+.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-});
+})
+.controller('docentes_notasController',docentes_notasController);
 
-app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$cookies',function($scope,$http,$cookieStore,$cookies){
+/*
+run(function(editableOptions) {
+  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+})
+.controller('docentes_notasController',docentes_notasController);
+*/
 
+docentes_notasController.$inject= ['$scope','$http','$cookieStore', '$cookies','CONFIG'];
+function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG) {
 
   $scope.estudiantes=[];
   $scope.date_asistencia = new Date();
@@ -34,17 +36,17 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
 
 
   //Trae el periodo Actual
-  $http.get('/api/todos/periodos/actual')
+  $http.get(CONFIG.http_address+'/api/todos/periodos/actual')
   .success(function(data){
-    $scope.periodo_actual = data;
+    $scope.periodo_actual = data[0];
 
     console.log(data);
   }).error(function(error){
     console.log(error);
   });
 
-  //Trae todos los periodos y pone el actual
-  $http.get('/api/todos/periodos')
+    //Trae todos los periodos y pone el actual
+  $http.get(CONFIG.http_address+'/api/todos/periodos')
   .success(function(data){
     $scope.periodos = data; 
 
@@ -58,32 +60,26 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
         $scope.periodo_sel = $scope.periodos[i];
 
          // Trae todas las cargas de un periodo seleccionado
-        $http.get('/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
+        $http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
         .success(function(data) {
           $scope.cargas = data;
         })
         .error(function(data) {
           console.log('Error: ' + data);
         });
-       }//cierra el if
-     }//cierra for
-   }).error(function(error){
+      }//cierra el if
+    }//cierra for
+  }).error(function(error){
     console.log(error);
     $scope.periodos = []
   });
    /////////////////////
   //////// fin trae cargas
 
-  /////prueba
-
-
-
-  ////////
-
-    //funcion que se la usa cuando le da click en un tab
+      //funcion que se la usa cuando le da click en un tab
   $scope.getPeriodoId = function(index){
     $scope.periodo_sel = $scope.periodos[index];
-    $http.get('/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
+    $http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
     .success(function(data) {
       $scope.cargas = data;
       var encontrado = false;
@@ -146,32 +142,23 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
               for (var j =0; j < actividades.length; j++) {
                 (function(j){
           
-                 $scope.cabeceras.push({'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)")});
-               // $scope.cabeceras.push("{'id_actividad':'"+actividades[j].id_actividad+"','nombre_cabecera':'A"+(j+1)+"'}"+ ;
+                  $scope.cabeceras.push({'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)")});
+                  // $scope.cabeceras.push("{'id_actividad':'"+actividades[j].id_actividad+"','nombre_cabecera':'A"+(j+1)+"'}"+ ;
                 })(j);
               }//finaliza for que recorre actividades
-              $scope.cabeceras.push({'id':logros[i].id_logro,'tipo':0,'mostrar':'Final'});
-             
+              $scope.cabeceras.push({'id':logros[i].id_logro,'tipo':0,'mostrar':'Final'}); 
             });
-            console.log($scope.cabeceras)
-
+            console.log($scope.cabeceras);
           })(i);
         };//finaliza For recorre logros
       
         //console.log($scope.logros);
 
-
-
-
-
 ///////////////////////////////////////////
         getNotasActividades(carga.id_carga_docente,function(notas_actividades){
           getNotasLogros(carga.id_carga_docente,function(notas_logros){
-
-            for(var i = 0; i < $scope.estudiantes.length; i++){ 
-
+            for(var i = 0; i < $scope.estudiantes.length; i++){
               var notas= [];
-            
               (function(i){
 
                 //si no encuentro al estudiante en las notas pongo de una vez -  a todas las notas
@@ -209,10 +196,7 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
                             'id_estudiante':$scope.estudiantes[i].id_estudiante,
                             'mostrar':'-'
                           });
-
-
-                        })(k);
-                       
+                        })(k); 
                        
                       }
                       //si el logro es indefinido ponga - si no ponga la nota de el logro
@@ -221,10 +205,7 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
                           'id':$scope.logros[l].id_logro,
                           'tipo':0,
                           'id_estudiante':$scope.estudiantes[i].id_estudiante,
-                          'mostrar':'-'});
-
-                       
-                        
+                          'mostrar':'-'}); 
                       }else{
                         notas.push(
                           {'id':$scope.logros[l].id_logro,
@@ -261,7 +242,6 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
                       //si el logro es indefinido ponga - si no ponga la nota de el logro
                       if(typeof notas_logros[$scope.estudiantes[i].id_estudiante][$scope.logros[l].id_logro] === 'undefined'){
                         notas.push({'id':$scope.logros[l].id_logro,'tipo':0,'id_estudiante':$scope.estudiantes[i].id_estudiante,'mostrar':'-'});
-
                       }else{
                         notas.push(
                           {'id':$scope.logros[l].id_logro,
@@ -269,28 +249,23 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
                           'id_estudiante':$scope.estudiantes[i].id_estudiante,
                           'mostrar':notas_logros[$scope.estudiantes[i].id_estudiante][$scope.logros[l].id_logro]
                         });
-                      }
-                    }
-                  }
-                }
+                      }// cierra else
+                    }//cierra else
+                  }//cierra for que recorro en vector de logros
+                } // cierra if type of - si no encuentro al estudiante en las notas pongo de una vez -  a todas las notas
                 console.log(notas)
                 $scope.estudiantes[i].notas = notas;
-                
-                
-              })(i);
-            }
+              })(i);//cierra funcion()
+            }//cierra for
 
-          })
-        })
-///////////
-
-
-      });
+          })//cierra gerNotasLogros
+        })//cierra getNotasActividades
+      });//vierra GEt logros
 
     });//CIERRA GETCURSOS
   }//CIERA FUNCION SELECIONAR CARGA
 
-  //
+
   $scope.before = function(valor1){
     $scope.valorBefore = valor1.mostrar;
     console.log("entro a before");
@@ -315,7 +290,7 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
 
         $http({
           method: 'POST',
-          url: '/api/docentes/logros/notas',
+          url: CONFIG.http_address+'/api/docentes/logros/notas',
           headers:{
             'Content-Type':'application/json'
           },
@@ -335,7 +310,7 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
 
         $http({
           method: 'PUT',
-          url: '/api/docentes/logros/notas',
+          url: CONFIG.http_address+'/api/docentes/logros/notas',
           headers:{
             'Content-Type':'application/json'
           },
@@ -363,7 +338,7 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
       if($scope.valorBefore == '-'){
         $http({
           method: 'POST',
-          url: '/api/docentes/actividades/notas',
+          url: CONFIG.http_address+'/api/docentes/actividades/notas',
           headers:{
             'Content-Type':'application/json'
           },
@@ -382,7 +357,7 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
 
         $http({
           method: 'PUT',
-          url: '/api/docentes/actividades/notas',
+          url: CONFIG.http_address+'/api/docentes/actividades/notas',
           headers:{
             'Content-Type':'application/json'
           },
@@ -404,7 +379,7 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
   //
 
   function getEstudiantes(id_curso,cb){
-    $http.get('/api/cursos/'+id_curso+'/estudiantes')
+    $http.get(CONFIG.http_address+'/api/cursos/'+id_curso+'/estudiantes')
     .success(function(est){
       for (var i = est.length - 1; i >= 0; i--) {
         est[i].nombre1 = delNull(est[i].nombre1);
@@ -427,7 +402,7 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
   };
 
   function getLogros (id_carga,cb){
-    $http.get('/api/docentes/cargas/'+id_carga+'/logros')
+    $http.get(CONFIG.http_address+'/api/docentes/cargas/'+id_carga+'/logros')
     .success(function(logros){ 
       cb(logros);                   
       //$scope.logros = logros;
@@ -439,7 +414,7 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
 
   }
   function getNotas(id_materia,id_periodo,cb){
-    $http.get('/estudiantes/materias/'+id_materia +'/notas/periodos/'+ id_periodo)
+    $http.get(CONFIG.http_address+'/estudiantes/materias/'+id_materia +'/notas/periodos/'+ id_periodo)
     .success(function(notas){ 
       cb(notas);                   
       //$scope.logros = logros;
@@ -450,7 +425,7 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
     });
   }
   function getActividades (id_logro,cb){
-    $http.get('/api/docentes/logros/'+id_logro+'/actividades')
+    $http.get(CONFIG.http_address+'/api/docentes/logros/'+id_logro+'/actividades')
     .success(function(actividades){ 
       cb(actividades);                   
       //$scope.logros = logros;
@@ -462,7 +437,7 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
 
   }
   function getNotasActividades(id_carga,cb){
-    $http.get('/api/docentes/cargas/'+id_carga +'/logros/actividades/notas')
+    $http.get(CONFIG.http_address+'/api/docentes/cargas/'+id_carga +'/logros/actividades/notas')
     .success(function(notas){ 
       cb(notas);                   
       //$scope.logros = logros;
@@ -472,8 +447,9 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
       cb({});
     });
   }
-  function getNotasLogros(id_carga,cb){
-    $http.get('/api/docentes/cargas/'+id_carga +'/logros/notas')
+
+    function getNotasLogros(id_carga,cb){
+    $http.get(CONFIG.http_address+'/api/docentes/cargas/'+id_carga +'/logros/notas')
     .success(function(notas){ 
       cb(notas);                   
       //$scope.logros = logros;
@@ -483,16 +459,23 @@ app.controller('docentes_notasController',['$scope','$http','$cookieStore', '$co
       cb({});
     });
   }
-}]);
-      
-})();
-function delNull(item){
+
+  function delNull(item){
   if(item == null){
     return "";
   }else{
     return item;
   }
 }
+
+
+
+
+
+
+}// body...     
+})();
+
 
 
 

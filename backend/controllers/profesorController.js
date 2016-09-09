@@ -217,6 +217,7 @@ function insertNota(req,res){
 		queri= pgp2.helpers.insert(req.body,null,'nota_actividad');
 
 	}
+	console.log(queri)
 	db.none(queri)
 	.then(function(){
 		console.log("bien")

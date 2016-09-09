@@ -1,7 +1,7 @@
 (function(){
     angular
-    .module("compras")
+    .module('docentes')
     .constant("CONFIG",{
-        "http_address": "http://localhost:4000"
-    })                
+        "http_address": "http://localhost:3000"
+    });      
 })();
