@@ -14,11 +14,17 @@
         var createInasistenciasEstudiantes= function(jsonenviar){
             return $http.post(CONFIG.http_address+"/inasistencias/inasistencia",jsonenviar)    
         };
+        var findInasistenciasByMateria = function(id_materia){
+            return $http.get(CONFIG.http_address+'/inasistencias/materias/'+id_materia) 
+
+        }
 
         return {
             findInasistenciasByCargaAndEstudiante:findInasistenciasByCargaAndEstudiante,
             createInasistenciasEstudiantes:createInasistenciasEstudiantes,
             findInasistenciasByCarga:findInasistenciasByCarga,
+            findInasistenciasByMateria: findInasistenciasByMateria
+
         };
     }
 })();

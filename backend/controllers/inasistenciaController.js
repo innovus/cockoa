@@ -13,6 +13,7 @@ var db = pgp(connectionString);
 var pgp2 = require('pg-promise')();
 
 var InasistenciaDao = require("../app_core/dao/inasistenciaDao");
+var MateriaDao = require("../app_core/dao/materiaDao");
 
 
 //inasistencias de una carga
@@ -106,6 +107,34 @@ function addInasistencias (req,res){
 	});
 	
 }
+function getMateriasWithInasistenciaByEstudiante(req,res){
+	MateriaDao.findMateriasWithInasistenciaByEstudiante(1)
+	.then(function (data){
+		respuesta.sendJsonResponse(res,200,data);
+		console.log("la fucnion salio bn" + data);
+	}).catch(function(err){
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
+}
+function getInasistenciasByMateria(req,res){
+	InasistenciaDao.findInasistenciasByMateria(1,req.params.id_materia)
+	.then(function (data){
+		respuesta.sendJsonResponse(res,200,data);
+		console.log("la fucnion salio bn" + data);
+	}).catch(function(err){
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
+}
 
 
 module.exports = {
@@ -113,5 +142,7 @@ module.exports = {
 	getInasistenciasCarga: getInasistenciasCarga,
 	addInasistencias: addInasistencias,
 	getCantidadInasistenciasCarga: getCantidadInasistenciasCarga,
-	getInasistenciaPorCarga: getInasistenciaPorCarga
+	getInasistenciaPorCarga: getInasistenciaPorCarga,
+	getMateriasWithInasistenciaByEstudiante:getMateriasWithInasistenciaByEstudiante,
+	getInasistenciasByMateria: getInasistenciasByMateria
 }

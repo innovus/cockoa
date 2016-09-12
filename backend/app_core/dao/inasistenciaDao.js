@@ -34,11 +34,25 @@ var queryFindInasistenciasByCarga = "SELECT id_inasistencia, fecha_inasistencia,
 	"FROM inasistencia "+
 	"WHERE id_carga = $id_carga AND id_estudiante = $id_estudiante"
 
+var queryFindInasistenciasByMateria = "SELECT carga_docente.id_materia,nombre_materia, nombre1, nombre2, apellido1, apellido2, estado_inasistencia, fecha_inasistencia, numero_periodo "+
+	"FROM inasistencia JOIN carga_docente ON inasistencia.id_carga = carga_docente.id_carga_docente "+
+	"JOIN materia ON materia.id_materia = carga_docente.id_materia "+
+	"JOIN periodo ON periodo.id_periodo = carga_docente.id_periodo "+
+	"JOIN docente ON docente.id_docente = carga_docente.id_docente "+
+	"JOIN persona ON persona.identificacion = docente.identificacion "+
+	"WHERE materia.id_materia= $id_materia AND inasistencia.id_estudiante= "+
+		"(SELECT estudiante.id_estudiante FROM usuario NATURAL JOIN persona "+
+		"NATURAL JOIN estudiante WHERE usuario.id_usuario = $id_usuario ) "+
+	"ORDER by fecha_inasistencia"
+
+
+
 var queries={
 	"inasistencia":{
 		'findInasistenciasByCarga':queryFindInasistenciasByCarga,
 		'findCantidadInasistenciasByCarga': queryFindCantidadInasistenciasByCarga,
-		'findInasistenciasByEstudiante':queryFindInasistenciasByEstudiante
+		'findInasistenciasByEstudiante':queryFindInasistenciasByEstudiante,
+		'findInasistenciasByMateria':queryFindInasistenciasByMateria,
 	}
 };
 
@@ -51,6 +65,9 @@ var findCantidadInasistenciasByCarga = function(id_carga){
 var findInasistenciasByEstudiante = function(id_usuario){
 	return sequelize.query(queries.inasistencia.findInasistenciasByEstudiante,{bind:{id_usuario:id_usuario},type:sequelize.QueryTypes.SELECT})
 }
+var findInasistenciasByMateria = function(id_usuario,id_materia){
+	return sequelize.query(queries.inasistencia.findInasistenciasByMateria,{bind:{id_usuario:id_usuario,id_materia:id_materia},type:sequelize.QueryTypes.SELECT})
+}
 /*
 var findNotasLogrosByEstudiante = function(id_usuario,id_materia,id_periodo){
 	return sequelize.query(queries.nota_logro.findNotasLogrosByEstudiante,{bind:{id_usuario:id_usuario,id_materia:id_materia,id_periodo:id_periodo},type:sequelize.QueryTypes.SELECT})
@@ -59,3 +76,4 @@ var findNotasLogrosByEstudiante = function(id_usuario,id_materia,id_periodo){
 module.exports.findInasistenciasByCarga=findInasistenciasByCarga;
 module.exports.findCantidadInasistenciasByCarga=findCantidadInasistenciasByCarga;
 module.exports.findInasistenciasByEstudiante=findInasistenciasByEstudiante;
+module.exports.findInasistenciasByMateria =findInasistenciasByMateria ;

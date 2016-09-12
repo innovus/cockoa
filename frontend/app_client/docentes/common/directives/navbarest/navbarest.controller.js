@@ -10,15 +10,15 @@
       
         navvm.notas=function(){
             
-            $location.path('/docentes/notas');
+            $location.path('/notas');
         };
         navvm.inasistencias=function(){
             
-            $location.path('/docentes/inasistencias');
+            $location.path('/inasistencias');
         };
         navvm.logros=function(){
             
-            $location.path('/docentes/logros');
+            $location.path('/logros');
         };
     }
 

@@ -13,16 +13,31 @@ var queryFindMateriasByEstudiante = "SELECT id_materia, persona.nombre1,nombre2,
 	"WHERE periodo.id_periodo = 1 AND estudiante.id_estudiante = "+ 
 	"(SELECT estudiante.id_estudiante FROM usuario "+ 
 	"NATURAL JOIN persona NATURAL JOIN estudiante WHERE usuario.id_usuario = $id_usuario)";
+
+var queryFindMateriasWithInasistenciaByEstudiante = "SELECT id_materia,nombre_materia, "+
+	"COUNT(*) AS total_inasistencia FROM inasistencia "+
+	"JOIN carga_docente ON inasistencia.id_carga=carga_docente.id_carga_docente "+
+	"NATURAL JOIN materia WHERE inasistencia.id_estudiante= "+
+		"(SELECT estudiante.id_estudiante "+
+		"FROM usuario NATURAL JOIN persona NATURAL JOIN estudiante "+
+		"WHERE usuario.id_usuario =  $id_usuario ) "+
+	"GROUP BY nombre_materia,id_materia ORDER BY nombre_materia ASC"
 	
 
 var queries={
 	"materia":{
 		'findMateriasByEstudiante':queryFindMateriasByEstudiante,
+		'findMateriasWithInasistenciaByEstudiante':queryFindMateriasWithInasistenciaByEstudiante,
 	}
 };
 
 var findMateriasByEstudiante = function(id_usuario){
 	return sequelize.query(queries.materia.findMateriasByEstudiante,{bind:{id_usuario:id_usuario},type:sequelize.QueryTypes.SELECT})
 };
+var findMateriasWithInasistenciaByEstudiante = function (id_usuario){
+	return sequelize.query(queries.materia.findMateriasWithInasistenciaByEstudiante, {bind:{id_usuario:id_usuario},type:sequelize.QueryTypes.SELECT})
+};
 
 module.exports.findMateriasByEstudiante=findMateriasByEstudiante;
+module.exports.findMateriasWithInasistenciaByEstudiante=findMateriasWithInasistenciaByEstudiante;
+

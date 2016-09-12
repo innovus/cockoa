@@ -2,7 +2,7 @@
 //(function (){
 var app = angular.module('docentes');//creamos el modulo pokedex y le pasamos array con las dependencias
 
-app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CONFIG','periodoData','inasistenciaData',function($scope,$http,$uibModal,$log,CONFIG,periodoData,inasistenciaData){
+app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CONFIG','periodoData','inasistenciaData','estudianteData',function($scope,$http,$uibModal,$log,CONFIG,periodoData,inasistenciaData,estudianteData){
 
   $scope.fechas = [];
   $scope.estudiantes=[];
@@ -168,6 +168,7 @@ app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CO
       var jsonsolo={"id_periodo": 1, "id_estudiante":$scope.selected.ids_estudiantes[i] ,"estado_inasistencia":1,"fecha_inasistencia":$scope.date_asistencia ,"id_carga": $scope.carga_seleccionada.id_carga_docente}
       jsonenviar.push(jsonsolo);
     } //cierra for
+    console.log(jsonenviar);
 
 
       inasistenciaData.createInasistenciasEstudiantes(jsonenviar)
@@ -181,7 +182,7 @@ app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CO
   }
 
   function getCursos(id_curso,cb){
-    $http.get(CONFIG.http_address+'/api/cursos/'+id_curso+'/estudiantes')
+    estudianteData.findEstudiantesByCurso(id_curso)
     .success(function(est){
       console.log("hizo la consulta y sige estudiantes");
       for (var i = est.length - 1; i >= 0; i--) {

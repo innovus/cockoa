@@ -9,8 +9,13 @@
             return $http.get(CONFIG.http_address+'/api/docentes/cargas/'+id_carga+'/logros')    
         };
 
+        var findLogrosByMateriaAndPeriodo = function(id_materia,id_periodo){
+            return $http.get('/estudiantes/materias/'+id_materia +'/notas/periodos/'+ id_periodo)
+        }
+
         return {
             findLogrosByCarga:findLogrosByCarga,
+            findLogrosByMateriaAndPeriodo:findLogrosByMateriaAndPeriodo,
         };
     }
 })();

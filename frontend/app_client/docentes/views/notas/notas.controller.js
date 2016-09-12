@@ -15,8 +15,8 @@ run(function(editableOptions) {
 .controller('docentes_notasController',docentes_notasController);
 */
 
-docentes_notasController.$inject= ['$scope','$http','$cookieStore', '$cookies','CONFIG'];
-function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG) {
+docentes_notasController.$inject= ['$scope','$http','$cookieStore', '$cookies','CONFIG','periodoData','estudianteData','actividadData','logroData','nota_actividadData','nota_logroData'];
+function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,periodoData,estudianteData,actividadData,logroData,nota_actividadData,nota_logroData) {
 
   $scope.estudiantes=[];
   $scope.date_asistencia = new Date();
@@ -36,7 +36,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG) {
 
 
   //Trae el periodo Actual
-  $http.get(CONFIG.http_address+'/api/todos/periodos/actual')
+  periodoData.findPeriodoActual()
   .success(function(data){
     $scope.periodo_actual = data[0];
 
@@ -46,7 +46,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG) {
   });
 
     //Trae todos los periodos y pone el actual
-  $http.get(CONFIG.http_address+'/api/todos/periodos')
+  periodoData.findPeriodos()
   .success(function(data){
     $scope.periodos = data; 
 
@@ -60,7 +60,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG) {
         $scope.periodo_sel = $scope.periodos[i];
 
          // Trae todas las cargas de un periodo seleccionado
-        $http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
+        periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo)
         .success(function(data) {
           $scope.cargas = data;
         })
@@ -79,7 +79,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG) {
       //funcion que se la usa cuando le da click en un tab
   $scope.getPeriodoId = function(index){
     $scope.periodo_sel = $scope.periodos[index];
-    $http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
+    periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo)
     .success(function(data) {
       $scope.cargas = data;
       var encontrado = false;
@@ -379,7 +379,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG) {
   //
 
   function getEstudiantes(id_curso,cb){
-    $http.get(CONFIG.http_address+'/api/cursos/'+id_curso+'/estudiantes')
+    estudianteData.findEstudiantesByCurso(id_curso)
     .success(function(est){
       for (var i = est.length - 1; i >= 0; i--) {
         est[i].nombre1 = delNull(est[i].nombre1);
@@ -402,7 +402,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG) {
   };
 
   function getLogros (id_carga,cb){
-    $http.get(CONFIG.http_address+'/api/docentes/cargas/'+id_carga+'/logros')
+    logroData.findLogrosByCarga(id_carga)
     .success(function(logros){ 
       cb(logros);                   
       //$scope.logros = logros;
@@ -413,19 +413,9 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG) {
     });
 
   }
-  function getNotas(id_materia,id_periodo,cb){
-    $http.get(CONFIG.http_address+'/estudiantes/materias/'+id_materia +'/notas/periodos/'+ id_periodo)
-    .success(function(notas){ 
-      cb(notas);                   
-      //$scope.logros = logros;
-    })
-    .error(function(error){
-      console.log('Error: '+ error);
-      cb({});
-    });
-  }
+
   function getActividades (id_logro,cb){
-    $http.get(CONFIG.http_address+'/api/docentes/logros/'+id_logro+'/actividades')
+    actividadData.findActividadesByLogro(id_logro)
     .success(function(actividades){ 
       cb(actividades);                   
       //$scope.logros = logros;
@@ -437,7 +427,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG) {
 
   }
   function getNotasActividades(id_carga,cb){
-    $http.get(CONFIG.http_address+'/api/docentes/cargas/'+id_carga +'/logros/actividades/notas')
+    nota_actividadData.findNotasActividadByCarga(id_carga)
     .success(function(notas){ 
       cb(notas);                   
       //$scope.logros = logros;
@@ -449,7 +439,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG) {
   }
 
     function getNotasLogros(id_carga,cb){
-    $http.get(CONFIG.http_address+'/api/docentes/cargas/'+id_carga +'/logros/notas')
+    nota_logroData.findNotasLogrosByCarga(id_carga)
     .success(function(notas){ 
       cb(notas);                   
       //$scope.logros = logros;

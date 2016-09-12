@@ -10,6 +10,8 @@ router.get('/mi_inasistencia', /*authenticate,*/inasistenciaController.getMiInas
 router.get('/cargas/:id_carga/estudiantes/:id_estudiante',/* authenticate,*/ inasistenciaController.getInasistenciaPorCarga);
 router.post('/inasistencia',/*authenticate,*/ inasistenciaController.addInasistencias)
 router.get('/cargas/:id_carga',inasistenciaController.getCantidadInasistenciasCarga);
+router.get('/materias',inasistenciaController.getMateriasWithInasistenciaByEstudiante);
+router.get('/materias/:id_materia',inasistenciaController.getInasistenciasByMateria);
 /*
 router.get('/cargas/:id_carga', function(req,res){
 	inasistenciaController.getInasistenciasCarga(req.params.id_carga, function(data){

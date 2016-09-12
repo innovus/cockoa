@@ -7,22 +7,31 @@
     function config($routeProvider, $locationProvider){
         $routeProvider
         
-        .when("/notas",{
+        .when("/docentes/notas",{
             templateUrl: "/views/notas/notas.html",
             controller: "docentes_notasController"
         })
-        .when("/logros",{
+        .when("/docentes/logros",{
             templateUrl: "/views/logros/crud_logros.html",
             controller: "crudLogrosController"
         })
-        .when("/inasistencias",{
+        .when("/docentes/inasistencias",{
             templateUrl: "/views/inasistencia/inasistencia.html",
             controller: "inasistenciaController"
         })
+        .when("/estudiantes/notas",{
+            templateUrl: "/views/estudiantes/notas/notas.html",
+            controller: "estudiantes_notasController"
+        })
+        .when("/estudiantes/inasistencias",{
+            templateUrl: "/views/estudiantes/inasistencia/inasistencia.html",
+            controller: "inasistenciaController"
+        })
+
         
 
         
-        .otherwise({redirectTo:"/notas"});
+        .otherwise({redirectTo:"/docentes/notas"});
 
         $locationProvider.html5Mode({
           enabled: true,
