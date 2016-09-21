@@ -135,6 +135,15 @@ function getInasistenciasByMateria(req,res){
 		}
 	});
 }
+function updateEstadoInasistencia(req,res){
+	InasistenciaDao.updateEstadoInasistencia(req.body)
+	.then(function(data){
+		respuesta.sendJsonResponse(res,200,{'msg':'Inasistencia Actualizada'});
+
+	}).catch(function(err){
+		respuesta.sendJsonResponse(res,500,{'msg':'Error al actualizar'});
+	})
+}
 
 
 module.exports = {
@@ -144,5 +153,6 @@ module.exports = {
 	getCantidadInasistenciasCarga: getCantidadInasistenciasCarga,
 	getInasistenciaPorCarga: getInasistenciaPorCarga,
 	getMateriasWithInasistenciaByEstudiante:getMateriasWithInasistenciaByEstudiante,
-	getInasistenciasByMateria: getInasistenciasByMateria
+	getInasistenciasByMateria: getInasistenciasByMateria,
+	updateEstadoInasistencia: updateEstadoInasistencia,
 }

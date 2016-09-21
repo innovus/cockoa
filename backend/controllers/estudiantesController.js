@@ -55,7 +55,7 @@ function getActividadesEstudiante(req,res){
 	/*var queri = "select id_actividad,id_logro,nombre_actividad,descripcion_actividad,porcentaje_actividad "+ 
 	"from actividad where id_logro =  "+req.params.id_logro;
 	db.many(queri)*/
-	actividadDao.findActividadesByLogro(req.params.id_logro)
+	ActividadDao.findActividadesByLogro(req.params.id_logro)
 	.then(function(data){ 
 
 		console.log("la fucnion salio bn" + data)

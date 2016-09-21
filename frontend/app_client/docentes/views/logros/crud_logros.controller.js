@@ -81,7 +81,7 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
       var modalInstance = $uibModal.open({
         animation: true,
         templateUrl: '/views/logros/actividades.html',
-        controller: 'ModalInstanceCtrl',
+        controller: 'actividadesModalController',
         size: size,
         resolve: {
           actividades: function () {
@@ -178,7 +178,7 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     });
   }
 }]);
-app.controller('ModalInstanceCtrl', function ($http,$scope,$q, $uibModalInstance, actividades) {
+app.controller('actividadesModalController', function ($http,$scope,$q, $uibModalInstance, actividades) {
 
   $scope.actividades = actividades;
 

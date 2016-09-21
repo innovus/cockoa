@@ -68,9 +68,9 @@
                     <tr ng-repeat="estudiante in estudiantes">
                      <td>{{estudiante.id_estudiante}}</td>
                      <td>{{estudiante.nombrecompleto}}</td>
-                     <td ng-repeat="nota in estudiante.notas track by $index">
-                        <a href="#" editable-text="nota.mostrar" onbeforesave="before(nota)" onaftersave="after(nota)"
-                        >{{ nota.mostrar || 'empty' }}</a>
+
+                      <td ng-repeat="cabecera in estudiante.cabeceras track by $index" >
+                        <a  href="#" editable-text="cabecera.nota" onbeforesave="before(cabecera, estudiante)" onaftersave="after(cabecera,estudiante.id_estudiante)" >{{cabecera.nota || 'empty' }}</a>
                       </td>
                       
 

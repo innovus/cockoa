@@ -9,6 +9,7 @@ var authenticate = require('./auth').authenticate;
 router.get('/mi_inasistencia', /*authenticate,*/inasistenciaController.getMiInasistencia);
 router.get('/cargas/:id_carga/estudiantes/:id_estudiante',/* authenticate,*/ inasistenciaController.getInasistenciaPorCarga);
 router.post('/inasistencia',/*authenticate,*/ inasistenciaController.addInasistencias)
+router.put('/estado',/*authenticate,*/ inasistenciaController.updateEstadoInasistencia)
 router.get('/cargas/:id_carga',inasistenciaController.getCantidadInasistenciasCarga);
 router.get('/materias',inasistenciaController.getMateriasWithInasistenciaByEstudiante);
 router.get('/materias/:id_materia',inasistenciaController.getInasistenciasByMateria);

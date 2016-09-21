@@ -40,22 +40,22 @@
       <table class="table  table-bordered" >
         <thead>
           <tr>
-              <th style="text-align:center;">Porcentaje</th>
-              <th style="text-align:center;">Logros</th>
+
+              <th class="col-sm-2" style="text-align:center;">Logros</th>
               <th style="text-align:center;" >Actividades</th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="logro in logros">
-            <td>{{logro.porcentaje_logro}} %</td>
-            <td>{{logro.descripcion_logro}}</td>
+            
+            <td>({{logro.porcentaje_logro}} %)<h3>Logro {{$index + 1 }}</h3> </td>
             <td>
-              <table class="table  table-bordered" >
+              <table class="table  table-bordered col-md-4" >
                 <thead>
                   <tr>
-                    <th ng-repeat="actividad in logro.actividades"> A{{$index + 1 }} ({{actividad.porcentaje_actividad}}%)</th>
+                    <th class="col-md-1" ng-repeat="actividad in logro.actividades"> A{{$index + 1 }} ({{actividad.porcentaje_actividad}}%)</th>
                    
-                    <th>Final</th>
+                    <th class="col-md-1" >Final</th>
                   
                   </tr>
 
@@ -74,10 +74,12 @@
           </tr>
 
         </tbody>
+        <!--
         <tr>
           <th>Final</th>
           <th style="text-align:right;"colspan="2"> 5 </th>
         </tr>
+        -->
       </table>
       </div >
       

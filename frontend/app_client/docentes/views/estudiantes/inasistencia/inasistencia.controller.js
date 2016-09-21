@@ -8,16 +8,24 @@
     //del controlador y le pasamos una function javascript
 
 //Agregamos el objecto pokemon asociado al controlador
-app.controller('inasistenciaController',['$scope','$http','$cookieStore', '$cookies','materiaData','inasistenciaData',function($scope,$http,$cookieStore,$cookies,materiaData,inasistenciaData){
+app.controller('inasistenciaEstudianteController',['$scope','$http','$cookieStore', '$cookies','materiaData','inasistenciaData',function($scope,$http,$cookieStore,$cookies,materiaData,inasistenciaData){
 
  $scope.materia_seleccionada = null;
  $scope.inasistencias = null;
 //////////////////////
 
-$scope.getInasistenciasByMateria = function(id_materia){
-  inasistenciaData.findInasistenciasByMateria(id_materia)
+$scope.getInasistenciasByMateria = function(materia){
+  $scope.materia_seleccionada = materia;
+  inasistenciaData.findInasistenciasByMateria(materia.id_materia)
   .success(function(data){
     $scope.inasistencias = data;
+          for (var i = $scope.inasistencias.length - 1; i >= 0; i--) {
+        $scope.inasistencias[i].nombre1 = delNull($scope.inasistencias[i].nombre1);
+        $scope.inasistencias[i].nombre2 = delNull($scope.inasistencias[i].nombre2);
+        $scope.inasistencias[i].apellido1 = delNull($scope.inasistencias[i].apellido1);
+        $scope.inasistencias[i].apellido2 = delNull($scope.inasistencias[i].apellido2);
+        $scope.inasistencias[i].nombrecompleto = $scope.inasistencias[i].nombre1 + " "+ $scope.inasistencias[i].nombre2 + " " + $scope.inasistencias[i].apellido1 + " "+  $scope.inasistencias[i].apellido2;                
+      }//cierra dor
     console.log(data);
   }).error(function(error){
     console.log('Error: ' +error);

@@ -10,7 +10,7 @@
       
         };
         var findNotasLogrosByMateriaAndPeriodo = function(id_materia,id_periodo){
-            return $http.get('/estudiantes/materias/'+id_materia +'/notas/periodos/'+ id_periodo)
+            return $http.get(CONFIG.http_address+'/estudiantes/materias/'+id_materia +'/notas/periodos/'+ id_periodo)
 
         }
        

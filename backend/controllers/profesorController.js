@@ -17,6 +17,7 @@ var actividadDao = require("../app_core/dao/actividadDao");
 var Nota_logroDao = require("../app_core/dao/nota_logroDao");
 var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 
+
 function getCursosMaterias(req,res){
 	var hoy = new Date();
 	var dia = hoy.getDate(); 
@@ -109,7 +110,7 @@ function getNotasActividades(req,res){
 		var auxLogro=null;
 
 		//inicia for que recorre la consulta
-		for (var i =0; i < data.length; i++) {
+		/*for (var i =0; i < data.length; i++) {
 			var estudiante = data[i].id_estudiante;
 			var logro = data[i].id_logro;
 			if(i==0){
@@ -148,9 +149,10 @@ function getNotasActividades(req,res){
 				estudiantes[auxEstudiante]= logros;
 
 			}
-		}
+		}*/
 
-		respuesta.sendJsonResponse(res,200,estudiantes);
+		//respuesta.sendJsonResponse(res,200,estudiantes);
+		respuesta.sendJsonResponse(res,200,data);
 		
 	}).catch(function(err){
 		if(err.message == 'No data returned from the query.'){
@@ -175,17 +177,9 @@ function getNotasActividades(req,res){
 */
 
 function updatePorcentajesActividades(req,res){
-	//console.log(data_multi);
-
-	/*var queri= pgp2.helpers.update(req.body,['?id_actividad','porcentaje_actividad'],'actividad') + 'WHERE v.id_actividad = t.id_actividad';
-	console.log(queri);
-	db.none(queri)
-	*/
 	actividadDao.updatePorcentajesActividades(req.body)
-	.then(function(){
-		
+	.then(function(){	
 		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Todos los ingresos correctos'})		
-
 	})
 	.catch(function(error){
 		console.log(error)
@@ -200,8 +194,6 @@ function prueba(cb){
 	var prueba = pgp2.helpers.update(dataMulti, ['?id_estado_docente', 'descripcion_estado_docente'], 'estado_docente') + ' WHERE v.id_estado_docente = t.id_estado_docente';
 	console.log(prueba)
 	prueba = prueba.replace('/"/',"");
-	//prueba = prueba.replace('/\/',"");
-	//console.log(mystring.replace(/,/g , ":"));
 	console.log(prueba);
 	cb(prueba);
 }
@@ -209,48 +201,56 @@ function prueba(cb){
 //inserto la nota, mando en data_simple los campos que voy a ingresas,
 // y en table el nombre de la tabla donde los voy a insertar
 function insertNota(req,res){
-	var queri= '';
+	console.log("Entro a inserNota")
+	
 	if(req.params.table == "logros"){
-		queri= pgp2.helpers.insert(req.body,null,'nota_logro');
+		console.log("es logros")
 
+		Nota_logroDao.insertNotasLogros(req.body)
+		.then(function(){	
+			respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Todos los ingresos correctos'})		
+		})
+		.catch(function(error){
+			console.log(error)
+			respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
+		})
 	}else if(req.params.table == "actividades"){
-		queri= pgp2.helpers.insert(req.body,null,'nota_actividad');
-
+		Nota_actividadDao.insertNotasActividades(req.body)
+		.then(function(){	
+			respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Todos los ingresos correctos'})		
+		})
+		.catch(function(error){
+			console.log(error)
+			respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
+		})
 	}
-	console.log(queri)
-	db.none(queri)
-	.then(function(){
-		console.log("bien")
-		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'La nota se ingreso correctamente'})		
-
-	})
-	.catch(function(error){
-		console.log(error)
-		respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
-	})
 }
 
 
 function updateNota(req,res){
-	var queri = "";
+	console.log("Entro a updateNota")
 
 	if(req.params.table == "logros"){
-		queri= pgp2.helpers.update(req.body,['nota_logro'],'nota_logro') + " WHERE id_logro= "+ req.params.id_logro +" and id_estudiante= '"+req.params.id_estudiante+"'";
-
+		Nota_logroDao.updateNotaLogro(req.body)
+		.then(function(){	
+			respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Actualizo la nota con exito'})		
+		})
+		.catch(function(error){
+			console.log(error)
+			respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
+		})
+		
 	}else if(req.params.table == "actividades"){
-		queri = pgp2.helpers.update(req.body,['nota_actividad'],'nota_actividad') + " WHERE id_actividad= "+ req.params.id_actividad +" and id_estudiante= '"+req.params.id_estudiante+"'";
+		Nota_actividadDao.updateNotaActividad(req.body)
+		.then(function(){	
+			respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Actualizo la nota con exito'})		
+		})
+		.catch(function(error){
+			console.log(error)
+			respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
+		})
 	}
-	console.log(queri);
-	db.none(queri)
-	.then(function(){
-		console.log("bien")
-		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'La nota se actualizo correctamente'})		
 
-	})
-	.catch(function(error){
-		console.log(error)
-		respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
-	})
 }
 
 function getNotasLogros(req,res){
@@ -261,7 +261,7 @@ function getNotasLogros(req,res){
 		var notas_logros = {};
 
 		//(function(i){
-			console.log("antes del for")
+		/*	console.log("antes del for")
 			var aux = null;
 
 			for (var i =0; i < data.length; i++) {
@@ -294,6 +294,8 @@ function getNotasLogros(req,res){
 
 		respuesta.sendJsonResponse(res,200,estudiantes);
 		console.log(estudiantes);
+		*/
+		respuesta.sendJsonResponse(res,200,data);
 		
 	}).catch(function(err){
 		if(err.message == 'No data returned from the query.'){

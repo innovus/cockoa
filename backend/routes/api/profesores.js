@@ -13,8 +13,8 @@ router.get('/logros/:id_logro/actividades'/*, authenticate*/,profesoresControlle
 router.get('/cargas/:id_carga/logros/notas'/*, authenticate*/, profesoresController.getNotasLogros);
 router.get('/cargas/:id_carga/logros/actividades/notas'/*, authenticate*/,profesoresController.getNotasActividades);
 router.put('/actividades/porcentajes'/*, authenticate*/,profesoresController.updatePorcentajesActividades);
-router.put('/:tabla/notas'/*, authenticate*/,profesoresController.updateNota);
-router.post('/:tabla/notas'/*, authenticate*/,profesoresController.insertNota);
+router.put('/:table/notas'/*, authenticate*/,profesoresController.updateNota);
+router.post('/:table/notas'/*, authenticate*/,profesoresController.insertNota);
 //(router.get('/prueba'/*, authenticate*/, prueba);
 
 

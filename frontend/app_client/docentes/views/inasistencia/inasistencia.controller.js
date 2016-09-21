@@ -30,6 +30,8 @@ app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CO
   periodoData.findPeriodoActual()
   .success(function(data){
     $scope.periodo_actual = data[0];
+    console.log("entro a perdiodo actual");
+    console.log($scope.periodo_actual)
 
   }).error(function(error){
     console.log(error);
@@ -56,6 +58,8 @@ app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CO
         periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo)
         .success(function(data) {
           $scope.cargas = data;
+          console.log("cargas")
+          console.log($scope.cargas)
         })
         .error(function(data) {
           console.log('Error: ' + data);
@@ -175,6 +179,9 @@ app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CO
       .success(function(response){
         console.log($scope.carga_seleccionada.id_carga_docente)
         console.log(response);
+        swal("Good job!", response.mensaje, "success")
+        seleccionarCarga($scope.carga_seleccionada);
+
       }).error(function(error){
         console.log('Error: ' + error);
       });
@@ -232,9 +239,35 @@ function clearCookieData(cookies){
   cookies.remove("accessToken");
 }
 
-app.controller('ModalInasistenciaCtrl', function ($scope, $uibModalInstance, fechas) {
+app.controller('ModalInasistenciaCtrl', function ($scope, $uibModalInstance, fechas, $filter,inasistenciaData) {
 
   $scope.fechas = fechas;
+    $scope.justificadas = [
+    {value: 1, text: 'Si'},
+    {value: 2, text: 'No'}
+  ]; 
+
+  $scope.show_estado_inasistencia = function(fecha) {
+    var selected = [];
+    if(fecha.estado_inasistencia) {
+      selected = $filter('filter')($scope.justificadas, {value: fecha.estado_inasistencia});
+    }
+    return selected.length ? selected[0].text : 'Not set';
+  };
+
+  $scope.updateEstado = function(fecha){
+    console.log("entro a updateEstado")
+    inasistenciaData.updateEstadoInasistencia(fecha)
+    .success(function(mensaje){
+       //   alert(mensaje.msg);
+          swal("Good job!", mensaje.msg, "success")
+          console.log(mensaje); 
+
+        }).error(function(error){
+          console.log(error);
+          swal("Oops..."," Algo salio mal!","error");
+        });
+  }
 
 
   console.log("en el modulo modal")

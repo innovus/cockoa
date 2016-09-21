@@ -10,7 +10,7 @@
       
         };
         var findNotasActividadByEstudianteAndLogro = function(id_logro){
-            return http.get('/estudiantes/logros/'+id_logro +'/actividades/notas')
+            return $http.get(CONFIG.http_address+'/estudiantes/logros/'+id_logro +'/actividades/notas')
 
         }
        

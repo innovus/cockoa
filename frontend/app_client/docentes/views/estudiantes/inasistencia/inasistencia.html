@@ -6,7 +6,7 @@
       <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
-              <li  ng-repeat="materia in materias"><a ng-click="getInasistenciasByMateria(materia.id_materia)">{{materia.nombre_materia}} </a>
+              <li  ng-repeat="materia in materias"><a ng-click="getInasistenciasByMateria(materia)">{{materia.nombre_materia}} </a>
               </li>
             </ul>
         </div>
@@ -24,7 +24,7 @@
 
 
    			    <div>
-    <h1>Asistencia</h1>
+    <h1>{{materia_seleccionada.nombre_materia}}</h1>
     <div ng-grid ="gridOptions">
     </div>
     <table class="table">
@@ -33,17 +33,15 @@
               <th>Fecha</th>
               <th>Periodo</th>
               <th>Docente</th>
-              <th>Materia</th>
               <th>Justificada</th>
           </tr>
         </thead>
         <tbody >
            <tr ng-repeat="inasistencia in inasistencias">
-              <th>{{inasistencia.fecha_inasistencia}}</th>
+              <th>{{inasistencia.fecha_inasistencia | date : format : shortDate}}</th>
               <th>{{inasistencia.numero_periodo}}</th>
               <th>{{inasistencia.nombrecompleto}}</th>
-              <th>{{inasistencia.nombre_materia}}</th>
-              <th>{{inasistencia.estado_inasistencia}}</th>
+              <th>{{inasistencia.estado_inasistencia === 1 ? "Si" : "No" }}</th>
           </tr>
         </tbody>
     </table>

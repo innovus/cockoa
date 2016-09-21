@@ -18,12 +18,23 @@
             return $http.get(CONFIG.http_address+'/inasistencias/materias/'+id_materia) 
 
         }
+        var updateEstadoInasistencia = function(inasistencia){
+           return $http({
+                method: 'PUT',
+                url: CONFIG.http_address+'/inasistencias/estado',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                data: inasistencia
+            })
+        }
 
         return {
             findInasistenciasByCargaAndEstudiante:findInasistenciasByCargaAndEstudiante,
             createInasistenciasEstudiantes:createInasistenciasEstudiantes,
             findInasistenciasByCarga:findInasistenciasByCarga,
-            findInasistenciasByMateria: findInasistenciasByMateria
+            findInasistenciasByMateria: findInasistenciasByMateria,
+            updateEstadoInasistencia: updateEstadoInasistencia,
 
         };
     }

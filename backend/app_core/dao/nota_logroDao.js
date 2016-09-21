@@ -26,6 +26,40 @@ var findNotasLogrosByCarga = function(id_carga){
 var findNotasLogrosByEstudiante = function(id_usuario,id_materia,id_periodo){
 	return sequelize.query(queries.nota_logro.findNotasLogrosByEstudiante,{bind:{id_usuario:id_usuario,id_materia:id_materia,id_periodo:id_periodo},type:sequelize.QueryTypes.SELECT})
 }
+var insertNotasLogros= function(notas_logro){
+   var cadena="INSERT INTO nota_logro(id_logro,nota_logro,id_estudiante) VALUES ";
+   var cadenaValores="";
+   notas_logro.forEach(function(nota_logro,index){
+   		cadenaValores += "("+nota_logro.id_logro+","+nota_logro.nota_logro+",'"+nota_logro.id_estudiante+"')";
+       if(index==notas_logro.length-1){
+           console.log("ultimo registro");
+       }
+       else{
+           console.log("registro");
+           cadenaValores+= ",";
+       }
+   });
+   cadena = cadena + cadenaValores
+   console.log(cadenaValores)
+   return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.INSERT
+   });
+
+};
+var updateNotaLogro= function(nota_logro){
+   var cadena="UPDATE nota_logro "+
+    "SET nota_logro = " + nota_logro.nota_logro +
+    " WHERE id_estudiante = '"+nota_logro.id_estudiante+
+    "' AND id_logro = "+nota_logro.id_logro ;
+
+   
+   return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.UPDATE
+   });
+
+};
 
 module.exports.findNotasLogrosByCarga=findNotasLogrosByCarga;
 module.exports.findNotasLogrosByEstudiante=findNotasLogrosByEstudiante;
+module.exports.insertNotasLogros = insertNotasLogros;
+module.exports.updateNotaLogro =updateNotaLogro;

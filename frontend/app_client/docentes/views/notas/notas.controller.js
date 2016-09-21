@@ -15,8 +15,8 @@ run(function(editableOptions) {
 .controller('docentes_notasController',docentes_notasController);
 */
 
-docentes_notasController.$inject= ['$scope','$http','$cookieStore', '$cookies','CONFIG','periodoData','estudianteData','actividadData','logroData','nota_actividadData','nota_logroData'];
-function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,periodoData,estudianteData,actividadData,logroData,nota_actividadData,nota_logroData) {
+docentes_notasController.$inject= ['$scope','$http','$cookieStore','$cookies','CONFIG','periodoData','estudianteData','actividadData','logroData','nota_actividadData','nota_logroData','$filter'];
+function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,periodoData,estudianteData,actividadData,logroData,nota_actividadData,nota_logroData,$filter) {
 
   $scope.estudiantes=[];
   $scope.date_asistencia = new Date();
@@ -32,7 +32,11 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
   $scope.periodo_actual = null;
   $scope.logros = [];
   $scope.cabeceras=[];
-  $scope.valorBefore = 0.0;
+  $scope.valorBefore = {};
+  var val_before;
+
+  $scope.notas_logros = null;
+  $scope.notas_actividades = null;
 
 
   //Trae el periodo Actual
@@ -49,6 +53,8 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
   periodoData.findPeriodos()
   .success(function(data){
     $scope.periodos = data; 
+    console.log("findPEriodos")
+    console.log(data)
 
     //recorre el vector de todos los periodos 
     for (var i = 0; i < data.length ; i++) {
@@ -122,47 +128,113 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
     $scope.estudiantes = [];
     $scope.cantidad = {};
     $scope.selected.ids_estudiantes = [];
-    getEstudiantes(carga.id_curso,function(estudiantes){
-      $scope.estudiantes=estudiantes;
+    ///////////////////////////////////////////
+    getNotasActividades(carga.id_carga_docente,function(notas_actividades){
+      $scope.notas_actividades = notas_actividades;
+      getNotasLogros(carga.id_carga_docente,function(notas_logros){
+        $scope.notas_logros = notas_logros;
+        console.log("no entra todavia a put")
+        console.log($scope.cabeceras)
+        getEstudiantes(carga.id_curso,function(estudiantes){
+          $scope.estudiantes=estudiantes;
+          for(var h = 0; h<estudiantes.length; h++){
+            $scope.estudiantes[h].cabeceras = []
+          }
 
-      getLogros(carga.id_carga_docente, function(logros){
-        $scope.logros = logros;
 
-        //fpor para recorrer osgros y agregarle actividades
-        for (var i =0; i < logros.length ; i++) {
-          (function(i){
-            console.log("Entro a recorrer los logros posicion: " + i + "id_logro " +logros[i].id_logro);
-          
-            getActividades(logros[i].id_logro,function(actividades){
+          getLogros(carga.id_carga_docente, function(logros){
+            $scope.logros = logros;
+
+            //fpor para recorrer osgros y agregarle actividades
+            for (var i =0; i < logros.length ; i++) {
+              (function(i){
+                getActividades(logros[i].id_logro,function(actividades){
+                  $scope.logros[i].actividades = actividades;
+                  //for para llenar las cabeceras segun el numero de actividades
+                  for (var j =0; j < actividades.length; j++) {
+                    $scope.cabeceras.push({'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)")});
+
+                    (function(j){
+                      for(var h = 0; h<estudiantes.length; h++){
+                        (function(h){
+                          //$scope.estudiantes[h].cabeceras = []
+                           selected = $filter('filter')(notas_actividades, {id_estudiante: estudiantes[h].id_estudiante, id_actividad:actividades[j].id_actividad})
+                            console.log(selected[0])
+                            var nota_a = "";
+                            if(selected[0] == undefined){
+                              nota_a = "-"
+
+                            }else{
+                              nota_a = selected[0].nota_actividad;
+                            }
+
+                          //  estudiantes[h].cabeceras[l].nota =selected[0].nota_actividad;
+
+                         $scope.estudiantes[h].cabeceras.push({'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)"),'nota':nota_a})
+
+                        })(h)
+
+                        //$scope.cabeceras[j] = {'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)")}
+                        //console.log($scope.cabeceras.length)
+                       // $scope.cabeceras.push({'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)")});
+
+                        // $scope.cabeceras.push("{'id_actividad':'"+actividades[j].id_actividad+"','nombre_cabecera':'A"+(j+1)+"'}"+ ;
+                      }// cierra for estudiantes
+                    })(j);
+                  }//finaliza for que recorre actividades
+                  
+                  for(var h = 0; h<estudiantes.length; h++){
+                    console.log("entro al for de estudiantes despues de recorrer actividades");
+                        (function(h){
+                        //  $scope.estudiantes[h].cabeceras = []
+                           selected = $filter('filter')(notas_logros, {id_estudiante: estudiantes[h].id_estudiante, id_logro:logros[i].id_logro})
+
+                          //  estudiantes[h].cabeceras[l].nota =selected[0].nota_actividad;
+                           var nota_a = "";
+                            if(selected[0] == undefined){
+                              nota_a = "-"
 
 
-              $scope.logros[i].actividades = actividades;
+                            }else{
+                              nota_a = selected[0].nota_logro;
+                            }
 
-              //for para llenar las cabeceras segun el numero de actividades
-              for (var j =0; j < actividades.length; j++) {
-                (function(j){
-          
-                  $scope.cabeceras.push({'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)")});
-                  // $scope.cabeceras.push("{'id_actividad':'"+actividades[j].id_actividad+"','nombre_cabecera':'A"+(j+1)+"'}"+ ;
-                })(j);
-              }//finaliza for que recorre actividades
-              $scope.cabeceras.push({'id':logros[i].id_logro,'tipo':0,'mostrar':'Final'}); 
-            });
-            console.log($scope.cabeceras);
-          })(i);
-        };//finaliza For recorre logros
-      
-        //console.log($scope.logros);
+                          $scope.estudiantes[h].cabeceras.push({'id':logros[i].id_logro,'tipo':0,'mostrar':'final','nota':nota_a})
 
-///////////////////////////////////////////
-        getNotasActividades(carga.id_carga_docente,function(notas_actividades){
-          getNotasLogros(carga.id_carga_docente,function(notas_logros){
-            for(var i = 0; i < $scope.estudiantes.length; i++){
+                        })(h)
+
+                        //$scope.cabeceras[j] = {'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)")}
+                        //console.log($scope.cabeceras.length)
+
+                        // $scope.cabeceras.push("{'id_actividad':'"+actividades[j].id_actividad+"','nombre_cabecera':'A"+(j+1)+"'}"+ ;
+                      }// cierra for estudiantes
+
+                  $scope.cabeceras.push({'id':logros[i].id_logro,'tipo':0,'mostrar':'Final'}); 
+              
+                });
+              })(i);
+            };//finaliza For recorre logros
+          });//vierra GEt logros
+        });//CIERRA GETEstudiantes
+        /* putCabeseras ($scope.estudiantes,$scope.cabeceras,notas_logros,notas_actividades,function(estudiantesC){
+              $scope.estudiantes = estudiantesC;*/
+      })//cierra gerNotasLogros
+    })//cierra getNotasActividades
+ // })
+console.log("final seleccionar carga")
+console.log($scope.estudiantes)
+console.log($scope.cabeceras)
+    
+  }//CIERA FUNCION SELECIONAR CARGA
+           /*  for(var i = 0; i < $scope.estudiantes.length; i++){
               var notas= [];
               (function(i){
 
                 //si no encuentro al estudiante en las notas pongo de una vez -  a todas las notas
-                if(typeof notas_actividades[$scope.estudiantes[i].id_estudiante] === 'undefined' ){
+               if(typeof notas_actividades[$scope.estudiantes[i].id_estudiante] === 'undefined' ){
+                  console.log("cuantas veces entra aqui")
+                  console.log($scope.estudiantes[i].id_estudiante)
+                  console.log(notas_actividades)
 
 
                  
@@ -252,7 +324,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
                       }// cierra else
                     }//cierra else
                   }//cierra for que recorro en vector de logros
-                } // cierra if type of - si no encuentro al estudiante en las notas pongo de una vez -  a todas las notas
+                //} // cierra if type of - si no encuentro al estudiante en las notas pongo de una vez -  a todas las notas
                 console.log(notas)
                 $scope.estudiantes[i].notas = notas;
               })(i);//cierra funcion()
@@ -264,26 +336,165 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 
     });//CIERRA GETCURSOS
   }//CIERA FUNCION SELECIONAR CARGA
+  */
 
+  $scope.mostrar_nota = function(id_estudiante,tipo, id){
+    //si es cero es logro
+    if (tipo == 0){
+     return $scope.notas_logros[id_estudiante][id]
+    }else{
+      return $scope.notas_actividades[id_estudiante][id]
+    }
+  }
 
-  $scope.before = function(valor1){
-    $scope.valorBefore = valor1.mostrar;
+  $scope.before = function(cabecera){
+    //$scope.valorBefore = valor1.mostrar;
+    $scope.valorBefore = cabecera
+    val_before =  $scope.valorBefore.nota
+    //var cabecera1 = cab
+
     console.log("entro a before");
+
     console.log($scope.valorBefore);
     //console.log($scope.valor);
   }
+  $scope.after = function(cabecera,id_estudiante){
+    var valorantes = $scope.valorBefore;
+    console.log("valor antes")
+    console.log(val_before)
+    console.log("entro a after");
+    console.log(cabecera)
+    var results = {};
+    if(cabecera.tipo == 0 ){
+      var results = [{
+        'id_logro':cabecera.id,
+        'id_estudiante': id_estudiante,
+        'nota_logro': parseFloat(cabecera.nota) 
+
+      }]
+      console.log('entro al tipo = 0')
+
+       //si es 0 miro si esta '-' es para insertar la nota, si no es para actualizarla
+       console.log($scope.valorBefore.nota)
+      if(val_before == '-'){
+        console.log("es un logro y es para insertar");
+        console.log("va a insertar")
+        console.log(results)
+
+        $http({
+          method: 'POST',
+          url: CONFIG.http_address+'/api/docentes/logros/notas',
+          headers:{
+            'Content-Type':'application/json'
+          },
+          data: results
+
+        })
+        .success(function(mensaje){
+          console.log("succes")
+          console.log(mensaje);
+        
+
+        }).error(function(error){
+          console.log("error")
+          console.log(error);
+          return  error;
+        });
+      }else{
+        console.log("es un logro y es para actualizar");
+
+        $http({
+          method: 'PUT',
+          url: CONFIG.http_address+'/api/docentes/logros/notas',
+          headers:{
+            'Content-Type':'application/json'
+          },
+          data: results[0]
+
+        })
+        .success(function(mensaje){
+       //   alert(mensaje.msg);
+          swal("Good job!", mensaje.msg, "success")
+          console.log(mensaje);
+        
+
+        }).error(function(error){
+          console.log(error);
+          alert("Oops... Something went wrong!");
+
+          return  error;
+        });
+
+      }
+    }else {
+      var results = [{
+        'id_actividad':cabecera.id,
+        'id_estudiante': id_estudiante,
+        'nota_actividad': parseFloat(cabecera.nota) 
+
+      }]
+      if(val_before == '-'){
+        $http({
+          method: 'POST',
+          url: CONFIG.http_address+'/api/docentes/actividades/notas',
+          headers:{
+            'Content-Type':'application/json'
+          },
+          data: results
+
+        })
+        .success(function(mensaje){
+          console.log(mensaje);
+        
+
+        }).error(function(error){
+          console.log(error);
+          return  error;
+        });
+      }else{
+
+        $http({
+          method: 'PUT',
+          url: CONFIG.http_address+'/api/docentes/actividades/notas',
+          headers:{
+            'Content-Type':'application/json'
+          },
+          data: results[0]
+
+        })
+        .success(function(mensaje){
+          console.log(mensaje);
+        
+
+        }).error(function(error){
+          console.log(error);
+          return  error;
+        });
+
+      }
+    }
+
+
+
+  }
+/*
+
+
   $scope.after = function(valor){
+    console.log('entro a after')
     console.log(valor)
     var results = {};
 
     //miro que tipo es si es logro(0) o actividad(1)
     if(valor.tipo == 0 ){
-      var results = {
+      var results = [{
         'id_logro':valor.id,
         'id_estudiante': valor.id_estudiante,
         'nota_logro': parseFloat(valor.mostrar) 
 
-      }
+      }]
+      console.log('entro al tipo = 0')
+
       //si es 0 miro si esta '-' es para insertar la nota, si no es para actualizarla
       if($scope.valorBefore == '-'){
         console.log("es un logro y es para insertar");
@@ -298,10 +509,12 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 
         })
         .success(function(mensaje){
+          console.log("succes")
           console.log(mensaje);
         
 
         }).error(function(error){
+          console.log("error")
           console.log(error);
           return  error;
         });
@@ -376,7 +589,59 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
       }
     }
   }
+  */
   //
+  $scope.showNota =function (id_estudiante,tipo,id_nota){
+   
+    var selected = [];
+    if(tipo == 0){
+       selected = $filter('filter')($scope.notas_logros, {id_estudiante: id_estudiante,id_logro: id_nota});
+     
+      return selected.length ? selected[0].nota_logro: '-';
+
+    }else{
+      selected = $filter('filter')($scope.notas_actividades, {id_estudiante: id_estudiante, id_actividad:id_nota})
+      return selected.length ? selected[0].nota_actividad: '-';
+     
+    //  return $filter('filter')($scope.notas_actividades, {id_estudiante: id_estudiante, id_actividad:id_nota})[0].nota_actividad 
+
+    }
+
+  }
+  function putCabeseras (estudiantes,cabeceras,notas_logros,notas_actividades,cb){
+    console.log("apenas entra")
+    console.log(cabeceras)
+    for(var h = 0; h<estudiantes.length; h++){
+        (function(h){
+        
+          estudiantes[h].cabeceras = cabeceras;
+        
+          for(var l = 0; l < estudiantes[h].cabeceras.length; l++){
+            (function(l){
+              var selected = []
+             
+              if(cabeceras[l].tipo == 0){
+                selected = $filter('filter')(notas_logros, {id_estudiante: estudiantes[h].id_estudiante,id_logro: estudiantes[h].cabeceras[l].id});  
+                console.log("seleeeecteeeed 0")
+                console.log(cabeceras)
+                console.log(estudiantes[h].id_estudiante)
+                console.log(selected[0])
+                estudiantes[h].cabeceras[l].nota =  selected[0].nota_logro;
+              }
+              else{
+                selected = $filter('filter')(notas_actividades, {id_estudiante: estudiantes[h].id_estudiante, id_actividad:estudiantes[h].cabeceras[l].id})
+                console.log("seleeeecteeeed 1")
+                console.log(selected[0])
+                estudiantes[h].cabeceras[l].nota =selected[0].nota_actividad;
+              }//cierra else
+            })(l);
+          }//cierra for  cabeceras
+
+        })(h);
+
+      }//cierra for estuduantes
+      cb(estudiantes)
+  }
 
   function getEstudiantes(id_curso,cb){
     estudianteData.findEstudiantesByCurso(id_curso)
@@ -457,7 +722,6 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
     return item;
   }
 }
-
 
 
 
