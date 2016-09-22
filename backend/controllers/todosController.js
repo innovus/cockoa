@@ -13,7 +13,7 @@ var respuesta= require("../helpers/respuesta");
 function getPeriodosDisponibles(req,res){
 	var hoy = new Date();
 	var dia = hoy.getDate(); 
-	var mes = hoy.getMonth()+3;
+	var mes = hoy.getMonth();
 	var anio= hoy.getFullYear();
 	var fecha_actual = String(anio+"-"+mes+"-"+dia);
 

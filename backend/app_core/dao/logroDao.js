@@ -21,6 +21,17 @@ var findLogrosByMateriaAndPeriodo = function(id_materia,id_periodo){
 	return sequelize.query(queries.logro.findLogrosByMateriaAndPeriodo,{bind:{id_materia:id_materia,id_periodo:id_periodo},type:sequelize.QueryTypes.SELECT});
 }
 
+var updateDescripcionLogro= function(logro){
+   var cadena="UPDATE logro "+
+    "SET descripcion_logro = '" + logro.descripcion_logro +"' "+
+    "WHERE id_logro = "+ logro.id_logro ;
+   
+   return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.UPDATE
+   });
+
+};
+
 module.exports.findLogrosByCargaDocente=findLogrosByCargaDocente;
 module.exports.findLogrosByMateriaAndPeriodo=findLogrosByMateriaAndPeriodo;
-
+module.exports.updateDescripcionLogro = updateDescripcionLogro;

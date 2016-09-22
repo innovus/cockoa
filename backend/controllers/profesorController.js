@@ -12,8 +12,8 @@ var db = pgp(connectionString);
 var respuesta= require("../helpers/respuesta");
 
 var carga_docenteDao = require("../app_core/dao/carga_docenteDao");
-var logroDao = require("../app_core/dao/logroDao");
-var actividadDao = require("../app_core/dao/actividadDao");
+var LogroDao = require("../app_core/dao/logroDao");
+var ActividadDao = require("../app_core/dao/actividadDao");
 var Nota_logroDao = require("../app_core/dao/nota_logroDao");
 var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 
@@ -56,7 +56,7 @@ function getCursosMateriasPorPeriodo(req,res){
 	});
 }
 function getLogros(req,res){
-	logroDao.findLogrosByCargaDocente(req.params.id_carga)
+	LogroDao.findLogrosByCargaDocente(req.params.id_carga)
 	.then(function(data){
 		respuesta.sendJsonResponse(res,200,data);
 		console.log("la fucnion salio bn" + data)
@@ -73,7 +73,7 @@ function getLogros(req,res){
 
  
 function getActividades(req,res){
-	actividadDao.findActividadesByLogro(req.params.id_logro)
+	ActividadDao.findActividadesByLogro(req.params.id_logro)
 	.then(function(data){
 		respuesta.sendJsonResponse(res,200,data);
 		console.log("la fucnion salio bn" + data)
@@ -177,14 +177,24 @@ function getNotasActividades(req,res){
 */
 
 function updatePorcentajesActividades(req,res){
-	actividadDao.updatePorcentajesActividades(req.body)
-	.then(function(){	
-		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Todos los ingresos correctos'})		
-	})
-	.catch(function(error){
-		console.log(error)
-		respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
-	})
+	var sumatoria = 0;
+	req.body.forEach(function(actividad,index){
+		sumatoria = sumatoria + actividad.porcentaje_actividad;
+   });
+	if(sumatoria != 100) {
+		respuesta.sendJsonResponse(res,500,{'status':2,'msg':'La sumatoria debe ser 100%'})
+
+	}else{
+		ActividadDao.updatePorcentajesActividades(req.body)
+		.then(function(){	
+			respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Todos los ingresos correctos'})		
+		})
+		.catch(function(error){
+			console.log(error)
+			respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
+		})
+	}
+	
 
 }
 
@@ -252,6 +262,38 @@ function updateNota(req,res){
 	}
 
 }
+function updateDescripcionLogro(req,res){
+	LogroDao.updateDescripcionLogro(req.body)
+	.then(function(){
+		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Actualizo el Logro con exito'})		
+
+	}).catch(function(){
+		respuesta.sendJsonResponse(res,500,{'status':0,'msg':'Se produjo un erro en la actualizacion'})		
+
+	})
+
+}
+function createActividad(req,res){
+	ActividadDao.createActividad(req.body)
+	.then(function(){
+		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Se agrego la actividad con exito'})		
+
+	}).catch(function(){
+		respuesta.sendJsonResponse(res,500,{'status':0,'msg':'Se produjo un error'})		
+
+	})
+}
+function updateDescripcionActividad(req,res){
+	ActividadDao.updateDescripcionActividad(req.body)
+	.then(function(){
+		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Se actualizo la actividad con exito'})		
+
+	}).catch(function(){
+		respuesta.sendJsonResponse(res,500,{'status':0,'msg':'Se produjo un error'})		
+
+	})
+
+}
 
 function getNotasLogros(req,res){
 	Nota_logroDao.findNotasLogrosByCarga(req.params.id_carga)
@@ -309,6 +351,7 @@ function getNotasLogros(req,res){
 }
 
 
+
 module.exports = {
 	getCursosMaterias: getCursosMaterias,
 	getCursosMateriasPorPeriodo: getCursosMateriasPorPeriodo,
@@ -319,6 +362,9 @@ module.exports = {
 	prueba: prueba,
 	updatePorcentajesActividades:updatePorcentajesActividades,
 	insertNota: insertNota,
-	updateNota: updateNota
+	updateNota: updateNota,
+	updateDescripcionLogro: updateDescripcionLogro,
+	createActividad: createActividad,
+	updateDescripcionActividad: updateDescripcionActividad,
 }
 

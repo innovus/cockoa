@@ -3,7 +3,7 @@ var sequelize = Models.sequelize;
 
 var queryFindCursosMateriasByPeriodo = "SELECT id_carga_docente, id_docente, id_materia, nombre_materia, id_curso, grado, grupo "+ 
 	"FROM carga_docente NATURAL JOIN materia NATURAL JOIN curso "+ 
-	"WHERE vigente_carga_docente = '1' and id_docente = '1' and id_periodo = $id_periodo "+
+	"WHERE vigente_carga_docente = 'S' and id_docente = '21' and id_periodo = $id_periodo "+
 	"ORDER BY grado, grupo ";
 
 var queryFindCursosMateriasByFechaActual = "SELECT id_carga_docente, id_docente, id_materia, nombre_materia, id_curso, grado, grupo "+ 

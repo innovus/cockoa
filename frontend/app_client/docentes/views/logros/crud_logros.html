@@ -40,8 +40,8 @@
             <div class="panel-body">
 
               <div class="row">
-                <div ng-repeat="logro in logros"class="col-sm-6 col-md-4">
-                  <form editable-form name="editableForm" onaftersave="saveUser()">
+                <div ng-repeat="logro in logros" class="col-sm-6 col-md-4">
+                  <form editable-form name="editableForm" onaftersave="saveLogro(logro)"  class="form-buttons form-inline" >
    
                   <div class="thumbnail">
                     <div class="caption" >
@@ -52,28 +52,17 @@
                         <!-- editable username (text with validation) -->
                  
                         <span editable-textarea="logro.descripcion_logro" e-name="descripcion_logro"  e-required>{{ logro.descripcion_logro || 'empty' }}</span>
-                      </div> 
-                        <!--
-                          <a href="#" editable-textarea="user.desc" >
-                            <p>{{ user.desc || 'no description' }}</p>
-                          </a>
-                        -->
-
-                        <div class="buttons">
-
-                          <span ng-show="!editableForm.$visible">
+                      </div>
+                      <div class="buttons">
+                        <span ng-show="!editableForm.$visible">
                             <a href="#" class="btn btn-default" role="button" ng-click="open('lg',logro.id_logro)" >Ver</a>
                             <button type="button" class="btn btn-default" ng-click="editableForm.$show()" >Editar</button>
                             <a href="#" class="btn btn-danger" role="button">Eliminar</a>
 
-                          </span>
-
-                          
+                         </span>
 
                           <!-- button to show form -->
-
-
-                          
+    
                           <!-- buttons to submit / cancel form -->
                           <span ng-show="editableForm.$visible">
                             <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">
@@ -85,10 +74,7 @@
                           </span>
 
                           
-                        </div>
-                       
-                   
-                      
+                        </div>           
                       
                     </div>
                   </div>

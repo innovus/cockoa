@@ -184,6 +184,7 @@ app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CO
 
       }).error(function(error){
         console.log('Error: ' + error);
+        swal("Oops..."," Algo salio mal!","error");
       });
    
   }

@@ -5,7 +5,6 @@ app.run(function(editableOptions) {
 });
 app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStore', '$cookies','CONFIG','periodoData','actividadData','logroData',function($scope,$http,$uibModal,$cookieStore,$cookies,CONFIG,periodoData,actividadData,logroData){
 
-  $scope.carga_seleccionada = null;
   $scope.periodos = [];
   $scope.periodo_sel = null;
   $scope.activeTabIndex = 0;
@@ -34,6 +33,7 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
 
   //Trae todos los periodos y pone el actual
   //$http.get(CONFIG.http_address+'/api/todos/periodos')
+
   periodoData.findPeriodos()
   .success(function(data){
     $scope.periodos = data; 
@@ -86,6 +86,9 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
         resolve: {
           actividades: function () {
             return data
+          },
+          id_logro: function(){
+            return id_logro
           }
         }
       });
@@ -97,17 +100,21 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
   //////// fin trae cargas
 
   ///////form editable
-  $scope.saveUser = function() {
-    // $scope.user already updated!
-    return $http.post('/saveUser', $scope.user).error(function(err) {
-      if(err.field && err.msg) {
-        // err like {field: "name", msg: "Server-side error for this username!"} 
-        $scope.editableForm.$setError(err.field, err.msg);
-      } else { 
-        // unknown error
-        $scope.editableForm.$setError('name', 'Unknown error!');
-      }
+  $scope.saveLogro = function(logro) {
+    console.log(logro)
+    logroData.updateDescripcionLogro(logro)
+    .success(function(mensaje){
+    swal("Good job!", mensaje.msg, "success")
+                 
+      //$scope.logros = logros;
+    })
+    .error(function(error){
+      console.log('Error: '+ error);
+      swal("Oops..."," Algo salio mal!","error");
     });
+
+    // $scope.user already updated!
+
   };
 
   ////////
@@ -178,9 +185,11 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     });
   }
 }]);
-app.controller('actividadesModalController', function ($http,$scope,$q, $uibModalInstance, actividades) {
+app.controller('actividadesModalController', function ($http,$scope,$q, $uibModalInstance, actividades,id_logro,actividadData) {
 
   $scope.actividades = actividades;
+  $scope.id_logro = id_logro;
+  console.log(actividades)
 
 
   console.log("en el modulo modal")
@@ -204,37 +213,96 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
     var sumatoria = 0;
     angular.forEach($scope.actividades, function(actividad) {
       sumatoria = sumatoria + parseFloat(actividad[column]);
+      console.log("sumatoria");
+      console.log(sumatoria)
       results.push({ id_actividad: actividad.id_actividad, porcentaje_actividad: parseFloat(actividad[column])});
     })
-    if(sumatoria > 100){
-      return 'que';
+    console.log(sumatoria)
 
-
-
-    }else{
       console.log(results);
-      $http({
-        method: 'PUT',
-        url: CONFIG.http_address+'/api/docentes/actividades/porcentajes',
-        headers:{
-          'Content-Type':'application/json'
-        },
-        data: results
-
-      })
+      actividadData.updatePorcentajes(results)
       .success(function(mensaje){
         console.log(mensaje);
         return $q.all(results);
 
       }).error(function(error){
+        if(error.status == 2){
+          swal("Oops...",error.msg,"error");
+          return error["mal"]
+        }else{
+          swal("Oops..."," Algo salio mal!","error");
+
+        }
+        
         console.log(error);
         return  error;
       });
-    }
-
-
 
   };
+    // add user
+    //tipo: 0 es para saber que es un dato para insertar
+    
+  $scope.addActividad = function() {
+    $scope.inserted = {
+      id_actividad: 100,
+      id_logro: $scope.id_logro,
+      porcentaje_actividad: "0",
+      nombre_actividad: "Prueba",
+      descripcion_actividad: null,
+      tipo:0
+    };
+    $scope.actividades.push($scope.inserted);
+  };
+  $scope.saveActividad = function(data, actividad){
+    console.log(data);
+    console.log(actividad)
+    console.log("union")
+    angular.extend(actividad, data );
+    console.log(actividad)
+    
+    if(actividad.tipo == 0){
+      actividadData.createActividad(actividad)
+      .success(function(mensaje){
+        console.log(mensaje);
+        return $q.all(actividad);
+
+      }).error(function(error){
+        if(error.status == 2){
+          swal("Oops...",error.msg,"error");
+          return error["mal"]
+        }else{
+          swal("Oops..."," Algo salio mal!","error");
+
+        }
+        
+        console.log(error);
+        return  error;
+      });
+
+    }else{
+      actividadData.updateDescripcion(actividad)
+      .success(function(mensaje){
+        console.log(mensaje);
+        return $q.all(actividad);
+
+      }).error(function(error){
+        if(error.status == 2){
+          swal("Oops...",error.msg,"error");
+          return error["mal"]
+        }else{
+          swal("Oops..."," Algo salio mal!","error");
+
+        }
+        
+        console.log(error);
+        return  error;
+      });
+
+    }
+    
+
+
+  }
 
   $scope.ok = function () {
     $uibModalInstance.close();

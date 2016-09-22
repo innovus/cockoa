@@ -1,7 +1,7 @@
 var Models=require("../models/index");
 var sequelize = Models.sequelize;
 
-var queryFindActividadesByLogro = "SELECT * FROM actividad WHERE id_logro  = $id_logro ORDER BY id_actividad"
+var queryFindActividadesByLogro = "SELECT * FROM actividad WHERE id_logro  = $id_logro ORDER BY id_actividad";
 
 var queries={
 	"actividad":{
@@ -10,7 +10,7 @@ var queries={
 };
 var findActividadesByLogro = function(id_logro){
 	return sequelize.query(queries.actividad.findActividadesByLogro,{bind:{id_logro:id_logro},type:sequelize.QueryTypes.SELECT})
-}
+};
 
 var updatePorcentajesActividades= function(actividades){
    var cadena="UPDATE actividad ";
@@ -41,7 +41,31 @@ var updatePorcentajesActividades= function(actividades){
 
 };
 
+var createActividad= function(actividad){
+   var cadena="INSERT INTO actividad"+
+    "(id_actividad,id_logro,porcentaje_actividad,nombre_actividad,descripcion_actividad) "+
+    "VALUES ("+actividad.id_actividad+","+actividad.id_logro+","+actividad.porcentaje_actividad+",'"+actividad.nota_actividad+"','"+actividad.descripcion_actividad+"')";
+   console.log(cadena);
+   return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.INSERT
+   });
+
+};
+var updateDescripcionActividad= function(actividad){
+
+   var cadena="UPDATE actividad "+
+    "SET descripcion_actividad = '"+actividad.descripcion_actividad+"' "+
+    "WHERE id_actividad = "+actividad.id_actividad;
+   console.log(cadena);
+   return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.UPDATE
+   });
+
+};
+
 
 module.exports.findActividadesByLogro=findActividadesByLogro;
 module.exports.updatePorcentajesActividades=updatePorcentajesActividades;
+module.exports.createActividad = createActividad;
+module.exports.updateDescripcionActividad= updateDescripcionActividad;
 

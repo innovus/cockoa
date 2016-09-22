@@ -42,14 +42,11 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
   //Trae el periodo Actual
   periodoData.findPeriodoActual()
   .success(function(data){
+    console.log("succes periodo actual")
     $scope.periodo_actual = data[0];
 
     console.log(data);
-  }).error(function(error){
-    console.log(error);
-  });
-
-    //Trae todos los periodos y pone el actual
+        //Trae todos los periodos y pone el actual
   periodoData.findPeriodos()
   .success(function(data){
     $scope.periodos = data; 
@@ -81,6 +78,12 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
   });
    /////////////////////
   //////// fin trae cargas
+  }).error(function(error){
+    console.log("error periodo actual")
+    console.log(error);
+  });
+
+
 
       //funcion que se la usa cuando le da click en un tab
   $scope.getPeriodoId = function(index){
@@ -349,14 +352,23 @@ console.log($scope.cabeceras)
 
   $scope.before = function(cabecera){
     //$scope.valorBefore = valor1.mostrar;
-    $scope.valorBefore = cabecera
-    val_before =  $scope.valorBefore.nota
-    //var cabecera1 = cab
-
+    $scope.valorBefore = cabecera;
+    val_before =  $scope.valorBefore.nota;
     console.log("entro a before");
+    console.log(val_before);
+    console.log(isNaN(val_before))
+    /*
+    if (!isNaN(val_before)) {
+      console.log("entro a if isnan " + val_before);
 
-    console.log($scope.valorBefore);
-    //console.log($scope.valor);
+      return "Debe Ingresar un numero";
+    }
+    if(parseFloat(val_before) < 0 && parseFloat(val_before) > 5){
+      console.log("entro a parseFloat ");
+      return "Debe Ingresar un numero entre 0 y 5";
+    }
+*/
+
   }
   $scope.after = function(cabecera,id_estudiante){
     var valorantes = $scope.valorBefore;
@@ -365,6 +377,16 @@ console.log($scope.cabeceras)
     console.log("entro a after");
     console.log(cabecera)
     var results = {};
+    if (isNaN(cabecera.nota)) {
+      console.log("entro a if isnan " + val_before);
+
+      return "Debe Ingresar un numero";
+    }
+    if(parseFloat(cabecera.nota) < 0 || parseFloat(cabecera.nota) > 5){
+      console.log("entro a parseFloat ");
+      return "Debe Ingresar un numero entre 0 y 5";
+    }
+
     if(cabecera.tipo == 0 ){
       var results = [{
         'id_logro':cabecera.id,

@@ -14,7 +14,10 @@ router.get('/cargas/:id_carga/logros/notas'/*, authenticate*/, profesoresControl
 router.get('/cargas/:id_carga/logros/actividades/notas'/*, authenticate*/,profesoresController.getNotasActividades);
 router.put('/actividades/porcentajes'/*, authenticate*/,profesoresController.updatePorcentajesActividades);
 router.put('/:table/notas'/*, authenticate*/,profesoresController.updateNota);
+router.put('/logros/descripcion'/*, authenticate*/,profesoresController.updateDescripcionLogro);
 router.post('/:table/notas'/*, authenticate*/,profesoresController.insertNota);
+router.post('/actividades',profesoresController.createActividad);
+router.put('/actividades/descripcion'/*, authenticate*/,profesoresController.updateDescripcionActividad);
 //(router.get('/prueba'/*, authenticate*/, prueba);
 
 
