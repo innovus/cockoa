@@ -21,7 +21,7 @@ var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 function getCursosMaterias(req,res){
 	var hoy = new Date();
 	var dia = hoy.getDate(); 
-	var mes = hoy.getMonth()+1;
+	var mes = hoy.getMonth();
 	var anio= hoy.getFullYear();
 	var fecha_actual = String(anio+"-"+mes+"-"+dia);
 
@@ -74,6 +74,22 @@ function getLogros(req,res){
  
 function getActividades(req,res){
 	ActividadDao.findActividadesByLogro(req.params.id_logro)
+	.then(function(data){
+		respuesta.sendJsonResponse(res,200,data);
+		console.log("la fucnion salio bn" + data)
+
+	}).catch(function(err){
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
+}
+
+function getActividadesByLogros(req,res){
+	ActividadDao.findActividadesByLogros(req.body)
 	.then(function(data){
 		respuesta.sendJsonResponse(res,200,data);
 		console.log("la fucnion salio bn" + data)
@@ -366,5 +382,6 @@ module.exports = {
 	updateDescripcionLogro: updateDescripcionLogro,
 	createActividad: createActividad,
 	updateDescripcionActividad: updateDescripcionActividad,
+	getActividadesByLogros:getActividadesByLogros,
 }
 

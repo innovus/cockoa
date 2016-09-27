@@ -2,15 +2,15 @@
   "development": {
     "username": "personal",
     "password": "1",
-    "database": "liceopulga",
+    "database": "liceo1",
     "host": "127.0.0.1",
     "port":"5432",
     "dialect": "postgres"
   },
   "test": {
-    "username": "root",
-    "password": "ud3n4r",
-    "database": "compras",
+    "username": "personal",
+    "password": "1",
+    "database": "l",
     "host": "127.0.0.1",
     "port":"5432",
     "dialect": "postgres"

@@ -1,10 +1,10 @@
 var Models=require("../models/index");
 var sequelize = Models.sequelize;
 
-var queryFindLogrosByCargaDocente = "SELECT * FROM logro WHERE id_carga_docente = $id_carga";
-var queryFindLogrosByMateriaAndPeriodo = "SELECT id_logro,nombre_logro, descripcion_logro, porcentaje_logro "+ 
+var queryFindLogrosByCargaDocente = "SELECT * FROM logro WHERE id_carga_docente = $id_carga AND vigente_logro = 'S'";
+var queryFindLogrosByMateriaAndPeriodo = "SELECT id_logro,nombre_logro, descripcion_logro, porcentaje_logro ORDER BY  id_logro"+ 
 	"FROM logro NATURAL JOIN carga_docente "+ 
-	"WHERE  id_materia = $id_materia AND id_periodo= $id_periodo";
+	"WHERE  id_materia = $id_materia AND id_periodo= $id_periodo AND vigente_logro = 'S' ORDER BY  id_logro" ;
 
 
 var queries={

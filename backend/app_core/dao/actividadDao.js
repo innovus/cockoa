@@ -12,6 +12,20 @@ var findActividadesByLogro = function(id_logro){
 	return sequelize.query(queries.actividad.findActividadesByLogro,{bind:{id_logro:id_logro},type:sequelize.QueryTypes.SELECT})
 };
 
+var findActividadesByLogros = function(ids_logro){
+  var cadena = "SELECT * FROM actividad WHERE id_logro IN ("
+  var ids = "";
+  ids_logro.forEach(function (id_logro,index){
+    if(index == ids_logro.length-1){
+      ids += id_logro;
+    }else{
+      ids += ids_logro + ",";
+    }
+  });
+  cadena += ids + ") ORDER BY id_logro,id_actividad"
+  return sequelize.query(cadena,{type:sequelize.QueryTypes.SELECT})
+};
+
 var updatePorcentajesActividades= function(actividades){
    var cadena="UPDATE actividad ";
    var cadenanombre="";
@@ -68,4 +82,4 @@ module.exports.findActividadesByLogro=findActividadesByLogro;
 module.exports.updatePorcentajesActividades=updatePorcentajesActividades;
 module.exports.createActividad = createActividad;
 module.exports.updateDescripcionActividad= updateDescripcionActividad;
-
+module.exports.findActividadesByLogros=findActividadesByLogros

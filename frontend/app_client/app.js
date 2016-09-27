@@ -4,5 +4,5 @@
 
 (function(){
  //   angular.module('estudiantes',['ngRoute', 'ngSanitize','ui.bootstrap','xeditable','ngAnimate']);
-    angular.module('docentes',['ngRoute', 'ngSanitize','ngAnimate','ui.bootstrap','xeditable']);
+    angular.module('docentes',['ngRoute', 'ngSanitize','ngAnimate','ui.bootstrap','xeditable','ngMaterial']);
 })();

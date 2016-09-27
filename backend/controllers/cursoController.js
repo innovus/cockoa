@@ -16,10 +16,11 @@ function getEstudiantesCurso(id_curso, cb){
 		"from curso join matricula on curso.id_curso = matricula.id_curso "+ 
 		"join estudiante on estudiante.id_estudiante = matricula.id_estudiante "+
 		 "join persona on estudiante.identificacion = persona.identificacion"+
-		 " where curso.id_curso = " + id_curso;
+		 " where curso.id_curso = " + id_curso +" ORDER BY apellido1,apellido2, nombre1";
 	console.log(queri)
 	db.many(queri)
 	.then(function(data){
+		console.log(data)
 		cb(data)
 	}).catch(function(err){
 		if(err.message == 'No data returned from the query.'){
