@@ -3,7 +3,7 @@
 var app = angular.module('docentes');//creamos el modulo pokedex y le pasamos array con las dependencias
 
 
-app.controller('estudiantes_notasController',['$scope','$http','$cookieStore', '$cookies','periodoData','materiaData','logroData','actividadData','nota_actividadData','nota_logroData',function($scope,$http,$cookieStore,$cookies,periodoData,materiaData,logroData,actividadData,nota_actividadData,nota_logroData){
+app.controller('estudiantes_notasController',['$scope','$http','$filter','$cookieStore', '$cookies','periodoData','materiaData','logroData','actividadData','nota_actividadData','nota_logroData',function($scope,$http,$filter,$cookieStore,$cookies,periodoData,materiaData,logroData,actividadData,nota_actividadData,nota_logroData){
   $scope.materia_seleccionada = null;
   $scope.periodos = [];
   $scope.periodo_actual = null
@@ -43,13 +43,16 @@ app.controller('estudiantes_notasController',['$scope','$http','$cookieStore', '
      // Cuando se cargue la página, pide del API todos los TODOs
 
  // $http.get('/estudiantes/materias')
-  materiaData.findMateriasWithInasistenciaByEstudiante()
+
+  materiaData.findMateriasByEstudiante()
   .success(function(data) {
     $scope.materias = data;
     console.log($scope.materias);
   }).error(function(data) {
     console.log('Error: ' + data);
   });
+
+
   $scope.getPeriodoId = function(index){
     $scope.periodo_sel = $scope.periodos[index];
     getNotasYLogros($scope.materia_seleccionada,$scope.periodo_sel);
@@ -98,8 +101,23 @@ app.controller('estudiantes_notasController',['$scope','$http','$cookieStore', '
     });
 
   }
-  function getNotasActividades(id_logro,cb){
-    nota_actividadData.findNotasActividadByEstudianteAndLogro(id_logro)
+   function getActividadesByLogros (ids_logro,cb){
+    console.log(JSON.stringify(ids_logro));
+    actividadData.findActividadesByLogros(ids_logro)
+    .success(function(actividades){ 
+      console.log("actividaes byr logros")
+      console.log(actividades)
+      cb(actividades);                   
+      //$scope.logros = logros;
+    })
+    .error(function(error){
+      console.log('Error: '+ error);
+      cb([]);
+    });
+
+  }
+  function getNotasActividades(cb){
+    nota_actividadData.findNotasActividadByEstudianteAndLogro()
     .success(function(notas){ 
       cb(notas);                   
       //$scope.logros = logros;
@@ -123,18 +141,61 @@ app.controller('estudiantes_notasController',['$scope','$http','$cookieStore', '
         $scope.notas = notas;
         $scope.logros = logros;
         console.log('notas')
-        console.log($scope.notas)
+        console.log($scope.notas);
+        getActividadesByLogros(logros,function(actividades){
+           getNotasActividades(function(notasactividades){
+          $scope.notasactividades = notasactividades;
+          $scope.logros.forEach(function(logro,index){
+            console.log("recorrer logros")
+             selected = $filter('filter')(actividades, {id_logro: logro.id_logro});
+             $scope.logros[index].actividades = selected;
+
+             $scope.logros[index].actividades.forEach(function(actividad,j){
+              console.log("recorrer atividades")
+              console.log($scope.notasactividades)
+              console.log(actividad)
+
+              selectedna = $filter('filter')($scope.notasactividades, {id_actividad: actividad.id_actividad});
+              console.log(selectedna)
+              if(typeof selectedna === 'undefined' || selectedna.length == 0){
+                $scope.logros[index].actividades[j].nota = '-'
+
+              }else{
+                console.log(selectedna)
+                 $scope.logros[index].actividades[j].nota = selectedna[0].nota_actividad
 
 
+              }
+  
 
-  for (var i = 0; i < $scope.logros.length ; i++) {
-     (function(i){
+             });//cierra foreach actividades
+
+
+              if(typeof $scope.notas[$scope.logros[index].id_logro] === 'undefined'  ){
+                $scope.logros[index].nota = ' - ';
+              }
+              else{
+                $scope.logros[index].nota = $scope.notas[$scope.logros[index].id_logro];
+              }
         
-        getActividades($scope.logros[i].id_logro,function(actividades){
-            getNotasActividades($scope.logros[i].id_logro,function(notasactividades){
+
+           })//cierra foreach logros
+
+
+         });//cierrra getnotasActividades
+
+
+        });//cierra getActividadesByLogros
+
+
+
+      /* for (var i = 0; i < $scope.logros.length ; i++) {
+          (function(i){
+
+           // getNotasActividades($scope.logros[i].id_logro,function(notasactividades){
               console.log('notasactividades')
               console.log(notasactividades)
-              $scope.logros[i].actividades = actividades;
+
               $scope.notasactividades = notasactividades;
             
               for (var j = $scope.logros[i].actividades.length - 1; j >= 0; j--) {
@@ -148,18 +209,8 @@ app.controller('estudiantes_notasController',['$scope','$http','$cookieStore', '
                 })(j);
               }//cierra for j
 
+          //  });//cierrra getnotasActividades
 
-
-
-
-
-
-            });//cierrra getnotasActividades
-
-            
-            
-
-          });//cierra getActividades
 
           if(typeof $scope.notas[$scope.logros[i].id_logro] === 'undefined' ){
             $scope.logros[i].nota = ' - ';
@@ -170,47 +221,14 @@ app.controller('estudiantes_notasController',['$scope','$http','$cookieStore', '
           })(i);
           
           
-        } //cierra for
+        } //cierra for*/
         console.log("cierra for y scope logros")
         console.log($scope.logros)
 
-
-
-        
       });//cierra getNotas
     });//Cierra getLogros
   }//cierra getNotasYLogros
 
-
-
-        /*$scope.getNotasYLogros = function(materia,periodo){
-          $scope.materia_seleccionada = materia;
-          $scope.logros = [];
-          $scope.notas = {}
-          getLogros(materia.id_materia,periodo.id_periodo,function(logros){
-            getNotas(materia.id_materia,periodo.id_periodo,function(notas){
-              $scope.notas = notas;
-              $scope.logros = logros;
-
-              for (var i = $scope.logros.length - 1; i >= 0; i--) {
-                console.log("ciclo" + i);
-                console.log($scope.logros[i].id_logro);
-                console.log($scope.notas[$scope.logros[i].id_logro])
-                if(typeof $scope.notas[$scope.logros[i].id_logro] === 'undefined' ){
-                  $scope.logros[i].nota = ' - ';
-                }
-                else{
-     
-
-                  $scope.logros[i].nota = $scope.notas[$scope.logros[i].id_logro];
-
-                }
-                //console.log("despues del for");
-            
-                } //cierra for
-            })
-          })
-        }*/
 }]);
       
 })();
@@ -234,4 +252,5 @@ function clearCookieData(cookies){
   var accessToken = "";
   cookies.remove("accessToken");
 }
+
 

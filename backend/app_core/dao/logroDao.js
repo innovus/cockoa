@@ -1,12 +1,15 @@
 var Models=require("../models/index");
 var sequelize = Models.sequelize;
 
-var queryFindLogrosByCargaDocente = "SELECT * FROM logro WHERE id_carga_docente = $id_carga AND vigente_logro = 'S'";
-var queryFindLogrosByMateriaAndPeriodo = "SELECT id_logro,nombre_logro, descripcion_logro, porcentaje_logro ORDER BY  id_logro"+ 
+var queryFindLogrosByCargaDocente = "SELECT * FROM logro WHERE id_carga_docente = $id_carga AND vigente_logro = 'S' ORDER BY id_logro";
+var queryFindLogrosByMateriaAndPeriodo = "SELECT id_logro, descripcion_logro, porcentaje_logro "+ 
 	"FROM logro NATURAL JOIN carga_docente "+ 
-	"WHERE  id_materia = $id_materia AND id_periodo= $id_periodo AND vigente_logro = 'S' ORDER BY  id_logro" ;
-
-
+	"NATURAL JOIN curso "+
+	"WHERE  id_materia = $id_materia AND id_periodo= $id_periodo AND vigente_logro = 'S' "+
+	" AND id_curso = "+
+		"(SELECT id_curso FROM matricula WHERE id_estudiante = $id_estudiante AND vigente_matricula = 'S')"+
+	" ORDER BY  id_logro" ;
+ 
 var queries={
 	"logro":{
 		'findLogrosByCargaDocente':queryFindLogrosByCargaDocente,
@@ -17,8 +20,9 @@ var findLogrosByCargaDocente = function(id_carga){
 	return sequelize.query(queries.logro.findLogrosByCargaDocente,{bind:{id_carga:id_carga},type:sequelize.QueryTypes.SELECT});
 }
 
-var findLogrosByMateriaAndPeriodo = function(id_materia,id_periodo){
-	return sequelize.query(queries.logro.findLogrosByMateriaAndPeriodo,{bind:{id_materia:id_materia,id_periodo:id_periodo},type:sequelize.QueryTypes.SELECT});
+var findLogrosByMateriaAndPeriodo = function(id_estudiante,id_materia,id_periodo){
+	console.log(queries.logro.findLogrosByMateriaAndPeriodo)
+	return sequelize.query(queries.logro.findLogrosByMateriaAndPeriodo,{bind:{id_materia:id_materia,id_periodo:id_periodo,id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT});
 }
 
 var updateDescripcionLogro= function(logro){

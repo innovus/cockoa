@@ -1,26 +1,42 @@
-  <div id="wrapper">
-    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-      
-      <navbar></navbar>
-      <!-- barra lateral -->
-      <div class="navbar-default sidebar" role="navigation">
-        <div class="sidebar-nav navbar-collapse">
-          <ul class="nav" id="side-menu">
-            <li ng-repeat="carga in cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a></li>
-          </ul>
+<navigation></navigation>
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+    <!-- Sidebar user panel -->
+    <div class="user-panel">
+        <div class="pull-left image">
+        <img src="/img/avatar04.png" class="img-circle" alt="User Image">
         </div>
-      </div>      
-    </nav>  
-
-    <div id="page-wrapper">
-
-      <div class="row">
-        <div class="col-lg-12">
-          <h1 class="page-header">{{carga_seleccionada.nombre_materia}}</h1>
+        <div class="pull-left info">
+        <p>{{primer_nombre}} {{primer_apellido}}</p>
+            <small>Identificación: {{numero_documento}}</small>
+        <!--<a href="#"><i class="fa fa-circle text-success"></i> En linea</a>-->
         </div>
-        <!-- /.col-lg-12 -->
-      </div>
-      <hr />
+    </div>
+
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu">
+        <li class="header">Materias</li>
+        <li ng-repeat="carga in cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a></li>
+
+
+
+    </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
+  <div class="wrapper">
+    <div class="content-wrapper">
+    <div container>
+     <section class="content-header">  
+      <h1>
+        {{carga_seleccionada.nombre_materia}}
+        <small> {{carga_seleccionada.grado}}-{{carga_seleccionada.grupo}}</small>
+        
+      </h1>
+    </section>
+
+    <section class="content">
 
       <uib-tabset  active="activeTabIndex">
       <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{periodo.numero_periodo}}" ng-click="getPeriodoId($index)">
@@ -96,13 +112,8 @@
 
   </uib-tab>
 </uib-tabset>
-
-
-
-
-
-
-
+</section>
+</div>
 </div>
 </div>
 

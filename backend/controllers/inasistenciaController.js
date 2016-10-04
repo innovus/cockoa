@@ -96,9 +96,7 @@ function getInasistenciaPorCarga(req,res){
 }
 
 function addInasistencias (req,res){
-
-	var queri = pgp.helpers.insert(req.body, ['id_periodo', 'id_estudiante','estado_inasistencia','fecha_inasistencia','id_carga'], 'inasistencia');
-	db.none(queri)
+	InasistenciaDao.addInasistencias(req.body)
 	.then(function(){
 		respuesta.sendJsonResponse(res,200,{'mensaje':'Inasistencias insertada'});
 	}).catch(function(error){
@@ -108,7 +106,7 @@ function addInasistencias (req,res){
 	
 }
 function getMateriasWithInasistenciaByEstudiante(req,res){
-	MateriaDao.findMateriasWithInasistenciaByEstudiante(1)
+	MateriaDao.findMateriasWithInasistenciaByEstudiante(30011)
 	.then(function (data){
 		respuesta.sendJsonResponse(res,200,data);
 		console.log("la fucnion salio bn" + data);
@@ -122,7 +120,7 @@ function getMateriasWithInasistenciaByEstudiante(req,res){
 	});
 }
 function getInasistenciasByMateria(req,res){
-	InasistenciaDao.findInasistenciasByMateria(1,req.params.id_materia)
+	InasistenciaDao.findInasistenciasByMateria(30011,req.params.id_materia)
 	.then(function (data){
 		respuesta.sendJsonResponse(res,200,data);
 		console.log("la fucnion salio bn" + data);

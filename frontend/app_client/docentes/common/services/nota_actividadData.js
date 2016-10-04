@@ -9,8 +9,8 @@
             return $http.get(CONFIG.http_address+'/api/docentes/cargas/'+id_carga +'/logros/actividades/notas')
       
         };
-        var findNotasActividadByEstudianteAndLogro = function(id_logro){
-            return $http.get(CONFIG.http_address+'/estudiantes/logros/'+id_logro +'/actividades/notas')
+        var findNotasActividadByEstudianteAndLogro = function(){
+            return $http.get(CONFIG.http_address+'/estudiantes/actividades/notas')
 
         }
        

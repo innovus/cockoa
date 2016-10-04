@@ -1,0 +1,55 @@
+.clear {
+  clear: both;
+}
+.login-box {
+  width: 450px !important;
+}
+.login-box .login-logo {
+  display: block;
+  width: 100%;
+  margin-bottom: 0px !important;
+  background-color: #008d4c;
+  padding: 5px 30px;
+  color: #fff;
+}
+.login-box .login-logo .icon {
+  float: right;
+}
+.login-box .login-logo .icon i {
+  font-size: 70px;
+  opacity: 0.5;
+}
+.login-box .login-logo .brandon {
+  padding: 0;
+  font-size: 28px;
+  float: left;
+  text-align: left;
+}
+.login-box .login-logo .brandon small {
+  font-size: 14px;
+  display: block;
+}
+.login-box .login-logo .titulo {
+  padding: 0;
+  font-size: 28px;
+  text-align: left;
+}
+.login-box .login-logo .titulo small {
+  font-size: 14px;
+  display: block;
+}
+.login-box .login-box-body .input-login input {
+  height: 46px;
+}
+.login-box .login-box-body .input-login span {
+  top: 4px;
+}
+.content-wrapper .content {
+  height: 812px;
+  overflow-y: auto;
+}
+@media screen and (max-width: 1366px) {
+  .content-wrapper .content {
+    height: 502px;
+  }
+}

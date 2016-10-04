@@ -80,6 +80,7 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     .success(function(data){
       var modalInstance = $uibModal.open({
         animation: true,
+        backdrop: "static",
         templateUrl: '/views/logros/actividades.html',
         controller: 'actividadesModalController',
         size: size,
@@ -185,6 +186,13 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     });
   }
 }]);
+/*
+app.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
+  $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
+  $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();
+  $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
+});*/
 app.controller('actividadesModalController', function ($http,$scope,$q, $uibModalInstance, actividades,id_logro,actividadData) {
 
   $scope.actividades = actividades;
@@ -199,12 +207,50 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
     fecha: $scope.fechas[0]
   };*/
 
-  $scope.checkPorcentaje = function(data) {
-  
-    if (data === 'awesome') {
-      return "Username should be `awesome`";
+
+  $scope.checkPorcentaje = function(){
+
+    var sumatoria = 0;
+    angular.forEach($scope.actividades,function(actividad){
+      if(isNaN(actividad.porcentaje_actividad)){
+        console.log("entro a isNaN")
+        console.log(actividad.porcentaje_actividad)
+        return "deben ser numeros"
+
+      }else{
+         sumatoria = sumatoria + parseInt(actividad.porcentaje_actividad);
+      }
+
+     
+    })
+    console.log(sumatoria)
+    if(sumatoria =! 100){
+      console.log("entro a error");
+      return "error"
+    }else{
+      console.log("sumatoria")
+      console.log()
+      actividadData.updatePorcentajes($scope.actividades)
+      .success(function(mensaje){
+        console.log(mensaje);
+        return $q.all(results);
+
+      }).error(function(error){
+        if(error.status == 2){
+        //  swal("Oops...",error.msg,"error");
+          return error["mal"]
+        }else{
+        //  swal("Oops..."," Algo salio mal!","error");
+
+        }
+        
+        console.log(error);
+        return  error;
+      });
+
     }
-  };
+
+  }
 
 
   $scope.saveColumn = function(column) {
@@ -244,7 +290,7 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
     
   $scope.addActividad = function() {
     $scope.inserted = {
-      id_actividad: 100,
+      //id_actividad: 100,
       id_logro: $scope.id_logro,
       porcentaje_actividad: "0",
       nombre_actividad: "Prueba",
@@ -299,18 +345,28 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
       });
 
     }
-    
-
-
+  
   }
 
+    $scope.cancelform = function(actividad,index) {
+      if(actividad.descripcion_actividad == null){
+        $scope.actividades.splice(index, 1);
+
+      }
+      console.log(actividad)
+      console.log(index)      
+  };
+
   $scope.ok = function () {
+    console.log(editableForm)
     $uibModalInstance.close();
   };
 
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
+
+
 });
 
 

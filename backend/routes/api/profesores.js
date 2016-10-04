@@ -10,7 +10,7 @@ router.get('/cargas/periodos/:id_periodo'/*, authenticate*/, profesoresControlle
 router.get('/cargas'/*, authenticate*/, profesoresController.getCursosMaterias);
 router.get('/cargas/:id_carga/logros'/*, authenticate*/,profesoresController.getLogros);
 router.get('/logros/:id_logro/actividades'/*, authenticate*/,profesoresController.getActividades);
-router.get('/logros/actividades'/*, authenticate*/,profesoresController.getActividadesByLogros);
+router.post('/logros/actividades'/*, authenticate*/,profesoresController.getActividadesByLogros);
 router.get('/cargas/:id_carga/logros/notas'/*, authenticate*/, profesoresController.getNotasLogros);
 router.get('/cargas/:id_carga/logros/actividades/notas'/*, authenticate*/,profesoresController.getNotasActividades);
 router.put('/actividades/porcentajes'/*, authenticate*/,profesoresController.updatePorcentajesActividades);

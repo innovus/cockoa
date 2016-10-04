@@ -23,7 +23,7 @@ var queryFindCantidadInasistenciasByCarga = "SELECT estudiante.id_estudiante, CO
 var queryFindInasistenciasByEstudiante = "SELECT nombre_materia, nombre1, nombre2, apellido1, apellido2, estado_inasistencia, fecha_inasistencia, numero_periodo "+
 	 "FROM inasistencia "+
 	 "JOIN carga_docente ON inasistencia.id_carga = carga_docente.id_carga_docente "+ 
-	 "JOIN usuario ON usuario.id_usuario =  carga_docente.id_usuario "+
+	// "JOIN usuario ON usuario.id_usuario =  carga_docente.id_usuario "+
 	 "JOIN materia ON materia.id_materia = carga_docente.id_materia "+
 	 "JOIN periodo ON periodo.id_periodo = carga_docente.id_periodo "+
 	 "JOIN docente ON docente.id_docente = carga_docente.id_docente "+
@@ -40,10 +40,31 @@ var queryFindInasistenciasByMateria = "SELECT carga_docente.id_materia,nombre_ma
 	"JOIN periodo ON periodo.id_periodo = carga_docente.id_periodo "+
 	"JOIN docente ON docente.id_docente = carga_docente.id_docente "+
 	"JOIN persona ON persona.identificacion = docente.identificacion "+
-	"WHERE materia.id_materia= $id_materia AND inasistencia.id_estudiante= "+
-		"(SELECT estudiante.id_estudiante FROM usuario NATURAL JOIN persona "+
-		"NATURAL JOIN estudiante WHERE usuario.id_usuario = $id_usuario ) "+
+	"WHERE materia.id_materia= $id_materia AND inasistencia.id_estudiante= $id_estudiante "+
+	/*	"(SELECT estudiante.id_estudiante FROM usuario NATURAL JOIN persona "+
+		"NATURAL JOIN estudiante WHERE usuario.id_usuario = $id_usuario ) "+*/
 	"ORDER by fecha_inasistencia"
+
+var addInasistencias= function(inasistencias){
+   var cadena="INSERT INTO inasistencia(id_estudiante,estado_inasistencia,fecha_inasistencia,id_carga) VALUES ";
+   var cadenaValores="";
+   inasistencias.forEach(function(inasistencia,index){
+   		cadenaValores += "('"+inasistencia.id_estudiante+"',"+inasistencia.estado_inasistencia+",'"+inasistencia.fecha_inasistencia+"',"+inasistencia.id_carga+")";
+       if(index==inasistencias.length-1){
+           console.log("ultimo registro");
+       }
+       else{
+           console.log("registro");
+           cadenaValores+= ",";
+       }
+   });
+   cadena = cadena + cadenaValores
+   console.log(cadenaValores)
+   return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.INSERT
+   });
+
+};
 
 
 
@@ -62,11 +83,11 @@ var findInasistenciasByCarga = function(id_estudiante,id_carga){
 var findCantidadInasistenciasByCarga = function(id_carga){
 	return sequelize.query(queries.inasistencia.findCantidadInasistenciasByCarga,{bind:{id_carga:id_carga},type:sequelize.QueryTypes.SELECT})
 }
-var findInasistenciasByEstudiante = function(id_usuario){
-	return sequelize.query(queries.inasistencia.findInasistenciasByEstudiante,{bind:{id_usuario:id_usuario},type:sequelize.QueryTypes.SELECT})
+var findInasistenciasByEstudiante = function(id_estudiante){
+	return sequelize.query(queries.inasistencia.findInasistenciasByEstudiante,{bind:{id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT})
 }
-var findInasistenciasByMateria = function(id_usuario,id_materia){
-	return sequelize.query(queries.inasistencia.findInasistenciasByMateria,{bind:{id_usuario:id_usuario,id_materia:id_materia},type:sequelize.QueryTypes.SELECT})
+var findInasistenciasByMateria = function(id_estudiante,id_materia){
+	return sequelize.query(queries.inasistencia.findInasistenciasByMateria,{bind:{id_estudiante:id_estudiante,id_materia:id_materia},type:sequelize.QueryTypes.SELECT})
 }
 
 var updateEstadoInasistencia= function(inasistencia){
@@ -89,3 +110,4 @@ module.exports.findCantidadInasistenciasByCarga=findCantidadInasistenciasByCarga
 module.exports.findInasistenciasByEstudiante=findInasistenciasByEstudiante;
 module.exports.findInasistenciasByMateria =findInasistenciasByMateria ;
 module.exports.updateEstadoInasistencia = updateEstadoInasistencia;
+module.exports.addInasistencias = addInasistencias;

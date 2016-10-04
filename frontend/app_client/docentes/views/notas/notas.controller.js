@@ -18,6 +18,10 @@ run(function(editableOptions) {
 docentes_notasController.$inject= ['$scope','$http','$cookieStore','$cookies','CONFIG','periodoData','estudianteData','actividadData','logroData','nota_actividadData','nota_logroData','$filter'];
 function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,periodoData,estudianteData,actividadData,logroData,nota_actividadData,nota_logroData,$filter) {
 
+  $scope.primer_nombre = "Jorge";
+  $scope.primer_apellido = "Viveros";
+  $scope.numero_documento = "1085292941"
+
   $scope.estudiantes=[];
   $scope.date_asistencia = new Date();
   $scope.carga_seleccionada = null;
@@ -152,16 +156,20 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
             $scope.logros = logros;
             console.log($scope.logros)
 
-            //fpor para recorrer logros y agregarle actividades
-            $scope.logros.forEach(function(logro,index){
-              console.log("antes de entrar a la function este es el i " + index);
-            //  (function(index){
-                console.log("despues de entrar a la function este es el i " + index)
+            //////////
 
-                getActividades(logro.id_logro,function(actividades){
-                  console.log("hizo getActividades " + index)
+            console.log("va a entrar a logros")
+            console.log(logros)
+            getActividadesByLogros(logros,function(actividades){
+              $scope.logros.forEach(function(logro,index){
 
-                  prueba (logro,$scope.cabeceras,$scope.estudiantes,actividades,notas_actividades,function(estudiantesPrueba,cabecerasPrueba){
+                selected = $filter('filter')(actividades, {id_logro: logro.id_logro});
+                console.log("este es el selected de "+ logro.id_logro);
+                console.log(selected);
+                //console.log("entroa  prueba")
+                //logro.actividades = selected;
+
+                prueba (logro,$scope.cabeceras,$scope.estudiantes,selected,notas_actividades,function(estudiantesPrueba,cabecerasPrueba){
                     console.log("ya hizo prueba")
                     $scope.estudiantes = estudiantesPrueba;
                     $scope.cabeceras = cabecerasPrueba;
@@ -170,275 +178,19 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 
                     fillNotasLogros(estudiante, logro,notas_logros,function(newEstudiante){
                       $scope.estudiantes[h] = newEstudiante;
-
                     })
-
-
-                  })
+                  })// cierra forEach estudianrs prueba
                   $scope.cabeceras.push({'id':logro.id_logro,'tipo':0,'mostrar':'Final'}); 
-                  })
-  
-                /*   console.log("entro a getActividades este es el i " + index );
-                  logro.actividades = actividades;
-                 
-                  console.log($scope.logros[index].id_logro);
-                  //for para llenar las cabeceras segun el numero de actividades
+                  })//cierra prueba
+              });//cierra for each logros
 
-                  actividades.forEach(function(actividad,j){
-                    fillCabecerasActvidades($scope.cabeceras,actividad,estudiantes,notas_actividades,function(estudiantesNew,cabecerasNew){
-                      $scope.cabeceras = cabecerasNew;
-                      $scope.estudiantes= estudiantesNew;
-
-                    });*/
-                 /*  $scope.cabeceras.push({'id':actividad.id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividad.porcentaje_actividad+"%)")});
-
-                 //   (function(j){
-                  //for estudiantes para agregarle al estudiante  para ponerle las notas al cetor de estudiantes
-                      estudiantes.forEach(function(estudiante,h){
-                        fillNotasActividades(estudiante,actividad,notas_actividades,function(newEstudiante){
-                          $scope.estudiantes[h] = newEstudiante;
-                        })//cierra fillNotasActividades
-
-
-
-                       // (function(h){
-                          //$scope.estudiantes[h].cabeceras = []
-                /*           selected = $filter('filter')(notas_actividades, {id_estudiante: estudiante.id_estudiante, id_actividad:actividad.id_actividad})
-                            console.log(selected[0])
-                            var nota_a = "";
-                            if(selected[0] == undefined){
-                              nota_a = "-"
-
-                            }else{
-                              nota_a = selected[0].nota_actividad;
-                            }
-
-                          //  estudiante.cabeceras[l].nota =selected[0].nota_actividad;
-
-                         $scope.estudiantes[h].cabeceras.push({'id':actividad.id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividad.porcentaje_actividad+"%)"),'nota':nota_a})
-
-                     //   })(h)
-                      })*/
-                    //})(j);
-
-               //   });
-               /*   estudiantes.forEach(function(estudiante,h){
-
-                    console.log("entro al for de estudiantes despues de recorrer actividades");
-                    fillNotasLogros(estudiante, logro,notas_logros,function(newEstudiante){
-                      $scope.estudiantes[h] = newEstudiante;
-
-                    })
-
-
-                  })
-
-
-
-                  $scope.cabeceras.push({'id':logro.id_logro,'tipo':0,'mostrar':'Final'}); 
-             */ 
-                });
-           //   })(index);
-
-            })
-/*
-            for (var i =0; i < logros.length ; i++) {
-              console.log("antes de entrar a la function este es el i " + i);
-              (function(i){
-                console.log("despues de entrar a la function este es el i " + i)
-
-                getActividades(logros[i].id_logro,function(actividades){
-                   console.log("entro a getActividades este es el i " + i );
-                  $scope.logros[i].actividades = actividades;
-                 
-                  console.log($scope.logros[i].id_logro);
-                  //for para llenar las cabeceras segun el numero de actividades
-                  for (var j =0; j < actividades.length; j++) {
-                    $scope.cabeceras.push({'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)")});
-
-                    (function(j){
-                      for(var h = 0; h<estudiantes.length; h++){
-                        (function(h){
-                          //$scope.estudiantes[h].cabeceras = []
-                           selected = $filter('filter')(notas_actividades, {id_estudiante: estudiantes[h].id_estudiante, id_actividad:actividades[j].id_actividad})
-                            console.log(selected[0])
-                            var nota_a = "";
-                            if(selected[0] == undefined){
-                              nota_a = "-"
-
-                            }else{
-                              nota_a = selected[0].nota_actividad;
-                            }
-
-                          //  estudiantes[h].cabeceras[l].nota =selected[0].nota_actividad;
-
-                         $scope.estudiantes[h].cabeceras.push({'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)"),'nota':nota_a})
-
-                        })(h)
-
-                        //$scope.cabeceras[j] = {'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)")}
-                        //console.log($scope.cabeceras.length)
-                       // $scope.cabeceras.push({'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)")});
-
-                        // $scope.cabeceras.push("{'id_actividad':'"+actividades[j].id_actividad+"','nombre_cabecera':'A"+(j+1)+"'}"+ ;
-                      }// cierra for estudiantes
-                    })(j);
-                  }//finaliza for que recorre actividades
-                  
-                  for(var h = 0; h<estudiantes.length; h++){
-                    console.log("entro al for de estudiantes despues de recorrer actividades");
-                        (function(h){
-                        //  $scope.estudiantes[h].cabeceras = []
-                           selected = $filter('filter')(notas_logros, {id_estudiante: estudiantes[h].id_estudiante, id_logro:logros[i].id_logro})
-
-                          //  estudiantes[h].cabeceras[l].nota =selected[0].nota_actividad;
-                           var nota_a = "";
-                            if(selected[0] == undefined){
-                              nota_a = "-"
-
-
-                            }else{
-                              nota_a = selected[0].nota_logro;
-                            }
-
-                          $scope.estudiantes[h].cabeceras.push({'id':logros[i].id_logro,'tipo':0,'mostrar':'final','nota':nota_a})
-
-                        })(h)
-
-                        //$scope.cabeceras[j] = {'id':actividades[j].id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividades[j].porcentaje_actividad+"%)")}
-                        //console.log($scope.cabeceras.length)
-
-                        // $scope.cabeceras.push("{'id_actividad':'"+actividades[j].id_actividad+"','nombre_cabecera':'A"+(j+1)+"'}"+ ;
-                      }// cierra for estudiantes
-
-                  $scope.cabeceras.push({'id':logros[i].id_logro,'tipo':0,'mostrar':'Final'}); 
-              
-                });
-              })(i);
-            };*/ //finaliza For recorre logros
-          });//vierra GEt logros
-        });//CIERRA GETEstudiantes
-        /* putCabeseras ($scope.estudiantes,$scope.cabeceras,notas_logros,notas_actividades,function(estudiantesC){
-              $scope.estudiantes = estudiantesC;*/
+            });// cierra getActividadesByLogros
+          })//Cierra getLogros
+        })//Cierra getEstudiantes
       })//cierra gerNotasLogros
     })//cierra getNotasActividades
- // })
-console.log("final seleccionar carga")
-console.log($scope.estudiantes)
-console.log($scope.cabeceras)
-    
   }//CIERA FUNCION SELECIONAR CARGA
-           /*  for(var i = 0; i < $scope.estudiantes.length; i++){
-              var notas= [];
-              (function(i){
 
-                //si no encuentro al estudiante en las notas pongo de una vez -  a todas las notas
-               if(typeof notas_actividades[$scope.estudiantes[i].id_estudiante] === 'undefined' ){
-                  console.log("cuantas veces entra aqui")
-                  console.log($scope.estudiantes[i].id_estudiante)
-                  console.log(notas_actividades)
-
-
-                 
-                  
-                  for(var k = 0; k < $scope.cabeceras.length; k++){
-                    (function(k){
-                      notas.push({
-                        'id':$scope.cabeceras[k].id,
-                        'tipo':$scope.cabeceras[k].tipo,
-                        'id_estudiante':$scope.estudiantes[i].id_estudiante,
-                        'mostrar':'-'
-                      });
-
-
-                    })(k);
-                    
-                  }
-                  
-                }
-                else{
-                  
-                  //recorro en vector de logros
-                  for (var l =0;  l < $scope.logros.length; l++) {
-                    //si no encuentroel logro en el esstudiante busco la nota de el logro y pongo -  a todas las notas de actividades
-                    if(typeof notas_actividades[$scope.estudiantes[i].id_estudiante][$scope.logros[l].id_logro] === 'undefined' ){
-                      for(var k = 0; k < $scope.logros[l].actividades.length; k++){
-                        (function(k){
-                          notas.push({
-                            'id':$scope.logros[l].actividades[k].id_actividad,
-                            'tipo':1,
-                            'id_estudiante':$scope.estudiantes[i].id_estudiante,
-                            'mostrar':'-'
-                          });
-                        })(k); 
-                       
-                      }
-                      //si el logro es indefinido ponga - si no ponga la nota de el logro
-                      if(typeof notas_logros[$scope.estudiantes[i].id_estudiante][$scope.logros[l].id_logro] === 'undefined'){
-                        notas.push({
-                          'id':$scope.logros[l].id_logro,
-                          'tipo':0,
-                          'id_estudiante':$scope.estudiantes[i].id_estudiante,
-                          'mostrar':'-'}); 
-                      }else{
-                        notas.push(
-                          {'id':$scope.logros[l].id_logro,
-                          'tipo':0,
-                          'id_estudiante':$scope.estudiantes[i].id_estudiante,
-                          'mostrar':notas_logros[$scope.estudiantes[i].id_estudiante][$scope.logros[l].id_logro]
-                        });
-         
-                      }
-                      
-                    }else{
-                     
-                      //recoore actividades
-                      for(var k = 0; k < $scope.logros[l].actividades.length; k++){
-                         //si no encuentra nota de actividad ponga - 
-                         (function(k){
-                          if(typeof notas_actividades[$scope.estudiantes[i].id_estudiante][$scope.logros[l].id_logro][$scope.logros[l].actividades[k].id_actividad]  === 'undefined'){
-                            notas.push({
-                              'id':$scope.logros[l].actividades[k].id_actividad,
-                              'tipo':1,
-                              'id_estudiante':$scope.estudiantes[i].id_estudiante,
-                              'mostrar':'-'});
-                          }else{
-                            notas.push({
-                              'id':$scope.logros[l].actividades[k].id_actividad,
-                              'tipo':1,
-                              'id_estudiante':$scope.estudiantes[i].id_estudiante,
-                              'mostrar':notas_actividades[$scope.estudiantes[i].id_estudiante][$scope.logros[l].id_logro][$scope.logros[l].actividades[k].id_actividad]
-                            });
-                      
-                          }
-                        })(k);
-                      }
-                      //si el logro es indefinido ponga - si no ponga la nota de el logro
-                      if(typeof notas_logros[$scope.estudiantes[i].id_estudiante][$scope.logros[l].id_logro] === 'undefined'){
-                        notas.push({'id':$scope.logros[l].id_logro,'tipo':0,'id_estudiante':$scope.estudiantes[i].id_estudiante,'mostrar':'-'});
-                      }else{
-                        notas.push(
-                          {'id':$scope.logros[l].id_logro,
-                          'tipo':0,
-                          'id_estudiante':$scope.estudiantes[i].id_estudiante,
-                          'mostrar':notas_logros[$scope.estudiantes[i].id_estudiante][$scope.logros[l].id_logro]
-                        });
-                      }// cierra else
-                    }//cierra else
-                  }//cierra for que recorro en vector de logros
-                //} // cierra if type of - si no encuentro al estudiante en las notas pongo de una vez -  a todas las notas
-                console.log(notas)
-                $scope.estudiantes[i].notas = notas;
-              })(i);//cierra funcion()
-            }//cierra for
-
-          })//cierra gerNotasLogros
-        })//cierra getNotasActividades
-      });//vierra GEt logros
-
-    });//CIERRA GETCURSOS
-  }//CIERA FUNCION SELECIONAR CARGA
-  */
 
   $scope.mostrar_nota = function(id_estudiante,tipo, id){
     //si es cero es logro
@@ -456,17 +208,17 @@ console.log($scope.cabeceras)
     console.log("entro a before");
     console.log(val_before);
     console.log(isNaN(val_before))
-    /*
-    if (!isNaN(val_before)) {
+
+  if (isNaN(cabecera.nota)) {
       console.log("entro a if isnan " + val_before);
 
       return "Debe Ingresar un numero";
     }
-    if(parseFloat(val_before) < 0 && parseFloat(val_before) > 5){
+    if(parseFloat(cabecera.nota) < 0 || parseFloat(cabecera.nota) > 5){
       console.log("entro a parseFloat ");
       return "Debe Ingresar un numero entre 0 y 5";
     }
-*/
+
 
   }
   $scope.after = function(cabecera,id_estudiante){
@@ -598,119 +350,7 @@ console.log($scope.cabeceras)
 
 
   }
-/*
 
-
-  $scope.after = function(valor){
-    console.log('entro a after')
-    console.log(valor)
-    var results = {};
-
-    //miro que tipo es si es logro(0) o actividad(1)
-    if(valor.tipo == 0 ){
-      var results = [{
-        'id_logro':valor.id,
-        'id_estudiante': valor.id_estudiante,
-        'nota_logro': parseFloat(valor.mostrar) 
-
-      }]
-      console.log('entro al tipo = 0')
-
-      //si es 0 miro si esta '-' es para insertar la nota, si no es para actualizarla
-      if($scope.valorBefore == '-'){
-        console.log("es un logro y es para insertar");
-
-        $http({
-          method: 'POST',
-          url: CONFIG.http_address+'/api/docentes/logros/notas',
-          headers:{
-            'Content-Type':'application/json'
-          },
-          data: results
-
-        })
-        .success(function(mensaje){
-          console.log("succes")
-          console.log(mensaje);
-        
-
-        }).error(function(error){
-          console.log("error")
-          console.log(error);
-          return  error;
-        });
-      }else{
-        console.log("es un logro y es para actualizar");
-
-        $http({
-          method: 'PUT',
-          url: CONFIG.http_address+'/api/docentes/logros/notas',
-          headers:{
-            'Content-Type':'application/json'
-          },
-          data: results
-
-        })
-        .success(function(mensaje){
-          console.log(mensaje);
-        
-
-        }).error(function(error){
-          console.log(error);
-          return  error;
-        });
-
-      }
-    
-    }else {
-      var results = {
-        'id_actividad':valor.id,
-        'id_estudiante': valor.id_estudiante,
-        'nota_actividad': parseFloat(valor.mostrar) 
-
-      }
-      if($scope.valorBefore == '-'){
-        $http({
-          method: 'POST',
-          url: CONFIG.http_address+'/api/docentes/actividades/notas',
-          headers:{
-            'Content-Type':'application/json'
-          },
-          data: results
-
-        })
-        .success(function(mensaje){
-          console.log(mensaje);
-        
-
-        }).error(function(error){
-          console.log(error);
-          return  error;
-        });
-      }else{
-
-        $http({
-          method: 'PUT',
-          url: CONFIG.http_address+'/api/docentes/actividades/notas',
-          headers:{
-            'Content-Type':'application/json'
-          },
-          data: results
-
-        })
-        .success(function(mensaje){
-          console.log(mensaje);
-        
-
-        }).error(function(error){
-          console.log(error);
-          return  error;
-        });
-
-      }
-    }
-  }
-  */
   //
   $scope.showNota =function (id_estudiante,tipo,id_nota){
    
@@ -814,12 +454,13 @@ console.log($scope.cabeceras)
   }
 
   function getActividadesByLogros (ids_logro,cb){
+    console.log(JSON.stringify(ids_logro));
     actividadData.findActividadesByLogros(ids_logro)
-    .then(function(actividades){ 
+    .success(function(actividades){ 
       cb(actividades);                   
       //$scope.logros = logros;
     })
-    .catch(function(error){
+    .error(function(error){
       console.log('Error: '+ error);
       cb([]);
     });
@@ -868,6 +509,29 @@ console.log($scope.cabeceras)
     cb(estudiantes,cabeceras)
 
 
+  }
+
+  function prueba2 (logro,cabeceras,estudiantes,actividades,notas_actividades,cb){
+  // console.log("entro a getActividades este es el i " + index );
+  console.log("entroa  prueba")
+  //console.log(logro)
+    logro.actividades = actividades;
+  //  console.log($scope.logros[index].id_logro);
+    //for para llenar las cabeceras segun el numero de actividades
+    console.log(logro.id_logro)
+    actividades.forEach(function(actividad,j){
+      console.log("entro a actividades " + j )
+      
+      fillCabecerasActvidades(cabeceras,actividad,estudiantes,notas_actividades,j,function(estudiantesNew,cabecerasNew){
+        console.log("ya lleno cabecera actividades")
+        cabeceras = cabecerasNew;
+        estudiantes= estudiantesNew;
+
+      });
+
+    });
+    cb(estudiantes,cabeceras);
+              
   }
 
   function prueba (logro,cabeceras,estudiantes,actividades,notas_actividades,cb){
@@ -931,13 +595,5 @@ console.log($scope.cabeceras)
   }
 }
 
-
-
-
-
 }// body...     
 })();
-
-
-
-

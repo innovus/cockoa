@@ -26,6 +26,10 @@
         .when("/estudiantes/inasistencias",{
             templateUrl: "/views/estudiantes/inasistencia/inasistencia.html",
             controller: "inasistenciaEstudianteController"
+        }).when("/estudiantes/ejemplo",{
+            templateUrl: "/views/ejemplo/ejemplo.template.html",
+            controller: "ejemploCtrl"
+
         })
 
         

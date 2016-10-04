@@ -1,4 +1,4 @@
-<div class="modal-header">
+<div class="modal-header" >
   <h3 class="modal-title">Actividades </h3>
   <div class="modal-body">
     <table class="table  table-hover table-condensed">
@@ -7,7 +7,7 @@
           <th>No</th>
           <th>Descripcion</th>
           <th>Porcentaje
-            <form editable-form name="nameform" onaftersave="saveColumn('porcentaje_actividad')" ng-show="nameform.$visible">
+            <form editable-form name="nameform" onbeforesave="checkPorcentaje()" ng-show="nameform.$visible">
               <button type="submit" ng-disabled="nameform.$waiting" class="btn btn-primary">save</button>
               <button type="button" ng-disabled="nameform.$waiting" ng-click="nameform.$cancel()" class="btn btn-default">cancel</button>
             </form>  
@@ -25,22 +25,22 @@
           <td>
             <!-- editable username (text with validation) -->
             <span editable-text="actividad.descripcion_actividad" e-name="descripcion_actividad" e-form="rowform" >
-              {{ actividad.descripcion_actividad || 'empty' }}
+              {{ actividad.descripcion_actividad || 'Vacia' }}
             </span>
           
           </td>
           <td>
-            <span editable-text="actividad.porcentaje_actividad" e-name="porcentaje_actividad" e-form="nameform" e-form="rowform" onbeforesave="checkPorcentaje('porcentaje_actividad')">
-              {{ actividad.porcentaje_actividad || 'empty' }}%
+            <span editable-text="actividad.porcentaje_actividad" e-name="porcentaje_actividad" e-form="nameform" e-form="rowform" >
+              {{ actividad.porcentaje_actividad || 'Vacio' }}%
             </span>
        
           </td>
           <th style="white-space: nowrap="><!-- form -->
-            <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onbeforesave="saveActividad($data, actividad)" shown="inserted == actividad" >
+            <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onbeforesave="saveActividad($data, actividad)" shown="inserted == actividad"  oncancel="cancelform(actividad, $index)">
               <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
                 save
               </button>
-              <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+              <button onbeforesave="prueba($data, actividad)"  type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
                 cancel
               </button>
             </form>

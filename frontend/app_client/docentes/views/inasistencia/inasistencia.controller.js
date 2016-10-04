@@ -198,7 +198,7 @@ app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CO
         est[i].nombre2 = delNull(est[i].nombre2);
         est[i].apellido1 = delNull(est[i].apellido1);
         est[i].apellido2 = delNull(est[i].apellido2);
-        est[i].nombrecompleto = est[i].nombre1 + " "+ est[i].nombre2 + " " + est[i].apellido1 + " "+  est[i].apellido2;                
+        est[i].nombrecompleto = est[i].apellido1 + " "+  est[i].apellido2 +" "+est[i].nombre1 + " "+ est[i].nombre2  ;                
       }//cierra dor
       cb(est);
     }).error(function(error){
@@ -244,16 +244,16 @@ app.controller('ModalInasistenciaCtrl', function ($scope, $uibModalInstance, fec
 
   $scope.fechas = fechas;
     $scope.justificadas = [
-    {value: 1, text: 'Si'},
-    {value: 2, text: 'No'}
+    {value: 0, text: 'Si'},
+    {value: 1, text: 'No'}
   ]; 
 
   $scope.show_estado_inasistencia = function(fecha) {
     var selected = [];
-    if(fecha.estado_inasistencia) {
+    //if(fecha.estado_inasistencia) {
       selected = $filter('filter')($scope.justificadas, {value: fecha.estado_inasistencia});
-    }
-    return selected.length ? selected[0].text : 'Not set';
+    //}
+    return selected[0].text ;
   };
 
   $scope.updateEstado = function(fecha){

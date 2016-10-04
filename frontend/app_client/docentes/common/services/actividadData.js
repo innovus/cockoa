@@ -6,35 +6,33 @@
     actividadData.$inject=['$http','$q','CONFIG'];
     function actividadData($http,$q,CONFIG){
         var findActividadesByLogro= function(id_logro){
-            var defered = $q.defer();
-            var promise = defered.promise;
-            $http.get(CONFIG.http_address+'/api/docentes/logros/'+id_logro+'/actividades/')
-                .success(function(data){
+           /* var defered = $q.defer();
+            var promise = defered.promise;*/
+            return $http.get(CONFIG.http_address+'/api/docentes/logros/'+id_logro+'/actividades/')
+               /* .success(function(data){
                     defered.resolve(data)
 
                 }).error(function(error){
                     defered.reject(error)
                 });
-                return promise;    
+                return promise;   */ 
         };
          var findActividadesByLogros= function(ids_logro){
-            var defered = $q.defer();
-            var promise = defered.promise;
-            $http({
-                method: 'GET',
+            console.log("entro al service")
+            console.log(ids_logro)
+            var envio= $http({
+                method: 'POST',
                 url: CONFIG.http_address+'/api/docentes/logros/actividades/',
                 headers:{
                     'Content-Type':'application/json'
                 },
                 data: ids_logro
             })
-            .success(function(data){
-                defered.resolve(data)
+            console.log(envio);
 
-                }).error(function(error){
-                    defered.reject(error)
-                });
-                return promise;    
+
+            return envio
+
         };
         var updatePorcentajes = function(porcentajes){
             return $http({
@@ -75,6 +73,7 @@
             updatePorcentajes:updatePorcentajes,
             updateDescripcion:updateDescripcion,
             createActividad: createActividad,
+            findActividadesByLogros:findActividadesByLogros
         };
     }
 })();

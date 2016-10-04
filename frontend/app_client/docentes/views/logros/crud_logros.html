@@ -1,190 +1,100 @@
+<navigation></navigation>
 
-  <div id="wrapper">
-    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-      <navbar></navbar>
-      <!-- barra lateral -->
-      <div class="navbar-default sidebar" role="navigation">
-        <div class="sidebar-nav navbar-collapse">
-          <ul class="nav" id="side-menu">
-            <li ng-repeat="carga in cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a></li>
-          </ul>
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+    <!-- Sidebar user panel -->
+    <div class="user-panel">
+        <div class="pull-left image">
+        <img src="/img/avatar04.png" class="img-circle" alt="User Image">
         </div>
-      </div>
-      
-    </nav>  
-
-    <div id="page-wrapper">
-
-
-
-      <div class="row">
-        <div class="col-lg-12">
-          <h1 class="page-header">{{carga_seleccionada.nombre_materia}}</h1>
+        <div class="pull-left info">
+        <p>{{primer_nombre}} {{primer_apellido}}</p>
+            <small>Identificación: {{numero_documento}}</small>
+        <!--<a href="#"><i class="fa fa-circle text-success"></i> En linea</a>-->
         </div>
-        <!-- /.col-lg-12 -->
-      </div>
-      <hr />
+    </div>
 
-      <uib-tabset  active="activeTabIndex">
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu">
+        <li class="header">Materias</li>
+        <li ng-repeat="carga in cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a></li>
+
+
+
+    </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
+
+<div class="wrapper">
+
+  <div class="content-wrapper">
+  <div container>
+
+  <section class="content-header">  
+      <h1>
+        {{carga_seleccionada.nombre_materia}}
+        <small> {{carga_seleccionada.grado}}-{{carga_seleccionada.grupo}}</small>
+        
+      </h1>
+    </section>
+
+    <section class="content">
+
+
+
+    <uib-tabset  active="activeTabIndex">
       <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{periodo.numero_periodo}}" ng-click="getPeriodoId($index)">
-
-      <div  ng-cloak >
-  <md-content class="md-padding" layout-xs="column" layout="row">
-    <div flex-xs flex-gt-xs="50" layout="column">
-      <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">Card with image</span>
-            <span class="md-subhead">Large</span>
-          </md-card-title-text>
-          <md-card-title-media>
-            <div class="md-media-lg card-media"></div>
-          </md-card-title-media>
-        </md-card-title>
-        <md-card-actions layout="row" layout-align="end center">
-          <md-button>Action 1</md-button>
-          <md-button>Action 2</md-button>
-        </md-card-actions>
-      </md-card>
-      <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch>
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">Card with image</span>
-            <span class="md-subhead">Extra Large</span>
-          </md-card-title-text>
-        </md-card-title>
-        <md-card-content layout="row" layout-align="space-between">
-          <div class="md-media-xl card-media"></div>
-
-          <md-card-actions layout="column">
-            <md-button class="md-icon-button" aria-label="Favorite">
-              <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
-            </md-button>
-            <md-button class="md-icon-button" aria-label="Settings">
-              <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
-            </md-button>
-            <md-button class="md-icon-button" aria-label="Share">
-              <md-icon md-svg-icon="img/icons/share-arrow.svg"></md-icon>
-            </md-button>
-          </md-card-actions>
-        </md-card-content>
-      </md-card>
-    </div>
-    <div flex-xs flex-gt-xs="50" layout="column">
-      <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">Card with image</span>
-            <span class="md-subhead">Small</span>
-          </md-card-title-text>
-          <md-card-title-media>
-            <div class="md-media-sm card-media">
-              sdjkdfjkdfjkdfjkfd
-              dfkjdfjk
-            </div>
-          </md-card-title-media>
-        </md-card-title>
-        <md-card-actions layout="row" layout-align="end center">
-          <md-button>Action 1</md-button>
-          <md-button>Action 2</md-button>
-        </md-card-actions>
-      </md-card>
-      <md-card md-theme="{{ showDarkTheme ? 'dark-blue' : 'default' }}" md-theme-watch>
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">Card with image</span>
-            <span class="md-subhead">Medium</span>
-          </md-card-title-text>
-          <md-card-title-media>
-            <div class="md-media-md card-media"></div>
-          </md-card-title-media>
-        </md-card-title>
-        <md-card-actions layout="row" layout-align="end center">
-          <md-button>Action 1</md-button>
-          <md-button>Action 2</md-button>
-        </md-card-actions>
-      </md-card>
-      <div layout layout-padding layout-align="center end" style="height:200px">
-        <md-checkbox ng-model="showDarkTheme">Use 'Dark' Themed Cards</md-checkbox>
-      </div>
-    </div>
-  </md-content>
-</div>
-      <div class="row">
-        <div class="col-lg-12">
-
-
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              Listado
-            </div>
-            <div class="panel-body">
-
-              <div class="row">
-                <div ng-repeat="logro in logros" class="col-sm-6 col-md-4">
-                  <form editable-form name="editableForm" onaftersave="saveLogro(logro)"  class="form-buttons form-inline" >
-   
-                  <div class="thumbnail">
-                    <div class="caption" >
-
-                      <h3>Logro {{($index + 1)}} {{logro.porcentaje_logro}}</h3>
-
-                      <div>
-                        <!-- editable username (text with validation) -->
-                 
-                        <span editable-textarea="logro.descripcion_logro" e-name="descripcion_logro"  e-required>{{ logro.descripcion_logro || 'empty' }}</span>
-                      </div>
-                      <div class="buttons">
-                        <span ng-show="!editableForm.$visible">
-                            <a href="#" class="btn btn-default" role="button" ng-click="open('lg',logro.id_logro)" >Ver</a>
-                            <button type="button" class="btn btn-default" ng-click="editableForm.$show()" >Editar</button>
-                            <a href="#" class="btn btn-danger" role="button">Eliminar</a>
-
-                         </span>
+        <div  ng-cloak >
+          <md-content class="md-padding" layout-xs="column" layout="row">
+            <div class='md-padding' flex-xs flex-gt-xs="" layout="column">
+              <md-card ng-repeat="logro in logros"  md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch >
+                <form editable-form name="editableForm" onbeforesave="saveLogro(logro)"  class="form-buttons form-inline" >
+                  <md-card-title>
+                    <md-card-title-text>
+                      <span class="md-headline">Logro {{($index + 1)}} </span>
+                      <span class="md-subhead">{{logro.porcentaje_logro}} % </span>
+                    </md-card-title-text>
+                  </md-card-title>
+                  <md-card-content>
+                    <span  style="width: 100%;" editable-textarea="logro.descripcion_logro" e-name="descripcion_logro"  e-required>{{ logro.descripcion_logro || 'Ingresa una descripcion' }}</span>
+                  </md-card-content>
+                  <md-card-actions layout="row" layout-align="end center">
+                    <div class="buttons">
+                      <span ng-show="!editableForm.$visible">
+                        <a href="#" class="btn btn-default" role="button" ng-click="open('lg',logro.id_logro)" >Ver</a>
+                        <button type="button" class="btn btn-default" ng-click="editableForm.$show()" >Editar</button>
+                        <a href="#" class="btn btn-danger" role="button">Eliminar</a>
+                      </span>
 
                           <!-- button to show form -->
     
                           <!-- buttons to submit / cancel form -->
-                          <span ng-show="editableForm.$visible">
-                            <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">
-                              Save
-                            </button>
-                            <button type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">
-                              Cancel
-                            </button>
-                          </span>
-
-                          
-                        </div>           
-                      
-                    </div>
-                  </div>
+                      <span ng-show="editableForm.$visible">
+                        <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">Guardar</button>
+                        <button type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">Cancel</button>
+                      </span>      
+                    </div>   
+                      <!--<md-button>Ver</md-button>
+                      <md-button>Editar</md-button>-->
+                  </md-card-actions>
                 </form>
-                </div>
-                <!-- /.row (nested) -->
-
-
-              </div>
-              <!-- /.panel-body -->
-              
+              </md-card>
             </div>
-            <!-- /.panel -->
 
-          
-          </div>
-  <!-- /.col-lg-12 -->
-    
+          </md-content>
+        </div>
+      </uib-tab>
+    </uib-tabset>
+    </section>
   </div>
-  <!-- Div Row -->
-
-
-
-</uib-tab>
-</uib-tabset>
-</div>
+  </div>
   <!-- Page Wraper -->
 </div>
   <!-- Wraper -->
+
+<footer-generic></footer-generic>
 
 
 

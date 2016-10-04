@@ -13,13 +13,16 @@ var findActividadesByLogro = function(id_logro){
 };
 
 var findActividadesByLogros = function(ids_logro){
+  console.log("este es ids_logro")
+  console.log(ids_logro)
   var cadena = "SELECT * FROM actividad WHERE id_logro IN ("
   var ids = "";
   ids_logro.forEach(function (id_logro,index){
     if(index == ids_logro.length-1){
-      ids += id_logro;
+      //console.log(id_logro.id_logro)
+      ids += id_logro.id_logro ;
     }else{
-      ids += ids_logro + ",";
+      ids += id_logro.id_logro + ",";
     }
   });
   cadena += ids + ") ORDER BY id_logro,id_actividad"
@@ -57,8 +60,8 @@ var updatePorcentajesActividades= function(actividades){
 
 var createActividad= function(actividad){
    var cadena="INSERT INTO actividad"+
-    "(id_actividad,id_logro,porcentaje_actividad,nombre_actividad,descripcion_actividad) "+
-    "VALUES ("+actividad.id_actividad+","+actividad.id_logro+","+actividad.porcentaje_actividad+",'"+actividad.nota_actividad+"','"+actividad.descripcion_actividad+"')";
+    "(id_logro,porcentaje_actividad,nombre_actividad,descripcion_actividad) "+
+    "VALUES ("+actividad.id_logro+","+actividad.porcentaje_actividad+",'"+actividad.nota_actividad+"','"+actividad.descripcion_actividad+"')";
    console.log(cadena);
    return sequelize.query(cadena,{
      type: sequelize.QueryTypes.INSERT

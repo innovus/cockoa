@@ -10,7 +10,7 @@ router.get('/materias', /*authenticate,*/ estudiantesController.getMateriasEstud
 router.get('/materias/:id_materia/logros/periodos/:id_periodo', /*authenticate,*/estudiantesController.getLogrosEstudiante);
 router.get('/materias/:id_materia/notas/periodos/:id_periodo', /*authenticate,*/estudiantesController.getNotasLogros);
 router.get('/logros/:id_logro/actividades', /*authenticate,*/estudiantesController.getActividadesEstudiante);
-router.get('/logros/:id_logro/actividades/notas', /*authenticate,*/estudiantesController.getNotasActividades);
+router.get('/actividades/notas', /*authenticate,*/estudiantesController.getNotasActividades);
 
 
 module.exports = router;

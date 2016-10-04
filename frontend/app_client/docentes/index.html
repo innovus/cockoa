@@ -3,33 +3,60 @@
 <head>
   <title>Notas</title>
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
-    <link href="/css/style.css" rel="stylesheet">
+
 
   <link href="/css/bootstrap.css" rel="stylesheet">
+   <!-- Custom Fonts -->
+   <link rel='stylesheet', href='/css/font-awesome.min.css'/>
+   <link rel='stylesheet', href='/css/ionicons.min.css'/>
+   <link rel='stylesheet', href='/css/AdminLTE.css'/>
+    <link rel='stylesheet', href='/css/skin-green.min.css'/>
+  <link rel='stylesheet', href='/css/estilo.css'/>
+
   <link href="/css/xeditable/xeditable.css" rel="stylesheet">
   
  
-  <!-- Css j -->
+  <!-- Css j 
   <link href="/css/metisMenu.min.css" rel="stylesheet">
-  <!-- Custom CSS -->
-  <link href="/css/sb-admin-2.css" rel="stylesheet">
-  <!-- Custom Fonts -->
-  <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
+  <!-- Custom CSS 
+  <link href="/css/sb-admin-2.css" rel="stylesheet"> -->
+ 
   <link rel="stylesheet" type="text/css" href="/css/sweet-alert/sweetalert.css">
+  <link href="/css/style.css" rel="stylesheet">
+      
+
+
 
   <script src="/lib/angular.min.js"></script>
   <script src="/lib/angular-sanitize.min.js"></script>
   <script src="/lib/angular-route.min.js"></script>
+<script src="/lib/vendor/angular-material/angular-aria.js"></script>
   <script src="/lib/angular-cookies.min.js"></script>
   <script src="/lib/angular-animate.min.js"></script>
+
+  <script src="/lib/vendor/angular-translate/angular-translate.min.js"></script> 
   <script src="/lib/checklist-model.min.js"></script>
+
+
+
+ <script src='/lib/vendor/jquery-legacy/jquery.min.js'></script> 
+    <script src='/lib/vendor/bootstrap/js/bootstrap.min.js'></script>
+    <script src='/lib/vendor/adminlte/bootstrap3-wysihtml5.all.min.js'></script>
+    <script src='/lib/vendor/adminlte/app.min.js'></script>
+    <script src='/lib/vendor/adminlte/demo.js'></script>
+    <script src='/lib/vendor/sweetalert/dist/sweetalert.min.js'></script>
+
+
+
+
+
+
 
   <script src="/lib/xeditable/xeditable.js"></script>
 
-   <!-- Angular Material Library -->
-  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-  
+  <!-- Angular Material Javascript using GitCDN to load directly from `bower-material/master` -->
+    <script src="/lib/vendor/angular-material/angular-material.js"></script>
+    <script src="/lib/vendor/angular-material/angular-messages.js"></script>
   
   <script src="/lib/ui-bootstrap-tpls-2.1.3.min.js"></script>
 
@@ -52,13 +79,18 @@
   <script src='/common/directives/navbarest/navbarest.directive.js'></script>
   <script src='/common/directives/navbar/navbar.directive.js'></script>
 
+    <script src='/common/directives/footerGeneric/footerGeneric.directive.js'></script>
+  <script src='/common/directives/navigation/navigation.directive.js'></script>
+  <script src='/common/directives/navigation/navigation.controller.js'></script>
+
   <script src='/views/notas/notas.controller.js'></script>
   <script src='/views/inasistencia/inasistencia.controller.js'></script>
   <script src='/views/logros/crud_logros.controller.js'></script>
   <script src='/views/estudiantes/notas/notas.controller.js'></script>
   <script src='/views/estudiantes/inasistencia/inasistencia.controller.js'></script>
 
-  <script src="/lib/j/jquery.min.js"></script>
+<script src='/views/ejemplo/ejemplo.controller.js'></script>
+ <!-- <script src="/lib/j/jquery.min.js"></script>-->
   <!-- Bootstrap Core JavaScript 
   <script src="/lib/bootstrap.min.js"></script>
   -->
@@ -74,9 +106,9 @@
   <script src="/lib/sweet-alert/sweetalert.min.js"></script>
 
 </head>
-<body>
+<body class="hold-transition skin-green sidebar-mini">
 
-  <div ng-view></div>
+  <div ng-view  ></div>
 
 </body>
 </html>

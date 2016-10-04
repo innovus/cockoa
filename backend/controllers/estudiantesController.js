@@ -33,7 +33,7 @@ function getMateriasEstudiante(req,res){
 	"natural join persona natural join estudiante where usuario.id_usuario = 1)";
 	
 	db.many(queri)*/
-	MateriaDao.findMateriasByEstudiante(1)
+	MateriaDao.findMateriasByEstudiante(30011)
 	.then(function(data){
 		respuesta.sendJsonResponse(res,200,data);
 		console.log("la fucnion salio bn" + data)
@@ -74,8 +74,9 @@ function getActividadesEstudiante(req,res){
 
 
 function getLogrosEstudiante(req,res){
-	console.log("entro aqui");
-	LogroDao.findLogrosByMateriaAndPeriodo(req.params.id_materia,req.params.id_periodo)
+	console.log("entro aqui a get Logros estudiantes");
+	console
+	LogroDao.findLogrosByMateriaAndPeriodo(30011,req.params.id_materia,req.params.id_periodo)
 	.then(function(data){ 
 		respuesta.sendJsonResponse(res,200,data);
 		console.log("la fucnion salio bn" + data)
@@ -95,7 +96,7 @@ function getLogrosEstudiante(req,res){
 
 function getNotasLogros(req,res){
 
-	Nota_logroDao.findNotasLogrosByEstudiante(1,req.params.id_materia,req.params.id_periodo)
+	Nota_logroDao.findNotasLogrosByEstudiante(30011,req.params.id_materia,req.params.id_periodo)
 	.then(function(data){ 
 		var data1 = {};
 		//(function(i){
@@ -104,7 +105,7 @@ function getNotasLogros(req,res){
 
 				data1[data[i].id_logro] = data[i].nota_logro;
 			}
-		console.log(data1)		
+		console.log(data)		
 		respuesta.sendJsonResponse(res,200,data1);
 	}).catch(function(err){
 		if(err.message == 'No data returned from the query.'){
@@ -121,18 +122,18 @@ function getNotasLogros(req,res){
 
 function getNotasActividades(req,res){
 
-	Nota_actividadDao.findNotasActividadesByEstudiante(1,req.params.id_logro)
+	Nota_actividadDao.findNotasActividadesByEstudiante(30011)
 	.then(function(data){ 
-		var data1 = {};
+	/*	var data1 = {};
 		//(function(i){
 			console.log("antes del for")
 			for (var i = data.length - 1; i >= 0; i--) {
 
 				data1[data[i].id_actividad] = data[i].nota_actividad;
 			}
-
-		console.log(data1)		
-		respuesta.sendJsonResponse(res,200,data1);
+*/
+		console.log(data)		
+		respuesta.sendJsonResponse(res,200,data);
 		
 	}).catch(function(err){
 		if(err.message == 'No data returned from the query.'){
