@@ -25,9 +25,17 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.LogrosActivity"
-            android:label="Indicadores de logros" />
-        <activity android:name=".Activities.NotasActivity" />
-        <activity android:name=".Activities.InasistenciaMateriaActivity" />
+            android:label="Indicadores de logros"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".Activities.NotasActivity"
+            android:label="Nota Actividad"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".Activities.InasistenciaMateriaActivity"
+            android:label="Inasistencia"
+            android:theme="@style/AppTheme"/>
         <activity android:name=".ActivityProfesor.EstudiantesCursoActivity" />
         <activity android:name=".ActivityProfesor.LogrosMateriaEstudianteProfesorActivity" />
         <activity android:name=".ActivityProfesor.LlamarListaActivity"></activity>

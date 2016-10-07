@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +39,9 @@ public class LogrosActivity extends AppCompatActivity {
         parametro.putString("id_materia", id_materia);
         parametro.putString("periodo_actual", "null");
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
 
         if (savedInstanceState == null) {
@@ -53,17 +57,20 @@ public class LogrosActivity extends AppCompatActivity {
         }
     }
 
+
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         List<String> list = new ArrayList<String>();
         //periodo_actual
-        periodo_actual = getIntent().getStringExtra("id_materia");
+        periodo_actual = getIntent().getStringExtra("periodo_actual");
         int numEntero = Integer.parseInt(periodo_actual)+1;
         list.add("Periodo");
         for(int i=1;i<=numEntero;i++){
             list.add("Periodo: "+i);
         }
-
 
 
         getMenuInflater().inflate(R.menu.android_action_bar_spinner_menu, menu);
@@ -137,12 +144,20 @@ public class LogrosActivity extends AppCompatActivity {
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-
-
+            switch (item.getItemId()) {
+                case android.R.id.home: //hago un case por si en un futuro agrego mas opciones
+                    Log.i("ActionBar", "Atrás!");
+                    finish();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
 
 
         /*if(id==3){
@@ -161,7 +176,7 @@ public class LogrosActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(this, "opcion 3",Toast.LENGTH_LONG);
             toast.show();
         }*/
-        return super.onOptionsItemSelected(item);
+       // return super.onOptionsItemSelected(item);
 
     }
 

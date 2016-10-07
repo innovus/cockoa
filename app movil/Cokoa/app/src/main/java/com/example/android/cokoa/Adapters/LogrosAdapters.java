@@ -28,12 +28,12 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tituloLogro, descLogro,numeroPerido;
+        public TextView  descLogro,numeroPerido;
         Logro logro;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tituloLogro = (TextView) itemView.findViewById(R.id.text_titulo_logro);
+
             descLogro = (TextView) itemView.findViewById(R.id.text_des_logro);
             numeroPerido = (TextView) itemView.findViewById(R.id.text_numero_periodo);
 
@@ -62,7 +62,7 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.tituloLogro.setText(logros.get(position).getTitulo_logro());
+
         viewHolder.descLogro.setText(logros.get(position).getDesc_logro());
         viewHolder.numeroPerido.setText(logros.get(position).getNumero_periodo());
         //viewHolder.feed = materia.get(position);

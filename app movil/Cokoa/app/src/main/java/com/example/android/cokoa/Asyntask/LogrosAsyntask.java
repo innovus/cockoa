@@ -63,7 +63,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "estudiantes/materias/logros/"+params[0]);
+            URL url = new URL(serverUrls + "estudiantes/materias/logros/" + params[0]);
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -111,7 +111,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
                 Log.v("status", "Json String" + statuss);
                 if (statuss == 400) {
                     ArrayList a = new ArrayList();
-                    a.add(0,"400");
+                    a.add(0, "400");
                     return a;
                 }
 
@@ -143,30 +143,26 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
     }
 
 
-
     @Override
     protected void onPostExecute(ArrayList<Logro> result) {
         if (result != null) {
 
-            ArrayList<String> status = new  ArrayList(result);
-            if(status.get(0)=="400"){
+            ArrayList<String> status = new ArrayList(result);
+            if (status.get(0) == "400") {
                 Toast toast1 =
                         Toast.makeText(activity, "status 400 sql vacio", Toast.LENGTH_SHORT);
                 toast1.show();
 
-            }else {
+            } else {
+
                 mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_logro);
-                imageView = (ImageView) activity.findViewById(R.id.id_img_logros_visibility);
-                textView = (TextView) activity.findViewById(R.id.id_text_logro_done);
-                imageView.setVisibility(View.GONE);
-                textView.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
                 mRecyclerView.setHasFixedSize(true);
-                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
-                mLayoutManager = new LinearLayoutManager(activity);
+
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mAdapter = new LogrosAdapters(result, activity);
                 mRecyclerView.setAdapter(mAdapter);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+
             }
 
         } else {
@@ -198,15 +194,15 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
 
             for (int i = 0; i < logroArray.length(); i++) {
                 JSONObject logro = logroArray.getJSONObject(i);
-                String numero_periodo =  logro.getString("numero_periodo");
+                String numero_periodo = logro.getString("numero_periodo");
                 String id_materia = logro.getString("id_materia");
                 String id_logro = logro.getString("id_logro");
-                String titleLogro = logro.getString("nombre_logro");
+                // String titleLogro = logro.getString("nombre_logro");
                 String descLogro = logro.getString("descripcion_logro");
                 Logro logro1 = new Logro();
                 logro1.setId_materia(id_materia);
                 logro1.setId_logro(id_logro);
-                logro1.setTitulo_logro(titleLogro);
+                // logro1.setTitulo_logro(titleLogro);
                 logro1.setDesc_logro(descLogro);
                 logro1.setNumero_periodo(numero_periodo);
                 logroArrayList.add(logro1);

@@ -152,8 +152,7 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
                         Toast.makeText(activity, "status 400 sql vacio", Toast.LENGTH_SHORT);
                 toast1.show();
                 mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_logro);
-                imageView = (ImageView) activity.findViewById(R.id.id_img_logros_visibility);
-                textView = (TextView) activity.findViewById(R.id.id_text_logro_done);
+
                 textView.setText(activity.getResources().getString(R.string.emptyNotasActividades));
 
 
@@ -163,8 +162,6 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
 
             }else {
                 mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_logro);
-                imageView = (ImageView) activity.findViewById(R.id.id_img_logros_visibility);
-                textView = (TextView) activity.findViewById(R.id.id_text_logro_done);
                 imageView.setVisibility(View.GONE);
                 textView.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);

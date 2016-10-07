@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.example.android.cokoa.Adapters.LogrosAdapters;
 import com.example.android.cokoa.Asyntask.LogrosAsyntask;
-import com.example.android.cokoa.Asyntask.LogrosPeriodoAsyntask;
 import com.example.android.cokoa.Models.Logro;
 import com.example.android.cokoa.R;
 
@@ -38,7 +37,6 @@ public class LogrosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recycler, container, false);
-//        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Logros");
         return rootView;
     }
 
@@ -49,12 +47,13 @@ public class LogrosFragment extends Fragment {
         Bundle args = getArguments();
         String id_materia = args.getString("id_materia");
         String numero_periodo = args.getString("periodo_actual");
-        if(numero_periodo.equals("null")){
+      /*  if(numero_periodo.equals("null")){
             new LogrosAsyntask(this.getActivity()).execute(id_materia);
         }else {
             new LogrosPeriodoAsyntask(this.getActivity()).execute(id_materia,numero_periodo);
-        }
+        }*/
 
+        new LogrosAsyntask(this.getActivity()).execute(id_materia);
         //obtenemos el recycler
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view_logro);
         mRecyclerView.setHasFixedSize(true);
@@ -67,6 +66,18 @@ public class LogrosFragment extends Fragment {
         // specify an adapter (see also next example)
         mAdapter = new LogrosAdapters(areas,getActivity());
         mRecyclerView.setAdapter(mAdapter);
+
+        /*ArrayList<InasistenciaMateria> inasistenciaMaterias = new ArrayList<>();
+        Bundle args = getArguments();
+        id_materia = args.getString("id_materia");
+        new InasistenciaMateriaAsyntask(this.getActivity()).execute(id_materia);
+        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_inasistencia_materia);
+        mRecyclerView.setHasFixedSize(true);
+        //usar UN ADMINISTRADOR PARA LINEARLAYOUT
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new InasistenciaMateriaAdapters(inasistenciaMaterias,getActivity());
+        mRecyclerView.setAdapter(mAdapter);*/
 
         //getView().setFocusableInTouchMode(true);
         getView().setFocusableInTouchMode(true);

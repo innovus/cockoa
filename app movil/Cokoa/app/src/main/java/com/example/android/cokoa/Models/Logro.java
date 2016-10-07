@@ -4,6 +4,31 @@ package com.example.android.cokoa.Models;
  * Created by ASUS on 09/06/2016.
  */
 public class Logro {
+    private String id_materia;
+    private String id_logro;
+    private String numero_periodo;
+
+    private String titulo_logro;
+    private String desc_logro;
+    private double nota_logro;
+    private  double porcentajeLogro;
+
+    public double getPorcentajeLogro() {
+        return porcentajeLogro;
+    }
+
+    public void setPorcentajeLogro(double porcentajeLogro) {
+        this.porcentajeLogro = porcentajeLogro;
+    }
+
+    public double getNota_logro() {
+        return nota_logro;
+    }
+
+    public void setNota_logro(double nota_logro) {
+        this.nota_logro = nota_logro;
+    }
+
     public String getTitulo_logro() {
         return titulo_logro;
     }
@@ -20,8 +45,6 @@ public class Logro {
         this.desc_logro = desc_logro;
     }
 
-    private String titulo_logro;
-    private String desc_logro;
 
     public String getId_materia() {
         return id_materia;
@@ -39,9 +62,7 @@ public class Logro {
         this.id_logro = id_logro;
     }
 
-    private String id_materia;
-    private String id_logro;
-    private String numero_periodo;
+
 
     public String getNumero_periodo() {
         return numero_periodo;

@@ -164,11 +164,7 @@ public class LogrosPeriodoAsyntask extends AsyncTask<String, Void, ArrayList<Log
 
             }else {
                 mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_logro);
-                imageView = (ImageView) activity.findViewById(R.id.id_img_logros_visibility);
-                textView = (TextView) activity.findViewById(R.id.id_text_logro_done);
-                imageView.setVisibility(View.GONE);
-                textView.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
+
                 mRecyclerView.setHasFixedSize(true);
                 //usR UN ADMINISTRADOR PARA LINEARLAYOUT
                 mLayoutManager = new LinearLayoutManager(activity);
@@ -209,12 +205,12 @@ public class LogrosPeriodoAsyntask extends AsyncTask<String, Void, ArrayList<Log
                 String numero_periodo =  logro.getString("numero_periodo");
                 String id_materia = logro.getString("id_materia");
                 String id_logro = logro.getString("id_logro");
-                String titleLogro = logro.getString("nombre_logro");
+               // String titleLogro = logro.getString("nombre_logro");
                 String descLogro = logro.getString("descripcion_logro");
                 Logro logro1 = new Logro();
                 logro1.setId_materia(id_materia);
                 logro1.setId_logro(id_logro);
-                logro1.setTitulo_logro(titleLogro);
+                //logro1.setTitulo_logro(titleLogro);
                 logro1.setDesc_logro(descLogro);
                 logro1.setNumero_periodo(numero_periodo);
                 logroArrayList.add(logro1);

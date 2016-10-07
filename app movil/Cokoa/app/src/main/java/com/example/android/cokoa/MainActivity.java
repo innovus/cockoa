@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /* DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);*/
         drawerLayout.openDrawer(GravityCompat.START);
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(sessionManager.getUser().equals("1")){
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.activity_main_drawer);
+            navigationView.getMenu().findItem(R.id.nav_calificaciones).setChecked(true);
+
         }else {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.navigation_with_teacher);
@@ -81,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+            //        navigationView.getMenu().findItem(R.id.nav_calificaciones).setChecked(true);
+
         } else {
             super.onBackPressed();
         }
