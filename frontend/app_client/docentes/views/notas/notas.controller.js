@@ -100,14 +100,12 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
       //hace la busqueda si existe la misma carga en las nuevas cargas de este periodo
       //para dejarla seleccionada con las nuevas
       for (var i = 0; i < data.length ; i++) {
-
      
         (function(i){
         
           if(data[i].nombre_materia == $scope.carga_seleccionada.nombre_materia && data[i].id_curso == $scope.carga_seleccionada.id_curso ){
             $scope.carga_seleccionada = data[i];
-            encontrado = true;
-            
+            encontrado = true;          
           }
         })(i);  
       }
@@ -116,8 +114,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
       }
 
       seleccionarCarga($scope.carga_seleccionada);
-            
-
+          
     })
     .error(function(data) {
       console.log('Error: ' + data);
@@ -208,6 +205,9 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
     console.log("entro a before");
     console.log(val_before);
     console.log(isNaN(val_before))
+    if(cabecera.nota == ""){
+      return "Debe Ingresar un numero"
+    }
 
   if (isNaN(cabecera.nota)) {
       console.log("entro a if isnan " + val_before);
@@ -597,3 +597,5 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 
 }// body...     
 })();
+
+

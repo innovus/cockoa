@@ -48,7 +48,11 @@
       <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{periodo.numero_periodo}}" ng-click="getPeriodoId($index)">
         <div  ng-cloak >
           <md-content class="md-padding" layout-xs="column" layout="row">
+
+
             <div class='md-padding' flex-xs flex-gt-xs="" layout="column">
+
+
               <md-card ng-repeat="logro in logros"  md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch >
                 <form editable-form name="editableForm" onbeforesave="saveLogro(logro)"  class="form-buttons form-inline" >
                   <md-card-title>
@@ -65,7 +69,7 @@
                       <span ng-show="!editableForm.$visible">
                         <a href="#" class="btn btn-default" role="button" ng-click="open('lg',logro.id_logro)" >Ver</a>
                         <button type="button" class="btn btn-default" ng-click="editableForm.$show()" >Editar</button>
-                        <a href="#" class="btn btn-danger" role="button">Eliminar</a>
+                        <a href="#" ng-click="deleteLogro(logro.id_logro)" class="btn btn-danger" role="button">Eliminar</a>
                       </span>
 
                           <!-- button to show form -->
@@ -81,6 +85,10 @@
                   </md-card-actions>
                 </form>
               </md-card>
+                          <div class="bottom-sheet-demo inset" layout="row" layout-sm="column" layout-align="center" >
+              <md-button flex="50" class="md-raised" ng-click="open_nuevo_logro('lg',carga_seleccionada.id_carga_docente)">Agregar Logro</md-button>
+              <md-button flex="50" class="md-raised" ng-click="open_update_logros('sm')">Actualizar Porcentaje</md-button>
+            </div>
             </div>
 
           </md-content>

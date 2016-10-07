@@ -67,6 +67,15 @@
 
             })
         }
+        var deleteActividad = function(id_actividad){
+           return $http({
+                method: 'DELETE',
+                url: CONFIG.http_address+'/api/docentes/actividades/'+id_actividad,
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            })
+        }
 
         return {
             findActividadesByLogro:findActividadesByLogro,

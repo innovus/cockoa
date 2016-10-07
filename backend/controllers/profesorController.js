@@ -194,14 +194,38 @@ function getNotasActividades(req,res){
 
 function updatePorcentajesActividades(req,res){
 	var sumatoria = 0;
+	console.log(req.body)
 	req.body.forEach(function(actividad,index){
-		sumatoria = sumatoria + actividad.porcentaje_actividad;
+		sumatoria = sumatoria + parseFloat(actividad.porcentaje_actividad);
    });
 	if(sumatoria != 100) {
+		console.log("sumatoria != 100")
 		respuesta.sendJsonResponse(res,500,{'status':2,'msg':'La sumatoria debe ser 100%'})
 
 	}else{
 		ActividadDao.updatePorcentajesActividades(req.body)
+		.then(function(){	
+			respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Todos los ingresos correctos'})		
+		})
+		.catch(function(error){
+			console.log(error)
+			respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
+		})
+	}
+	
+
+}
+function updatePorcentajesLogros(req,res){
+	var sumatoria = 0;
+	req.body.forEach(function(logro,index){
+		sumatoria = sumatoria + parseFloat(logro.porcentaje_logro);
+   });
+	console.log(sumatoria)
+	if(sumatoria != 100) {
+		respuesta.sendJsonResponse(res,500,{'status':2,'msg':'La sumatoria debe ser 100%'})
+
+	}else{
+		LogroDao.updatePorcentajesLogros(req.body)
 		.then(function(){	
 			respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Todos los ingresos correctos'})		
 		})
@@ -278,6 +302,30 @@ function updateNota(req,res){
 	}
 
 }
+function deleteLogro(req,res){
+	console.log("Eliminar Logro");
+	LogroDao.deleteLogro(req.params.id_logro)
+	.then(function(){
+		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Elimino el logro con exito'})
+	})
+	.catch(function(error){
+			console.log(error)
+			respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
+		})
+
+}
+function deleteActividad(req,res){
+	console.log("Eliminar Actividad");
+	ActividadDao.deleteActividad(req.params.id_actividad)
+	.then(function(){
+		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Elimino la actividad con exito'})
+	})
+	.catch(function(error){
+			console.log(error)
+			respuesta.sendJsonResponse(res,500,{'status':1,'msg':error})
+		})
+
+}
 function updateDescripcionLogro(req,res){
 	LogroDao.updateDescripcionLogro(req.body)
 	.then(function(){
@@ -291,8 +339,20 @@ function updateDescripcionLogro(req,res){
 }
 function createActividad(req,res){
 	ActividadDao.createActividad(req.body)
-	.then(function(){
-		respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Se agrego la actividad con exito'})		
+	.then(function(actividad){
+		console.log(actividad)
+		respuesta.sendJsonResponse(res,200,{'id_actividad':actividad[0],'status':0,'msg':'Se agrego la actividad con exito'})		
+
+	}).catch(function(){
+		respuesta.sendJsonResponse(res,500,{'status':0,'msg':'Se produjo un error'})		
+
+	})
+}
+function createLogro(req,res){
+	LogroDao.createLogro(req.body)
+	.then(function(logro){
+		
+		respuesta.sendJsonResponse(res,200,{'id_logro':logro[0],'status':0,'msg':'Se agrego el logro con exito'})		
 
 	}).catch(function(){
 		respuesta.sendJsonResponse(res,500,{'status':0,'msg':'Se produjo un error'})		
@@ -383,5 +443,10 @@ module.exports = {
 	createActividad: createActividad,
 	updateDescripcionActividad: updateDescripcionActividad,
 	getActividadesByLogros:getActividadesByLogros,
+	deleteLogro:deleteLogro,
+	deleteActividad:deleteActividad,
+	updatePorcentajesLogros:updatePorcentajesLogros,
+	createLogro: createLogro,
+
 }
 

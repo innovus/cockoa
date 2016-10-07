@@ -3,7 +3,7 @@ var app = angular.module('docentes');//creamos el modulo pokedex y le pasamos ar
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
-app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStore', '$cookies','CONFIG','periodoData','actividadData','logroData',function($scope,$http,$uibModal,$cookieStore,$cookies,CONFIG,periodoData,actividadData,logroData){
+app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStore', '$cookies','CONFIG','periodoData','actividadData','logroData','$mdBottomSheet','$mdToast','$timeout',function($scope,$http,$uibModal,$cookieStore,$cookies,CONFIG,periodoData,actividadData,logroData, $mdBottomSheet,$mdToast,$timeout){
 
   $scope.periodos = [];
   $scope.periodo_sel = null;
@@ -16,6 +16,7 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
   $scope.selected = {
     ids_estudiantes:[]
   };
+
 
     //Trae el periodo Actual
   //periodoData.findPeriodoActual()
@@ -76,9 +77,10 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
   $scope.open = function (size,id_logro) {
 
     //$http.get(CONFIG.http_address+'/api/docentes/logros/'+id_logro+'/actividades/')
+    var modalInstance = null;
      actividadData.findActividadesByLogro(id_logro)
     .success(function(data){
-      var modalInstance = $uibModal.open({
+      modalInstance = $uibModal.open({
         animation: true,
         backdrop: "static",
         templateUrl: '/views/logros/actividades.html',
@@ -93,9 +95,53 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
           }
         }
       });
+      console.log(modalInstance)
     }).error(function(error){
       console.log(error);
     });
+    console.log(modalInstance)
+  };
+    $scope.open_nuevo_logro = function (size,id_carga_docente) {
+
+
+      var modalInstance = $uibModal.open({
+        animation: true,
+        backdrop: "static",
+        templateUrl: '/views/logros/nuevo_logro.html',
+        controller: 'nuevo_logroCtrl',
+        size: size,
+        resolve: {
+          id_carga_docente: function(){
+            return id_carga_docente
+          }
+        }
+      });
+      modalInstance.result.then(function (nuevo_logro) {
+        $scope.logros.push(nuevo_logro);
+      //$ctrl.selected = selectedItem;
+    });
+
+  };
+      $scope.open_update_logros = function (size) {
+
+
+      var modalInstance = $uibModal.open({
+        animation: true,
+        backdrop: "static",
+        templateUrl: '/views/logros/actualizar_porcentaje.html',
+        controller: 'updatePorcentajesCtrl',
+        size: size,
+        resolve: {
+          logros: function(){
+            return $scope.logros
+          }
+        }
+      });
+      modalInstance.result.then(function (logros) {
+        $scope.logros = logros;
+      //$ctrl.selected = selectedItem;
+    });
+
   };
    /////////////////////
   //////// fin trae cargas
@@ -185,7 +231,31 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
       cb([]);
     });
   }
+  $scope.deleteLogro = function (id_logro){
+  logroData.deleteLogro(id_logro)
+  .success(function(data){
+    swal("Ok","se elimino con exito","success");
+    console.log("elimino con exito")
+
+  }).error(function(error){
+    if(error.msg.name == "SequelizeForeignKeyConstraintError" && error.msg.parent.table =="nota_logro"){
+        swal("Oops...","Debe eliminar primero las notas de los estudiantes","error");
+    }else  if(error.msg.name == "SequelizeForeignKeyConstraintError" && error.msg.parent.table =="actividad"){
+      swal("Oops...","Debe eliminar primero las actividades","error");
+    }else{
+      swal("Oops...","Algo aslio mal","error");
+    }
+  })
+}
+
+
+
+
+
+
 }]);
+
+
 /*
 app.config(function($mdThemingProvider) {
   $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
@@ -209,7 +279,7 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
 
 
   $scope.checkPorcentaje = function(){
-
+    
     var sumatoria = 0;
     angular.forEach($scope.actividades,function(actividad){
       if(isNaN(actividad.porcentaje_actividad)){
@@ -218,22 +288,21 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
         return "deben ser numeros"
 
       }else{
-         sumatoria = sumatoria + parseInt(actividad.porcentaje_actividad);
-      }
 
+         sumatoria = sumatoria + parseFloat(actividad.porcentaje_actividad);
+      }
      
     })
+    console.log("sumatoria")
     console.log(sumatoria)
-    if(sumatoria =! 100){
-      console.log("entro a error");
-      return "error"
-    }else{
-      console.log("sumatoria")
-      console.log()
+    console.log("antes de if");
+    if(sumatoria == 100){
+      console.log("entro al else")
+      console.log(sumatoria)
       actividadData.updatePorcentajes($scope.actividades)
       .success(function(mensaje){
         console.log(mensaje);
-        return $q.all(results);
+        //return $q.all(results);
 
       }).error(function(error){
         if(error.status == 2){
@@ -247,6 +316,15 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
         console.log(error);
         return  error;
       });
+
+
+      
+    }else{
+      console.log("entro a error");
+      swal("Oops...","Debe sumar 100 el porcentaje","error");
+      return "error"
+      
+ 
 
     }
 
@@ -310,7 +388,9 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
       actividadData.createActividad(actividad)
       .success(function(mensaje){
         console.log(mensaje);
-        return $q.all(actividad);
+        angular.extend(actividad,mensaje.id_actividad)
+        console.log($scope.actividades);
+       
 
       }).error(function(error){
         if(error.status == 2){
@@ -368,5 +448,146 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
 
 
 });
+
+app.controller('nuevo_logroCtrl', function($scope,$uibModalInstance,logroData,id_carga_docente) {
+
+   $scope.ok = function (descripcion) {
+    console.log(id_carga_docente)
+    console.log(descripcion)
+    logro = {id_carga_docente:id_carga_docente,descripcion_logro:descripcion, porcentaje_logro:0}
+
+     logroData.createLogro(logro)
+      .success(function(mensaje){
+        console.log(mensaje);
+         swal("Ok",mensaje.msg,"success");
+          angular.extend(logro,mensaje.id_logro)
+          console.log(logro)
+         $uibModalInstance.close(logro);
+        
+
+      }).error(function(error){
+        if(error.status == 2){
+          swal("Oops...",error.msg,"error");
+          $uibModalInstance.dismiss('cancel');
+          
+        }else{
+          swal("Oops..."," Algo salio mal!","error");
+          $uibModalInstance.dismiss('cancel');
+
+        }
+        
+        console.log(error);
+        
+      });
+
+ 
+  };
+
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+
+
+})
+app.controller('updatePorcentajesCtrl', function($scope, $uibModalInstance,logroData,logros) {
+  $scope.logros = logros
+  //variable para guardar los logros como llegan y en caso de darle cancelar sera usada para devolver los logros como llegaron al principio
+  $scope.logrosAntes = $scope.logros;
+
+
+  $scope.ok = function () {
+    sumatoria = 0;
+
+
+    angular.forEach($scope.logros,function(logro){
+
+      if(isNaN(logro.porcentaje_logro)){
+        console.log("entro a isNaN")
+        console.log(logro.porcentaje_logro)
+        swal("Ups....","Debes ingresar numeros","error");
+
+        console.log($scope.logrosAntes)
+        $uibModalInstance.close($scope.logrosAntes)
+        return;
+
+      }else{
+
+         sumatoria = sumatoria + parseFloat(logro.porcentaje_logro);
+       }
+     })
+
+      console.log("sumatoria")
+      console.log(sumatoria)
+      console.log("antes de if");
+      if(sumatoria == 100){
+        console.log("entro al if == 100")
+        console.log(sumatoria)
+        logroData.updatePorcentajesLogros($scope.logros)
+        .success(function(mensaje){
+          console.log(mensaje);
+          swal("Ok",mensaje.msg,"success");
+         
+         $uibModalInstance.close($scope.logros)
+        //return $q.all(results);
+
+        }).error(function(error){
+          if(error.status == 2){
+          //  swal("Oops...",error.msg,"error");
+            return error["mal"]
+          }else{
+            //  swal("Oops..."," Algo salio mal!","error");
+
+          }
+          console.log(error);
+          return  error;
+        });      
+      }else{
+        console.log("entro a error");
+        swal("Oops...","Debe sumar 100 el porcentaje","error");
+        
+      }
+     
+    
+
+    /*console.log(id_carga_docente)
+    console.log(descripcion)
+    logro = {id_carga_docente:id_carga_docente,descripcion_logro:descripcion, porcentaje_logro:0}
+
+     logroData.createLogro(logro)
+      .success(function(mensaje){
+        console.log(mensaje);
+         swal("Ok",mensaje.msg,"success");
+          angular.extend(logro,mensaje.id_logro)
+          console.log(logro)
+         $uibModalInstance.close(logro);
+        
+
+      }).error(function(error){
+        if(error.status == 2){
+          swal("Oops...",error.msg,"error");
+          $uibModalInstance.dismiss('cancel');
+          
+        }else{
+          swal("Oops..."," Algo salio mal!","error");
+          $uibModalInstance.dismiss('cancel');
+
+        }
+        
+        console.log(error);
+        
+      });*/
+      console.log($scope.logros)
+
+ 
+  };
+
+  $scope.cancel = function () {
+   // $uibModalInstance.dismiss('cancel');
+   console.log($scope.logrosAntes)
+    $uibModalInstance.close($scope.logrosAntes)
+  }
+
+
+})
 
 

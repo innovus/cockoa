@@ -10,10 +10,14 @@ router.get('/cargas/periodos/:id_periodo'/*, authenticate*/, profesoresControlle
 router.get('/cargas'/*, authenticate*/, profesoresController.getCursosMaterias);
 router.get('/cargas/:id_carga/logros'/*, authenticate*/,profesoresController.getLogros);
 router.get('/logros/:id_logro/actividades'/*, authenticate*/,profesoresController.getActividades);
+router.delete('/logros/:id_logro'/*, authenticate*/,profesoresController.deleteLogro);
+router.delete('/actividades/:id_actividad'/*, authenticate*/,profesoresController.deleteActividad);
 router.post('/logros/actividades'/*, authenticate*/,profesoresController.getActividadesByLogros);
+router.post('/logros',profesoresController.createLogro);
 router.get('/cargas/:id_carga/logros/notas'/*, authenticate*/, profesoresController.getNotasLogros);
 router.get('/cargas/:id_carga/logros/actividades/notas'/*, authenticate*/,profesoresController.getNotasActividades);
 router.put('/actividades/porcentajes'/*, authenticate*/,profesoresController.updatePorcentajesActividades);
+router.put('/logros/porcentajes'/*, authenticate*/,profesoresController.updatePorcentajesLogros);
 router.put('/:table/notas'/*, authenticate*/,profesoresController.updateNota);
 router.put('/logros/descripcion'/*, authenticate*/,profesoresController.updateDescripcionLogro);
 router.post('/:table/notas'/*, authenticate*/,profesoresController.insertNota);

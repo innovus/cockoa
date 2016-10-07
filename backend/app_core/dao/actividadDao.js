@@ -61,7 +61,7 @@ var updatePorcentajesActividades= function(actividades){
 var createActividad= function(actividad){
    var cadena="INSERT INTO actividad"+
     "(id_logro,porcentaje_actividad,nombre_actividad,descripcion_actividad) "+
-    "VALUES ("+actividad.id_logro+","+actividad.porcentaje_actividad+",'"+actividad.nota_actividad+"','"+actividad.descripcion_actividad+"')";
+    "VALUES ("+actividad.id_logro+","+actividad.porcentaje_actividad+",'"+actividad.nota_actividad+"','"+actividad.descripcion_actividad+"') RETURNING id_actividad";
    console.log(cadena);
    return sequelize.query(cadena,{
      type: sequelize.QueryTypes.INSERT
@@ -79,6 +79,15 @@ var updateDescripcionActividad= function(actividad){
    });
 
 };
+var deleteActividad= function(id_actividad){
+   var cadena="DELETE FROM actividad "+
+     "WHERE id_actividad = "+ id_actividad ;
+   
+   return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.DELETE
+   });
+
+};
 
 
 module.exports.findActividadesByLogro=findActividadesByLogro;
@@ -86,3 +95,4 @@ module.exports.updatePorcentajesActividades=updatePorcentajesActividades;
 module.exports.createActividad = createActividad;
 module.exports.updateDescripcionActividad= updateDescripcionActividad;
 module.exports.findActividadesByLogros=findActividadesByLogros
+module.exports.deleteActividad=deleteActividad;

@@ -22,11 +22,44 @@
                 data: logro
             })
         }
+        var updatePorcentajesLogros = function(logros){
+           return $http({
+                method: 'PUT',
+                url: CONFIG.http_address+'/api/docentes/logros/porcentajes',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                data: logros
+            })
+        }
+        var deleteLogro = function(id_logro){
+           return $http({
+                method: 'DELETE',
+                url: CONFIG.http_address+'/api/docentes/logros/'+id_logro,
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            })
+        }
+        var createLogro = function(logro){
+            return $http({
+                method: 'POST',
+                url: CONFIG.http_address+'/api/docentes/logros',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                data: logro
+
+            })
+        }
 
         return {
             findLogrosByCarga:findLogrosByCarga,
             findLogrosByMateriaAndPeriodo:findLogrosByMateriaAndPeriodo,
             updateDescripcionLogro:updateDescripcionLogro,
+            deleteLogro: deleteLogro,
+            createLogro: createLogro,
+            updatePorcentajesLogros:updatePorcentajesLogros,
             
         };
     }

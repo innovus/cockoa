@@ -24,7 +24,6 @@ var findLogrosByMateriaAndPeriodo = function(id_estudiante,id_materia,id_periodo
 	console.log(queries.logro.findLogrosByMateriaAndPeriodo)
 	return sequelize.query(queries.logro.findLogrosByMateriaAndPeriodo,{bind:{id_materia:id_materia,id_periodo:id_periodo,id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT});
 }
-
 var updateDescripcionLogro= function(logro){
    var cadena="UPDATE logro "+
     "SET descripcion_logro = '" + logro.descripcion_logro +"' "+
@@ -35,7 +34,55 @@ var updateDescripcionLogro= function(logro){
    });
 
 };
+var deleteLogro= function(id_logro){
+   var cadena="DELETE FROM logro "+
+     "WHERE id_logro = "+ id_logro ;
+   
+   return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.DELETE
+   });
 
+};
+var createLogro = function(logro){
+  var cadena = "INSERT INTO logro (id_carga_docente,descripcion_logro,porcentaje_logro) "+
+  "VALUES ("+logro.id_carga_docente+",'"+logro.descripcion_logro+"',"+logro.porcentaje_logro+") RETURNING id_logro";
+  return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.INSERT
+   });
+}
+
+var updatePorcentajesLogros= function(logros){
+   var cadena="UPDATE logro ";
+   var cadenanombre="";
+   var cadenavalor="";
+   var cadenawhere="";
+   logros.forEach(function(logro,index){
+       cadenanombre+= "WHEN "+ logro.id_logro+" THEN "+logro.porcentaje_logro+" ";
+      // cadenavalor+= "WHEN "+logro.id_logro+" THEN "+logro.valor+" ";
+       if(index==logros.length-1){
+           console.log("ultimo registro");
+           cadenawhere+=logro.id_logro;
+       }
+       else{
+           console.log("registro");
+           cadenawhere+=logro.id_logro+",";
+       }
+   });
+   //console.log(cadenanombre);
+   //console.log(cadenavalor);
+   cadena= cadena+" SET porcentaje_logro = CASE id_logro "+cadenanombre+" END ";
+  // cadena= cadena+",valor = CASE id_logro "+cadenavalor+" END ";
+   cadena= cadena+" WHERE id_logro IN("+cadenawhere+")";
+   
+   return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.UPDATE
+   });
+
+};
 module.exports.findLogrosByCargaDocente=findLogrosByCargaDocente;
 module.exports.findLogrosByMateriaAndPeriodo=findLogrosByMateriaAndPeriodo;
 module.exports.updateDescripcionLogro = updateDescripcionLogro;
+module.exports.deleteLogro = deleteLogro;
+module.exports.updatePorcentajesLogros=updatePorcentajesLogros;
+module.exports.createLogro =createLogro;
+

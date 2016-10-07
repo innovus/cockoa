@@ -7,7 +7,7 @@
           <th>No</th>
           <th>Descripcion</th>
           <th>Porcentaje
-            <form editable-form name="nameform" onbeforesave="checkPorcentaje()" ng-show="nameform.$visible">
+            <form editable-form name="nameform" onaftersave="checkPorcentaje()" ng-show="nameform.$visible">
               <button type="submit" ng-disabled="nameform.$waiting" class="btn btn-primary">save</button>
               <button type="button" ng-disabled="nameform.$waiting" ng-click="nameform.$cancel()" class="btn btn-default">cancel</button>
             </form>  
@@ -46,6 +46,7 @@
             </form>
             <div class="buttons" ng-show="!rowform.$visible">
               <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+              <button class="btn btn-danger" ng-click="removeActividad($index)">del</button>
             </div>  
           </th>
         </tr>
