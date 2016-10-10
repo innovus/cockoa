@@ -10,6 +10,7 @@ router.get('/cargas/periodos/:id_periodo'/*, authenticate*/, profesoresControlle
 router.get('/cargas'/*, authenticate*/, profesoresController.getCursosMaterias);
 router.get('/cargas/:id_carga/logros'/*, authenticate*/,profesoresController.getLogros);
 router.get('/logros/:id_logro/actividades'/*, authenticate*/,profesoresController.getActividades);
+router.get('/actividades/:id_actividad',profesoresController.getActividadById)
 router.delete('/logros/:id_logro'/*, authenticate*/,profesoresController.deleteLogro);
 router.delete('/actividades/:id_actividad'/*, authenticate*/,profesoresController.deleteActividad);
 router.post('/logros/actividades'/*, authenticate*/,profesoresController.getActividadesByLogros);

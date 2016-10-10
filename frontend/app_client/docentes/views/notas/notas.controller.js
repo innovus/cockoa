@@ -28,10 +28,11 @@ function showLogroController($scope,$uibModalInstance,logro) {
 
 }
 
-showActividadController.$inject= ['$scope','$uibModalInstance','cabecera'];
-function showActividadController($scope,$uibModalInstance,cabecera) {
-  $scope.cabecera = cabecera
-  console.log(cabecera)
+showActividadController.$inject= ['$scope','$uibModalInstance','actividad'];
+function showActividadController($scope,$uibModalInstance,actividad) {
+  $scope.actividad = actividad
+  console.log("ya en el modal")
+  console.log(actividad)
   $scope.ok = function(){
     $uibModalInstance.close();
   }
@@ -148,20 +149,30 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 
   $scope.showActividad = function(cabecera){
     if(cabecera.tipo==1){
-
-      var modalInstance = null;
-      modalInstance = $uibModal.open({
-        animation: true,
-        backdrop: "static",
-        templateUrl: '/views/notas/actividad_modal.html',
-        controller: 'showActividadController',
-        size: 'sm',
-        resolve: {
-          cabecera: function () {
-            return cabecera
+      actividadData.findActividadById(cabecera.id)
+      .success(function(data){
+        console.log(data);
+        var modalInstance = null;
+        modalInstance = $uibModal.open({
+          animation: true,
+          backdrop: "static",
+          templateUrl: '/views/notas/actividad_modal.html',
+          controller: 'showActividadController',
+          size: 'sm',
+          resolve: {
+            actividad: function () {
+              return data[0]
+            }
           }
-        }
-      });
+        });
+
+
+      }).error(function(error){
+        console.log(error)
+
+      })
+
+
 
     }
 

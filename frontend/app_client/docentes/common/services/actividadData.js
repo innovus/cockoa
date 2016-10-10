@@ -6,16 +6,12 @@
     actividadData.$inject=['$http','$q','CONFIG'];
     function actividadData($http,$q,CONFIG){
         var findActividadesByLogro= function(id_logro){
-           /* var defered = $q.defer();
-            var promise = defered.promise;*/
             return $http.get(CONFIG.http_address+'/api/docentes/logros/'+id_logro+'/actividades/')
-               /* .success(function(data){
-                    defered.resolve(data)
 
-                }).error(function(error){
-                    defered.reject(error)
-                });
-                return promise;   */ 
+        };
+        var findActividadById= function(id_actividad){
+            return $http.get(CONFIG.http_address+'/api/docentes/actividades/'+id_actividad)
+
         };
          var findActividadesByLogros= function(ids_logro){
             console.log("entro al service")
@@ -84,6 +80,7 @@
             createActividad: createActividad,
             findActividadesByLogros:findActividadesByLogros,
             deleteActividad: deleteActividad,
+            findActividadById:findActividadById,
         };
     }
 })();

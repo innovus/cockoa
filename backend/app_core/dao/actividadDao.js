@@ -2,15 +2,21 @@ var Models=require("../models/index");
 var sequelize = Models.sequelize;
 
 var queryFindActividadesByLogro = "SELECT * FROM actividad WHERE id_logro  = $id_logro ORDER BY id_actividad";
+var queryFindActividadById = "SELECT * FROM actividad WHERE id_actividad = $id_actividad "
 
 var queries={
   "actividad":{
     'findActividadesByLogro':queryFindActividadesByLogro, 
+    'findActividadById':queryFindActividadById,
   }
 };
 var findActividadesByLogro = function(id_logro){
   return sequelize.query(queries.actividad.findActividadesByLogro,{bind:{id_logro:id_logro},type:sequelize.QueryTypes.SELECT})
 };
+
+var findActividadById = function(id_actividad){
+  return sequelize.query(queries.actividad.findActividadById,{bind:{id_actividad:id_actividad},type:sequelize.QueryTypes.SELECT})
+}
 
 var findActividadesByLogros = function(ids_logro){
   console.log("este es ids_logro")
@@ -96,3 +102,4 @@ module.exports.createActividad = createActividad;
 module.exports.updateDescripcionActividad= updateDescripcionActividad;
 module.exports.findActividadesByLogros=findActividadesByLogros
 module.exports.deleteActividad=deleteActividad;
+module.exports.findActividadById = findActividadById;

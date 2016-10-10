@@ -370,10 +370,21 @@ function updateDescripcionActividad(req,res){
 	})
 
 }
+function getActividadById(req,res){
+	ActividadDao.findActividadById(req.params.id_actividad)
+	.then(function(data){
+		respuesta.sendJsonResponse(res,200,data);
+
+	}).catch(function(error){
+		respuesta.sendJsonResponse(res,500,{});
+
+	})
+}
 
 function getNotasLogros(req,res){
 	Nota_logroDao.findNotasLogrosByCarga(req.params.id_carga)
 	.then(function(data){ 
+
 
 		var estudiantes = {};
 		var notas_logros = {};
@@ -447,6 +458,7 @@ module.exports = {
 	deleteActividad:deleteActividad,
 	updatePorcentajesLogros:updatePorcentajesLogros,
 	createLogro: createLogro,
+	getActividadById:getActividadById,
 
 }
 
