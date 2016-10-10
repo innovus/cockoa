@@ -1,7 +1,7 @@
 
   <navigation></navigation>
 
-  <!-- ------------------------------- barra lateral
+  <!-- barra lateral
   -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -18,18 +18,19 @@
         </div>
     </div>
 
-    <!-- sidebar menu: : style can be found in sidebar.less -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
         <li class="header">Materias</li>
-        <li ng-repeat="carga in cargas">
-
-        <a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a><
-          
-        </li>
-
-
+        <li  class="treeview" ng-repeat="materia in materias">
+          <a ><span>{{materia.nombre_materia}} </span><i class="fa fa-angle-left pull-right"></i></a>
+          <ul class="treeview-menu">
+             <li ng-repeat="carga in materia.cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}</a></li>
+          </ul>
+          </li>
 
     </ul>
+
+
     </section>
     <!-- /.sidebar -->
 </aside>
@@ -65,6 +66,7 @@
             <div class="panel-heading">
               Listado
             </div>
+            
             <div class="panel-body">
 
               <div class="row">
@@ -77,12 +79,12 @@
                       <th rowspan="2">Cod</th>
                       <th rowspan="2">Nombres y Apellidos</th>
                      
-                      <th ng-repeat="logro in logros " colspan = "{{logro.actividades.length + 1}}">Logro {{$index + 1}} </th>
+                      <th  ng-repeat="logro in logros " ng-click="showLogro(logro)" colspan = "{{logro.actividades.length + 1}}">Logro {{$index + 1}} </th>
                       
                     </tr>
                     <tr>
                           
-                        <th ng-repeat="cabecera in cabeceras track by $index">{{cabecera.mostrar}}</th>
+                        <th ng-repeat="cabecera in cabeceras track by $index" ng-click="showActividad(cabecera)" >{{cabecera.mostrar}}</th>
                   
                     </tr>
 

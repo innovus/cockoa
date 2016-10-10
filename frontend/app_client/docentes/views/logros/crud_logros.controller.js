@@ -3,7 +3,7 @@ var app = angular.module('docentes');//creamos el modulo pokedex y le pasamos ar
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
-app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStore', '$cookies','CONFIG','periodoData','actividadData','logroData','$mdBottomSheet','$mdToast','$timeout',function($scope,$http,$uibModal,$cookieStore,$cookies,CONFIG,periodoData,actividadData,logroData, $mdBottomSheet,$mdToast,$timeout){
+app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStore', '$cookies','CONFIG','periodoData','actividadData','logroData','$mdBottomSheet','$mdToast','$timeout','$filter',function($scope,$http,$uibModal,$cookieStore,$cookies,CONFIG,periodoData,actividadData,logroData, $mdBottomSheet,$mdToast,$timeout,$filter){
 
   $scope.periodos = [];
   $scope.periodo_sel = null;
@@ -13,9 +13,11 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
   $scope.estudiantes=[];
   $scope.date_asistencia = new Date();
   $scope.carga_seleccionada = null;
+  $scope.materias=[];
   $scope.selected = {
     ids_estudiantes:[]
   };
+  
 
 
     //Trae el periodo Actual
@@ -60,6 +62,19 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
         periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo)
         .success(function(data) {
           $scope.cargas = data;
+          //recorremos las cargas para organizarlas para el acordeon del sliderbar por materias
+          angular.forEach(data,function(carga){
+            var selected = [];
+            //primero validamos si el id de la materia ya esta en materias
+            filtro = $filter('filter')($scope.materias, {id_materia: carga.id_materia});
+
+            //me hace un busqueda por id_materia
+
+            if(filtro[0] == undefined){
+              selected = $filter('filter')(data, {id_materia: carga.id_materia});
+              $scope.materias.push({'id_materia':carga.id_materia, 'nombre_materia':carga.nombre_materia,'cargas':selected})
+            }
+          })//cierra forEach
 
         })
         .error(function(data) {
@@ -101,8 +116,22 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     });
     console.log(modalInstance)
   };
-    $scope.open_nuevo_logro = function (size,id_carga_docente) {
+  $scope.create_nuevo_logro = function () {
+    console.log("entreo a create")
+      $scope.inserted = {
+        //id_actividad: 100,
+        id_carga_docente: $scope.carga_seleccionada.id_carga_docente,
+        
+        porcentaje_logro: "0",
+        nombre_logro: "Prueba",
+        descripcion_logro: null,
+        tipo:0,
+        vigente_logro:"S",
+      };
+      $scope.logros.push($scope.inserted);
+    };
 
+/*
 
       var modalInstance = $uibModal.open({
         animation: true,
@@ -121,7 +150,8 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
       //$ctrl.selected = selectedItem;
     });
 
-  };
+  };*/
+
       $scope.open_update_logros = function (size) {
 
 
@@ -231,21 +261,27 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
       cb([]);
     });
   }
-  $scope.deleteLogro = function (id_logro){
-  logroData.deleteLogro(id_logro)
-  .success(function(data){
-    swal("Ok","se elimino con exito","success");
-    console.log("elimino con exito")
-
-  }).error(function(error){
-    if(error.msg.name == "SequelizeForeignKeyConstraintError" && error.msg.parent.table =="nota_logro"){
-        swal("Oops...","Debe eliminar primero las notas de los estudiantes","error");
-    }else  if(error.msg.name == "SequelizeForeignKeyConstraintError" && error.msg.parent.table =="actividad"){
-      swal("Oops...","Debe eliminar primero las actividades","error");
+  $scope.deleteLogro = function (logro,index){
+    //el logro debe tener porcentaje 0 para eliminarse
+    if(logro.porcentaje_logro != 0){
+      swal("Oops...","Debe tener el porcentaje en 0","error");
     }else{
-      swal("Oops...","Algo aslio mal","error");
+      logroData.deleteLogro(logro.id_logro)
+      .success(function(data){
+        $scope.logros.splice(index, 1);
+
+        swal("Ok","se elimino con exito","success");
+        console.log("elimino con exito")
+      }).error(function(error){
+        if(error.msg.name == "SequelizeForeignKeyConstraintError" && error.msg.parent.table =="nota_logro"){
+          swal("Oops...","Debe eliminar primero las notas de los estudiantes","error");
+        }else  if(error.msg.name == "SequelizeForeignKeyConstraintError" && error.msg.parent.table =="actividad"){
+          swal("Oops...","Debe eliminar primero las actividades","error");
+        }else{
+          swal("Oops...","Algo aslio mal","error");
+        }
+      });
     }
-  })
 }
 
 
@@ -267,6 +303,7 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
 
   $scope.actividades = actividades;
   $scope.id_logro = id_logro;
+  $scope.actividadesPorEliminar = [];
   console.log(actividades)
 
 
@@ -277,6 +314,29 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
     fecha: $scope.fechas[0]
   };*/
 
+
+  $scope.deleteActividad = function (actividad,index){
+    console.log(actividad)
+    
+    $scope.actividadesPorEliminar.push(actividad);
+    $scope.actividades.splice(index, 1); 
+
+/*
+        actividadData.deleteActividad(actividad.id_actividad)
+        .success(function(data){
+          $scope.actividades.splice(index, 1);
+
+          swal("Ok","se elimino con exito","success");
+          console.log("elimino con exito")
+
+        }).error(function(error){
+          if(error.msg.name == "SequelizeForeignKeyConstraintError" && error.msg.parent.table =="nota_actividad"){
+              swal("Oops...","Debe eliminar primero las notas de los estudiantes","error");
+          }else{
+            swal("Oops...","Algo aslio mal","error");
+          }
+        })*/
+}
 
   $scope.checkPorcentaje = function(){
     
@@ -377,14 +437,41 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
     };
     $scope.actividades.push($scope.inserted);
   };
-  $scope.saveActividad = function(data, actividad){
+  $scope.validarPorcentaje = function(data){
+    console.log(data);
+   // console.log(actividad)
+    console.log("union")
+    //angular.extend(actividad, data );
+    //console.log(actividad)
+    if(isNaN(data)){
+      return "Debe ingresar un numero";
+      console.log("entro")
+    }else if(parseFloat(data) > 100 || parseFloat(data) < 0){
+      return "El Porcentaje debe estar entre 0 y 100 ";
+      console.log("no entro")
+    }
+
+
+  }
+
+  //esta funcion la usamos cuando le damos ok en una actividad
+
+  $scope.guardarActividadTemporal = function(data, actividad){  
     console.log(data);
     console.log(actividad)
     console.log("union")
     angular.extend(actividad, data );
     console.log(actividad)
+    /*
+    if(isNaN(data.porcentaje_actividad)){
+     // return "Tien que ingresar un numero";
+      console.log("entro")
+    }else{
+      console.log("no entro")
+
+    }*/
     
-    if(actividad.tipo == 0){
+  /*  if(actividad.tipo == 0){
       actividadData.createActividad(actividad)
       .success(function(mensaje){
         console.log(mensaje);
@@ -424,21 +511,25 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
         return  error;
       });
 
-    }
+    }*/
   
   }
 
-    $scope.cancelform = function(actividad,index) {
-      if(actividad.descripcion_actividad == null){
-        $scope.actividades.splice(index, 1);
+  $scope.cancelform = function(actividad,index) {
+    if(actividad.descripcion_actividad == null){
+      $scope.actividades.splice(index, 1);
 
-      }
-      console.log(actividad)
-      console.log(index)      
+    }
+    console.log(actividad)
+    console.log(index)      
   };
 
   $scope.ok = function () {
-    console.log(editableForm)
+    console.log("actividades por eliminar");
+    console.log($scope.actividadesPorEliminar)
+    console.log("actividades");
+    console.log($scope.actividades)
+  //  console.log(editableForm)
     $uibModalInstance.close();
   };
 
@@ -492,7 +583,21 @@ app.controller('nuevo_logroCtrl', function($scope,$uibModalInstance,logroData,id
 app.controller('updatePorcentajesCtrl', function($scope, $uibModalInstance,logroData,logros) {
   $scope.logros = logros
   //variable para guardar los logros como llegan y en caso de darle cancelar sera usada para devolver los logros como llegaron al principio
-  $scope.logrosAntes = $scope.logros;
+ 
+  var logrosAntes = []
+
+  angular.forEach($scope.logros,function(logro){
+    logro_copia = {
+      id_logro:logro.id_logro,
+      id_carga_docente:logro.id_carga_docente,
+      descripcion_logro:logro.descripcion_logro,
+      porcentaje_logro:logro.porcentaje_logro,
+      vigente_logro: logro.vigente_logro
+    }
+    logrosAntes.push(logro_copia);
+  })
+
+  var validacion = 0; //Variables 
 
 
   $scope.ok = function () {
@@ -504,18 +609,24 @@ app.controller('updatePorcentajesCtrl', function($scope, $uibModalInstance,logro
       if(isNaN(logro.porcentaje_logro)){
         console.log("entro a isNaN")
         console.log(logro.porcentaje_logro)
-        swal("Ups....","Debes ingresar numeros","error");
 
-        console.log($scope.logrosAntes)
-        $uibModalInstance.close($scope.logrosAntes)
-        return;
+        validacion = 1;
+        
 
       }else{
 
          sumatoria = sumatoria + parseFloat(logro.porcentaje_logro);
        }
      })
+    if(validacion == 1){
 
+        swal("Ups....","Debes ingresar numeros","error");
+
+        console.log("logros antes")
+        console.log(logrosAntes)
+        $uibModalInstance.close(logrosAntes)
+
+    }else{
       console.log("sumatoria")
       console.log(sumatoria)
       console.log("antes de if");
@@ -546,45 +657,17 @@ app.controller('updatePorcentajesCtrl', function($scope, $uibModalInstance,logro
         swal("Oops...","Debe sumar 100 el porcentaje","error");
         
       }
-     
-    
+    }
 
-    /*console.log(id_carga_docente)
-    console.log(descripcion)
-    logro = {id_carga_docente:id_carga_docente,descripcion_logro:descripcion, porcentaje_logro:0}
-
-     logroData.createLogro(logro)
-      .success(function(mensaje){
-        console.log(mensaje);
-         swal("Ok",mensaje.msg,"success");
-          angular.extend(logro,mensaje.id_logro)
-          console.log(logro)
-         $uibModalInstance.close(logro);
-        
-
-      }).error(function(error){
-        if(error.status == 2){
-          swal("Oops...",error.msg,"error");
-          $uibModalInstance.dismiss('cancel');
-          
-        }else{
-          swal("Oops..."," Algo salio mal!","error");
-          $uibModalInstance.dismiss('cancel');
-
-        }
-        
-        console.log(error);
-        
-      });*/
-      console.log($scope.logros)
+      
 
  
   };
 
   $scope.cancel = function () {
    // $uibModalInstance.dismiss('cancel');
-   console.log($scope.logrosAntes)
-    $uibModalInstance.close($scope.logrosAntes)
+   console.log(logrosAntes)
+    $uibModalInstance.close(logrosAntes)
   }
 
 

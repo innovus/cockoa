@@ -82,7 +82,8 @@
             updatePorcentajes:updatePorcentajes,
             updateDescripcion:updateDescripcion,
             createActividad: createActividad,
-            findActividadesByLogros:findActividadesByLogros
+            findActividadesByLogros:findActividadesByLogros,
+            deleteActividad: deleteActividad,
         };
     }
 })();

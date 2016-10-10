@@ -17,9 +17,12 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
         <li class="header">Materias</li>
-        <li ng-repeat="carga in cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a></li>
-
-
+        <li  class="treeview" ng-repeat="materia in materias">
+          <a ><span>{{materia.nombre_materia}} </span><i class="fa fa-angle-left pull-right"></i></a>
+          <ul class="treeview-menu">
+             <li ng-repeat="carga in materia.cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}</a></li>
+          </ul>
+          </li>
 
     </ul>
     </section>

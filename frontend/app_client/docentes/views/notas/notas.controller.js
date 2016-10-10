@@ -6,7 +6,9 @@ angular
 .run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 })
-.controller('docentes_notasController',docentes_notasController);
+.controller('docentes_notasController',docentes_notasController)
+.controller('showLogroController',showLogroController)
+.controller('showActividadController',showActividadController)
 
 /*
 run(function(editableOptions) {
@@ -14,9 +16,35 @@ run(function(editableOptions) {
 })
 .controller('docentes_notasController',docentes_notasController);
 */
+showLogroController.$inject= ['$scope','$uibModalInstance','logro'];
+function showLogroController($scope,$uibModalInstance,logro) {
+  $scope.logro = logro
+  $scope.ok = function(){
+    $uibModalInstance.close();
+  }
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
 
-docentes_notasController.$inject= ['$scope','$http','$cookieStore','$cookies','CONFIG','periodoData','estudianteData','actividadData','logroData','nota_actividadData','nota_logroData','$filter'];
-function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,periodoData,estudianteData,actividadData,logroData,nota_actividadData,nota_logroData,$filter) {
+}
+
+showActividadController.$inject= ['$scope','$uibModalInstance','cabecera'];
+function showActividadController($scope,$uibModalInstance,cabecera) {
+  $scope.cabecera = cabecera
+  console.log(cabecera)
+  $scope.ok = function(){
+    $uibModalInstance.close();
+  }
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+
+}
+
+
+
+docentes_notasController.$inject= ['$scope','$http','$cookieStore','$cookies','CONFIG','periodoData','estudianteData','actividadData','logroData','nota_actividadData','nota_logroData','$filter','$uibModal'];
+function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,periodoData,estudianteData,actividadData,logroData,nota_actividadData,nota_logroData,$filter,$uibModal) {
 
   $scope.primer_nombre = "Jorge";
   $scope.primer_apellido = "Viveros";
@@ -41,6 +69,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 
   $scope.notas_logros = null;
   $scope.notas_actividades = null;
+  $scope.materias = []
 
 
   //Trae el periodo Actual
@@ -70,6 +99,19 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
         periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo)
         .success(function(data) {
           $scope.cargas = data;
+          //recorremos las cargas para organizarlas para el acordeon del sliderbar por materias
+          angular.forEach(data,function(carga){
+            var selected = [];
+            //primero validamos si el id de la materia ya esta en materias
+            filtro = $filter('filter')($scope.materias, {id_materia: carga.id_materia});
+
+            //me hace un busqueda por id_materia
+
+            if(filtro[0] == undefined){
+              selected = $filter('filter')(data, {id_materia: carga.id_materia});
+              $scope.materias.push({'id_materia':carga.id_materia, 'nombre_materia':carga.nombre_materia,'cargas':selected})
+            }
+          })//cierra forEach
         })
         .error(function(data) {
           console.log('Error: ' + data);
@@ -87,6 +129,71 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
     console.log(error);
   });
 
+//funcion que se utiliza al dar click en la cabecera de un logro y muestra el logro en la ventana modal
+  $scope.showLogro = function(logro){
+    var modalInstance = null;
+      modalInstance = $uibModal.open({
+        animation: true,
+        backdrop: "static",
+        templateUrl: '/views/notas/logro_modal.html',
+        controller: 'showLogroController',
+        size: 'sm',
+        resolve: {
+          logro: function () {
+            return logro
+          }
+        }
+      });
+  }
+
+  $scope.showActividad = function(cabecera){
+    if(cabecera.tipo==1){
+
+      var modalInstance = null;
+      modalInstance = $uibModal.open({
+        animation: true,
+        backdrop: "static",
+        templateUrl: '/views/notas/actividad_modal.html',
+        controller: 'showActividadController',
+        size: 'sm',
+        resolve: {
+          cabecera: function () {
+            return cabecera
+          }
+        }
+      });
+
+    }
+
+  }
+       //funcion q abre ventana modal
+  $scope.open = function (size,id_logro) {
+
+    //$http.get(CONFIG.http_address+'/api/docentes/logros/'+id_logro+'/actividades/')
+    var modalInstance = null;
+     actividadData.findActividadesByLogro(id_logro)
+    .success(function(data){
+      modalInstance = $uibModal.open({
+        animation: true,
+        backdrop: "static",
+        templateUrl: '/views/logros/actividades.html',
+        controller: 'actividadesModalController',
+        size: size,
+        resolve: {
+          actividades: function () {
+            return data
+          },
+          id_logro: function(){
+            return id_logro
+          }
+        }
+      });
+      console.log(modalInstance)
+    }).error(function(error){
+      console.log(error);
+    });
+    console.log(modalInstance)
+  };
 
 
       //funcion que se la usa cuando le da click en un tab

@@ -2,7 +2,7 @@
 //(function (){
 var app = angular.module('docentes');//creamos el modulo pokedex y le pasamos array con las dependencias
 
-app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CONFIG','periodoData','inasistenciaData','estudianteData',function($scope,$http,$uibModal,$log,CONFIG,periodoData,inasistenciaData,estudianteData){
+app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','$filter','CONFIG','periodoData','inasistenciaData','estudianteData',function($scope,$http,$uibModal,$log,$filter,CONFIG,periodoData,inasistenciaData,estudianteData){
 
   $scope.fechas = [];
   $scope.estudiantes=[];
@@ -18,6 +18,7 @@ app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CO
   $scope.periodo_sel = null;
   $scope.activeTabIndex = 0;
   $scope.periodo_actual = null;
+  $scope.materias = [];
 
   //option de faltas justificada o no
 
@@ -33,43 +34,60 @@ app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','CO
     console.log("entro a perdiodo actual");
     console.log($scope.periodo_actual)
 
+      //Trae todos los periodos y pone el actual
+    periodoData.findPeriodos()
+    .success(function(data){
+      $scope.periodos = data;  
+
+      console.log("periodo actual")
+
+      console.log($scope.periodo_actual);
+      //recorre el vector de todos los periodos 
+      for (var i = 0; i < data.length ; i++) {
+        //entra cuando el periodo actual es encontrado en el vector
+        if(data[i].id_periodo == $scope.periodo_actual.id_periodo){
+          //selecciona el periodo actual en las tabs
+          $scope.activeTabIndex = i;
+          //
+          $scope.periodo_sel = $scope.periodos[i];
+
+           // Trae todas las cargas de un periodo seleccionado
+          periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo)
+          .success(function(data) {
+            $scope.cargas = data;
+            console.log("cargas")
+            console.log($scope.cargas)
+            //recorremos las cargas para organizarlas para el acordeon del sliderbar por materias
+            angular.forEach(data,function(carga){
+              var selected = [];
+              //primero validamos si el id de la materia ya esta en materias
+              filtro = $filter('filter')($scope.materias, {id_materia: carga.id_materia});
+
+              //me hace un busqueda por id_materia
+
+              if(filtro[0] == undefined){
+                selected = $filter('filter')(data, {id_materia: carga.id_materia});
+                $scope.materias.push({'id_materia':carga.id_materia, 'nombre_materia':carga.nombre_materia,'cargas':selected})
+              }
+            })//cierra forEach
+            console.log("materias")
+            console.log($scope.materias)
+          })
+          .error(function(data) {
+            console.log('Error: ' + data);
+          });
+        }//cierra el if
+      }//cierra for
+    }).error(function(error){
+      console.log(error);
+      $scope.periodos = []
+    });
+
   }).error(function(error){
     console.log(error);
   });
 
-  //Trae todos los periodos y pone el actual
-  periodoData.findPeriodos()
-  .success(function(data){
-    $scope.periodos = data;  
 
-    console.log("periodo actual")
-
-    console.log($scope.periodo_actual);
-    //recorre el vector de todos los periodos 
-    for (var i = 0; i < data.length ; i++) {
-      //entra cuando el periodo actual es encontrado en el vector
-      if(data[i].id_periodo == $scope.periodo_actual.id_periodo){
-        //selecciona el periodo actual en las tabs
-        $scope.activeTabIndex = i;
-        //
-        $scope.periodo_sel = $scope.periodos[i];
-
-         // Trae todas las cargas de un periodo seleccionado
-        periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo)
-        .success(function(data) {
-          $scope.cargas = data;
-          console.log("cargas")
-          console.log($scope.cargas)
-        })
-        .error(function(data) {
-          console.log('Error: ' + data);
-        });
-       }//cierra el if
-     }//cierra for
-   }).error(function(error){
-    console.log(error);
-    $scope.periodos = []
-  });
    /////////////////////
 
 

@@ -15,12 +15,16 @@
         </div>
     </div>
 
-    <!-- sidebar menu: : style can be found in sidebar.less -->
+
+        <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
         <li class="header">Materias</li>
-        <li ng-repeat="carga in cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a></li>
-
-
+        <li  class="treeview" ng-repeat="materia in materias">
+          <a ><span>{{materia.nombre_materia}} </span><i class="fa fa-angle-left pull-right"></i></a>
+          <ul class="treeview-menu">
+             <li ng-repeat="carga in materia.cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}</a></li>
+          </ul>
+          </li>
 
     </ul>
     </section>
@@ -53,6 +57,54 @@
             <div class='md-padding' flex-xs flex-gt-xs="" layout="column">
 
 
+
+            <!-- tabla -->
+                <table class="table  table-hover table-condensed">
+      <thead>
+        <tr>
+          <th class="col-md-1">No</th>
+          <th class="col-md-7">Descripcion</th>
+          <th class="col-md-2">Porcentaje
+          </th>
+          <th class="col-md-2" >Acciones</th>
+        </tr>
+      </thead>
+      <tbody >
+        <tr ng-repeat="logro in logros">
+          <td>{{($index + 1)}}</td>
+          <td>
+            <!-- editable username (text with validation) -->
+            <span editable-textarea="logro.descripcion_logro" e-name="descripcion_logro" e-form="rowform" >
+              {{ logro.descripcion_logro || 'Vacia' }}
+            </span>
+          
+          </td>
+          <td>
+            <span editable-text="logro.porcentaje_logro" e-name="porcentaje_logro"  e-form="rowform" >
+              {{ logro.porcentaje_logro || 'Vacio' }}%
+            </span>
+          </td>
+          <th style="white-space: nowrap="><!-- form -->
+            <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onbeforesave="savelogro($data, logro)" shown="inserted == logro"  oncancel="cancelform(logro, $index)">
+              <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                Ok
+              </button>
+              <button onbeforesave="prueba($data, logro)"  type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                cancel
+              </button>
+            </form>
+            <div class="buttons" ng-show="!rowform.$visible">
+             <a href="#" class="btn btn-default" role="button" ng-click="open('lg',logro.id_logro)" >Ver</a>
+              <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+              <button class="btn btn-danger" ng-click="deletelogro(logro,$index)">del</button>
+            </div>  
+          </th>
+        </tr>
+      </tbody>
+    </table>
+
+<!--
+
               <md-card ng-repeat="logro in logros"  md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch >
                 <form editable-form name="editableForm" onbeforesave="saveLogro(logro)"  class="form-buttons form-inline" >
                   <md-card-title>
@@ -69,25 +121,22 @@
                       <span ng-show="!editableForm.$visible">
                         <a href="#" class="btn btn-default" role="button" ng-click="open('lg',logro.id_logro)" >Ver</a>
                         <button type="button" class="btn btn-default" ng-click="editableForm.$show()" >Editar</button>
-                        <a href="#" ng-click="deleteLogro(logro.id_logro)" class="btn btn-danger" role="button">Eliminar</a>
+                        <a href="#" ng-click="deleteLogro(logro,$index)" class="btn btn-danger" role="button">Eliminar</a>
                       </span>
 
-                          <!-- button to show form -->
-    
-                          <!-- buttons to submit / cancel form -->
                       <span ng-show="editableForm.$visible">
                         <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">Guardar</button>
                         <button type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">Cancel</button>
                       </span>      
                     </div>   
-                      <!--<md-button>Ver</md-button>
-                      <md-button>Editar</md-button>-->
+
                   </md-card-actions>
                 </form>
               </md-card>
-                          <div class="bottom-sheet-demo inset" layout="row" layout-sm="column" layout-align="center" >
-              <md-button flex="50" class="md-raised" ng-click="open_nuevo_logro('lg',carga_seleccionada.id_carga_docente)">Agregar Logro</md-button>
-              <md-button flex="50" class="md-raised" ng-click="open_update_logros('sm')">Actualizar Porcentaje</md-button>
+              -->
+              <div class="bottom-sheet-demo inset" layout="row" layout-sm="column" layout-align="center" >
+              <md-button flex="50" class="md-raised" ng-click=" create_nuevo_logro()">Agregar Logro</md-button>
+              <md-button flex="50" class="md-raised" ng-click="open_update_logros('sm')">Guardar</md-button>
             </div>
             </div>
 
