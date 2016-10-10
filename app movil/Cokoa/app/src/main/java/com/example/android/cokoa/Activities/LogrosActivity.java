@@ -38,6 +38,7 @@ public class LogrosActivity extends AppCompatActivity {
         Bundle parametro = new Bundle();
         parametro.putString("id_materia", id_materia);
         parametro.putString("periodo_actual", "null");
+        parametro.putString("sheckPeriodo", "false");//sheckPeriodo
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -66,7 +67,7 @@ public class LogrosActivity extends AppCompatActivity {
         List<String> list = new ArrayList<String>();
         //periodo_actual
         periodo_actual = getIntent().getStringExtra("periodo_actual");
-        int numEntero = Integer.parseInt(periodo_actual)+1;
+        int numEntero = Integer.parseInt(periodo_actual);
         list.add("Periodo");
         for(int i=1;i<=numEntero;i++){
             list.add("Periodo: "+i);
@@ -91,19 +92,20 @@ public class LogrosActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
 
-                String pos = Integer.toString(position);
+
+
 
                 String s = Long.toString(id);
                 if(position!=0){
                     Toast.makeText(parent.getContext(), "Selected: " + s, Toast.LENGTH_LONG).show();
                     aux = 1;
                     id_materia = getIntent().getStringExtra("id_materia");
-                    periodo_actual = getIntent().getStringExtra("id_materia");
+                    periodo_actual = getIntent().getStringExtra("periodo_actual");
                     Bundle parametro = new Bundle();
                     parametro.putString("id_materia", id_materia);
                     parametro.putString("periodo_actual", Integer.toString(position));
+                    parametro.putString("sheckPeriodo", "true");
                     fragmentManager = getSupportFragmentManager();
                     fragmentTransaction = fragmentManager.beginTransaction();
                     LogrosFragment logrosFragment = new LogrosFragment();
@@ -111,24 +113,9 @@ public class LogrosActivity extends AppCompatActivity {
                     fragmentTransaction.replace(R.id.fragments, logrosFragment);
                     fragmentTransaction.commit();
                 }
-                else {
-                    if(aux==1){
-                        Toast.makeText(parent.getContext(), "Selected: " + s, Toast.LENGTH_LONG).show();
-                        id_materia = getIntent().getStringExtra("id_materia");
-                        Bundle parametro = new Bundle();
-                        parametro.putString("id_materia", id_materia);
-                        parametro.putString("periodo_actual", "null");
-                        fragmentManager = getSupportFragmentManager();
-                        fragmentTransaction = fragmentManager.beginTransaction();
-                        LogrosFragment logrosFragment = new LogrosFragment();
-                        logrosFragment.setArguments(parametro);
-                        fragmentTransaction.replace(R.id.fragments, logrosFragment);
-                        fragmentTransaction.commit();
-                    }
 
-                }
 
-                // Showing selected spinner item
+
 
             }
 
@@ -160,23 +147,7 @@ public class LogrosActivity extends AppCompatActivity {
             }
 
 
-        /*if(id==3){
-            /*Toast toast1 =
-                        Toast.makeText(activity, "status 400 sql vacio", Toast.LENGTH_SHORT);
-                toast1.show();
-            id_materia = getIntent().getStringExtra("id_materia");
-            Bundle parametro = new Bundle();
-            parametro.putString("id_materia", id_materia);
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            LogrosFragment logrosFragment = new LogrosFragment();
-            logrosFragment.setArguments(parametro);
-            fragmentTransaction.replace(R.id.fragments, logrosFragment);
-            fragmentTransaction.commit();
-            Toast toast = Toast.makeText(this, "opcion 3",Toast.LENGTH_LONG);
-            toast.show();
-        }*/
-       // return super.onOptionsItemSelected(item);
+
 
     }
 

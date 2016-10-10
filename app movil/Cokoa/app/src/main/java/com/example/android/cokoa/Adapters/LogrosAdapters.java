@@ -64,7 +64,12 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
         viewHolder.descLogro.setText(logros.get(position).getDesc_logro());
-        viewHolder.numeroPerido.setText(logros.get(position).getNumero_periodo());
+        if (logros.get(position).getNota_logro() < 0) {
+            viewHolder.numeroPerido.setText("---");
+        }else{
+            viewHolder.numeroPerido.setText(String.valueOf(logros.get(position).getNota_logro()));
+        }
+
         //viewHolder.feed = materia.get(position);
         viewHolder.logro = logros.get(position);
     }

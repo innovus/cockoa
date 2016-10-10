@@ -61,7 +61,7 @@ public class TotalInasistenciaAsyntask extends AsyncTask<Void, Void, ArrayList<I
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "inasistencias/total_inasistencia/");
+            URL url = new URL(serverUrls + "inasistencias/cantida/inasistencia/materia");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -152,7 +152,7 @@ public class TotalInasistenciaAsyntask extends AsyncTask<Void, Void, ArrayList<I
                 toast1.show();
 
             } else {
-                mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view);
+                mRecyclerView = (RecyclerView) activity.findViewById(R.id.cantidad_inasistencia_materiass);
                 mRecyclerView.setHasFixedSize(true);
                 //usR UN ADMINISTRADOR PARA LINEARLAYOUT
                 mLayoutManager = new LinearLayoutManager(activity);

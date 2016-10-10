@@ -33,7 +33,7 @@ public class LoginAsyntask extends AsyncTask<String, Void, String[]> {
     private EditText editCodigo, editPassword;
     private Activity activity;
     // String serverUrls = com.acarolabs.a3dent.AppConstants.serverUrl;
-    String serverUrls = AppConstants.serverUrl;
+    String serverUrls = AppConstants.serverUrls;
     String parametro1 = AppConstants.parametro1;
     String parametro2 = AppConstants.parametro2;
     private final String LOG_TAG = LoginAsyntask.class.getSimpleName();

@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
+    android:gravity="center"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:minHeight="?android:attr/listPreferredItemHeight"
@@ -12,12 +13,6 @@
         android:layout_width="200dp"
         android:layout_height="100dp"
         card_view:cardCornerRadius="4dp">
-
-
-
-
-
-
         <LinearLayout
             android:layout_gravity="left"
             android:paddingTop="5dp"

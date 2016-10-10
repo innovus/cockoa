@@ -53,6 +53,41 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
 
     @Override
     protected ArrayList<NotaActividad> doInBackground(String... params) {
+
+        if(ActividadLogro()!=null){
+            ArrayList<NotaActividad> actividadLogro = ActividadLogro();
+            if(notasActividadLogro()!=null){
+                ArrayList<NotaActividad> notaActividads = notasActividadLogro();
+
+                for(int i=0;i<actividadLogro.size();i++){
+                    String id_actividad=actividadLogro.get(i).getIdnotaActividad();
+                    for (int j =0;j<notaActividads.size();j++){
+                        String id_nota_actividad = notaActividads.get(j).getIdnotaActividad();
+                        if(id_actividad.equals(id_nota_actividad)){
+                            actividadLogro.get(i).setNotaActividad(notaActividads.get(j).getNotaActividad());
+                        }else {
+                            actividadLogro.get(i).setNotaActividad("---");
+                        }
+                    }
+
+                }
+                //actividadLogro.get(0).setNotaActividad("5.5");
+                return actividadLogro;
+            }else {
+                for(int i=0;i<actividadLogro.size();i++){
+                    actividadLogro.get(i).setNotaActividad("---");
+                }
+                return actividadLogro;
+            }
+        }
+
+
+
+        return null;
+
+    }
+
+    public ArrayList<NotaActividad> ActividadLogro(){
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -65,7 +100,7 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
             //http://localhost:3000/estudiantes/materias/notalogro/1-200
-            URL url = new URL(serverUrls + "estudiantes/materias/notalogro/"+params[0]+"-"+params[1]);
+            URL url = new URL(serverUrls + "estudiantes/logros/44216/actividades");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -151,20 +186,13 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
                 Toast toast1 =
                         Toast.makeText(activity, "status 400 sql vacio", Toast.LENGTH_SHORT);
                 toast1.show();
-                mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_logro);
 
-                textView.setText(activity.getResources().getString(R.string.emptyNotasActividades));
-
-
-                imageView.setVisibility(View.VISIBLE);
-                textView.setVisibility(View.VISIBLE);
-                mRecyclerView.setVisibility(View.GONE);
 
             }else {
-                mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_logro);
-                imageView.setVisibility(View.GONE);
+                mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view_actividad_logro);
+               /* imageView.setVisibility(View.GONE);
                 textView.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.VISIBLE);*/
                 mRecyclerView.setHasFixedSize(true);
                 //usR UN ADMINISTRADOR PARA LINEARLAYOUT
                 mLayoutManager = new LinearLayoutManager(activity);
@@ -204,13 +232,13 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
 
              for (int i = 0; i < notasActividadArray.length(); i++) {
                  JSONObject notaActividad = notasActividadArray.getJSONObject(i);
-                 String titleActividad = notaActividad.getString("nombre_actividad");
+                 String id_actividad = notaActividad.getString("id_actividad");
                  String descActividad = notaActividad.getString("descripcion_actividad");
-                 String notaActividads = notaActividad.getString("nota_actividad");
+                // String notaActividads = notaActividad.getString("nota_actividad");
                  NotaActividad  notaActividad1 = new NotaActividad();
-                 notaActividad1.setNombreActividad(titleActividad);
+                notaActividad1.setIdnotaActividad(id_actividad);
                  notaActividad1.setDescActividad(descActividad);
-                 notaActividad1.setNotaActividad(notaActividads);
+                 //notaActividad1.setNotaActividad(notaActividads);
                  notasActividadArrayList.add(notaActividad1);
 
              }
@@ -219,4 +247,119 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
          }
          return null;
      }
+
+
+    public  ArrayList<NotaActividad> notasActividadLogro(){
+        sessionManager = new SessionManager(activity.getApplication());
+        // Estos dos deben ser declarados fuera de la try / catch
+        // Fin de que puedan ser cerradas en el bloque finally .
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+        // Contendra las respuesta del JSON en un Araylist
+        String forecastJsonStr = null;
+
+        try {
+            // Construir la dirección URL para el appi materias
+            // Posibles parámetros están disponibles en la página de la API de materias del liceo.
+            //http://localhost:3000/estudiantes/materias/notalogro/1-200
+            URL url = new URL(serverUrls + "estudiantes/logro/44216/notas/actividad/");
+            //Crear el request para el liceo, abre una conexión
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            String token = sessionManager.getKeyToken();
+            Log.v("tokenSessionManager", "Json String" + token);
+            urlConnection.setRequestProperty("Authorization", "Bearer " + token);
+            urlConnection.connect();
+
+            // lee Respons de entrada en una cadena
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null) {
+                // Nothing to do.
+                return null;
+            }
+
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Ya que es JSON , la adición de una nueva línea no es necesario ( no afectará el análisis sintáctico )
+                // De modo hace que la depuración sea mucho más fácil
+                // Búfer para la depuración.
+                buffer.append(line + "\n");
+            }
+
+            if (buffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return null;
+            }
+            if (buffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return null;
+            }
+            forecastJsonStr = buffer.toString();
+
+            Log.v("revisar json ", "Json String" + forecastJsonStr);
+
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Error ", e);
+            // Si el código no consiguió con éxito los datos de la actividad,
+            int statuss = 0;
+            try {
+                statuss = urlConnection.getResponseCode();
+                Log.v("status", "Json String" + statuss);
+                if (statuss == 400) {
+                    ArrayList a = new ArrayList();
+                    a.add(0,"400");
+                    return a;
+                }
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    Log.e(LOG_TAG, "Error ", e);
+                }
+            }
+        }
+        try {
+            return getNotasActividadLogros(forecastJsonStr);
+            //return  null;
+        } catch (JSONException e) {
+            Log.e("error", e.getMessage(), e);
+            e.printStackTrace();
+        }
+
+        return null;
+        }
+    public ArrayList<NotaActividad> getNotasActividadLogros(String notaActividadJson)throws JSONException {
+
+        if(notaActividadJson!=null){
+            ArrayList<NotaActividad> notaActividadArraylist = new ArrayList<>();
+            JSONArray jsonArrayNotaActividad = new JSONArray(notaActividadJson);
+            for(int i=0;i<jsonArrayNotaActividad.length();i++){
+                JSONObject jsonObject = jsonArrayNotaActividad.getJSONObject(i);
+                String id_actividad = jsonObject.getString("id_actividad");
+                String nota_actividad = jsonObject.getString("nota_actividad");
+                NotaActividad notaActividad = new NotaActividad();
+                notaActividad.setIdnotaActividad(id_actividad);
+                notaActividad.setNotaActividad(nota_actividad);
+                notaActividadArraylist.add(notaActividad);
+
+            }
+            Log.v("id_actividad", "notaActividadArraylist :" + notaActividadArraylist);
+            return notaActividadArraylist;
+
+
+        }
+        return null;
+    }
+
 }

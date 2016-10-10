@@ -29,7 +29,7 @@ public class NotasActividadFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.recycler, container, false);
+        View rootView = inflater.inflate(R.layout.activity_notas, container, false);
         return rootView;
     }
 
@@ -42,7 +42,7 @@ public class NotasActividadFragment extends Fragment {
         id_logro = args.getString("id_logro");
         new NotasActividadAsyntask(this.getActivity()).execute(id_materia,id_logro);
         //obtenemos el recycler
-        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view_logro);
+        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view_actividad_logro);
         mRecyclerView.setHasFixedSize(true);
         //usar UN ADMINISTRADOR PARA LINEARLAYOUT
         mLayoutManager = new LinearLayoutManager(getActivity());

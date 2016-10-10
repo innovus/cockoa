@@ -5,6 +5,16 @@ package com.example.android.cokoa.Models;
  */
 public class NotaActividad {
 
+    private String idnotaActividad;
+
+    public String getIdnotaActividad() {
+        return idnotaActividad;
+    }
+
+    public void setIdnotaActividad(String idnotaActividad) {
+        this.idnotaActividad = idnotaActividad;
+    }
+
     public String getNombreActividad() {
         return nombreActividad;
     }

@@ -34,7 +34,7 @@ public class AsistenciaFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.calificaciones_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.asistencia_fragment, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Asistencia");
         return rootView;
     }
@@ -61,7 +61,7 @@ public class AsistenciaFragment extends Fragment {
 
         ArrayList<Inasistencia> inasistencias = new ArrayList<>();
         new TotalInasistenciaAsyntask(this.getActivity()).execute();
-        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view);
+        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.cantidad_inasistencia_materiass);
         mRecyclerView.setHasFixedSize(true);
         //usar UN ADMINISTRADOR PARA LINEARLAYOUT
         mLayoutManager = new LinearLayoutManager(getActivity());

@@ -61,7 +61,7 @@ public class InasistenciaMateriaAsyntask extends AsyncTask<String, Void, ArrayLi
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "inasistencias/inasistencia_materia/"+params[0]);
+            URL url = new URL(serverUrls + "inasistencias/materias/"+params[0]);
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

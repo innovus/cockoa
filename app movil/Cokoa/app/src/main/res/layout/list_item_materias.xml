@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:padding="9dp"
+    android:gravity="center"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:minHeight="?android:attr/listPreferredItemHeight"
@@ -63,14 +64,13 @@
                 android:textColor="@color/secondary_text"
                 android:textSize="10sp" />
             <LinearLayout
-                android:layout_gravity="left"
+                android:layout_gravity="center"
                 android:paddingTop="5dp"
                 android:orientation="horizontal"
                 android:layout_width="230dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:gravity="center"
-                    android:background="@drawable/border"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
@@ -90,7 +90,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <LinearLayout
-                            android:background="@drawable/border"
                             android:gravity="center"
                             android:padding="1dp"
                             android:orientation="vertical"
@@ -114,7 +113,6 @@
 
                         </LinearLayout>
                         <LinearLayout
-                            android:background="@drawable/border"
                             android:padding="1dp"
                             android:gravity="center"
                             android:orientation="vertical"
@@ -138,7 +136,6 @@
 
                         </LinearLayout>
                         <LinearLayout
-                            android:background="@drawable/border"
                             android:gravity="center"
                             android:padding="1dp"
                             android:orientation="vertical"
@@ -165,7 +162,6 @@
                             android:padding="1dp"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:background="@drawable/border"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content">
@@ -197,7 +193,6 @@
                     android:paddingBottom="0dp"
                     android:padding="1.8dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/border"
                     android:orientation="vertical">
 
                     <TextView

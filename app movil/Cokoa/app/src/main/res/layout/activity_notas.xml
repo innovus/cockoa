@@ -3,4 +3,9 @@
     android:id="@+id/fragment_notas"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view_actividad_logro"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
 </FrameLayout>

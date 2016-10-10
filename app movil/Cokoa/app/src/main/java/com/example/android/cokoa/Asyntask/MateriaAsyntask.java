@@ -52,12 +52,6 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
           ArrayList<Materia> unos = uno();
          ArrayList<Logro> dosss=doss();
 
-
-
-
-
-
-
         for (int i = 0;i<unos.size();i++) {
             int countPer =0;
             int countPer2 =0;
@@ -281,7 +275,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "estudiantes/materias/logros/213");
+            URL url = new URL(serverUrls + "estudiantes/notas/logros/materia/20003");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -374,9 +368,19 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
                 mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view);
                 mRecyclerView.setHasFixedSize(true);
                 //usR UN ADMINISTRADOR PARA LINEARLAYOUT
+                mLayoutManager = new LinearLayoutManager(activity);
+                mRecyclerView.setLayoutManager(mLayoutManager);
                 mAdapter = new MateriaAdapters(result, activity);
                 mRecyclerView.setAdapter(mAdapter);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+
+
+                /*mRecyclerView = (RecyclerView) activity.findViewById(R.id.cantidad_inasistencia_materiass);
+                mRecyclerView.setHasFixedSize(true);
+                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
+                mLayoutManager = new LinearLayoutManager(activity);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new TotalInsasitenciaAdapter(result, activity);
+                mRecyclerView.setAdapter(mAdapter);*/
             }
 
 

@@ -47,13 +47,20 @@ public class LogrosFragment extends Fragment {
         Bundle args = getArguments();
         String id_materia = args.getString("id_materia");
         String numero_periodo = args.getString("periodo_actual");
+        String sheckPeriodo = args.getString("sheckPeriodo");
+
       /*  if(numero_periodo.equals("null")){
             new LogrosAsyntask(this.getActivity()).execute(id_materia);
         }else {
             new LogrosPeriodoAsyntask(this.getActivity()).execute(id_materia,numero_periodo);
         }*/
+        if(sheckPeriodo.equals("false")){
+            new LogrosAsyntask(this.getActivity()).execute(id_materia,"false");
+        }else {
+            new LogrosAsyntask(this.getActivity()).execute(id_materia,"true",numero_periodo);
+        }
 
-        new LogrosAsyntask(this.getActivity()).execute(id_materia);
+        //new LogrosAsyntask(this.getActivity()).execute(id_materia,"sheckPeriodo");
         //obtenemos el recycler
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view_logro);
         mRecyclerView.setHasFixedSize(true);
