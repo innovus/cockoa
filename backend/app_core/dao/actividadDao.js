@@ -4,12 +4,12 @@ var sequelize = Models.sequelize;
 var queryFindActividadesByLogro = "SELECT * FROM actividad WHERE id_logro  = $id_logro ORDER BY id_actividad";
 
 var queries={
-	"actividad":{
-		'findActividadesByLogro':queryFindActividadesByLogro,	
-	}
+  "actividad":{
+    'findActividadesByLogro':queryFindActividadesByLogro, 
+  }
 };
 var findActividadesByLogro = function(id_logro){
-	return sequelize.query(queries.actividad.findActividadesByLogro,{bind:{id_logro:id_logro},type:sequelize.QueryTypes.SELECT})
+  return sequelize.query(queries.actividad.findActividadesByLogro,{bind:{id_logro:id_logro},type:sequelize.QueryTypes.SELECT})
 };
 
 var findActividadesByLogros = function(ids_logro){

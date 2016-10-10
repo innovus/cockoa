@@ -13,6 +13,11 @@ var queryFindInasistenciasByCarga = "SELECT nombre_materia, nombre1, nombre2, ap
 	"JOIN persona ON persona.identificacion = docente.identificacion  "+ 
 	"WHERE id_carga = $id_carga";*/
 
+
+var queryFindCantidadInasistenciasBYMateria = "select id_materia,nombre_materia,count(*) as total_inasistencia from inasistencia join carga_docente "+
+	 "on inasistencia.id_carga=carga_docente.id_carga_docente natural join materia where inasistencia.id_estudiante = $id_estudiante "+
+	 "GROUP BY nombre_materia,id_materia ORDER BY nombre_materia ASC";
+
 var queryFindCantidadInasistenciasByCarga = "SELECT estudiante.id_estudiante, COUNT(estudiante.id_estudiante) AS cantidad "+
 	"FROM inasistencia "+
 	"RIGHT JOIN estudiante ON inasistencia.id_estudiante = estudiante.id_estudiante "+
@@ -74,8 +79,13 @@ var queries={
 		'findCantidadInasistenciasByCarga': queryFindCantidadInasistenciasByCarga,
 		'findInasistenciasByEstudiante':queryFindInasistenciasByEstudiante,
 		'findInasistenciasByMateria':queryFindInasistenciasByMateria,
+		'findCantidadInasistenciasBYMateria':queryFindCantidadInasistenciasBYMateria,
 	}
 };
+
+var findCantidadInasistenciasBYMateria = function(id_estudiante){
+	return sequelize.query(queries.inasistencia.findCantidadInasistenciasBYMateria,{bind:{id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT})
+}
 
 var findInasistenciasByCarga = function(id_estudiante,id_carga){
 	return sequelize.query(queries.inasistencia.findInasistenciasByCarga,{bind:{id_carga:id_carga,id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT})
@@ -111,3 +121,4 @@ module.exports.findInasistenciasByEstudiante=findInasistenciasByEstudiante;
 module.exports.findInasistenciasByMateria =findInasistenciasByMateria ;
 module.exports.updateEstadoInasistencia = updateEstadoInasistencia;
 module.exports.addInasistencias = addInasistencias;
+module.exports.findCantidadInasistenciasBYMateria = findCantidadInasistenciasBYMateria;

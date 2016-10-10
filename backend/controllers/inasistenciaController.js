@@ -15,6 +15,21 @@ var pgp2 = require('pg-promise')();
 var InasistenciaDao = require("../app_core/dao/inasistenciaDao");
 var MateriaDao = require("../app_core/dao/materiaDao");
 
+function getCantidadInasistenciaMateria(req,res){
+	InasistenciaDao.findCantidadInasistenciasBYMateria(30011)
+	.then(function(data){
+		respuesta.sendJsonResponse(res,200,data);
+		console.log("la fucnion salio bn" + data)
+
+	}).catch(function(err){
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
+}
 
 //inasistencias de una carga
 function getInasistenciasCarga(req,res){
@@ -153,4 +168,5 @@ module.exports = {
 	getMateriasWithInasistenciaByEstudiante:getMateriasWithInasistenciaByEstudiante,
 	getInasistenciasByMateria: getInasistenciasByMateria,
 	updateEstadoInasistencia: updateEstadoInasistencia,
+	getCantidadInasistenciaMateria:getCantidadInasistenciaMateria,
 }

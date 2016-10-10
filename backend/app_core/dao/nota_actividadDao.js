@@ -2,33 +2,45 @@ var Models=require("../models/index");
 var sequelize = Models.sequelize;
 
 var queriFindNotasActividadesByCarga = "SELECT  id_estudiante,id_logro, id_actividad, nota_actividad "+ 
-	"FROM actividad NATURAL JOIN nota_actividad NATURAL JOIN logro "+ 
-	"WHERE id_carga_docente = $id_carga "+
-	"ORDER BY id_estudiante, id_logro";
+  "FROM actividad NATURAL JOIN nota_actividad NATURAL JOIN logro "+ 
+  "WHERE id_carga_docente = $id_carga "+
+  "ORDER BY id_estudiante, id_logro";
 
 var queryFindNotasActividadesByEstudiante = "SELECT id_actividad, nota_actividad,id_logro FROM nota_actividad "+ 
-	"NATURAL JOIN actividad WHERE id_estudiante = $id_estudiante ";
+  "NATURAL JOIN actividad WHERE id_estudiante = $id_estudiante ";
+
+var queryFindNotaActividadLogrobyEstudiante="select * from nota_actividad NATURAL JOIN actividad WHERE id_estudiante = $id_estudiante and id_logro=$id_logro";
 
 var queries={
-	"nota_actividad":{
-		'findNotasActividadesByCarga':queriFindNotasActividadesByCarga,
-		'findNotasActividadesByEstudiante':queryFindNotasActividadesByEstudiante,	
-	}
+  "nota_actividad":{
+    'findNotasActividadesByCarga':queriFindNotasActividadesByCarga,
+    'findNotasActividadesByEstudiante':queryFindNotasActividadesByEstudiante, 
+    'findNotaActividadLogrobyEstudiante':queryFindNotaActividadLogrobyEstudiante, 
+
+  }
+};
+
+var findNotaActividadLogrobyEstudiante = function(id_estudiante,id_logro){
+  return sequelize.query(queries.nota_actividad.findNotaActividadLogrobyEstudiante,{bind:{id_estudiante:id_estudiante,id_logro:id_logro},type:sequelize.QueryTypes.SELECT})
 };
 
 var findNotasActividadesByCarga = function(id_carga){
-	return sequelize.query(queries.nota_actividad.findNotasActividadesByCarga,{bind:{id_carga:id_carga},type:sequelize.QueryTypes.SELECT})
+  return sequelize.query(queries.nota_actividad.findNotasActividadesByCarga,{bind:{id_carga:id_carga},type:sequelize.QueryTypes.SELECT})
+};
+
+var findNotasActividadesByCarga = function(id_carga){
+  return sequelize.query(queries.nota_actividad.findNotasActividadesByCarga,{bind:{id_carga:id_carga},type:sequelize.QueryTypes.SELECT})
 };
 
 var findNotasActividadesByEstudiante = function(id_estudiante){
-	return sequelize.query(queries.nota_actividad.findNotasActividadesByEstudiante,{bind:{id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT})
+  return sequelize.query(queries.nota_actividad.findNotasActividadesByEstudiante,{bind:{id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT})
 };
 
 var insertNotasActividades= function(notas_actividades){
    var cadena="INSERT INTO nota_actividad(id_actividad,nota_actividad,id_estudiante) VALUES ";
    var cadenaValores="";
    notas_actividades.forEach(function(nota_actividad,index){
-   		cadenaValores += "("+nota_actividad.id_actividad+","+nota_actividad.nota_actividad+",'"+nota_actividad.id_estudiante+"')";
+      cadenaValores += "("+nota_actividad.id_actividad+","+nota_actividad.nota_actividad+",'"+nota_actividad.id_estudiante+"')";
        if(index==notas_actividades.length-1){
            console.log("ultimo registro");
        }
@@ -83,3 +95,4 @@ module.exports.findNotasActividadesByCarga=findNotasActividadesByCarga;
 module.exports.findNotasActividadesByEstudiante=findNotasActividadesByEstudiante;
 module.exports.insertNotasActividades=insertNotasActividades;
 module.exports.updateNotaActividad = updateNotaActividad;
+module.exports.findNotaActividadLogrobyEstudiante=findNotaActividadLogrobyEstudiante;

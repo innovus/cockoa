@@ -16,6 +16,27 @@ var ActividadDao = require("../app_core/dao/actividadDao");
 var LogroDao = require("../app_core/dao/logroDao");
 var Nota_logroDao = require("../app_core/dao/nota_logroDao");
 var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
+var NotificacionDao = require("../app_core/dao/notificacionDao");
+
+function getNotaLogrosMaterias(req,res){
+	var hoy = new Date();
+  	var dia = hoy.getDate(); 
+  	var mes = hoy.getMonth()+1;
+  	var anio= hoy.getFullYear();
+  	var fecha_actual = String(anio+"-"+mes+"-"+dia);
+	Nota_logroDao.findNotasLogrosByMateria(fecha_actual,req.params.id_estudiante)
+	 	.then(function(data){ 
+	 		respuesta.sendJsonResponse(res,200,data);
+	 	}).catch(function(err){
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
+}
+
 
 function getMateriasEstudiante(req,res){
 	//MateriaDao.findMateriasByEstudiante
@@ -59,10 +80,24 @@ function getActividadesEstudiante(req,res){
 	.then(function(data){ 
 
 		console.log("la fucnion salio bn" + data)
-		respuesta.sendJsonResponse(res,200,data);
+		
+
+		
+		 	if((data.length<=0)||(!data)){
+		 		return respuesta
+            .status(400)
+            .json({});
+		 	}
+          
+            else{
+              respuesta.sendJsonResponse(res,200,data);//arrayName.length > 0
+
+            }
+            
+
 	}).catch(function(err){
 		if(err.message == 'No data returned from the query.'){
-			respuesta.sendJsonResponse(res,200,[]);
+			respuesta.sendJsonResponse(res,400,[]);
 		}else{
 			console.log(err.message);
 			respuesta.sendJsonResponse(res,500,[]);
@@ -117,7 +152,19 @@ function getNotasLogros(req,res){
 	});
 
 }
-
+function getNotificaciones(req,res){
+	NotificacionDao.findNotificacionesByEstudiante(req.params.usuario_notificacion)
+	 	.then(function(data){ 
+	 		respuesta.sendJsonResponse(res,200,data);
+	 	}).catch(function(err){
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
+}
 
 
 function getNotasActividades(req,res){
@@ -147,6 +194,36 @@ function getNotasActividades(req,res){
 
 }
 
+function getNotasActividadbyLogro(req,res){
+	Nota_actividadDao.findNotaActividadLogrobyEstudiante(30011,req.params.id_logro)
+	 .then(function(data){ 
+
+		console.log("la fucnion salio bn" + data)
+		
+
+		
+		 	if((data.length<=0)||(!data)){
+		 		return respuesta
+            .status(400)
+            .json({});
+		 	}
+          
+            else{
+              respuesta.sendJsonResponse(res,200,data);//arrayName.length > 0
+
+            }
+            
+
+	}).catch(function(err){
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,400,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
+}
+
 
 
 /*
@@ -161,6 +238,8 @@ function getMateriasEstudiante(id_usuario, cb){
 	})
 
 }*/
+
+
 module.exports = {
 	getMateriasEstudiante: getMateriasEstudiante,
 	getLogrosEstudiante: getLogrosEstudiante,
@@ -168,6 +247,10 @@ module.exports = {
 	getNotasLogros: getNotasLogros,
 	getActividadesEstudiante: getActividadesEstudiante,
 	getNotasActividades: getNotasActividades,
+    getNotificaciones: getNotificaciones,
+    getNotaLogrosMaterias:getNotaLogrosMaterias,
+    getNotasActividadbyLogro:getNotasActividadbyLogro,
+
 
 
 }

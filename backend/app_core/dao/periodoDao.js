@@ -6,8 +6,16 @@ var queryFindPeriodosDisponibles = "SELECT id_periodo,numero_periodo "+
 	"FROM anio_lectivo NATURAL JOIN periodo "+
 	"WHERE id_estado_anio_lectivo = 1 AND fecha_inicio_periodo <= $fecha_actual";
 var queryFindPeriodoActual = "SELECT  id_periodo, numero_periodo "+
-	"FROM  periodo WHERE fecha_inicio_periodo <= $fecha_actual "+
-	"AND fecha_fin_periodo >= $fecha_actual";
+	"FROM anio_lectivo NATURAL JOIN periodo WHERE id_estado_anio_lectivo = 1 and fecha_inicio_periodo <= $fecha_actual "+
+	"AND numero_periodo ="+
+	"(SELECT  count(numero_periodo) as numero_periodos FROM periodo NATURAL JOIN anio_lectivo  "+
+	"where id_estado_anio_lectivo = 1 and fecha_inicio_periodo <= $fecha_actual)";
+
+	/*SELECT  id_periodo, numero_periodo 
+	FROM anio_lectivo NATURAL JOIN periodo  WHERE id_estado_anio_lectivo = 1 and 
+	fecha_inicio_periodo <= '8/10/2016' and numero_periodo =
+	(select  count(numero_periodo) as numero_periodos from periodo natural join anio_lectivo  
+	where id_estado_anio_lectivo = 1 and fecha_inicio_periodo <= '8/10/2016');*/
 	
 
 
