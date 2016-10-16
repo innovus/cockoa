@@ -79,6 +79,11 @@ var updatePorcentajesLogros= function(logros){
    });
 
 };
+
+
+
+
+
 module.exports.findLogrosByCargaDocente=findLogrosByCargaDocente;
 module.exports.findLogrosByMateriaAndPeriodo=findLogrosByMateriaAndPeriodo;
 module.exports.updateDescripcionLogro = updateDescripcionLogro;

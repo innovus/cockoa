@@ -17,17 +17,13 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
   $scope.selected = {
     ids_estudiantes:[]
   };
-  
-
-
-    //Trae el periodo Actual
+  //Trae el periodo Actual
   //periodoData.findPeriodoActual()
    //$http.get(CONFIG.http_address+'/api/todos/periodos/actual')
    periodoData.findPeriodoActual()
   .success(function(data){
     console.log("entro al succes del controller")
     $scope.periodo_actual = data[0];
-
     console.log(data);
   }).error(function(error){
     console.log("entro al error del controller")
@@ -191,9 +187,7 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     });
 
     // $scope.user already updated!
-
   };
-
   ////////
 
       //funcion que se la usa cuando le da click en un tab
@@ -284,11 +278,6 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     }
 }
 
-
-
-
-
-
 }]);
 
 
@@ -305,38 +294,8 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
   $scope.id_logro = id_logro;
   $scope.actividadesPorEliminar = [];
   console.log(actividades)
-
-
   console.log("en el modulo modal")
   console.log($scope.actividades);
- // $scope.fechas = fechas;
-  /*$scope.selected = {
-    fecha: $scope.fechas[0]
-  };*/
-
-
-  $scope.deleteActividad = function (actividad,index){
-    console.log(actividad)
-    
-    $scope.actividadesPorEliminar.push(actividad);
-    $scope.actividades.splice(index, 1); 
-
-/*
-        actividadData.deleteActividad(actividad.id_actividad)
-        .success(function(data){
-          $scope.actividades.splice(index, 1);
-
-          swal("Ok","se elimino con exito","success");
-          console.log("elimino con exito")
-
-        }).error(function(error){
-          if(error.msg.name == "SequelizeForeignKeyConstraintError" && error.msg.parent.table =="nota_actividad"){
-              swal("Oops...","Debe eliminar primero las notas de los estudiantes","error");
-          }else{
-            swal("Oops...","Algo aslio mal","error");
-          }
-        })*/
-}
 
   $scope.checkPorcentaje = function(){
     
@@ -376,21 +335,13 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
         console.log(error);
         return  error;
       });
-
-
-      
+     
     }else{
       console.log("entro a error");
       swal("Oops...","Debe sumar 100 el porcentaje","error");
       return "error"
-      
- 
-
     }
-
   }
-
-
   $scope.saveColumn = function(column) {
     console.log(column)
     var results = [];
@@ -437,6 +388,31 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
     };
     $scope.actividades.push($scope.inserted);
   };
+
+
+
+  $scope.updateActividad = function(data, actividad) {
+    console.log(data);
+    console.log(actividad)
+    console.log("union")
+    angular.extend(actividad, data );
+    console.log(actividad)
+    console.log("tipo al actualizar ");
+    console.log(actividad.tipo)
+    if (actividad.tipo==undefined){
+      actividad.tipo =1;
+    }
+    console.log("actividad con tipo")
+    console.log(actividad)
+  };
+
+  $scope.deleteActividad = function (actividad,index){
+    console.log(actividad) 
+    $scope.actividadesPorEliminar.push(actividad);
+    $scope.actividades.splice(index, 1); 
+}
+
+
   $scope.validarPorcentaje = function(data){
     console.log(data);
    // console.log(actividad)
@@ -451,7 +427,6 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
       console.log("no entro")
     }
 
-
   }
 
   //esta funcion la usamos cuando le damos ok en una actividad
@@ -462,58 +437,8 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
     console.log("union")
     angular.extend(actividad, data );
     console.log(actividad)
-    /*
-    if(isNaN(data.porcentaje_actividad)){
-     // return "Tien que ingresar un numero";
-      console.log("entro")
-    }else{
-      console.log("no entro")
-
-    }*/
-    
-  /*  if(actividad.tipo == 0){
-      actividadData.createActividad(actividad)
-      .success(function(mensaje){
-        console.log(mensaje);
-        angular.extend(actividad,mensaje.id_actividad)
-        console.log($scope.actividades);
-       
-
-      }).error(function(error){
-        if(error.status == 2){
-          swal("Oops...",error.msg,"error");
-          return error["mal"]
-        }else{
-          swal("Oops..."," Algo salio mal!","error");
-
-        }
-        
-        console.log(error);
-        return  error;
-      });
-
-    }else{
-      actividadData.updateDescripcion(actividad)
-      .success(function(mensaje){
-        console.log(mensaje);
-        return $q.all(actividad);
-
-      }).error(function(error){
-        if(error.status == 2){
-          swal("Oops...",error.msg,"error");
-          return error["mal"]
-        }else{
-          swal("Oops..."," Algo salio mal!","error");
-
-        }
-        
-        console.log(error);
-        return  error;
-      });
-
-    }*/
-  
   }
+
 
   $scope.cancelform = function(actividad,index) {
     if(actividad.descripcion_actividad == null){
@@ -525,18 +450,60 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
   };
 
   $scope.ok = function () {
+
     console.log("actividades por eliminar");
     console.log($scope.actividadesPorEliminar)
     console.log("actividades");
     console.log($scope.actividades)
+
+    var sumatoria = 0;
+    angular.forEach($scope.actividades,function(actividad){
+
+
+      if(isNaN(actividad.porcentaje_actividad)){
+        console.log("entro a isNaN")
+        console.log(actividad.porcentaje_actividad)
+        return "deben ser numeros"
+      }else{
+         sumatoria = sumatoria + parseFloat(actividad.porcentaje_actividad);
+      }
+     
+    })
+    console.log("sumatoria")
+      console.log(sumatoria);
+    if(sumatoria != 100){
+      console.log("sumatoria")
+      console.log(sumatoria);
+
+    }else{
+      console.log("eliminados")
+      console.log($scope.actividadesPorEliminar)
+      console.log("actividaes")
+      console.log($scope.actividades)
+      actividadData.saveActividades($scope.actividadesPorEliminar,$scope.actividades)
+      .success(function(mensaje){
+        console.log(mensaje);
+        swal("Ok...","Actividades Guardadas!","success");
+        $uibModalInstance.close();
+
+
+      }).error(function(error){
+
+      swal("Oops..."," Algo salio mal!","error");        
+        console.log(error);
+
+      });
+      
+    }
+
+
   //  console.log(editableForm)
-    $uibModalInstance.close();
+   // $uibModalInstance.close();
   };
 
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
-
 
 });
 
@@ -599,10 +566,8 @@ app.controller('updatePorcentajesCtrl', function($scope, $uibModalInstance,logro
 
   var validacion = 0; //Variables 
 
-
   $scope.ok = function () {
     sumatoria = 0;
-
 
     angular.forEach($scope.logros,function(logro){
 
@@ -657,10 +622,7 @@ app.controller('updatePorcentajesCtrl', function($scope, $uibModalInstance,logro
         swal("Oops...","Debe sumar 100 el porcentaje","error");
         
       }
-    }
-
-      
-
+    } 
  
   };
 
@@ -670,7 +632,4 @@ app.controller('updatePorcentajesCtrl', function($scope, $uibModalInstance,logro
     $uibModalInstance.close(logrosAntes)
   }
 
-
 })
-
-

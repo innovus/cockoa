@@ -72,6 +72,16 @@
                 }
             })
         }
+        var saveActividades = function(actividadesEliminadas, actividades){
+            return $http({
+                method: 'POST',
+                url: CONFIG.http_address+'/api/docentes/actividades/guardar',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                data: {actividadesEliminadas:actividadesEliminadas,actividades:actividades}
+            })
+        }
 
         return {
             findActividadesByLogro:findActividadesByLogro,
@@ -81,6 +91,7 @@
             findActividadesByLogros:findActividadesByLogros,
             deleteActividad: deleteActividad,
             findActividadById:findActividadById,
+            saveActividades: saveActividades,
         };
     }
 })();

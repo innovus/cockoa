@@ -17,12 +17,18 @@ router.post('/logros/actividades'/*, authenticate*/,profesoresController.getActi
 router.post('/logros',profesoresController.createLogro);
 router.get('/cargas/:id_carga/logros/notas'/*, authenticate*/, profesoresController.getNotasLogros);
 router.get('/cargas/:id_carga/logros/actividades/notas'/*, authenticate*/,profesoresController.getNotasActividades);
-router.put('/actividades/porcentajes'/*, authenticate*/,profesoresController.updatePorcentajesActividades);
+
+router.put('/actividades'/*, authenticate*/,profesoresController.updateActividades);
+router.delete('/actividades'/*, authenticate*/,profesoresController.deleteActividades);
+router.post('/actividades',profesoresController.createActividades);
+router.post('/actividades/guardar',profesoresController.guardarActividadesTransaccion)
+
+
 router.put('/logros/porcentajes'/*, authenticate*/,profesoresController.updatePorcentajesLogros);
 router.put('/:table/notas'/*, authenticate*/,profesoresController.updateNota);
 router.put('/logros/descripcion'/*, authenticate*/,profesoresController.updateDescripcionLogro);
 router.post('/:table/notas'/*, authenticate*/,profesoresController.insertNota);
-router.post('/actividades',profesoresController.createActividad);
+//router.post('/actividades',profesoresController.createActividad);
 router.put('/actividades/descripcion'/*, authenticate*/,profesoresController.updateDescripcionActividad);
 
 //(router.get('/prueba'/*, authenticate*/, prueba);

@@ -30,7 +30,13 @@
 }
 
 
+/* Styles para progress */
 
+
+
+md-progress-circular path{
+  stroke: white;
+}
 
 
 

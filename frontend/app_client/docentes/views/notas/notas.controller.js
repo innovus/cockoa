@@ -9,6 +9,7 @@ angular
 .controller('docentes_notasController',docentes_notasController)
 .controller('showLogroController',showLogroController)
 .controller('showActividadController',showActividadController)
+.controller('waitCtrl', waitCtrl);
 
 /*
 run(function(editableOptions) {
@@ -16,6 +17,14 @@ run(function(editableOptions) {
 })
 .controller('docentes_notasController',docentes_notasController);
 */
+ waitCtrl.$inject = ['$mdDialog', '$rootScope'];
+function waitCtrl($mdDialog, $rootScope) {
+  var vm = this;
+  $rootScope.$on("hide_wait", function (event, args) {
+    $mdDialog.cancel();
+  }); 
+}
+
 showLogroController.$inject= ['$scope','$uibModalInstance','logro'];
 function showLogroController($scope,$uibModalInstance,logro) {
   $scope.logro = logro
@@ -27,6 +36,7 @@ function showLogroController($scope,$uibModalInstance,logro) {
   };
 
 }
+
 
 showActividadController.$inject= ['$scope','$uibModalInstance','actividad'];
 function showActividadController($scope,$uibModalInstance,actividad) {
@@ -44,8 +54,8 @@ function showActividadController($scope,$uibModalInstance,actividad) {
 
 
 
-docentes_notasController.$inject= ['$scope','$http','$cookieStore','$cookies','CONFIG','periodoData','estudianteData','actividadData','logroData','nota_actividadData','nota_logroData','$filter','$uibModal'];
-function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,periodoData,estudianteData,actividadData,logroData,nota_actividadData,nota_logroData,$filter,$uibModal) {
+docentes_notasController.$inject= ['$scope','$http','$cookieStore','$cookies','CONFIG','periodoData','estudianteData','actividadData','logroData','nota_actividadData','nota_logroData','$filter','$uibModal','myutils'];
+function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,periodoData,estudianteData,actividadData,logroData,nota_actividadData,nota_logroData,$filter,$uibModal,myutils) {
 
   $scope.primer_nombre = "Jorge";
   $scope.primer_apellido = "Viveros";
@@ -245,6 +255,12 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
   }
 
   function seleccionarCarga(carga){
+    $scope.data_received = false;
+    myutils.showWait();
+    $scope.status = true;
+
+
+              
     $scope.cabeceras = [];
     $scope.carga_seleccionada = carga;
     $scope.estudiantes = [];
@@ -293,11 +309,20 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 
                     fillNotasLogros(estudiante, logro,notas_logros,function(newEstudiante){
                       $scope.estudiantes[h] = newEstudiante;
+
+
+
+
                     })
                   })// cierra forEach estudianrs prueba
                   $scope.cabeceras.push({'id':logro.id_logro,'tipo':0,'mostrar':'Final'}); 
                   })//cierra prueba
               });//cierra for each logros
+
+
+              //progress
+              
+             myutils.hideWait();
 
             });// cierra getActividadesByLogros
           })//Cierra getLogros
@@ -716,4 +741,89 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 }// body...     
 })();
 
+var incrementarSecuencia= function(nombre){
 
+  var deferred= Q.defer();
+  return sequelize.transaction({autocommit:false}).then(function(t){
+    
+    Models.Secuencia.find({
+          where:{
+              nombre_secuencia:nombre
+          }
+      },
+      {transaction:t})
+    .then(function(secuencia){
+        secuencia.updateAttributes({
+          consecutivo:secuencia.consecutivo+1
+        },{transaction:t})
+        .then(function(nuevasecuencia){
+          deferred.resolve({transaccion:t,secuencia:nuevasecuencia});
+        }).catch(function(error){
+          t.rollback();
+          deferred.reject("error");
+        });
+      }).catch(function(error){
+        t.rollback();
+        deferred.reject("error");
+      });
+      return deferred.promise;
+  });
+};
+
+//---------------------------------------------------
+/*
+var crearCompraTransaccion= function (compraVariable, detallesCompra, idUsuario, callback){
+        sequelize.transaction({autocommit:false})
+        .then(function(t){
+              models.Compra.create({
+                  fecha_compra:compraVariable.fecha_compra,
+                  observacion:compraVariable.observacion,
+                  id_usuario:idUsuario
+              }, {transaction: t})
+              .then(function (compra){//si sale bn el create entoncess ... usaremos el compra para agregarle a los detalles de compra
+                  var detalles= detallesCompra;
+                  detalles.forEach(function(detalle){
+                      detalle.id_compra=compra.id_compra;
+                  });
+                  models.DetalleCompra.bulkCreate(detalles, {returning:true,transaction: t})//insertamos los detallescomra
+                  .then(function(detalles){//si sale bn entonces hacemos esto con detalles
+                        var registroDetalle={};
+                        var registrosDetalle=[];
+                        console.log(detalles);
+                        detalles.forEach(function(itemDetalle){
+                          registroDetalle={};
+                          registroDetalle.id_detalle_compra=itemDetalle.id_detalle_compra;
+                          registroDetalle.observacion="nueva observacion"+itemDetalle.id_detalle_compra;
+                          registrosDetalle.push(registroDetalle);
+                        });
+                        models.RegistroCompra.bulkCreate(registrosDetalle,{returning:true,transaction:t})
+                        .then(function(registrodetalles){
+
+                          t.commit();//si salen bn todas hago el commit 
+                          callback(registrodetalles,null);
+                        }).
+                        catch(function(error){
+                          t.rollback();//si sale error hago el roolback
+                          callback(null,error);     
+                        });
+                  }).catch(function(error){
+                        t.rollback();
+                        callback(null,error);
+                  });
+
+              }).catch(function(error){//si sale mal crear compra valla aqui y hagame el rollback
+                  t.rollback();
+                  callback(null,error);
+              });
+        });//finaliza transsaccion
+}
+
+{
+  "delete":[{"id_actividad":125},{id_actividad:123}],
+  "update":[{"id_logro":50042,"id_actividad":125,"descripcion_actividad":"prueba postman 12","porcentaje_actividad":17},{"id_logro":50042,"id_actividad":126,"descripcion_actividad":"prueba postman 22","porcentaje_actividad":18}],
+  "create":[{"id_logro":50042,"id_actividad":125,"descripcion_actividad":"prueba postman 12","porcentaje_actividad":17},{"id_logro":50042,"id_actividad":126,"descripcion_actividad":"prueba postman 22","porcentaje_actividad":18}]
+}
+
+[{"id_logro":50042,"id_actividad":125,"descripcion_actividad":"prueba postman 12","porcentaje_actividad":17},{"id_logro":50042,"id_actividad":126,"descripcion_actividad":"prueba postman 22","porcentaje_actividad":18}]
+
+*/

@@ -34,15 +34,43 @@ var findActividadesByLogros = function(ids_logro){
   cadena += ids + ") ORDER BY id_logro,id_actividad"
   return sequelize.query(cadena,{type:sequelize.QueryTypes.SELECT})
 };
-
-var updatePorcentajesActividades= function(actividades){
-   var cadena="UPDATE actividad ";
+var updateAllRaw= function(productos){
+   var cadena="UPDATE producto ";
    var cadenanombre="";
    var cadenavalor="";
    var cadenawhere="";
+   productos.forEach(function(producto,index){
+       cadenanombre+= "WHEN "+ producto.id_producto+" THEN '"+producto.nombre_producto+"' ";
+       cadenavalor+= "WHEN "+producto.id_producto+" THEN "+producto.valor+" ";
+       if(index==productos.length-1){
+           console.log("ultimo registro");
+           cadenawhere+=producto.id_producto;
+       }
+       else{
+           console.log("registro");
+           cadenawhere+=producto.id_producto+",";
+       }
+   });
+   //console.log(cadenanombre);
+   //console.log(cadenavalor);
+   cadena= cadena+" SET nombre_producto = CASE id_producto "+cadenanombre+" END ";
+   cadena= cadena+",valor = CASE id_producto "+cadenavalor+" END ";
+   cadena= cadena+" WHERE id_producto IN("+cadenawhere+")";
+   
+   return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.UPDATE
+   });
+
+
+};
+var updateActividades= function(actividades,t){
+   var cadena="UPDATE actividad ";
+   var cadenaporcentaje="";
+   var cadenadescripcion="";
+   var cadenawhere="";
    actividades.forEach(function(actividad,index){
-       cadenanombre+= "WHEN "+ actividad.id_actividad+" THEN "+actividad.porcentaje_actividad+" ";
-      // cadenavalor+= "WHEN "+actividad.id_actividad+" THEN "+actividad.valor+" ";
+       cadenaporcentaje+= "WHEN "+ actividad.id_actividad+" THEN "+actividad.porcentaje_actividad+" ";
+       cadenadescripcion+= "WHEN "+actividad.id_actividad+" THEN '"+actividad.descripcion_actividad+"' ";
        if(index==actividades.length-1){
            console.log("ultimo registro");
            cadenawhere+=actividad.id_actividad;
@@ -52,14 +80,14 @@ var updatePorcentajesActividades= function(actividades){
            cadenawhere+=actividad.id_actividad+",";
        }
    });
-   //console.log(cadenanombre);
-   //console.log(cadenavalor);
-   cadena= cadena+" SET porcentaje_actividad = CASE id_actividad "+cadenanombre+" END ";
-  // cadena= cadena+",valor = CASE id_actividad "+cadenavalor+" END ";
+   //console.log(cadenaporcentaje);
+   //console.log(cadenadescripcion);
+   cadena= cadena+" SET porcentaje_actividad = CASE id_actividad "+cadenaporcentaje+" END ";
+   cadena= cadena+",descripcion_actividad = CASE id_actividad "+cadenadescripcion+" END ";
    cadena= cadena+" WHERE id_actividad IN("+cadenawhere+")";
    
    return sequelize.query(cadena,{
-     type: sequelize.QueryTypes.UPDATE
+     type: sequelize.QueryTypes.UPDATE, transaction: t
    });
 
 };
@@ -74,6 +102,126 @@ var createActividad= function(actividad){
    });
 
 };
+
+
+var createActividades= function(actividades,t){
+   var cadena="INSERT INTO actividad(id_logro,nombre_actividad,descripcion_actividad,porcentaje_actividad) VALUES ";
+   var cadenaValores="";
+   actividades.forEach(function(actividad,index){
+      cadenaValores += "("+actividad.id_logro+",'"+actividad.nombre_actividad+"','"+actividad.descripcion_actividad+"',"+actividad.porcentaje_actividad+")";
+       if(index==actividades.length-1){
+           console.log("ultimo registro");
+       }
+       else{
+           console.log("registro");
+           cadenaValores+= ",";
+       }
+   });
+   cadena = cadena + cadenaValores
+   console.log(cadenaValores)
+   return sequelize.query(cadena,{
+     type: sequelize.QueryTypes.INSERT
+   });
+
+};
+
+var guardarActividadesTransaccion = function(deleteA,updateA,createA,cb){
+  var deleteBandera = false;
+  var updateBandera = false;
+  var createBandera = false;
+
+  if(deleteBandera != []) deleteBandera = true;
+  if(updateBandera != []) updateBandera = true;
+  if(createBandera != []) createBandera = true;
+
+  
+  
+
+  sequelize.transaction({autocommit:false})
+  .then(function(t){
+
+    console.log("entro al primer then de transaccion");
+/*
+    if(deleteA != []){
+      /////delete con datos////////////
+      console.log("delete con datos")
+     
+      if(updateA != []){
+        console.log("update con datos")
+
+        if(createA != []){
+          console.log("update con datos")
+        }else{
+          console.log("create vacio")
+
+        }
+      }else{
+        console.log("update vacio")
+
+      }
+
+      /////////cierra delete con datos
+    }else{
+
+       console.log("delete vacio")
+       if(updateA != []){
+        console.log("update con datos")
+
+        if(createA != []){
+          console.log("update con datos")
+        }else{
+          console.log("create vacio")
+
+        }
+      }else{
+        console.log("update vacio")
+
+      }
+    }
+
+    */
+    deleteActividades(deleteA,t)
+    .then(function(dataDelete){
+      console.log("entro al segundo then de transaccion")
+
+      updateActividades(updateA,t)
+      .then(function(dataUpdate){
+
+        console.log("entro a el tercer then de la transaccion");
+
+        createActividades(createA,t)
+        .then(function(dataCreate){
+          console.log("hizo todo")
+          t.commit();
+          cb({"msg":"Salio Bien"},null)
+        }).catch(function(error){
+          console.log("entro al error de create actividades");
+          console.log(error);
+          t.rollback();
+          cb(null,error);
+
+        });
+
+
+
+
+      }).catch(function(error){
+        console.log("entro al error de update actividades");
+        console.log(error);
+        t.rollback();
+        cb(null,error);
+      });
+    }).catch(function(error){
+      console.log("entro al error de eliminar actividades");
+      console.log(error);
+      t.rollback();
+      cb(null,error);
+    });//cierra catch
+  });//trnsaccion
+
+};
+
+
 var updateDescripcionActividad= function(actividad){
 
    var cadena="UPDATE actividad "+
@@ -85,21 +233,52 @@ var updateDescripcionActividad= function(actividad){
    });
 
 };
-var deleteActividad= function(id_actividad){
+
+var deleteActividades= function(actividades,t){
+  var cadena="DELETE FROM actividad "+
+     "WHERE id_actividad IN (" ;
+
+  var cadenaValores="";
+   actividades.forEach(function(actividad,index){
+      cadenaValores += actividad.id_actividad;
+       if(index==actividades.length-1){
+           console.log("ultimo registro");
+           cadenaValores+= ")";
+       }
+       else{
+           console.log("registro");
+           cadenaValores+= ",";
+       }
+   });
+   cadena = cadena + cadenaValores
+   console.log(cadenaValores)
+  
+ // return cadena;
+  
+   return sequelize.query(cadena,{type: sequelize.QueryTypes.DELETE,transaction: t});
+
+};
+
+var deleteActividad= function(id_actividad,t){
    var cadena="DELETE FROM actividad "+
      "WHERE id_actividad = "+ id_actividad ;
    
    return sequelize.query(cadena,{
      type: sequelize.QueryTypes.DELETE
-   });
+   }
+   );
 
 };
 
 
 module.exports.findActividadesByLogro=findActividadesByLogro;
-module.exports.updatePorcentajesActividades=updatePorcentajesActividades;
+module.exports.updateActividades=updateActividades;
 module.exports.createActividad = createActividad;
+module.exports.createActividades = createActividades;
 module.exports.updateDescripcionActividad= updateDescripcionActividad;
 module.exports.findActividadesByLogros=findActividadesByLogros
 module.exports.deleteActividad=deleteActividad;
 module.exports.findActividadById = findActividadById;
+module.exports.deleteActividades = deleteActividades;
+module.exports.guardarActividadesTransaccion = guardarActividadesTransaccion;
+
