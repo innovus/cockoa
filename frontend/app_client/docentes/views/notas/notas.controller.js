@@ -349,6 +349,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
     console.log(val_before);
     console.log(isNaN(val_before))
     console.log(cabecera.nota)
+    /*
     if(cabecera.nota == ""){
       return "Debe Ingresar un numero"
     }
@@ -361,7 +362,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
     if(parseFloat(cabecera.nota) < 0 || parseFloat(cabecera.nota) > 5){
       console.log("entro a parseFloat ");
       return "Debe Ingresar un numero entre 0 y 5";
-    }
+    }*/
 
 
   }

@@ -403,6 +403,48 @@ function getActividadById(req,res){
 		respuesta.sendJsonResponse(res,500,{});
 
 	})
+} function guardarLogrosTransaccion (req,res){
+	console.log("logrosEliminadas")
+	console.log(req.body.logrosEliminados)
+
+	console.log("logros")
+	console.log(req.body.logros)
+
+	var deleteA = req.body.logrosEliminados;
+	var updateA = [];
+	var createA = [];
+
+	req.body.logros.forEach(function(logro,index){
+		if(logro.tipo == 1){
+			updateA.push(logro);
+
+		}else if(logro.tipo == 0){
+			createA.push(logro)
+
+		}
+		
+   });
+	console.log("deleteA")
+	console.log(deleteA);
+	console.log("updateA")
+	console.log(updateA);
+	console.log("createA")
+	console.log(createA);
+
+
+
+	LogroDao.guardarLogrosTransaccion(deleteA,updateA,createA,function(bien,error){
+		if(bien == null){
+			respuesta.sendJsonResponse(res,500,error);
+
+
+		}else{
+			respuesta.sendJsonResponse(res,200,bien);
+
+		}
+		
+	})
+
 }
 
 function guardarActividadesTransaccion(req,res){
@@ -530,6 +572,7 @@ module.exports = {
 	getActividadById:getActividadById,
 	deleteActividades: deleteActividades,
 	guardarActividadesTransaccion:guardarActividadesTransaccion,
+	guardarLogrosTransaccion: guardarLogrosTransaccion,
 
 }
 

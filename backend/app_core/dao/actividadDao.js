@@ -34,35 +34,7 @@ var findActividadesByLogros = function(ids_logro){
   cadena += ids + ") ORDER BY id_logro,id_actividad"
   return sequelize.query(cadena,{type:sequelize.QueryTypes.SELECT})
 };
-var updateAllRaw= function(productos){
-   var cadena="UPDATE producto ";
-   var cadenanombre="";
-   var cadenavalor="";
-   var cadenawhere="";
-   productos.forEach(function(producto,index){
-       cadenanombre+= "WHEN "+ producto.id_producto+" THEN '"+producto.nombre_producto+"' ";
-       cadenavalor+= "WHEN "+producto.id_producto+" THEN "+producto.valor+" ";
-       if(index==productos.length-1){
-           console.log("ultimo registro");
-           cadenawhere+=producto.id_producto;
-       }
-       else{
-           console.log("registro");
-           cadenawhere+=producto.id_producto+",";
-       }
-   });
-   //console.log(cadenanombre);
-   //console.log(cadenavalor);
-   cadena= cadena+" SET nombre_producto = CASE id_producto "+cadenanombre+" END ";
-   cadena= cadena+",valor = CASE id_producto "+cadenavalor+" END ";
-   cadena= cadena+" WHERE id_producto IN("+cadenawhere+")";
-   
-   return sequelize.query(cadena,{
-     type: sequelize.QueryTypes.UPDATE
-   });
 
-
-};
 var updateActividades= function(actividades,t){
    var cadena="UPDATE actividad ";
    var cadenaporcentaje="";

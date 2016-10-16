@@ -22,6 +22,7 @@ router.put('/actividades'/*, authenticate*/,profesoresController.updateActividad
 router.delete('/actividades'/*, authenticate*/,profesoresController.deleteActividades);
 router.post('/actividades',profesoresController.createActividades);
 router.post('/actividades/guardar',profesoresController.guardarActividadesTransaccion)
+router.post('/logros/guardar',profesoresController.guardarLogrosTransaccion);
 
 
 router.put('/logros/porcentajes'/*, authenticate*/,profesoresController.updatePorcentajesLogros);
