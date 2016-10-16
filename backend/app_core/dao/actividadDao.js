@@ -129,19 +129,205 @@ var guardarActividadesTransaccion = function(deleteA,updateA,createA,cb){
   var deleteBandera = false;
   var updateBandera = false;
   var createBandera = false;
+  console.log(updateA.length)
+  console.log(deleteA.length)
+  console.log(createA.length)
 
-  if(deleteBandera != []) deleteBandera = true;
-  if(updateBandera != []) updateBandera = true;
-  if(createBandera != []) createBandera = true;
+  if(deleteA.length != 0) deleteBandera = true;
+  if(updateA.length != 0) updateBandera = true;
+  if(createA.length != 0) createBandera = true;
+  var value = 0;
+  console.log("bandera update")
+  console.log(updateBandera);
+  console.log("bandera delete")
+  console.log(deleteBandera);
+  console.log("bandera creae")
+  console.log(createBandera);
+
+  if(createBandera && updateBandera && deleteBandera )value = 1;
+  else if ( createBandera && updateBandera && !deleteBandera ) value=2;
+  else if ( createBandera && !updateBandera && deleteBandera ) value=3;
+  else if ( createBandera && !updateBandera && !deleteBandera ) value=4;
+  else if ( !createBandera && updateBandera && deleteBandera ) value=5;
+  else if ( !createBandera && updateBandera && !deleteBandera ) value=6;
+  else if ( !createBandera && !updateBandera && deleteBandera ) value=7;
+  else if ( !createBandera && !updateBandera && !deleteBandera ) value=8;
+
+  sequelize.transaction({autocommit:false})
+  .then(function(t){
+    console.log("entro al primer then de transaccion");
+    console.log(value);
+
+    switch(value){
+      case 1://C - U - D
+        deleteActividades(deleteA,t)
+        .then(function(dataDelete){
+          console.log("entro al segundo then de transaccion")
+
+          updateActividades(updateA,t)
+          .then(function(dataUpdate){
+            console.log("entro a el tercer then de la transaccion");
+            createActividades(createA,t)
+            .then(function(dataCreate){
+              console.log("hizo todo")
+              t.commit();
+              cb({"msg":"Salio Bien"},null)
+            }).catch(function(error){
+              console.log("entro al error de create actividades");
+              console.log(error);
+              t.rollback();
+              cb(null,error);
+            });// cierra carch createActividades
+          }).catch(function(error){
+            console.log("entro al error de update actividades");
+            console.log(error);
+            t.rollback();
+            cb(null,error);
+          });// cierra catch updatre actividades
+        }).catch(function(error){
+          console.log("entro al error de eliminar actividades");
+          console.log(error);
+          t.rollback();
+          cb(null,error);
+        });//cierra catch
+        break;
+
+      case 2://C - U 
+        updateActividades(updateA,t)
+          .then(function(dataUpdate){
+            console.log("entro a el tercer then de la transaccion");
+            createActividades(createA,t)
+            .then(function(dataCreate){
+              console.log("hizo todo")
+              t.commit();
+              cb({"msg":"Salio Bien"},null)
+            }).catch(function(error){
+              console.log("entro al error de create actividades");
+              console.log(error);
+              t.rollback();
+              cb(null,error);
+            });// cierra carch createActividades
+          }).catch(function(error){
+            console.log("entro al error de update actividades");
+            console.log(error);
+            t.rollback();
+            cb(null,error);
+          });// cierra catch updatre actividades
+          break;
+      
+      case 3://C - D
+      deleteActividades(deleteA,t)
+        .then(function(dataDelete){
+          console.log("entro al segundo then de transaccion")
+          createActividades(createA,t)
+          .then(function(dataCreate){
+            console.log("hizo todo")
+            t.commit();
+            cb({"msg":"Salio Bien"},null)
+          }).catch(function(error){
+            console.log("entro al error de create actividades");
+            console.log(error);
+            t.rollback();
+            cb(null,error);
+          });// cierra carch createActividades
+
+        }).catch(function(error){
+          console.log("entro al error de eliminar actividades");
+          console.log(error);
+          t.rollback();
+          cb(null,error);
+        });//cierra catch
+        break;
+
+      case 4://C
+        console.log("entro al segundo then de transaccion")
+          createActividades(createA,t)
+          .then(function(dataCreate){
+            console.log("hizo todo")
+            t.commit();
+            cb({"msg":"Salio Bien"},null)
+          }).catch(function(error){
+            console.log("entro al error de create actividades");
+            console.log(error);
+            t.rollback();
+            cb(null,error);
+          });// cierra carch createActividades
+          break;
+
+      case 5:// U - D
+
+        deleteActividades(deleteA,t)
+        .then(function(dataDelete){
+          console.log("entro al segundo then de transaccion")
+          updateActividades(updateA,t)
+          .then(function(dataUpdate){
+            console.log("hizo todo")
+            t.commit();
+            cb({"msg":"Salio Bien"},null)
+          }).catch(function(error){
+            console.log("entro al error de update actividades");
+            console.log(error);
+            t.rollback();
+            cb(null,error);
+          });// cierra catch updatre actividades
+        }).catch(function(error){
+          console.log("entro al error de eliminar actividades");
+          console.log(error);
+          t.rollback();
+          cb(null,error);
+        });//cierra catch
+        break;
+
+      case 6://U
+        updateActividades(updateA,t)
+        .then(function(dataUpdate){
+          console.log("hizo todo")
+          t.commit();
+          cb({"msg":"Salio Bien"},null)
+        }).catch(function(error){
+          console.log("entro al error de update actividades");
+          console.log(error);
+          t.rollback();
+          cb(null,error);
+        });// cierra catch updatre actividades
+        break;
+      case 7: //D
+         deleteActividades(deleteA,t)
+        .then(function(dataDelete){
+            console.log("hizo todo")
+            t.commit();
+            cb({"msg":"Salio Bien"},null)
+
+        }).catch(function(error){
+          console.log("entro al error de eliminar actividades");
+          console.log(error);
+          t.rollback();
+          cb(null,error);
+        });//cierra catch
+        break;
+
+      case 8:
+          console.log("todos vacios");   
+          t.rollback();
+          cb(null,"todos vacios");
+          break;
+
+      default:
+          console.log("default");
+          t.rollback();
+          cb(null,"defaut");
+          break;
+    }//cierra el siutch 
+  })//cierra transaccion
+
 
   
-  
-
+/*
   sequelize.transaction({autocommit:false})
   .then(function(t){
 
     console.log("entro al primer then de transaccion");
-/*
+
     if(deleteA != []){
       /////delete con datos////////////
       console.log("delete con datos")
@@ -179,7 +365,7 @@ var guardarActividadesTransaccion = function(deleteA,updateA,createA,cb){
       }
     }
 
-    */
+    
     deleteActividades(deleteA,t)
     .then(function(dataDelete){
       console.log("entro al segundo then de transaccion")
@@ -218,6 +404,7 @@ var guardarActividadesTransaccion = function(deleteA,updateA,createA,cb){
       cb(null,error);
     });//cierra catch
   });//trnsaccion
+*/
 
 };
 

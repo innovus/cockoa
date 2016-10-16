@@ -343,11 +343,12 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 
   $scope.before = function(cabecera){
     //$scope.valorBefore = valor1.mostrar;
-    $scope.valorBefore = cabecera;
-    val_before =  $scope.valorBefore.nota;
+    $scope.valorBefore = cabecera.nota;
+    val_before =  $scope.valorBefore;
     console.log("entro a before");
     console.log(val_before);
     console.log(isNaN(val_before))
+    console.log(cabecera.nota)
     if(cabecera.nota == ""){
       return "Debe Ingresar un numero"
     }
