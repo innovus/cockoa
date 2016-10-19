@@ -37,11 +37,7 @@
 
 
 <div class="wrapper">
-  
-
-
   <div class="content-wrapper">
-
 
     <div container>
     <section class="content-header">  
@@ -52,8 +48,6 @@
       </h1>
     </section>
     <section class="content">
-
-
 
       <uib-tabset  active="activeTabIndex">
       <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{periodo.numero_periodo}}" ng-click="getPeriodoId($index)">
@@ -80,6 +74,7 @@
                       <th rowspan="2">Nombres y Apellidos</th>
                      
                       <th  ng-repeat="logro in logros " ng-click="showLogro(logro)" colspan = "{{logro.actividades.length + 1}}">Logro {{$index + 1}} </th>
+                      <th rowspan="2">Final</th>
                       
                     </tr>
                     <tr>
@@ -103,8 +98,6 @@
               </tbody>
             </table>
             </div>
-
-
 
           </div>
 

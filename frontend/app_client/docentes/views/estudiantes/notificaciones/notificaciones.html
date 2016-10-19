@@ -1,0 +1,72 @@
+<navbarest></navbarest>
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+    <!-- Sidebar user panel -->
+    <div class="user-panel">
+        <div class="pull-left image">
+        <img src="/img/avatar04.png" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+        <p>{{primer_nombre}} {{primer_apellido}}</p>
+            <small>Identificación: {{numero_documento}}</small>
+        <!--<a href="#"><i class="fa fa-circle text-success"></i> En linea</a>-->
+        </div>
+    </div>
+
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu">
+        <li class="header">Tipos</li>
+        <li  class="treeview" ng-repeat="tipo_notificacion in tipos_notificaciones" ng-click="seleccionarTipo(tipo_notificacion)">
+          <a ><span>{{tipo_notificacion.nombre_tipo_notificacion}} </span><i class="fa fa-angle-left pull-right"></i></a>
+          </li>
+          <li  class="treeview" ng-click="mostrarTodos()">
+          <a ><span>Mostrar Todos </span><i class="fa fa-angle-left pull-right"></i></a>
+          </li>
+
+    </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
+  <div class="wrapper">
+    <div class="content-wrapper">
+    <div container>
+     <section class="content-header">  
+      <h1>
+        {{tipos_notificacion_seleccionada.nombre_tipo_notificacion}}
+        
+      </h1>
+    </section>
+
+    <section class="content">
+
+    <md-toolbar layout="row" class="md-hue-3">
+      <div class="md-toolbar-tools">
+        <span>Tus notificaciones</span>
+      </div>
+    </md-toolbar>
+
+    <md-content>
+      <md-list flex>
+        <md-subheader class="md-no-sticky">{{tipo_notificacion_seleccionada.nombre_tipo_notificacion}}</md-subheader>
+        <md-list-item class="md-3-line" ng-repeat="notificacion in notificaciones" ng-click="null">
+          <img ng-src="{{item.face}}?{{$index}}" class="md-avatar" alt="{{item.who}}" />
+          <div class="md-list-item-text" layout="column">
+            <h3>{{ notificacion.fecha_notificacion | date : format : shortDate }}</h3>
+ 
+            <p>{{ notificacion.mensaje_notificacion }}</p>
+          </div>
+        </md-list-item>
+
+        <md-divider ></md-divider>
+      </md-list>
+    </md-content>
+  </div>
+
+
+</section>
+</div>
+</div>
+</div>
+
+  

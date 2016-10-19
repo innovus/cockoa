@@ -1,10 +1,28 @@
 (function(){
-    angular.module("docentes").controller("navbarCtrl",navbarCtrl);
+    angular.module("docentes").controller("navbarestCtrl",navbarestCtrl);
 
-    navigationCtrl.$inject=["$location"];
+    navbarestCtrl.$inject=["$scope","$location","notificacionData","$filter"];
 
-    function navbarCtrl($location){
-        
+
+    function navbarestCtrl($scope,$location,notificacionData,$filter){
+        console.log("hizo algo")
+
+        $scope.notificaciones = [];
+        $scope.cantidadNotificaciones = 0;
+        $scope.notificaciones_pendientes = [];
+
+        notificacionData.findNotificationByEstudiante(30011)
+            .success(function(data){
+                console.log("entro al succes")
+                $scope.notificaciones = data;
+                $scope.notificaciones_pendientes = $filter('filter')($scope.notificaciones, {estado_notificacion: "0"});
+                $scope.cantidadNotificaciones = $scope.notificaciones_pendientes.length
+                
+                console.log(data)
+            }).error(function(error){
+                console.log(error);
+            });
+
         var navvm=this;
         navvm.currentPath= $location.path();
       
@@ -20,6 +38,9 @@
             
             $location.path('/logros');
         };
+        
+
+
     }
 
 })();

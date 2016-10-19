@@ -17,6 +17,8 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
   $scope.selected = {
     ids_estudiantes:[]
   };
+  $scope.logrosPorEliminar = [];
+
   //Trae el periodo Actual
   //periodoData.findPeriodoActual()
    //$http.get(CONFIG.http_address+'/api/todos/periodos/actual')
@@ -25,15 +27,8 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     console.log("entro al succes del controller")
     $scope.periodo_actual = data[0];
     console.log(data);
-  }).error(function(error){
-    console.log("entro al error del controller")
-    console.log(error);
-  });
 
-  //Trae todos los periodos y pone el actual
-  //$http.get(CONFIG.http_address+'/api/todos/periodos')
-
-  periodoData.findPeriodos()
+      periodoData.findPeriodos()
   .success(function(data){
     $scope.periodos = data; 
     console.log("succes findPeriodos")
@@ -81,7 +76,19 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
    }).error(function(error){
     console.log(error);
     $scope.periodos = []
+  });//cierra error findPeriodos
+
+
+
+  }).error(function(error){
+    console.log("entro al error del controller")
+    console.log(error);
   });
+
+  //Trae todos los periodos y pone el actual
+  //$http.get(CONFIG.http_address+'/api/todos/periodos')
+
+
 
 
      //funcion q abre ventana modal
@@ -113,11 +120,11 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     console.log(modalInstance)
   };
   $scope.create_nuevo_logro = function () {
+
     console.log("entreo a create")
-      $scope.inserted = {
-        //id_actividad: 100,
+    $scope.inserted = {
+
         id_carga_docente: $scope.carga_seleccionada.id_carga_docente,
-        
         porcentaje_logro: "0",
         nombre_logro: "Prueba",
         descripcion_logro: null,
@@ -125,69 +132,46 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
         vigente_logro:"S",
       };
       $scope.logros.push($scope.inserted);
-    };
-
-/*
-
-      var modalInstance = $uibModal.open({
-        animation: true,
-        backdrop: "static",
-        templateUrl: '/views/logros/nuevo_logro.html',
-        controller: 'nuevo_logroCtrl',
-        size: size,
-        resolve: {
-          id_carga_docente: function(){
-            return id_carga_docente
-          }
-        }
-      });
-      modalInstance.result.then(function (nuevo_logro) {
-        $scope.logros.push(nuevo_logro);
-      //$ctrl.selected = selectedItem;
-    });
-
-  };*/
-
-      $scope.open_update_logros = function (size) {
-
-
-      var modalInstance = $uibModal.open({
-        animation: true,
-        backdrop: "static",
-        templateUrl: '/views/logros/actualizar_porcentaje.html',
-        controller: 'updatePorcentajesCtrl',
-        size: size,
-        resolve: {
-          logros: function(){
-            return $scope.logros
-          }
-        }
-      });
-      modalInstance.result.then(function (logros) {
-        $scope.logros = logros;
-      //$ctrl.selected = selectedItem;
-    });
-
   };
+
    /////////////////////
   //////// fin trae cargas
 
   ///////form editable
-  $scope.saveLogro = function(logro) {
+  $scope.updateLogro = function(data, logro) {
+    console.log(data);
     console.log(logro)
-    logroData.updateDescripcionLogro(logro)
-    .success(function(mensaje){
-    swal("Good job!", mensaje.msg, "success")
-                 
-      //$scope.logros = logros;
-    })
-    .error(function(error){
-      console.log('Error: '+ error);
-      swal("Oops..."," Algo salio mal!","error");
-    });
-
-    // $scope.user already updated!
+    console.log("union")
+    angular.extend(logro, data);
+    console.log(logro)
+    console.log("tipo al actualizar ");
+    console.log(logro.tipo)
+    if (logro.tipo==undefined){
+      logro.tipo =1;
+    }
+    console.log("logro con tipo")
+    console.log(logro)
   };
+
+  $scope.deleteLogro = function (logro,index){
+     if(logro.id_logro != undefined){
+      $scope.logrosPorEliminar.push(logro);
+
+    }
+    console.log(logro) 
+    $scope.logros.splice(index, 1); 
+    
+  }
+
+    $scope.cancelform = function(logro,index) {
+    if(logro.descripcion_logro == null){
+      $scope.logros.splice(index, 1);
+
+    }
+    console.log(logro)
+    console.log(index)      
+  };
+
   ////////
 
       //funcion que se la usa cuando le da click en un tab
@@ -255,28 +239,65 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
       cb([]);
     });
   }
-  $scope.deleteLogro = function (logro,index){
-    //el logro debe tener porcentaje 0 para eliminarse
-    if(logro.porcentaje_logro != 0){
-      swal("Oops...","Debe tener el porcentaje en 0","error");
-    }else{
-      logroData.deleteLogro(logro.id_logro)
-      .success(function(data){
-        $scope.logros.splice(index, 1);
 
-        swal("Ok","se elimino con exito","success");
-        console.log("elimino con exito")
+    $scope.btnGuardar = function () {
+
+    console.log("logros por eliminar");
+    console.log($scope.logrosPorEliminar)
+    console.log("logros");
+    console.log($scope.logros)
+
+    var sumatoria = 0;
+    angular.forEach($scope.logros,function(logro){
+
+
+      if(isNaN(logro.porcentaje_logro)){
+        console.log("entro a isNaN")
+        console.log(logro.porcentaje_logro)
+        return "deben ser numeros"
+      }else{
+         sumatoria = sumatoria + parseFloat(logro.porcentaje_logro);
+      }
+     
+    })
+    console.log("sumatoria")
+      console.log(sumatoria);
+    if(sumatoria != 100){
+      console.log("sumatoria")
+      console.log(sumatoria);
+
+    }else{
+      console.log("eliminados")
+      console.log($scope.logrosPorEliminar)
+      console.log("actividaes")
+      console.log($scope.logros)
+      logroData.saveLogros($scope.logrosPorEliminar,$scope.logros)
+      .success(function(mensaje){
+        console.log(mensaje);
+        swal("Ok...","logros Guardados!","success");
+
+
       }).error(function(error){
-        if(error.msg.name == "SequelizeForeignKeyConstraintError" && error.msg.parent.table =="nota_logro"){
+        console.log(error)
+        
+        if(error.name == "SequelizeForeignKeyConstraintError" && error.parent.table =="nota_logro"){
           swal("Oops...","Debe eliminar primero las notas de los estudiantes","error");
-        }else  if(error.msg.name == "SequelizeForeignKeyConstraintError" && error.msg.parent.table =="actividad"){
+        }else  if(error.name == "SequelizeForeignKeyConstraintError" && error.parent.table =="actividad"){
           swal("Oops...","Debe eliminar primero las actividades","error");
         }else{
           swal("Oops...","Algo aslio mal","error");
         }
+        seleccionarCarga($scope.carga_seleccionada);
+
       });
+      
     }
-}
+
+
+  //  console.log(editableForm)
+   // $uibModalInstance.close();
+  };
+
 
 }]);
 
@@ -389,8 +410,6 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
     $scope.actividades.push($scope.inserted);
   };
 
-
-
   $scope.updateActividad = function(data, actividad) {
     console.log(data);
     console.log(actividad)
@@ -407,8 +426,11 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
   };
 
   $scope.deleteActividad = function (actividad,index){
+    if(actividad.id_actividad != undefined){
+      $scope.actividadesPorEliminar.push(actividad);
+
+    }
     console.log(actividad) 
-    $scope.actividadesPorEliminar.push(actividad);
     $scope.actividades.splice(index, 1); 
 }
 
@@ -633,3 +655,4 @@ app.controller('updatePorcentajesCtrl', function($scope, $uibModalInstance,logro
   }
 
 })
+

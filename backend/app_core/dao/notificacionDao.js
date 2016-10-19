@@ -1,19 +1,28 @@
 var Models=require("../models/index");
 var sequelize = Models.sequelize;
 
-var queryFindNotificacionesByEstudiante = "SELECT * FROM notificacion WHERE usuario_notificacion=$usuario_notificacion";
-var queryFind
+var queryFindNotificacionesByEstudiante = "SELECT * FROM notificacion WHERE id_estudiante=$id_estudiante"
+var queryFindNotificacionesByEstudianteAndEstado= "SELECT * FROM notificacion WHERE id_estudiante=$id_estudiante and estado_notificacion = '0'"
+//var queryFindCantidadNotificacionesEstadoCero =
 
 var queries={
 	"notificacion":{
 		'findNotificacionesByEstudiante':queryFindNotificacionesByEstudiante,
+		'findNotificacionesByEstudianteAndEstado':queryFindNotificacionesByEstudianteAndEstado
 		
 	}
 };
 
-var findNotificacionesByEstudiante = function(usuario_notificacion){
-	return sequelize.query(queries.notificacion.findNotificacionesByEstudiante,{bind:{usuario_notificacion:usuario_notificacion},type:sequelize.QueryTypes.SELECT});
+var findNotificacionesByEstudiante = function(id_estudiante){
+	console.log(id_estudiante);
+	return sequelize.query(queries.notificacion.findNotificacionesByEstudiante,{bind:{id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT});
 }
+
+var findNotificacionesByEstudianteAndEstado = function(id_estudiante){
+	console.log(id_estudiante);
+	return sequelize.query(queries.notificacion.findNotificacionesByEstudiante,{bind:{id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT});
+}
+
 
 /*
 var insertarNotificacion = function(logro){
@@ -26,4 +35,5 @@ var insertarNotificacion = function(logro){
 */
 
 module.exports.findNotificacionesByEstudiante=findNotificacionesByEstudiante;
+module.exports.findNotificacionesByEstudianteAndEstado = findNotificacionesByEstudianteAndEstado;
 

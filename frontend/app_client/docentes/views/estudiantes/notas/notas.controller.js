@@ -9,6 +9,7 @@ app.controller('estudiantes_notasController',['$scope','$http','$filter','$cooki
   $scope.periodo_actual = null
   $scope.periodo_sel = null;
   $scope.activeTabIndex = 0;
+  $scope.notaFinal = 0;
 
   //Trae el periodo Actual
   periodoData.findPeriodoActual()
@@ -127,6 +128,23 @@ app.controller('estudiantes_notasController',['$scope','$http','$filter','$cooki
       cb({});
     });
   }
+  function calcularNotaFinal(){
+    var promedio = 0;
+    
+    $scope.logros.forEach(function(logro,i){
+      if(logro.nota != " - "){
+        console.log("entro al if ")
+        console.log(logro.nota)
+        var nota = parseFloat(logro.nota);
+        var porcentaje = parseFloat(logro.porcentaje_logro);
+        var valor = (nota*porcentaje)/100;
+        promedio =promedio + valor;
+        console.log(promedio)
+      }  
+
+  })
+    $scope.notaFinal = Math.round(promedio*100)/100;
+}
 
 
  
@@ -181,47 +199,13 @@ app.controller('estudiantes_notasController',['$scope','$http','$filter','$cooki
 
            })//cierra foreach logros
 
+          calcularNotaFinal();
 
          });//cierrra getnotasActividades
 
 
         });//cierra getActividadesByLogros
 
-
-
-      /* for (var i = 0; i < $scope.logros.length ; i++) {
-          (function(i){
-
-           // getNotasActividades($scope.logros[i].id_logro,function(notasactividades){
-              console.log('notasactividades')
-              console.log(notasactividades)
-
-              $scope.notasactividades = notasactividades;
-            
-              for (var j = $scope.logros[i].actividades.length - 1; j >= 0; j--) {
-                (function(j){
-                  if(typeof $scope.notasactividades[$scope.logros[i].actividades[j].id_actividad] === 'undefined' ){
-                    $scope.logros[i].actividades[j].nota = ' - ';
-                  }
-                  else{
-                    $scope.logros[i].actividades[j].nota = $scope.notasactividades[$scope.logros[i].actividades[j].id_actividad];
-                  }
-                })(j);
-              }//cierra for j
-
-          //  });//cierrra getnotasActividades
-
-
-          if(typeof $scope.notas[$scope.logros[i].id_logro] === 'undefined' ){
-            $scope.logros[i].nota = ' - ';
-          }
-          else{
-            $scope.logros[i].nota = $scope.notas[$scope.logros[i].id_logro];
-          }
-          })(i);
-          
-          
-        } //cierra for*/
         console.log("cierra for y scope logros")
         console.log($scope.logros)
 

@@ -8,7 +8,8 @@
             scope: {
               content : '=content'
             },
-            templateUrl: '/common/directives/navbarest/navbarest.template.html'
+            templateUrl: '/common/directives/navbarest/navbarest.template.html',
+            controller: 'navbarestCtrl'
         };
     }
 })();

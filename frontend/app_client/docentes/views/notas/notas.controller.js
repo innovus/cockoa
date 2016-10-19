@@ -156,6 +156,9 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
         }
       });
   }
+  calcularFinal = function(estudiante){
+
+  }
 
   $scope.showActividad = function(cabecera){
     if(cabecera.tipo==1){

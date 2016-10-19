@@ -30,6 +30,10 @@
             templateUrl: "/views/ejemplo/ejemplo.template.html",
             controller: "ejemploCtrl"
 
+        }).when("/estudiantes/notificaciones",{
+            templateUrl: "/views/estudiantes/notificaciones/notificaciones.html",
+            controller: "notificacionesController"
+
         })
 
         

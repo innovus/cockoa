@@ -81,10 +81,10 @@ var updatePorcentajesLogros= function(logros){
 };
 
 var createLogros= function(logros,t){
-   var cadena="INSERT INTO logro(id_logro,nombre_logro,descripcion_logro,porcentaje_logro) VALUES ";
+   var cadena="INSERT INTO logro(id_carga_docente,descripcion_logro,porcentaje_logro) VALUES ";
    var cadenaValores="";
    logros.forEach(function(logro,index){
-      cadenaValores += "("+logro.id_logro+",'"+logro.nombre_logro+"','"+logro.descripcion_logro+"',"+logro.porcentaje_logro+")";
+      cadenaValores += "("+logro.id_carga_docente+",'"+logro.descripcion_logro+"',"+logro.porcentaje_logro+")";
        if(index==logros.length-1){
            console.log("ultimo registro");
        }
@@ -324,7 +324,7 @@ var guardarLogrosTransaccion = function(deleteL,updateL,createL,cb){
       case 7: //D
          deleteLogros(deleteL,t)
         .then(function(dataDelete){
-            console.log("hizo todo")
+            console.log("hizo todo");
             t.commit();
             cb({"msg":"Salio Bien"},null)
 
@@ -349,10 +349,7 @@ var guardarLogrosTransaccion = function(deleteL,updateL,createL,cb){
           break;
     }//cierra el siutch 
   })//cierra transaccion
-
-
-
-
+}
 
 
 module.exports.findLogrosByCargaDocente=findLogrosByCargaDocente;
@@ -362,4 +359,3 @@ module.exports.deleteLogro = deleteLogro;
 module.exports.updatePorcentajesLogros=updatePorcentajesLogros;
 module.exports.createLogro =createLogro;
 module.exports.guardarLogrosTransaccion = guardarLogrosTransaccion;
-

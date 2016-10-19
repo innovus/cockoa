@@ -17,6 +17,7 @@ var LogroDao = require("../app_core/dao/logroDao");
 var Nota_logroDao = require("../app_core/dao/nota_logroDao");
 var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
+var Tipo_notificacionDao = require("../app_core/dao/tipo_notificacionDao");
 
 function getNotaLogrosMaterias(req,res){
 	var hoy = new Date();
@@ -153,7 +154,21 @@ function getNotasLogros(req,res){
 
 }
 function getNotificaciones(req,res){
-	NotificacionDao.findNotificacionesByEstudiante(req.params.usuario_notificacion)
+	NotificacionDao.findNotificacionesByEstudiante(req.body.id_estudiante)
+	 	.then(function(data){ 
+	 		console.log(req.body);
+	 		respuesta.sendJsonResponse(res,200,data);
+	 	}).catch(function(err){
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
+}
+function getNotificacionesPendientes(req,res){
+	NotificacionDao.findNotificacionesByEstudianteAndEstado(req.body.id_estudiante)
 	 	.then(function(data){ 
 	 		respuesta.sendJsonResponse(res,200,data);
 	 	}).catch(function(err){
@@ -166,6 +181,19 @@ function getNotificaciones(req,res){
 	});
 }
 
+function getTiposNotificacion(req,res){
+	Tipo_notificacionDao.findTipoNotificacion()
+	 	.then(function(data){ 
+	 		respuesta.sendJsonResponse(res,200,data);
+	 	}).catch(function(err){
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
+}
 
 function getNotasActividades(req,res){
 
@@ -250,6 +278,8 @@ module.exports = {
     getNotificaciones: getNotificaciones,
     getNotaLogrosMaterias:getNotaLogrosMaterias,
     getNotasActividadbyLogro:getNotasActividadbyLogro,
+    getTiposNotificacion: getTiposNotificacion,
+    getNotificacionesPendientes:getNotificacionesPendientes,
 
 
 

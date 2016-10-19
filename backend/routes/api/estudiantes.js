@@ -11,12 +11,9 @@ router.get('/materias/:id_materia/logros/periodos/:id_periodo', /*authenticate,*
 router.get('/materias/:id_materia/notas/periodos/:id_periodo', /*authenticate,*/estudiantesController.getNotasLogros);
 router.get('/logros/:id_logro/actividades', /*authenticate,*/estudiantesController.getActividadesEstudiante);
 router.get('/actividades/notas', /*authenticate,*/estudiantesController.getNotasActividades);
-router.get('/notificacion/:usuario_notificacion',estudiantesController.getNotificaciones);
+router.post('/notificaciones/',estudiantesController.getNotificaciones);
 router.get('/notas/logros/materia/:id_estudiante',estudiantesController.getNotaLogrosMaterias);
 router.get('/logro/:id_logro/notas/actividad/',estudiantesController.getNotasActividadbyLogro);
-
-
-
-
-
+router.get('/tipos_notificaciones/',estudiantesController.getTiposNotificacion);
+router.post('/notificaciones/pendientes',estudiantesController.getNotificacionesPendientes);
 module.exports = router;

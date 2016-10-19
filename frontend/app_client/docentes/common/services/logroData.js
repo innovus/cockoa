@@ -52,6 +52,16 @@
 
             })
         }
+        var saveLogros = function(logrosEliminados, logros){
+            return $http({
+                method: 'POST',
+                url: CONFIG.http_address+'/api/docentes/logros/guardar',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                data: {logrosEliminados:logrosEliminados,logros:logros}
+            })
+        }
 
         return {
             findLogrosByCarga:findLogrosByCarga,
@@ -60,6 +70,7 @@
             deleteLogro: deleteLogro,
             createLogro: createLogro,
             updatePorcentajesLogros:updatePorcentajesLogros,
+            saveLogros:saveLogros,
             
         };
     }

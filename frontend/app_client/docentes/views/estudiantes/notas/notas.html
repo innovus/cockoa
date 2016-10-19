@@ -65,6 +65,17 @@
               <th class="col-sm-1" style="text-align:center;" >Final</th>
           </tr>
         </thead>
+        <tfoot>
+                  <tr>
+                    <td colspan="2">
+                    <md-card-title>
+                      <md-card-title-text>
+                      <span class="md-headline"> Final</span>
+                      </md-card-title-text>
+                    </md-card-title>
+                    <td><h3>{{notaFinal}}</h3></td>
+                  </tr>
+                </tfoot>
         <tbody>
           <tr ng-repeat="logro in logros">
 
@@ -96,11 +107,10 @@
                   </tr>
 
                 </thead>
+                
                 <tbody>
                   <tr>
                     <td ng-repeat="actividad in logro.actividades">{{actividad.nota}}</td>
-
-                    
                   </tr>
 
                 </tbody>
@@ -116,6 +126,7 @@
           </tr>
 
         </tbody>
+
         <!--
         <tr>
           <th>Final</th>
