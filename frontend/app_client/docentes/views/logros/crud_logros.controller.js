@@ -141,7 +141,6 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
   $scope.updateLogro = function(data, logro) {
     console.log(data);
     console.log(logro)
-    console.log("union")
     angular.extend(logro, data);
     console.log(logro)
     console.log("tipo al actualizar ");
@@ -152,6 +151,23 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     console.log("logro con tipo")
     console.log(logro)
   };
+
+    $scope.validarPorcentaje = function(data){
+    console.log("entro enbefore")
+    console.log(data);
+   // console.log(actividad)
+    console.log("union")
+    //angular.extend(actividad, data );
+    //console.log(actividad)
+    if(isNaN(data)){
+      return "Debe ingresar un numero";
+      console.log("entro")
+    }else if(parseFloat(data) > 100 || parseFloat(data) < 0){
+      return "El Porcentaje debe estar entre 0 y 100 ";
+      console.log("no entro")
+    }
+
+  }
 
   $scope.deleteLogro = function (logro,index){
      if(logro.id_logro != undefined){
@@ -240,6 +256,8 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     });
   }
 
+
+
     $scope.btnGuardar = function () {
 
     console.log("logros por eliminar");
@@ -314,53 +332,22 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
   $scope.actividades = actividades;
   $scope.id_logro = id_logro;
   $scope.actividadesPorEliminar = [];
+  $scope.isPorcentajeCien = true;
   console.log(actividades)
   console.log("en el modulo modal")
   console.log($scope.actividades);
 
-  $scope.checkPorcentaje = function(){
-    
+
+  function checkPorcentaje(){
     var sumatoria = 0;
     angular.forEach($scope.actividades,function(actividad){
-      if(isNaN(actividad.porcentaje_actividad)){
-        console.log("entro a isNaN")
-        console.log(actividad.porcentaje_actividad)
-        return "deben ser numeros"
-
-      }else{
-
          sumatoria = sumatoria + parseFloat(actividad.porcentaje_actividad);
-      }
-     
-    })
-    console.log("sumatoria")
-    console.log(sumatoria)
-    console.log("antes de if");
-    if(sumatoria == 100){
-      console.log("entro al else")
-      console.log(sumatoria)
-      actividadData.updatePorcentajes($scope.actividades)
-      .success(function(mensaje){
-        console.log(mensaje);
-        //return $q.all(results);
-
-      }).error(function(error){
-        if(error.status == 2){
-        //  swal("Oops...",error.msg,"error");
-          return error["mal"]
-        }else{
-        //  swal("Oops..."," Algo salio mal!","error");
-
-        }
-        
-        console.log(error);
-        return  error;
       });
+    if(sumatoria == 100){
+      return true
      
     }else{
-      console.log("entro a error");
-      swal("Oops...","Debe sumar 100 el porcentaje","error");
-      return "error"
+      return false
     }
   }
   $scope.saveColumn = function(column) {
@@ -408,6 +395,8 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
       tipo:0
     };
     $scope.actividades.push($scope.inserted);
+    $scope.isPorcentajeCien=checkPorcentaje();
+
   };
 
   $scope.updateActividad = function(data, actividad) {
@@ -423,6 +412,7 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
     }
     console.log("actividad con tipo")
     console.log(actividad)
+
   };
 
   $scope.deleteActividad = function (actividad,index){
@@ -432,6 +422,7 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
     }
     console.log(actividad) 
     $scope.actividades.splice(index, 1); 
+    $scope.isPorcentajeCien=checkPorcentaje() ;
 }
 
 
@@ -448,6 +439,11 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
       return "El Porcentaje debe estar entre 0 y 100 ";
       console.log("no entro")
     }
+
+  }
+  $scope.validarPorcentajeTotal = function(){
+    console.log("nunca entro")
+    $scope.isPorcentajeCien=checkPorcentaje() ;
 
   }
 
@@ -472,6 +468,7 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
   };
 
   $scope.ok = function () {
+    console.log($scope.isPorcentajeCien)
 
     console.log("actividades por eliminar");
     console.log($scope.actividadesPorEliminar)
@@ -493,6 +490,8 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
     })
     console.log("sumatoria")
       console.log(sumatoria);
+      $scope.isPorcentajeCien=checkPorcentaje() ;
+      console.log($scope.isPorcentajeCien)
     if(sumatoria != 100){
       console.log("sumatoria")
       console.log(sumatoria);
@@ -529,130 +528,5 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
 
 });
 
-app.controller('nuevo_logroCtrl', function($scope,$uibModalInstance,logroData,id_carga_docente) {
 
-   $scope.ok = function (descripcion) {
-    console.log(id_carga_docente)
-    console.log(descripcion)
-    logro = {id_carga_docente:id_carga_docente,descripcion_logro:descripcion, porcentaje_logro:0}
-
-     logroData.createLogro(logro)
-      .success(function(mensaje){
-        console.log(mensaje);
-         swal("Ok",mensaje.msg,"success");
-          angular.extend(logro,mensaje.id_logro)
-          console.log(logro)
-         $uibModalInstance.close(logro);
-        
-
-      }).error(function(error){
-        if(error.status == 2){
-          swal("Oops...",error.msg,"error");
-          $uibModalInstance.dismiss('cancel');
-          
-        }else{
-          swal("Oops..."," Algo salio mal!","error");
-          $uibModalInstance.dismiss('cancel');
-
-        }
-        
-        console.log(error);
-        
-      });
-
- 
-  };
-
-  $scope.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
-  };
-
-
-})
-app.controller('updatePorcentajesCtrl', function($scope, $uibModalInstance,logroData,logros) {
-  $scope.logros = logros
-  //variable para guardar los logros como llegan y en caso de darle cancelar sera usada para devolver los logros como llegaron al principio
- 
-  var logrosAntes = []
-
-  angular.forEach($scope.logros,function(logro){
-    logro_copia = {
-      id_logro:logro.id_logro,
-      id_carga_docente:logro.id_carga_docente,
-      descripcion_logro:logro.descripcion_logro,
-      porcentaje_logro:logro.porcentaje_logro,
-      vigente_logro: logro.vigente_logro
-    }
-    logrosAntes.push(logro_copia);
-  })
-
-  var validacion = 0; //Variables 
-
-  $scope.ok = function () {
-    sumatoria = 0;
-
-    angular.forEach($scope.logros,function(logro){
-
-      if(isNaN(logro.porcentaje_logro)){
-        console.log("entro a isNaN")
-        console.log(logro.porcentaje_logro)
-
-        validacion = 1;
-        
-
-      }else{
-
-         sumatoria = sumatoria + parseFloat(logro.porcentaje_logro);
-       }
-     })
-    if(validacion == 1){
-
-        swal("Ups....","Debes ingresar numeros","error");
-
-        console.log("logros antes")
-        console.log(logrosAntes)
-        $uibModalInstance.close(logrosAntes)
-
-    }else{
-      console.log("sumatoria")
-      console.log(sumatoria)
-      console.log("antes de if");
-      if(sumatoria == 100){
-        console.log("entro al if == 100")
-        console.log(sumatoria)
-        logroData.updatePorcentajesLogros($scope.logros)
-        .success(function(mensaje){
-          console.log(mensaje);
-          swal("Ok",mensaje.msg,"success");
-         
-         $uibModalInstance.close($scope.logros)
-        //return $q.all(results);
-
-        }).error(function(error){
-          if(error.status == 2){
-          //  swal("Oops...",error.msg,"error");
-            return error["mal"]
-          }else{
-            //  swal("Oops..."," Algo salio mal!","error");
-
-          }
-          console.log(error);
-          return  error;
-        });      
-      }else{
-        console.log("entro a error");
-        swal("Oops...","Debe sumar 100 el porcentaje","error");
-        
-      }
-    } 
- 
-  };
-
-  $scope.cancel = function () {
-   // $uibModalInstance.dismiss('cancel');
-   console.log(logrosAntes)
-    $uibModalInstance.close(logrosAntes)
-  }
-
-})
 

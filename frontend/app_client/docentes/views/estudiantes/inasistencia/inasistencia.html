@@ -19,10 +19,6 @@
         <li class="header">Materias</li>
         <li  class="treeview" ng-repeat="materia in materias">
           <a ng-click="getInasistenciasByMateria(materia)"><span>{{materia.nombre_materia}} </span><i class="fa fa-angle-left pull-right"></i></a>
-          <ul class="treeview-menu">
-             <li><a href="#">Link in level 2</a></li>
-            <li><a href="#">Link in level 2</a></li>
-          </ul>
           </li>
           
 
@@ -67,7 +63,7 @@
               <td>{{inasistencia.fecha_inasistencia | date : format : shortDate}}</td>
               <td>{{inasistencia.numero_periodo}}</td>
               <td>{{inasistencia.nombrecompleto}}</td>
-              <td>{{inasistencia.estado_inasistencia === 1 ? "Si" : "No" }}</td>
+              <td>{{inasistencia.estado_inasistencia === 2 ? "Si" : "No" }}</td>
           </tr>
         </tbody>
     </table>

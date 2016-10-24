@@ -22,14 +22,14 @@
           
           </td>
           <td>
-            <span ng-model="actividad.porcentaje_actividad" editable-text="actividad.porcentaje_actividad" onbeforesave="validarPorcentaje($data)" e-name="porcentaje_actividad"  e-form="rowform" >
+            <span editable-text="actividad.porcentaje_actividad" onbeforesave="validarPorcentaje($data)" e-name="porcentaje_actividad"  e-form="rowform" >
               {{ actividad.porcentaje_actividad || 'Vacio' }}%
             </span>
        
           </td>
           <th style="white-space: nowrap="><!-- form -->
-            <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onbeforesave="updateActividad ($data, actividad)" shown="inserted == actividad"  oncancel="cancelform(actividad, $index)">
-              <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+            <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onbeforesave="updateActividad ($data, actividad)" onaftersave="validarPorcentajeTotal()" shown="inserted == actividad"  oncancel="cancelform(actividad, $index)">
+              <button  type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
                 Ok
               </button>
               <button onbeforesave="prueba($data, actividad)"  type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
@@ -44,6 +44,10 @@
         </tr>
       </tbody>
     </table>
+    <div class="has-error">
+    <label ng-show="!isPorcentajeCien" class="control-label" for="inputError1">La sumatoria del porcentaje debe ser igual a 100%</label>
+      <span ng-show="!isPorcentajeCien"> </span>
+    </div>
     <button class="btn btn-default" ng-click="addActividad()">Agregar</button>
     </div><!-- modal body -->
   <div class="modal-footer">

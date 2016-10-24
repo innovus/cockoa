@@ -14,8 +14,6 @@
         <!--<a href="#"><i class="fa fa-circle text-success"></i> En linea</a>-->
         </div>
     </div>
-
-
         <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
         <li class="header">Materias</li>
@@ -25,7 +23,6 @@
              <li ng-repeat="carga in materia.cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}</a></li>
           </ul>
           </li>
-
     </ul>
     </section>
     <!-- /.sidebar -->
@@ -59,7 +56,7 @@
 
 
             <!-- tabla -->
-                <table class="table  table-hover table-condensed">
+                <table class="table  table-hover table-condensed" ng-show = "carga_seleccionada != null" > 
       <thead>
         <tr>
           <th class="col-md-1">No</th>
@@ -80,7 +77,7 @@
           
           </td>
           <td>
-            <span editable-text="logro.porcentaje_logro" e-name="porcentaje_logro"  e-form="rowform" >
+            <span editable-text="logro.porcentaje_logro" onbeforesave="validarPorcentaje($data)" e-name="porcentaje_logro" e-form="rowform" >
               {{ logro.porcentaje_logro || 'Vacio' }}%
             </span>
           </td>
@@ -102,41 +99,9 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-default" ng-click="create_nuevo_logro()">Agregar</button>
-
-<!--
-
-              <md-card ng-repeat="logro in logros"  md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch >
-                <form editable-form name="editableForm" onbeforesave="saveLogro(logro)"  class="form-buttons form-inline" >
-                  <md-card-title>
-                    <md-card-title-text>
-                      <span class="md-headline">Logro {{($index + 1)}} </span>
-                      <span class="md-subhead">{{logro.porcentaje_logro}} % </span>
-                    </md-card-title-text>
-                  </md-card-title>
-                  <md-card-content>
-                    <span  style="width: 100%;" editable-textarea="logro.descripcion_logro" e-name="descripcion_logro"  e-required>{{ logro.descripcion_logro || 'Ingresa una descripcion' }}</span>
-                  </md-card-content>
-                  <md-card-actions layout="row" layout-align="end center">
-                    <div class="buttons">
-                      <span ng-show="!editableForm.$visible">
-                        <a href="#" class="btn btn-default" role="button" ng-click="open('lg',logro.id_logro)" >Ver</a>
-                        <button type="button" class="btn btn-default" ng-click="editableForm.$show()" >Editar</button>
-                        <a href="#" ng-click="deleteLogro(logro,$index)" class="btn btn-danger" role="button">Eliminar</a>
-                      </span>
-
-                      <span ng-show="editableForm.$visible">
-                        <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">Guardar</button>
-                        <button type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">Cancel</button>
-                      </span>      
-                    </div>   
-
-                  </md-card-actions>
-                </form>
-              </md-card>
-              -->
+    <button class="btn btn-default" ng-click="create_nuevo_logro()" ng-show = "carga_seleccionada != null">Agregar</button>
               <div class="modal-footer">
-              <button class="btn btn-primary" type="button" ng-click="btnGuardar()">Guardar</button>
+              <button class="btn btn-primary" type="button" ng-show = "carga_seleccionada != null" ng-click="btnGuardar()">Guardar</button>
             </div>
             </div>
 

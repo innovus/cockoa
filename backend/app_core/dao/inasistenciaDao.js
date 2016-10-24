@@ -70,9 +70,6 @@ var addInasistencias= function(inasistencias){
    });
 
 };
-
-
-
 var queries={
 	"inasistencia":{
 		'findInasistenciasByCarga':queryFindInasistenciasByCarga,
