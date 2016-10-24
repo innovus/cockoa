@@ -14,6 +14,7 @@ var pgp2 = require('pg-promise')();
 
 var InasistenciaDao = require("../app_core/dao/inasistenciaDao");
 var MateriaDao = require("../app_core/dao/materiaDao");
+var NotificacionDao = require("../app_core/dao/notificacionDao");
 
 function getCantidadInasistenciaMateria(req,res){
 	InasistenciaDao.findCantidadInasistenciasBYMateria(30011)
@@ -109,10 +110,28 @@ function getInasistenciaPorCarga(req,res){
 		}
 	});
 }
-
+//funcion que recibe un arreglo de inasistencias y las agrega en la base de datos
 function addInasistencias (req,res){
 	InasistenciaDao.addInasistencias(req.body)
 	.then(function(){
+		var notificaciones = [];
+		//recorremos inasistencias para crear el arreglo de notificaciones por cada inassistencia agregada
+		 req.body.forEach(function(inasistencia,index){
+		 	var notificacion = {'id_tipo_notificacion':1,'mensaje_notificacion':'Su hijo Falto en la fecha '+inasistencia.fecha_inasistencia,'id_estudiante':inasistencia.id_estudiante,'guia':inasistencia.id_carga}
+		 	notificaciones.push(notificacion)
+		 })
+		 
+		 console.log(notificaciones)
+		 NotificacionDao.insertarNotificaciones(notificaciones)
+		 .then(function(data){
+			console.log("se envio notificacion")
+
+		}).catch(function(error){
+			console.log("error notificacion")
+			console.log(error)
+		})
+
+		//manda la respuesta
 		respuesta.sendJsonResponse(res,200,{'mensaje':'Inasistencias insertada'});
 	}).catch(function(error){
 		respuesta.sendJsonResponse(res,500,[]);

@@ -16,4 +16,5 @@ router.get('/notas/logros/materia/:id_estudiante',estudiantesController.getNotaL
 router.get('/logro/:id_logro/notas/actividad/',estudiantesController.getNotasActividadbyLogro);
 router.get('/tipos_notificaciones/',estudiantesController.getTiposNotificacion);
 router.post('/notificaciones/pendientes',estudiantesController.getNotificacionesPendientes);
+router.put('/notificaciones/estado',estudiantesController.updateEstadoNotificacion);
 module.exports = router;

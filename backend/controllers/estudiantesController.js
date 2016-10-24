@@ -194,6 +194,19 @@ function getTiposNotificacion(req,res){
 		}
 	});
 }
+function updateEstadoNotificacion(req,res){
+	NotificacionDao.updateEstadoNotificacion(req.body.id_notificacion)
+	 	.then(function(data){ 
+	 		respuesta.sendJsonResponse(res,200,data);
+	 	}).catch(function(err){
+		if(err.message == 'No data returned from the query.'){
+			respuesta.sendJsonResponse(res,200,[]);
+		}else{
+			console.log(err.message);
+			respuesta.sendJsonResponse(res,500,[]);
+		}
+	});
+}
 
 function getNotasActividades(req,res){
 
@@ -280,6 +293,7 @@ module.exports = {
     getNotasActividadbyLogro:getNotasActividadbyLogro,
     getTiposNotificacion: getTiposNotificacion,
     getNotificacionesPendientes:getNotificacionesPendientes,
+    updateEstadoNotificacion: updateEstadoNotificacion,
 
 
 

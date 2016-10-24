@@ -35,11 +35,23 @@
                 url: CONFIG.http_address+'/estudiantes/tipos_notificaciones',
             })
            
-        };      
+        }; 
+          var updateEstadoNotificacion= function(id_notificacion){
+            return $http({
+                method: 'PUT',
+                url: CONFIG.http_address+'/estudiantes/notificaciones/estado',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                data: {'id_notificacion': id_notificacion}
+            })
+           
+        };     
         return {
             findNotificationByEstudiante:findNotificationByEstudiante,
             findTiposNotificaciones:findTiposNotificaciones,
             findNotificacionesPendientesByEstudiante:findNotificacionesPendientesByEstudiante,
+            updateEstadoNotificacion: updateEstadoNotificacion
         };
     }
 })();

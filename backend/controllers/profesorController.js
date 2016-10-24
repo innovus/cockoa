@@ -16,6 +16,7 @@ var LogroDao = require("../app_core/dao/logroDao");
 var ActividadDao = require("../app_core/dao/actividadDao");
 var Nota_logroDao = require("../app_core/dao/nota_logroDao");
 var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
+var NotificacionDao = require("../app_core/dao/notificacionDao");
 
 
 function getCursosMaterias(req,res){
@@ -257,7 +258,10 @@ function insertNota(req,res){
 		console.log("es logros")
 
 		Nota_logroDao.insertNotasLogros(req.body)
-		.then(function(){	
+		.then(function(){
+
+
+
 			respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Todos los ingresos correctos'})		
 		})
 		.catch(function(error){
@@ -267,6 +271,17 @@ function insertNota(req,res){
 	}else if(req.params.table == "actividades"){
 		Nota_actividadDao.insertNotasActividades(req.body)
 		.then(function(){	
+			var notificacion = {'id_tipo_notificacion':2,'mensaje_notificacion':'Su hijo obtuvo una nota de '+req.body[0].nota_actividad,'id_estudiante':req.body[0].id_estudiante,'guia':req.body[0].id_actividad}
+			console.log(notificacion)
+			NotificacionDao.insertarNotificacion(notificacion)
+			.then(function(data){
+				console.log("se envio notificacion")
+
+			}).catch(function(error){
+				console.log("error notificacion")
+				console.log(error)
+
+			})
 			respuesta.sendJsonResponse(res,200,{'status':0,'msg':'Todos los ingresos correctos'})		
 		})
 		.catch(function(error){
@@ -431,8 +446,6 @@ function getActividadById(req,res){
 	console.log("createA")
 	console.log(createA);
 
-
-
 	LogroDao.guardarLogrosTransaccion(deleteA,updateA,createA,function(bien,error){
 		if(bien == null){
 			respuesta.sendJsonResponse(res,500,error);
@@ -494,8 +507,6 @@ function guardarActividadesTransaccion(req,res){
 function getNotasLogros(req,res){
 	Nota_logroDao.findNotasLogrosByCarga(req.params.id_carga)
 	.then(function(data){ 
-
-
 		var estudiantes = {};
 		var notas_logros = {};
 

@@ -30,7 +30,7 @@
             <li>
               <!-- inner menu: contains the actual data -->
               <ul class="menu">
-                <li ng-repeat="notificacion in notificaciones">
+                <li ng-repeat="notificacion in notificaciones" ng-class='{notificacionp: notificacion.estado_notificacion == "0" }' ng-click="clickNotificacion(notificacion)">
                   <a href="#">
                     <i class="ion ion-ios-people info"></i> {{notificacion.mensaje_notificacion}}
                   </a>
@@ -38,7 +38,7 @@
                 ...
               </ul>
             </li>
-            <li class="footer"><a href="#">View all</a></li>
+            <li class="footer"><a href="/#/estudiantes/notificaciones">Ver Todas</a></li>
           </ul>
         </li>
            <li><a href="/#/estudiantes/inasistencias">Asistencia</a></li>

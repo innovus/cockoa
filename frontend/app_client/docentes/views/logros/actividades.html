@@ -22,7 +22,7 @@
           
           </td>
           <td>
-            <span editable-text="actividad.porcentaje_actividad" onbeforesave="validarPorcentaje($data)" e-name="porcentaje_actividad"  e-form="rowform" >
+            <span ng-model="actividad.porcentaje_actividad" editable-text="actividad.porcentaje_actividad" onbeforesave="validarPorcentaje($data)" e-name="porcentaje_actividad"  e-form="rowform" >
               {{ actividad.porcentaje_actividad || 'Vacio' }}%
             </span>
        
