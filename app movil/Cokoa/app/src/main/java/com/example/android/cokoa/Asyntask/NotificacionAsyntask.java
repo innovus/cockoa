@@ -1,4 +1,4 @@
-package com.example.android.cokoa.AsyntaskProfesor;
+package com.example.android.cokoa.Asyntask;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -6,9 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.example.android.cokoa.AdaptersProfesor.CusosProfesorAdapters;
+import com.example.android.cokoa.Adapters.NotificacionAdapters;
 import com.example.android.cokoa.AppConstants.AppConstants;
-import com.example.android.cokoa.ModelsProfesor.CursosProfesor;
+import com.example.android.cokoa.Models.Notificacion;
 import com.example.android.cokoa.R;
 import com.example.android.cokoa.SessionManager.SessionManager;
 
@@ -25,28 +25,25 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 12/07/2016.
+ * Created by juancarlospantoja@hotmail.com on 17/10/2016.
  */
-public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<CursosProfesor>> {
+//extends AsyncTask<Void, Void, ArrayList<Inasistencia>> {
+public class NotificacionAsyntask extends AsyncTask<Void, Void, ArrayList<Notificacion>>{
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SessionManager sessionManager;
     String serverUrls = AppConstants.serverUrl;
-    private final String LOG_TAG = CursosAsyntaskProfresor.class.getSimpleName();
-
     private Activity activity;
+    private final String LOG_TAG = NotificacionAsyntask.class.getSimpleName();
 
-
-    public CursosAsyntaskProfresor(Activity activity) {
+    public NotificacionAsyntask(Activity activity) {
         super();
         this.activity = activity;
     }
-
-
-
     @Override
-    protected ArrayList<CursosProfesor> doInBackground(Void... params) {
+    protected ArrayList<Notificacion> doInBackground(Void... params) {
+
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -59,7 +56,7 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "api/docentes/cargas");
+            URL url = new URL(serverUrls + "estudiantes/notificacion/1193479112");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -127,7 +124,7 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
             }
         }
         try {
-            return getCursosMateriaProfesor(forecastJsonStr);
+            return getNotificacion(forecastJsonStr);
             //return  null;
         } catch (JSONException e) {
             Log.e("error", e.getMessage(), e);
@@ -135,66 +132,45 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
         }
 
         return null;
+    }
 
+    public ArrayList<Notificacion> getNotificacion(String notificacionJson)throws JSONException {
+        if(notificacionJson!=null){
+            JSONArray jsonArray = new JSONArray(notificacionJson);
+            ArrayList<Notificacion> notifications = new ArrayList<>();
+            for (int i = 0;i<jsonArray.length();i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Notificacion notificacion = new Notificacion();
+                String id_notificacion = jsonObject.getString("id_notificacion");
+                String id_tipo_notificacion = jsonObject.getString("id_tipo_notificacion");
+                String mensaje_notificacion = jsonObject.getString("mensaje_notificacion");
+                String fecha_notificacion = jsonObject.getString("fecha_notificacion");
+
+                notificacion.setIdNotificacion(id_notificacion);
+                notificacion.setTipoNotificacion(id_tipo_notificacion);
+                notificacion.setMensajeNotificacion(mensaje_notificacion);
+                notificacion.setFechaNotificacion(fecha_notificacion);
+
+                notifications.add(notificacion);
+
+            }
+            return notifications;
+        }
+        return null;
     }
 
     @Override
-    protected void onPostExecute(ArrayList<CursosProfesor> cursosProfesors) {
-        if(cursosProfesors!=null){
-             mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view);
-                mRecyclerView.setHasFixedSize(true);
-                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
-                mLayoutManager = new LinearLayoutManager(activity);
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                mAdapter = new CusosProfesorAdapters(cursosProfesors, activity);
-                mRecyclerView.setAdapter(mAdapter);
+    protected void onPostExecute(ArrayList<Notificacion> notificacions) {
+        super.onPostExecute(notificacions);
+        if(notificacions!=null){
+            mRecyclerView = (RecyclerView) activity.findViewById(R.id.notifacion);
+            mRecyclerView.setHasFixedSize(true);
+            // mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            //usar UN ADMINISTRADOR PARA LINEARLAYOUT
+            mLayoutManager = new LinearLayoutManager(activity);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new NotificacionAdapters(notificacions, activity);
+            mRecyclerView.setAdapter(mAdapter);
         }
     }
-
-    public ArrayList<CursosProfesor> getCursosMateriaProfesor(String ArrayListCursoProfesores) throws JSONException {
-
-        if (ArrayListCursoProfesores != null) {
-            // Ahora tenemos una cadena que representa todas las areas en formato JSON .
-            // Afortunadamente análisis es fácil: constructor toma la cadena JSON y lo convierte
-            // En una jerarquía de objetos para nosotros .
-            // Estos son los nombres de los objetos JSON que necesitan ser extraídos .
-            // La información de ubicación
-            Log.v("getArea", "Json String" + ArrayListCursoProfesores);
-            JSONArray areaArray = new JSONArray(ArrayListCursoProfesores);
-            Log.v("areaArray", "Json String" + areaArray);
-            ArrayList<CursosProfesor> cursosProfesors = new ArrayList<CursosProfesor>();
-
-            for (int i = 0; i < areaArray.length(); i++) {
-                JSONObject areas = areaArray.getJSONObject(i);
-
-
-
-                CursosProfesor cursosProfesor = new CursosProfesor();
-
-                String id_carga_docente = areas.getString("id_carga_docente");
-                cursosProfesor.setIdCargaDocente(id_carga_docente);
-
-                String nombre_materia = areas.getString("nombre_materia");
-                cursosProfesor.setNombreMateria(nombre_materia);
-
-                String grado_materia = areas.getString("grado");
-                cursosProfesor.setGrado(grado_materia);
-
-                String curso_materia = areas.getString("grupo");
-                cursosProfesor.setCurso(curso_materia);
-
-                cursosProfesors.add(cursosProfesor);
-
-
-            }
-
-            return cursosProfesors;
-
-
-        }
-
-        return null;
-
-    }
-
 }

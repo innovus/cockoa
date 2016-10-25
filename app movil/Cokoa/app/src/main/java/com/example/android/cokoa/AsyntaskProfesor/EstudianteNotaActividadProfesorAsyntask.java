@@ -2,14 +2,14 @@ package com.example.android.cokoa.AsyntaskProfesor;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
+import com.example.android.cokoa.AdaptersProfesor.EstudianteCursoAdapters;
 import com.example.android.cokoa.AppConstants.AppConstants;
-import com.example.android.cokoa.ModelsProfesor.ActividadLogroProfesor;
-import com.example.android.cokoa.ModelsProfesor.LogroProfesor;
+import com.example.android.cokoa.ModelsProfesor.EstudianteCurso;
+import com.example.android.cokoa.ModelsProfesor.NotaActividadProfesor;
 import com.example.android.cokoa.R;
 import com.example.android.cokoa.SessionManager.SessionManager;
 
@@ -24,28 +24,55 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by ASUS on 19/07/2016.
+ * Created by juancarlospantoja@hotmail.com on 14/10/2016.
  */
-public class SpinerLogrosAsintask extends AsyncTask<Void, Void, ArrayList<LogroProfesor>> {
+public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, Void, ArrayList<EstudianteCurso>> {
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
     SessionManager sessionManager;
     String serverUrls = AppConstants.serverUrl;
-    private final String LOG_TAG = SpinerLogrosAsintask.class.getSimpleName();
-    private Spinner spinner1, spinner2;
-
+    private final String LOG_TAG = EstudianteNotaActividadProfesorAsyntask.class.getSimpleName();
     private Activity activity;
 
-
-    public SpinerLogrosAsintask(Activity activity) {
+    public EstudianteNotaActividadProfesorAsyntask(Activity activity) {
         super();
         this.activity = activity;
     }
 
-
     @Override
-    protected ArrayList<LogroProfesor> doInBackground(Void... params) {
+    protected ArrayList<EstudianteCurso> doInBackground(String... params) {
+        if(estudianteCursos(params[0])!=null){
+            ArrayList<EstudianteCurso> estudianteCursos = estudianteCursos(params[0]);
+            if(notaActividadProfesors()!=null){
+                ArrayList<NotaActividadProfesor> notaActividadProfesors = notaActividadProfesors();
+                for(int i=0;i<estudianteCursos.size();i++){
+                    String idEstudiante = estudianteCursos.get(i).getCodigoEstudiante();
+                    for(int j=0;j<notaActividadProfesors.size();j++){
+                        String idEstudiante_nota_actividad = notaActividadProfesors.get(j).getIdEstudiante();
+                       // estudianteCursos.get(i).setIdActividad(notaActividadProfesors.get(j).getIdActividad());
+                        if(idEstudiante.equals(idEstudiante_nota_actividad)){
+                            estudianteCursos.get(i).setNotaEstudiante(notaActividadProfesors.get(j).getNotaActividad());
+
+                            //i++;
+                        }else {
+                            //estudianteCursos.get(i).setNotaEstudiante(" - ");
+                        }
+                    }
+
+                }
+                return estudianteCursos;
+            }else{
+                return estudianteCursos;
+            }
+        }
+
+       return null;
+    }
+
+    public ArrayList<EstudianteCurso> estudianteCursos(String params){
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -58,7 +85,7 @@ public class SpinerLogrosAsintask extends AsyncTask<Void, Void, ArrayList<LogroP
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "api/docentes/cargas/13375/logros");
+            URL url = new URL(serverUrls + "api/cursos/239/estudiantes");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -126,8 +153,7 @@ public class SpinerLogrosAsintask extends AsyncTask<Void, Void, ArrayList<LogroP
             }
         }
         try {
-          //  ArrayList<ActividadLogroProfesor> actividadLogroProfesors =  getLogrosProfesordoInBackground();
-            return getLogrosProfesor(forecastJsonStr);
+            return getEstudianteCursoProfesor(forecastJsonStr,params);
             //return  null;
         } catch (JSONException e) {
             Log.e("error", e.getMessage(), e);
@@ -135,8 +161,72 @@ public class SpinerLogrosAsintask extends AsyncTask<Void, Void, ArrayList<LogroP
         }
         return null;
     }
+    public ArrayList<EstudianteCurso> getEstudianteCursoProfesor(String ArrayListEstudianteCurso,String params) throws JSONException {
+        if (ArrayListEstudianteCurso != null) {
+            // Ahora tenemos una cadena que representa todas las areas en formato JSON .
+            // Afortunadamente análisis es fácil: constructor toma la cadena JSON y lo convierte
+            // En una jerarquía de objetos para nosotros .
+            // Estos son los nombres de los objetos JSON que necesitan ser extraídos .
+            // La información de ubicación
+            Log.v("getArea", "Json String" + ArrayListEstudianteCurso);
+            JSONArray areaArray = new JSONArray(ArrayListEstudianteCurso);
+            Log.v("areaArray", "Json String" + areaArray);
+            ArrayList<EstudianteCurso> estudianteCursos = new ArrayList<EstudianteCurso>();
 
-    public ArrayList<ActividadLogroProfesor> getLogrosProfesordoInBackground()  {
+            int numeroLista = 0;
+
+            for (int i = 0; i < areaArray.length(); i++) {
+                JSONObject areas = areaArray.getJSONObject(i);
+                String nombres = "";
+
+
+
+                if (!areas.isNull("apellido1")) {
+                    nombres = areas.getString("apellido1");
+                }
+
+                if (!areas.isNull("apellido2")) {
+                    nombres = nombres +" "+ areas.getString("apellido2");
+                }
+
+                if (!areas.isNull("nombre1")) {
+                    nombres = nombres +" "+ areas.getString("nombre1");
+                }
+
+                if (!areas.isNull("nombre2")) {
+                    nombres = nombres +" "+ areas.getString("nombre2");
+                }
+
+                EstudianteCurso estudianteCurso = new EstudianteCurso();
+
+                numeroLista=i;
+                estudianteCurso.setNumeroLista(Integer.toString(numeroLista+1));
+
+
+
+
+
+
+                estudianteCurso.setNombreEstudiante(nombres);
+
+                String codigo = areas.getString("id_estudiante");
+                estudianteCurso.setCodigoEstudiante(codigo);
+
+                estudianteCurso.setIdActividad(params);
+
+                estudianteCursos.add(estudianteCurso);
+
+
+            }
+
+            return estudianteCursos;
+
+        }
+        return null;
+    }
+
+
+    public ArrayList<NotaActividadProfesor> notaActividadProfesors(){
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -149,7 +239,7 @@ public class SpinerLogrosAsintask extends AsyncTask<Void, Void, ArrayList<LogroP
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "cursos/actividad_logros_profesor/");
+            URL url = new URL(serverUrls + "api/docentes/cargas/13375/logros/actividades/notas");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -217,90 +307,47 @@ public class SpinerLogrosAsintask extends AsyncTask<Void, Void, ArrayList<LogroP
             }
         }
         try {
-            return getActividadLogroProfesor(forecastJsonStr);
+            return getNotaActividadProfesor(forecastJsonStr);
             //return  null;
         } catch (JSONException e) {
             Log.e("error", e.getMessage(), e);
             e.printStackTrace();
         }
+
         return null;
     }
-
-    public ArrayList<ActividadLogroProfesor> getActividadLogroProfesor(String ArrayListLogroProfesor) throws JSONException {
-        if (ArrayListLogroProfesor != null) {
-            // Ahora tenemos una cadena que representa todas las areas en formato JSON .
-            // Afortunadamente análisis es fácil: constructor toma la cadena JSON y lo convierte
-            // En una jerarquía de objetos para nosotros .
-            // Estos son los nombres de los objetos JSON que necesitan ser extraídos .
-            // La información de ubicación
-            JSONArray jsonArray = new JSONArray(ArrayListLogroProfesor);
-            ArrayList<ActividadLogroProfesor> logroProfesors = new ArrayList<ActividadLogroProfesor>();
-
+    public ArrayList<NotaActividadProfesor> getNotaActividadProfesor(String ArrayListNotaActividad) throws JSONException {
+        if (ArrayListNotaActividad != null) {
+            JSONArray jsonArray = new JSONArray(ArrayListNotaActividad);
+            Log.v("areaArray", "Json String" + jsonArray);
+            ArrayList<NotaActividadProfesor> notaActividadProfesors = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                ActividadLogroProfesor logroProfesor = new ActividadLogroProfesor();
-                String nombreActividad = jsonObject.getString("nombre_actividad");
-                logroProfesor.setNombreActividad(nombreActividad);
-
-                logroProfesors.add(logroProfesor);
+              //  String idActividad = jsonObject.getString("id_actividad");
+                String idEstudiante = jsonObject.getString("id_estudiante");
+                String notaActividad = jsonObject.getString("nota_actividad");
+                NotaActividadProfesor notaActividadProfesor = new NotaActividadProfesor();
+               // notaActividadProfesor.setIdActividad(idActividad);
+                notaActividadProfesor.setIdEstudiante(idEstudiante);
+                notaActividadProfesor.setNotaActividad(notaActividad);
+                notaActividadProfesors.add(notaActividadProfesor);
             }
-            return logroProfesors;
-
+            return notaActividadProfesors;
         }
         return null;
     }
-
-    public ArrayList<LogroProfesor> getLogrosProfesor(String ArrayListLogroProfesor) throws JSONException {
-        if (ArrayListLogroProfesor != null) {
-            // Ahora tenemos una cadena que representa todas las areas en formato JSON .
-            // Afortunadamente análisis es fácil: constructor toma la cadena JSON y lo convierte
-            // En una jerarquía de objetos para nosotros .
-            // Estos son los nombres de los objetos JSON que necesitan ser extraídos .
-            // La información de ubicación
-            JSONArray jsonArray = new JSONArray(ArrayListLogroProfesor);
-            ArrayList<LogroProfesor> logroProfesors = new ArrayList<LogroProfesor>();
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                LogroProfesor logroProfesor = new LogroProfesor();
-                String nombreLogro = jsonObject.getString("descripcion_logro");
-                logroProfesor.setNombreLogro(nombreLogro);
-
-                logroProfesors.add(logroProfesor);
-            }
-            return logroProfesors;
-
-        }
-        return null;
-    }
-
-
-
 
     @Override
-    protected void onPostExecute(ArrayList<LogroProfesor> logroProfesors) {
-
-        if(logroProfesors!=null){
-            spinner1 = (Spinner) activity.findViewById(R.id.spinner2);
-            spinner1.setVisibility(View.VISIBLE);
-
-            List<String> list = new ArrayList<String>();
-            list.add("elija un logro ");
-            list.add(logroProfesors.get(0).getNombreLogro());
-
-            String[] opciones = {"Logro 1", "Logro 2", "Logro 4", "Logro 5"};
-
-            //ArrayAdapter<LogroProfesor> adapter = new ArrayAdapter<LogroProfesor>(activity, android.R.layout.simple_spinner_item, logroProfesors.get(0));
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item, list);
-            spinner1.setAdapter(adapter);
-
-
-
-
+    protected void onPostExecute(ArrayList<EstudianteCurso> estudianteCursos) {
+        super.onPostExecute(estudianteCursos);
+        if(estudianteCursos!=null){
+             mRecyclerView = (RecyclerView) activity.findViewById(R.id.recycler_estudiantes_actividad_logro_materia_profesor);
+                mRecyclerView.setHasFixedSize(true);
+                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
+                mLayoutManager = new LinearLayoutManager(activity);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new EstudianteCursoAdapters(estudianteCursos, activity);
+                mRecyclerView.setAdapter(mAdapter);
         }
-
     }
-
-
 }

@@ -6,6 +6,15 @@ package com.example.android.cokoa.ModelsProfesor;
 public class NotaActividadProfesor {
     private String idEstudiante;
     private String notaActividad;
+    private String idActividad;
+
+    public String getIdActividad() {
+        return idActividad;
+    }
+
+    public void setIdActividad(String idActividad) {
+        this.idActividad = idActividad;
+    }
 
     public String getIdEstudiante() {
         return idEstudiante;

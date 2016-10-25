@@ -40,7 +40,7 @@ public class MateriaAdapters extends RecyclerView.Adapter<MateriaAdapters.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.nameArea.setText(materia.get(position).getNombre_materia());
-        viewHolder.name1Docente.setText("Prof: " + materia.get(position).getNombre1_docente() + materia.get(position).getNombre2_docente() + materia.get(position).getApellido1_docente() + materia.get(position).getApellido2_docente());
+        viewHolder.name1Docente.setText(materia.get(position).getNombre1_docente() + materia.get(position).getNombre2_docente() + materia.get(position).getApellido1_docente() + materia.get(position).getApellido2_docente());
         double v = materia.get(position).getNotaPeriodo1();
 
         String s = String.valueOf(v);
@@ -75,6 +75,7 @@ public class MateriaAdapters extends RecyclerView.Adapter<MateriaAdapters.ViewHo
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, LogrosActivity.class);
                     intent.putExtra("id_materia", feed.getId_materia());
+                    intent.putExtra("nombre_materia", feed.getNombre_materia());
                     intent.putExtra("periodo_actual",feed.getPeriodo_actual());
                     intent.putExtra("promedio",feed.getPromedio());
                     activity.startActivity(intent);

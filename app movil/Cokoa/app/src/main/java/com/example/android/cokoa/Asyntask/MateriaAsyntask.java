@@ -1,12 +1,14 @@
 package com.example.android.cokoa.Asyntask;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -30,7 +32,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 08/06/2016.
+ * Created by juancarlospantoja@hotmail.com on 08/06/2016.
  */
 public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
     private RecyclerView mRecyclerView;
@@ -42,135 +44,88 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
     private Activity activity;
     private final String LOG_TAG = MateriaAsyntask.class.getSimpleName();
 
+    ProgressDialog progressDialog;
+
     public MateriaAsyntask(Activity activity) {
         super();
         this.activity = activity;
     }
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(true);
+        progressDialog.getWindow().setGravity(Gravity.CENTER);
+        progressDialog.show();
+    }
+
+    @Override
     protected ArrayList<Materia> doInBackground(Void... params) {
-          ArrayList<Materia> unos = uno();
-         ArrayList<Logro> dosss=doss();
+        ArrayList<Materia> unos = uno();
 
-        for (int i = 0;i<unos.size();i++) {
-            int countPer =0;
-            int countPer2 =0;
-            int countPer3 =0;
-            int countPer4 =0;
-            double porcentajeLogro=0;
-            double porcentajeLogro2=0;
-            double porcentajeLogro3=0;
-            double porcentajeLogro4=0;
-            for (int j = 0; j < dosss.size(); j++) {
-                if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("1")))) {
-                    double porcentaje = dosss.get(j).getPorcentajeLogro()/100;
-                    double suma = dosss.get(j).getNota_logro()*porcentaje;
-                    porcentajeLogro = porcentajeLogro +suma;
-                    countPer = countPer +1;
-                }
-                if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("2")))) {
-                    double porcentaje = dosss.get(j).getPorcentajeLogro()/100;
-                    double suma = dosss.get(j).getNota_logro()*porcentaje;
-                    porcentajeLogro2 = porcentajeLogro2 +suma;
-                    countPer2 = countPer2 +1;
-                }
-                if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("3")))) {
-                    double porcentaje = dosss.get(j).getPorcentajeLogro()/100;
-                    double suma = dosss.get(j).getNota_logro()*porcentaje;
-                    porcentajeLogro3 = porcentajeLogro3 +suma;
-                    countPer3 = countPer3 +1;
-                }
-                if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("4")))) {
-                    double porcentaje = dosss.get(j).getPorcentajeLogro()/100;
-                    double suma = dosss.get(j).getNota_logro()*porcentaje;
-                    porcentajeLogro4 = porcentajeLogro4 +suma;
-                    countPer4 = countPer4 +1;
-                }
-            }
-            unos.get(i).setNotaPeriodo1(porcentajeLogro);
-            unos.get(i).setNotaPeriodo2(porcentajeLogro2);
-            unos.get(i).setNotaPeriodo3(porcentajeLogro3);
-            unos.get(i).setNotaPeriodo4(porcentajeLogro4);
+        if(uno()!=null){
+            if(doss()!=null){
+                ArrayList<Logro> dosss = doss();
 
-            int num = Integer.parseInt(unos.get(i).getPeriodo_actual());
-            unos.get(i).setPromedio( (porcentajeLogro+porcentajeLogro2+porcentajeLogro3+porcentajeLogro4)/num);
-
-        }
-
-
-
-/* double porcentaje = dosss.get(j).getPorcentajeLogro()/100;
-                            notaLogro=dosss.get(j).getNota_logro()*porcentaje;
-                            promedio = notaLogro/perio1;
-                            perio1 ++;
-                            unos.get(i).setNotaPeriodo1(promedio);*/
-
-
-
-
-
-           /* for (int j = 0;j<dosss.size();j++){
-
-
-
-
-                    if(unos.get(i).getId_materia().equals(dosss.get(j).getId_materia())){
-
-                        if(dosss.get(j).getNumero_periodo().equals("1")){
-                            double porcentaje = dosss.get(j).getPorcentajeLogro()/100;
-                            notaLogro=dosss.get(j).getNota_logro()*porcentaje;
-                            promedio = notaLogro/perio1;
-                            perio1 ++;
-                            unos.get(i).setNotaPeriodo1(promedio);
+                for (int i = 0; i < unos.size(); i++) {
+                    int countPer = 0;
+                    int countPer2 = 0;
+                    int countPer3 = 0;
+                    int countPer4 = 0;
+                    double porcentajeLogro = 0;
+                    double porcentajeLogro2 = 0;
+                    double porcentajeLogro3 = 0;
+                    double porcentajeLogro4 = 0;
+                    for (int j = 0; j < dosss.size(); j++) {
+                        if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("1")))) {
+                            double porcentaje = dosss.get(j).getPorcentajeLogro() / 100;
+                            double suma = dosss.get(j).getNota_logro() * porcentaje;
+                            porcentajeLogro = porcentajeLogro + suma;
+                            countPer = countPer + 1;
                         }
-
-
+                        if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("2")))) {
+                            double porcentaje = dosss.get(j).getPorcentajeLogro() / 100;
+                            double suma = dosss.get(j).getNota_logro() * porcentaje;
+                            porcentajeLogro2 = porcentajeLogro2 + suma;
+                            countPer2 = countPer2 + 1;
+                        }
+                        if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("3")))) {
+                            double porcentaje = dosss.get(j).getPorcentajeLogro() / 100;
+                            double suma = dosss.get(j).getNota_logro() * porcentaje;
+                            porcentajeLogro3 = porcentajeLogro3 + suma;
+                            countPer3 = countPer3 + 1;
+                        }
+                        if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("4")))) {
+                            double porcentaje = dosss.get(j).getPorcentajeLogro() / 100;
+                            double suma = dosss.get(j).getNota_logro() * porcentaje;
+                            porcentajeLogro4 = porcentajeLogro4 + suma;
+                            countPer4 = countPer4 + 1;
+                        }
                     }
-            }*/
+                    unos.get(i).setNotaPeriodo1(porcentajeLogro);
+                    unos.get(i).setNotaPeriodo2(porcentajeLogro2);
+                    unos.get(i).setNotaPeriodo3(porcentajeLogro3);
+                    unos.get(i).setNotaPeriodo4(porcentajeLogro4);
 
+                    int num = Integer.parseInt(unos.get(i).getPeriodo_actual());
+                    unos.get(i).setPromedio((porcentajeLogro + porcentajeLogro2 + porcentajeLogro3 + porcentajeLogro4) / num);
 
-
-            /*for (int m=0;m<Integer.parseInt(uno.get(0).getPeriodo_actual());m++){
-                for (int j = 0;j<doss.size();j++){
-                    int periodo_actual=  Integer.parseInt(uno.get(0).getPeriodo_actual());
-                    int periodo_logro=Integer.parseInt(doss.get(j).getNumero_periodo());
-                    if(periodo_actual<periodo_logro){
-                        double promedio=0;
-                        double notaLogro=0;
-
-                        double=doss.get(j).getNota_logro()*doss.get(j).getPorcentajeLogro();
-                        double=promedio+notaLogro;
-                        uno.get(i).setNotaPeriodo1(promedio);
-                    }else {
-
-                    }
                 }
-            }*/
+                return unos;
+            }else{
+                return uno();
+            }
 
-
-
-
-
-        return unos;
-
-        //return uno();
-        //return null;
+        }
+      return null;
     }
 
-    public boolean esDecimal(String cad)
-    {
-        try
-        {
-            Double.parseDouble(cad);
-            return true;
-        }
-        catch(NumberFormatException nfe)
-        {
-            return false;
-        }
-    }
 
-    public ArrayList<Materia> uno(){
+    public ArrayList<Materia> uno() {
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -262,7 +217,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
         return null;
     }
 
-    public  ArrayList<Logro> doss(){
+    public ArrayList<Logro> doss() {
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -275,7 +230,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "estudiantes/notas/logros/materia/20003");
+            URL url = new URL(serverUrls + "estudiantes/notas/logros/materia/30011");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -323,7 +278,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
                 Log.v("status", "Json String" + statuss);
                 if (statuss == 400) {
                     ArrayList a = new ArrayList();
-                    a.add(0,"400");
+                    a.add(0, "400");
                     return a;
                 }
 
@@ -364,7 +319,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
                         Toast.makeText(activity, "Aun no se le asignan materias", Toast.LENGTH_SHORT);
                 toast1.show();
 
-            }else{
+            } else {
                 mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view);
                 mRecyclerView.setHasFixedSize(true);
                 //usR UN ADMINISTRADOR PARA LINEARLAYOUT
@@ -373,14 +328,6 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
                 mAdapter = new MateriaAdapters(result, activity);
                 mRecyclerView.setAdapter(mAdapter);
 
-
-                /*mRecyclerView = (RecyclerView) activity.findViewById(R.id.cantidad_inasistencia_materiass);
-                mRecyclerView.setHasFixedSize(true);
-                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
-                mLayoutManager = new LinearLayoutManager(activity);
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                mAdapter = new TotalInsasitenciaAdapter(result, activity);
-                mRecyclerView.setAdapter(mAdapter);*/
             }
 
 
@@ -396,6 +343,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
                     .setActionTextColor(Color.YELLOW)
                     .show();
         }
+        progressDialog.dismiss();
     }
 
 
@@ -480,7 +428,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
 
             for (int i = 0; i < logroArray.length(); i++) {
                 JSONObject logro = logroArray.getJSONObject(i);
-                String numero_periodo =  logro.getString("numero_periodo");
+                String numero_periodo = logro.getString("numero_periodo");
                 double notalogro = logro.getDouble("nota_logro");
                 double porsentajeLogro = logro.getInt("porcentaje_logro");
                 String id_materia = logro.getString("id_materia");

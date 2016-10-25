@@ -10,6 +10,15 @@ public class CursosProfesor {
     private String grado;
     private String curso;
     private String  nombreMateria;
+    private String idCargaDocente;
+
+    public String getIdCargaDocente() {
+        return idCargaDocente;
+    }
+
+    public void setIdCargaDocente(String idCargaDocente) {
+        this.idCargaDocente = idCargaDocente;
+    }
 
     public String getNombreMateria() {
         return nombreMateria;

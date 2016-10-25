@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         //drawer.closeDrawer(GravityCompat.START);
         /* DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);*/
-        drawerLayout.openDrawer(GravityCompat.START);
+        //drawerLayout.openDrawer(GravityCompat.START);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+           // drawer.closeDrawer(GravityCompat.START);
             //        navigationView.getMenu().findItem(R.id.nav_calificaciones).setChecked(true);
 
         } else {

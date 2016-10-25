@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.android.cokoa.ActivityProfesor.EstudiantesCursoActivity;
+import com.example.android.cokoa.ActivityProfesor.LogrosMateriaEstudianteProfesorActivity;
 import com.example.android.cokoa.ModelsProfesor.CursosProfesor;
 import com.example.android.cokoa.R;
 
@@ -41,6 +41,8 @@ public class CusosProfesorAdapters extends RecyclerView.Adapter<CusosProfesorAda
         viewHolder.nombreMateria.setText(cursosProfesors.get(position).getNombreMateria());
         viewHolder.curso.setText(cursosProfesors.get(position).getCurso());
         viewHolder.grado.setText(cursosProfesors.get(position).getGrado());
+        viewHolder.cursosProfesor = cursosProfesors.get(position);
+
 
     }
 
@@ -51,6 +53,7 @@ public class CusosProfesorAdapters extends RecyclerView.Adapter<CusosProfesorAda
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nombreMateria, curso,grado;
+        CursosProfesor cursosProfesor;
         public ViewHolder(View itemView) {
             super(itemView);
             nombreMateria = (TextView) itemView.findViewById(R.id.id_text_nombremateria_curso);
@@ -60,7 +63,9 @@ public class CusosProfesorAdapters extends RecyclerView.Adapter<CusosProfesorAda
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(activity, EstudiantesCursoActivity.class);
+                    Intent intent = new Intent(activity, LogrosMateriaEstudianteProfesorActivity.class);
+                    intent.putExtra("nombre_materia",cursosProfesor.getNombreMateria());
+                    intent.putExtra("id_carda_docente",cursosProfesor.getIdCargaDocente());
                     activity.startActivity(intent);
                 }
             });

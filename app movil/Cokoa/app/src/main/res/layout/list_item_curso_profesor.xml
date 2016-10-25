@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingRight="16dp"
     android:background="?android:attr/selectableItemBackground"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="vertical">
@@ -15,65 +14,39 @@
         android:padding="16dp"
         android:paddingBottom="5dp">
 
-        <LinearLayout
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/ImageView_image"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/ripple"
-                android:scaleType="centerCrop"
-                android:padding="3dp"
-                android:src="@drawable/ic_border_color_white_24dp"/>
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-          </LinearLayout>
 
         <LinearLayout
-            android:paddingLeft="16dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="16dp">
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="Asignatura" />
 
             <TextView
                 android:id="@+id/id_text_nombremateria_curso"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="4dp"
-                android:text="Nombre Asignatura" />
+                android:text="Nombre Asignatura"
+                android:textStyle="bold" />
 
         </LinearLayout>
-        <LinearLayout
-            android:gravity="center"
 
-            android:orientation="vertical"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="Curso" />
+                android:text="Curso"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

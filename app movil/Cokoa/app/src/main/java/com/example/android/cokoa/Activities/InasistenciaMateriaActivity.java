@@ -6,9 +6,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.example.android.cokoa.Fragments.InasistenciaMateriaFragment;
+import com.example.android.cokoa.Asyntask.InasistenciaMateriaAsyntask;
 import com.example.android.cokoa.R;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class InasistenciaMateriaActivity extends AppCompatActivity {
     String id_materia;
@@ -22,7 +24,9 @@ public class InasistenciaMateriaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         id_materia = getIntent().getStringExtra("id_materia");
-        Bundle parametros = new Bundle();
+
+
+       /* Bundle parametros = new Bundle();
         parametros.putString("id_materia", id_materia);
         if (savedInstanceState == null) {
 
@@ -32,7 +36,11 @@ public class InasistenciaMateriaActivity extends AppCompatActivity {
             inasistenciaMateriaFragment.setArguments(parametros);
             fragmentTransaction.replace(R.id.fragment_inasistencias_materia, inasistenciaMateriaFragment);
             fragmentTransaction.commit();
-        }
+        }*/
+
+
+
+        new InasistenciaMateriaAsyntask(this).execute(id_materia);
     }
 
     @Override
@@ -46,5 +54,15 @@ public class InasistenciaMateriaActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void getTok(View view){
+
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d("firebase", "FBMToken: " + token);
+
+
+    }
+
+
 
 }

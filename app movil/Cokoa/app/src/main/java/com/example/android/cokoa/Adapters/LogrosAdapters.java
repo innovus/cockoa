@@ -15,7 +15,7 @@ import com.example.android.cokoa.R;
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 09/06/2016.
+ * Created by juancarlospantoja@hotmail.com on 09/06/2016.
  */
 public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHolder> {
     private ArrayList<Logro> logros;
@@ -28,14 +28,15 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView  descLogro,numeroPerido;
+        public TextView  numeroLogro,descLogro,numeroPerido;
         Logro logro;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
+            numeroLogro = (TextView) itemView.findViewById(R.id.txt_num_logro);
             descLogro = (TextView) itemView.findViewById(R.id.text_des_logro);
             numeroPerido = (TextView) itemView.findViewById(R.id.text_numero_periodo);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -44,6 +45,7 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
                     Intent intent = new Intent(activity, NotasActivity.class);
                     intent.putExtra("id_materia",logro.getId_materia());
                     intent.putExtra("id_logro",logro.getId_logro());
+                    intent.putExtra("descripcionLogro",logro.getDesc_logro());
                     activity.startActivity(intent);
 
 
@@ -63,6 +65,7 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
+        viewHolder.numeroLogro.setText("Logro "+Integer.toString(position+1));
         viewHolder.descLogro.setText(logros.get(position).getDesc_logro());
         if (logros.get(position).getNota_logro() < 0) {
             viewHolder.numeroPerido.setText("---");

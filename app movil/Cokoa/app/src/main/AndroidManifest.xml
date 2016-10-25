@@ -25,20 +25,35 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.LogrosActivity"
-            android:label="Indicadores de logros"
-            android:theme="@style/AppTheme"/>
-
+            android:label="Logros"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".Activities.NotasActivity"
             android:label="Nota Actividad"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".Activities.InasistenciaMateriaActivity"
             android:label="Inasistencia"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity android:name=".ActivityProfesor.EstudiantesCursoActivity" />
-        <activity android:name=".ActivityProfesor.LogrosMateriaEstudianteProfesorActivity" />
-        <activity android:name=".ActivityProfesor.LlamarListaActivity"></activity>
+        <activity
+            android:name=".ActivityProfesor.LogrosMateriaEstudianteProfesorActivity"
+            android:label="Logros"/>
+        <activity android:name=".ActivityProfesor.LlamarListaActivity" />
+        <activity android:name=".ActivityProfesor.InsertarNotaActividadActivity"></activity>
+
+        <service
+            android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".MyFirebaseInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

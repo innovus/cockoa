@@ -11,8 +11,9 @@ import com.example.android.cokoa.Fragments.NotasActividadFragment;
 import com.example.android.cokoa.R;
 
 public class NotasActivity extends AppCompatActivity {
-    String id_materia;
+    String id_materia,descripcionLogro;
     String id_logro;
+
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
@@ -25,9 +26,13 @@ public class NotasActivity extends AppCompatActivity {
 
         id_materia = getIntent().getStringExtra("id_materia");
         id_logro = getIntent().getStringExtra("id_logro");
+        descripcionLogro = getIntent().getStringExtra("descripcionLogro");
+
+
         Bundle parametros = new Bundle();
         parametros.putString("id_materia", id_materia);
         parametros.putString("id_logro", id_logro);
+        parametros.putString("descripcionLogro",descripcionLogro);
 
 
         if (savedInstanceState == null) {

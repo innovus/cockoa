@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.cokoa.Adapters.NotificacionAdapters;
+import com.example.android.cokoa.Asyntask.NotificacionAsyntask;
 import com.example.android.cokoa.MainActivity;
 import com.example.android.cokoa.Models.Notificacion;
 import com.example.android.cokoa.R;
@@ -43,6 +44,8 @@ public class NotificacionFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ArrayList<Notificacion> notificacions = new ArrayList<>();
+
+        new NotificacionAsyntask(getActivity()).execute();
 
 
         /**prueba de notificaciones*/

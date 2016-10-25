@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.android.cokoa.Adapters.NotasActividadAdapters;
 import com.example.android.cokoa.Asyntask.NotasActividadAsyntask;
@@ -24,12 +25,12 @@ public class NotasActividadFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private String id_materia;
-    private String id_logro;
+    private String id_logro,descripcionLogro;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_notas, container, false);
+        View rootView = inflater.inflate(R.layout.nota_actividad_fragment, container, false);
         return rootView;
     }
 
@@ -40,6 +41,11 @@ public class NotasActividadFragment extends Fragment {
         Bundle args = getArguments();
         id_materia = args.getString("id_materia");
         id_logro = args.getString("id_logro");
+        descripcionLogro = args.getString("descripcionLogro");
+
+        // descripcionLogro = getIntent().getStringExtra("descripcionLogro");
+        TextView textView = (TextView) getActivity().findViewById(R.id.txtActividadLogro);
+        textView.setText(descripcionLogro);
         new NotasActividadAsyntask(this.getActivity()).execute(id_materia,id_logro);
         //obtenemos el recycler
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view_actividad_logro);

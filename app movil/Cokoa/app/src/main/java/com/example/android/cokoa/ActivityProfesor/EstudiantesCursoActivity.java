@@ -95,10 +95,7 @@ public class EstudiantesCursoActivity extends AppCompatActivity implements Adapt
                 mRecyclerView.setAdapter(mAdapter);
 
 
-                /*ArrayList<String> list = new ArrayList<>(); //this list will hold the Strings from the adapter Views
-for (int i = 0 ; i < yourRecycle.getChildCount(); i++){
-        list.add(((EditText)yourRecycle.getChildAt(i)).getText().toString());
-}*/
+
 
             }
 
@@ -115,9 +112,7 @@ for (int i = 0 ; i < yourRecycle.getChildCount(); i++){
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //Toast.makeText(parent.getContext(), "Seleccion: " + position, Toast.LENGTH_LONG).show();
-        /*switch (parent.getId()) {
-        case R.id.sp_provincia:*/
+
         switch (parent.getId()) {
             case R.id.spinner2:
                 if (position > 0) {
@@ -130,21 +125,14 @@ for (int i = 0 ; i < yourRecycle.getChildCount(); i++){
                 break;
             case R.id.spinner3:
                 if (position > 0) {
-                    /*fragmentManager = getSupportFragmentManager();
-                    fragmentTransaction = fragmentManager.beginTransaction();
-                    EstudianteCursoFragment estudianteCursoFragment = new EstudianteCursoFragment();
-                    fragmentTransaction.replace(R.id.fragment_curso_estudiante, estudianteCursoFragment);
-                    fragmentTransaction.commit();*/
+
                     new EstudianteCursoProfesorAsyntask(this).execute();
                 }
                 if (position == 0) {
                     ArrayList<EstudianteCurso> estudianteCursos = new ArrayList<>();
                     //obtenemos el recycler
 
-       /* spinner1 = (Spinner) getActivity().findViewById(R.id.spinner2);
-        String []opciones={"sumar","restar","multiplicar","culiar"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, opciones);
-        spinner1.setAdapter(adapter);*/
+
 
 
                     mRecyclerView = (RecyclerView) this.findViewById(R.id.my_recycler_curso_materia);
@@ -158,25 +146,13 @@ for (int i = 0 ; i < yourRecycle.getChildCount(); i++){
                     mAdapter = new EstudianteCursoAdapters(estudianteCursos, this);
                     mRecyclerView.setAdapter(mAdapter);
 
-                    /* MyFrag myFrag = (MyFrag)fragmentManager.findFragmentByTag(SOME_TAG);
-    fragmentTransaction.hide(myFrag);
-    fragmentTransaction.commit();*/
 
-
-                    /*View frag = findViewById(R.id.fragment_curso_estudiante);
-                    frag.setVisibility(View.VISIBLE);*/
 
                 }
 
                 break;
         }
-       /* if (position > 0) {
-            new SpinnerActividadAsyntask(this).execute();
-        }
-        if (position == 0) {
 
-            spinner2.setVisibility(View.INVISIBLE);
-        }*/
     }
 
     @Override

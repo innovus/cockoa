@@ -1,6 +1,7 @@
 package com.example.android.cokoa.Asyntask;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
@@ -43,12 +44,27 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
     String serverUrls = AppConstants.serverUrl;
     private Activity activity;
     private final String LOG_TAG = NotasActividadAsyntask.class.getSimpleName();
+    ProgressDialog progressDialog;
 
 
 
     public NotasActividadAsyntask(Activity activity){
         super();
         this.activity=activity;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        // progressDialog= ProgressDialog.show(activity, "Reporte de calificaciones","Asignaturas", true);
+
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+
     }
 
     @Override
@@ -71,7 +87,6 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
                     }
 
                 }
-                //actividadLogro.get(0).setNotaActividad("5.5");
                 return actividadLogro;
             }else {
                 for(int i=0;i<actividadLogro.size();i++){
@@ -80,9 +95,6 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
                 return actividadLogro;
             }
         }
-
-
-
         return null;
 
     }
@@ -215,6 +227,8 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
                     .setActionTextColor(Color.YELLOW)
                     .show();
         }
+
+        progressDialog.dismiss();
     }
 
     public static ArrayList<NotaActividad> getNotasActividad(String logroJsonStr) throws JSONException {
@@ -237,6 +251,7 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
                 // String notaActividads = notaActividad.getString("nota_actividad");
                  NotaActividad  notaActividad1 = new NotaActividad();
                 notaActividad1.setIdnotaActividad(id_actividad);
+                 notaActividad1.setNombreActividad("Actividad");
                  notaActividad1.setDescActividad(descActividad);
                  //notaActividad1.setNotaActividad(notaActividads);
                  notasActividadArrayList.add(notaActividad1);

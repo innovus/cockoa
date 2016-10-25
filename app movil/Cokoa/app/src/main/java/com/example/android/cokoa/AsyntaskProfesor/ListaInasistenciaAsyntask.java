@@ -69,7 +69,7 @@ public class ListaInasistenciaAsyntask extends AsyncTask<Void,Void,ArrayList<Est
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "cursos/226/estudiantes");
+            URL url = new URL(serverUrls + "api/cursos/239/estudiantes");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -159,7 +159,7 @@ public class ListaInasistenciaAsyntask extends AsyncTask<Void,Void,ArrayList<Est
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "cursos/1/estudiantes");
+            URL url = new URL(serverUrls + "api/cursos/239/estudiantes");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -268,20 +268,22 @@ public class ListaInasistenciaAsyntask extends AsyncTask<Void,Void,ArrayList<Est
                 JSONObject areas = areaArray.getJSONObject(i);
                 String nombres = "";
 
-                if (!areas.isNull("nombre1")) {
-                    nombres = areas.getString("nombre1");
-                }
 
-                if (!areas.isNull("nombre2")) {
-                    nombres = nombres +" "+ areas.getString("nombre2");
-                }
 
                 if (!areas.isNull("apellido1")) {
-                    nombres = nombres +" "+ areas.getString("apellido1");
+                    nombres = areas.getString("apellido1");
                 }
 
                 if (!areas.isNull("apellido2")) {
                     nombres = nombres +" "+ areas.getString("apellido2");
+                }
+
+                if (!areas.isNull("nombre1")) {
+                    nombres = nombres +" " +areas.getString("nombre1");
+                }
+
+                if (!areas.isNull("nombre2")) {
+                    nombres = nombres +" "+ areas.getString("nombre2");
                 }
 
                 EstudianteCurso estudianteCurso = new EstudianteCurso();

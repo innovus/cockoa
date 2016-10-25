@@ -3,14 +3,13 @@ package com.example.android.cokoa.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.android.cokoa.Adapters.LogrosAdapters;
 import com.example.android.cokoa.Asyntask.LogrosAsyntask;
@@ -23,15 +22,10 @@ import java.util.ArrayList;
  * Created by ASUS on 09/06/2016.
  */
 public class LogrosFragment extends Fragment {
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private String id_materia;
-
-
-
 
 
     @Override
@@ -46,18 +40,22 @@ public class LogrosFragment extends Fragment {
         ArrayList<Logro> areas = new ArrayList<>();
         Bundle args = getArguments();
         String id_materia = args.getString("id_materia");
+        String nombreMateria = args.getString("nombreMateria");
         String numero_periodo = args.getString("periodo_actual");
         String sheckPeriodo = args.getString("sheckPeriodo");
+
+        TextView textView = (TextView) getActivity().findViewById(R.id.txtNombreMateria);
+        textView.setText(nombreMateria);
 
       /*  if(numero_periodo.equals("null")){
             new LogrosAsyntask(this.getActivity()).execute(id_materia);
         }else {
             new LogrosPeriodoAsyntask(this.getActivity()).execute(id_materia,numero_periodo);
         }*/
-        if(sheckPeriodo.equals("false")){
-            new LogrosAsyntask(this.getActivity()).execute(id_materia,"false");
-        }else {
-            new LogrosAsyntask(this.getActivity()).execute(id_materia,"true",numero_periodo);
+        if (sheckPeriodo.equals("false")) {
+            new LogrosAsyntask(this.getActivity()).execute(id_materia, "false");
+        } else {
+            new LogrosAsyntask(this.getActivity()).execute(id_materia, "true", numero_periodo);
         }
 
         //new LogrosAsyntask(this.getActivity()).execute(id_materia,"sheckPeriodo");
@@ -71,7 +69,7 @@ public class LogrosFragment extends Fragment {
         //recyclerView.setItemAnimator(ItemAnimator animator);
         // mRecyclerView.setItemAnimator(ItemAnimator animator);
         // specify an adapter (see also next example)
-        mAdapter = new LogrosAdapters(areas,getActivity());
+        mAdapter = new LogrosAdapters(areas, getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
         /*ArrayList<InasistenciaMateria> inasistenciaMaterias = new ArrayList<>();

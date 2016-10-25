@@ -63,7 +63,7 @@ public class SpinnerActividadAsyntask extends AsyncTask<Void, Void,ArrayList<Act
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "cursos/actividad_logros_profesor/");
+            URL url = new URL(serverUrls + "api/docentes/logros/44216/actividades");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -153,7 +153,7 @@ public class SpinnerActividadAsyntask extends AsyncTask<Void, Void,ArrayList<Act
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 ActividadLogroProfesor logroProfesor = new ActividadLogroProfesor();
-                String nombreActividad = jsonObject.getString("nombre_actividad");
+                String nombreActividad = jsonObject.getString("descripcion_actividad");
                 logroProfesor.setNombreActividad(nombreActividad);
 
                 logroProfesors.add(logroProfesor);

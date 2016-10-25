@@ -23,7 +23,7 @@ import java.util.List;
 
 //implements OnItemSelectedListener
 public class LogrosActivity extends AppCompatActivity {
-    String id_materia;
+    String id_materia,nombreMateria;
     String periodo_actual;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -34,9 +34,10 @@ public class LogrosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logros);
         id_materia = getIntent().getStringExtra("id_materia");
-
+        nombreMateria = getIntent().getStringExtra("nombre_materia");
         Bundle parametro = new Bundle();
         parametro.putString("id_materia", id_materia);
+        parametro.putString("nombreMateria" ,nombreMateria);
         parametro.putString("periodo_actual", "null");
         parametro.putString("sheckPeriodo", "false");//sheckPeriodo
 
@@ -104,6 +105,7 @@ public class LogrosActivity extends AppCompatActivity {
                     periodo_actual = getIntent().getStringExtra("periodo_actual");
                     Bundle parametro = new Bundle();
                     parametro.putString("id_materia", id_materia);
+                    parametro.putString("nombreMateria" ,nombreMateria);
                     parametro.putString("periodo_actual", Integer.toString(position));
                     parametro.putString("sheckPeriodo", "true");
                     fragmentManager = getSupportFragmentManager();

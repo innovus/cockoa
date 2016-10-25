@@ -11,6 +11,15 @@ public class EstudianteCurso {
     private String notaEstudiante;
     private boolean inasistencia;
     private String fecha;
+    private String idActividad;
+
+    public String getIdActividad() {
+        return idActividad;
+    }
+
+    public void setIdActividad(String idActividad) {
+        this.idActividad = idActividad;
+    }
 
     public String getFecha() {
         return fecha;

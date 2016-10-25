@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.android.cokoa.AppConstants.AppConstants;
 import com.example.android.cokoa.SessionManager.SessionManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,14 +43,17 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
         String forecastJsonStr = null;
 
         try {
+            JSONArray jsonArray = new JSONArray();
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("nota", params[0]);//id_estudiante
-            jsonParam.put("id_estudiante", params[1]);
+            jsonParam.put("id_actividad",params[0]);
+            jsonParam.put("nota_actividad", params[1]);//id_estudiante
+            jsonParam.put("id_estudiante", params[2]);
+            jsonArray.put(jsonParam);
 
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "cursos/insert_nota");
-
+            URL url = new URL(serverUrls + "api/docentes/actividades/notas");
+            Log.v("revisar json ", "postman" + params[0]);
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoOutput(true);
@@ -59,7 +63,8 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
             String token = sessionManager.getKeyToken();
             urlConnection.setRequestProperty("Authorization", "Bearer " + token);
             OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-            out.write(jsonParam.toString());
+            out.write(jsonArray.toString());
+            Log.v("revisar json ", "post" + jsonArray);
             out.close();
             urlConnection.connect();
 
@@ -91,7 +96,7 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
             }
             forecastJsonStr = buffer.toString();
 
-            Log.v("revisar json ", "Andrea" + forecastJsonStr);
+            Log.v("revisar json ", "post" + forecastJsonStr);
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);

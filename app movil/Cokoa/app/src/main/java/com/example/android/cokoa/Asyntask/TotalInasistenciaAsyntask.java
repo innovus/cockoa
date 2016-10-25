@@ -31,7 +31,6 @@ import java.util.ArrayList;
 /**
  * Created by ASUS on 30/06/2016.
  */
-//AsyncTask<Void, Void, ArrayList<Materia>> {
 public class TotalInasistenciaAsyntask extends AsyncTask<Void, Void, ArrayList<Inasistencia>> {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;

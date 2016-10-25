@@ -8,8 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.cokoa.Adapters.LogrosAdapters;
@@ -37,8 +35,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ImageView imageView;
-    private TextView textView;
+
     SessionManager sessionManager;
     String serverUrls = AppConstants.serverUrl;
     private Activity activity;
@@ -73,15 +70,13 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
                             logroArrayList.get(i).setNota_logro(v);
                         }else{
 
-                            logroArrayList.get(i).setNota_logro(-4.0);
+                           // logroArrayList.get(i).setNota_logro(-4.0);
 
                         }
                     }
 
                     return logroArrayList;
-                    /*for (int i=0;i<logroArrayList.size();i++){
-                        logroArrayList.get(i).setNota_logro(String.valueOf(jsonObject.getString(logroArrayList.get(i).getId_logro())));
-                    }*/
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

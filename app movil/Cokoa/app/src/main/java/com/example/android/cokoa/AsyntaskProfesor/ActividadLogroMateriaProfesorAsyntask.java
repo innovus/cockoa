@@ -6,9 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.example.android.cokoa.AdaptersProfesor.CusosProfesorAdapters;
+import com.example.android.cokoa.AdaptersProfesor.ActividadLogroMateriaProfesorAdapter;
 import com.example.android.cokoa.AppConstants.AppConstants;
-import com.example.android.cokoa.ModelsProfesor.CursosProfesor;
+import com.example.android.cokoa.ModelsProfesor.ActividadLogroProfesor;
 import com.example.android.cokoa.R;
 import com.example.android.cokoa.SessionManager.SessionManager;
 
@@ -25,28 +25,24 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 12/07/2016.
+ * Created by ASUS on 14/10/2016.
  */
-public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<CursosProfesor>> {
+public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<Void, Void, ArrayList<ActividadLogroProfesor>> {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SessionManager sessionManager;
     String serverUrls = AppConstants.serverUrl;
-    private final String LOG_TAG = CursosAsyntaskProfresor.class.getSimpleName();
-
+    private final String LOG_TAG = ActividadLogroMateriaProfesorAsyntask.class.getSimpleName();
     private Activity activity;
 
-
-    public CursosAsyntaskProfresor(Activity activity) {
+    public ActividadLogroMateriaProfesorAsyntask(Activity activity) {
         super();
         this.activity = activity;
     }
 
-
-
     @Override
-    protected ArrayList<CursosProfesor> doInBackground(Void... params) {
+    protected ArrayList<ActividadLogroProfesor> doInBackground(Void... params) {
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -59,7 +55,7 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "api/docentes/cargas");
+            URL url = new URL(serverUrls + "api/docentes/logros/44216/actividades");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -127,74 +123,55 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
             }
         }
         try {
-            return getCursosMateriaProfesor(forecastJsonStr);
+            return getActividadLogroProfesor(forecastJsonStr);
             //return  null;
         } catch (JSONException e) {
             Log.e("error", e.getMessage(), e);
             e.printStackTrace();
         }
-
         return null;
-
     }
 
-    @Override
-    protected void onPostExecute(ArrayList<CursosProfesor> cursosProfesors) {
-        if(cursosProfesors!=null){
-             mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view);
-                mRecyclerView.setHasFixedSize(true);
-                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
-                mLayoutManager = new LinearLayoutManager(activity);
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                mAdapter = new CusosProfesorAdapters(cursosProfesors, activity);
-                mRecyclerView.setAdapter(mAdapter);
-        }
-    }
-
-    public ArrayList<CursosProfesor> getCursosMateriaProfesor(String ArrayListCursoProfesores) throws JSONException {
-
-        if (ArrayListCursoProfesores != null) {
+    public ArrayList<ActividadLogroProfesor> getActividadLogroProfesor(String ArrayListLogroProfesor) throws JSONException {
+        if (ArrayListLogroProfesor != null) {
             // Ahora tenemos una cadena que representa todas las areas en formato JSON .
             // Afortunadamente análisis es fácil: constructor toma la cadena JSON y lo convierte
             // En una jerarquía de objetos para nosotros .
             // Estos son los nombres de los objetos JSON que necesitan ser extraídos .
             // La información de ubicación
-            Log.v("getArea", "Json String" + ArrayListCursoProfesores);
-            JSONArray areaArray = new JSONArray(ArrayListCursoProfesores);
-            Log.v("areaArray", "Json String" + areaArray);
-            ArrayList<CursosProfesor> cursosProfesors = new ArrayList<CursosProfesor>();
+            JSONArray jsonArray = new JSONArray(ArrayListLogroProfesor);
+            ArrayList<ActividadLogroProfesor> logroProfesors = new ArrayList<ActividadLogroProfesor>();
 
-            for (int i = 0; i < areaArray.length(); i++) {
-                JSONObject areas = areaArray.getJSONObject(i);
-
-
-
-                CursosProfesor cursosProfesor = new CursosProfesor();
-
-                String id_carga_docente = areas.getString("id_carga_docente");
-                cursosProfesor.setIdCargaDocente(id_carga_docente);
-
-                String nombre_materia = areas.getString("nombre_materia");
-                cursosProfesor.setNombreMateria(nombre_materia);
-
-                String grado_materia = areas.getString("grado");
-                cursosProfesor.setGrado(grado_materia);
-
-                String curso_materia = areas.getString("grupo");
-                cursosProfesor.setCurso(curso_materia);
-
-                cursosProfesors.add(cursosProfesor);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                ActividadLogroProfesor logroProfesor = new ActividadLogroProfesor();
+                String idActividad = jsonObject.getString("id_actividad");
+                String nombreActividad = jsonObject.getString("descripcion_actividad");
+                logroProfesor.setIdActividad(idActividad);
+                logroProfesor.setNombreActividad(nombreActividad);
+                logroProfesor.setCasilla(false);
 
 
+                logroProfesors.add(logroProfesor);
             }
-
-            return cursosProfesors;
-
+            return logroProfesors;
 
         }
-
         return null;
-
     }
 
+    @Override
+    protected void onPostExecute(ArrayList<ActividadLogroProfesor> actividadLogroProfesors) {
+        super.onPostExecute(actividadLogroProfesors);
+        if(actividadLogroProfesors!=null){
+            mRecyclerView = (RecyclerView) activity.findViewById(R.id.recycler_actividad_logro_materia_profesor);
+            mRecyclerView.setHasFixedSize(true);
+            //usR UN ADMINISTRADOR PARA LINEARLAYOUT
+            mLayoutManager = new LinearLayoutManager(activity);
+            mRecyclerView.setLayoutManager(mLayoutManager);//LogroMateriaProfesorAdapter
+            mAdapter = new ActividadLogroMateriaProfesorAdapter(actividadLogroProfesors, activity);
+            mRecyclerView.setAdapter(mAdapter);
+
+        }
+    }
 }

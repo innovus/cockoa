@@ -42,6 +42,11 @@
                     android:spinnerMode="dropdown"
                     android:visibility="invisible" />
 
+                <ExpandableListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/expandableListView" />
+
                 <Spinner
                     android:id="@+id/spinner3"
                     android:layout_width="wrap_content"

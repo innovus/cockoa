@@ -1,56 +1,71 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:gravity="center"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
+    android:gravity="center"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:orientation="vertical">
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingTop="16dp"
+    android:paddingLeft="26dp"
+    android:paddingRight="26dp">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_vies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="#ffffff"
         android:padding="4dp"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
         card_view:cardCornerRadius="4dp">
+
         <LinearLayout
-            android:layout_gravity="left"
-            android:paddingTop="5dp"
-            android:orientation="horizontal"
+            android:padding="8dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:orientation="horizontal">
+
             <LinearLayout
-                android:gravity="center"
+                android:layout_margin="8dp"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:layout_height="match_parent"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text_des_logro"
-                    android:text="Actividad ... "
-                    android:layout_width="wrap_content"
+                    android:id="@+id/txt_num_logro"
+                    android:textStyle="bold"
+                    android:text="Logro 1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:layout_gravity="bottom"
-                android:paddingBottom="0dp"
-                android:padding="1.8dp"
-                android:layout_marginRight="10dp"
-                android:orientation="vertical">
+                <TextView
+                    android:paddingLeft="8dp"
+                    android:id="@+id/text_des_logro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Logro ..hhj hjh hjgg jhghghj  ghjg h  " />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="1.8dp"
+                android:paddingBottom="0dp">
 
                 <LinearLayout
-                    android:gravity="center"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/list_item_high_tew"
@@ -64,25 +79,21 @@
                         android:id="@+id/text_numero_periodo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/primary_text"
-                        android:maxLength="3"
                         android:text="4.1"
+                        android:textColor="@color/primary_text"
                         android:textSize="12sp" />
 
                     <TextView
+                        android:visibility="invisible"
                         android:id="@+id/alto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/secondary_text"
-
                         android:text="BÀSICO"
+                        android:textColor="@color/secondary_text"
                         android:textSize="10sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
-
-
 
 
     </android.support.v7.widget.CardView>

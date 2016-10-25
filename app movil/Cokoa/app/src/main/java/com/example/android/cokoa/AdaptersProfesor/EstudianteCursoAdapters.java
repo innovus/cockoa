@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,13 +52,15 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
         viewHolder.codigoEstudiante.setText(estudianteCursos.get(position).getCodigoEstudiante());
         viewHolder.nombreEstudiante.setText(estudianteCursos.get(position).getNombreEstudiante());
 
-        if (estudianteCursos.get(position).getNotaEstudiante().equals(" - ")) {
-            viewHolder.notaEstudiante.setHint("-");
+        if(TextUtils.isEmpty(estudianteCursos.get(position).getNotaEstudiante())){
+            viewHolder.notaEstudiante.setHint("---");
         } else {
             viewHolder.notaEstudiante.setText(estudianteCursos.get(position).getNotaEstudiante());
             viewHolder.notaEstudiante.setFocusable(false);
             viewHolder.notaEstudiante.setCursorVisible(false);
         }
+
+        viewHolder.notaEstudiante.setText(estudianteCursos.get(position).getNotaEstudiante());
 
         viewHolder.estudianteCurso = estudianteCursos.get(position);
         viewHolder.cbSelect.setOnCheckedChangeListener(null);
@@ -77,7 +81,9 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            new InsertNotaActividadAsyntask(activity).execute(viewHolder.notaEstudiante.getText().toString(), viewHolder.codigoEstudiante.getText().toString());
+
+                                            Log.v("revisar json ", "postsf" + estudianteCursos.get(position).getIdActividad());
+                                            new InsertNotaActividadAsyntask(activity).execute(estudianteCursos.get(position).getIdActividad(),viewHolder.notaEstudiante.getText().toString(), viewHolder.codigoEstudiante.getText().toString());
                                             viewHolder.notaEstudiante.setFocusable(false);
                                             viewHolder.notaEstudiante.setCursorVisible(false);
                                             viewHolder.linearLayout.setVisibility(View.GONE);
