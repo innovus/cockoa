@@ -82,7 +82,7 @@
             </span>
           </td>
           <th style="white-space: nowrap="><!-- form -->
-            <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onbeforesave="updateLogro($data, logro)" shown="inserted == logro"  oncancel="cancelform(logro, $index)">
+            <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onbeforesave="updateLogro($data, logro)" onaftersave="validarPorcentajeTotal()" shown="inserted == logro"  oncancel="cancelform(logro, $index)">
               <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
                 Ok
               </button>
@@ -99,6 +99,10 @@
         </tr>
       </tbody>
     </table>
+    <div class="has-error">
+      <label ng-show="!isPorcentajeCien" class="control-label" for="inputError1">La sumatoria del porcentaje debe ser igual a 100%</label>
+      <span ng-show="!isPorcentajeCien"> </span>
+    </div>
     <button class="btn btn-default" ng-click="create_nuevo_logro()" ng-show = "carga_seleccionada != null">Agregar</button>
               <div class="modal-footer">
               <button class="btn btn-primary" type="button" ng-show = "carga_seleccionada != null" ng-click="btnGuardar()">Guardar</button>

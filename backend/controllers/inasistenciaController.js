@@ -117,7 +117,8 @@ function addInasistencias (req,res){
 		var notificaciones = [];
 		//recorremos inasistencias para crear el arreglo de notificaciones por cada inassistencia agregada
 		 req.body.forEach(function(inasistencia,index){
-		 	var notificacion = {'id_tipo_notificacion':1,'mensaje_notificacion':'Su hijo Falto en la fecha '+inasistencia.fecha_inasistencia,'id_estudiante':inasistencia.id_estudiante,'guia':inasistencia.id_carga}
+		 	var fecha = new Date(inasistencia.fecha_inasistencia)
+		 	var notificacion = {'id_tipo_notificacion':1,'mensaje_notificacion':'Su hijo Falto en la fecha  del '+fecha.toLocaleDateString(),'id_estudiante':inasistencia.id_estudiante,'guia':inasistencia.id_carga}
 		 	notificaciones.push(notificacion)
 		 })
 		 

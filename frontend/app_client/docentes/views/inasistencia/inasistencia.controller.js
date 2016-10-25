@@ -190,6 +190,7 @@ app.controller('inasistenciaController',['$scope','$http','$uibModal','$log','$f
       var jsonsolo={"id_periodo": 1, "id_estudiante":$scope.selected.ids_estudiantes[i] ,"estado_inasistencia":1,"fecha_inasistencia":$scope.date_asistencia ,"id_carga": $scope.carga_seleccionada.id_carga_docente}
       jsonenviar.push(jsonsolo);
     } //cierra for
+    console.log("json que vamos a enviar")
     console.log(jsonenviar);
 
 

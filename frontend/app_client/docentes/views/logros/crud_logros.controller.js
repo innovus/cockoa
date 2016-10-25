@@ -18,6 +18,7 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
     ids_estudiantes:[]
   };
   $scope.logrosPorEliminar = [];
+  $scope.isPorcentajeCien = true;
 
   //Trae el periodo Actual
   //periodoData.findPeriodoActual()
@@ -132,6 +133,7 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
         vigente_logro:"S",
       };
       $scope.logros.push($scope.inserted);
+      $scope.isPorcentajeCien=checkPorcentaje() ;
   };
 
    /////////////////////
@@ -174,8 +176,11 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
       $scope.logrosPorEliminar.push(logro);
 
     }
+    
+
     console.log(logro) 
     $scope.logros.splice(index, 1); 
+    $scope.isPorcentajeCien=checkPorcentaje();
     
   }
 
@@ -278,6 +283,7 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
       }
      
     })
+    $scope.isPorcentajeCien=checkPorcentaje();
     console.log("sumatoria")
       console.log(sumatoria);
     if(sumatoria != 100){
@@ -315,6 +321,31 @@ app.controller('crudLogrosController',['$scope','$http','$uibModal','$cookieStor
   //  console.log(editableForm)
    // $uibModalInstance.close();
   };
+    //returna true si el porcentaje es = 100 si es diferente retorna false
+  function checkPorcentaje(){
+
+    var sumatoria = 0;
+    angular.forEach($scope.logros,function(logro){
+         sumatoria = sumatoria + parseFloat(logro.porcentaje_logro);
+      });
+    if(sumatoria == 100){
+      console.log("return true")
+      console.log(sumatoria);
+
+      return true
+
+     
+    }else{
+      console.log("return false")
+      console.log(sumatoria);
+      return false
+    }
+  }
+    $scope.validarPorcentajeTotal = function(){
+      console.log("nunca entro")
+      $scope.isPorcentajeCien=checkPorcentaje() ;
+
+  }
 
 
 }]);
@@ -337,7 +368,7 @@ app.controller('actividadesModalController', function ($http,$scope,$q, $uibModa
   console.log("en el modulo modal")
   console.log($scope.actividades);
 
-
+  //returna true si el porcentaje es = 100 si es diferente retorna false
   function checkPorcentaje(){
     var sumatoria = 0;
     angular.forEach($scope.actividades,function(actividad){
