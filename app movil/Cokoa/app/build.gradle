@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.example.android.cokoa"
+        applicationId "com.example.android.cokoas"
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
@@ -28,7 +28,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.3.+'
     compile 'com.google.firebase:firebase-core:9.6.1'
     compile 'com.google.firebase:firebase-messaging:9.6.1'
-    compile 'com.google.android.gms:play-services:9.6.1'
+    //compile 'com.google.android.gms:play-services:9.6.1'
     //compile 'com.google.firebase:firebase-auth:9.0.0'
 
 }

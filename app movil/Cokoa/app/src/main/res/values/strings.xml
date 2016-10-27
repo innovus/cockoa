@@ -6,7 +6,7 @@
     <string name="calificacion">Calificaciones</string>
     <string name="eventos">Eventos</string>
     <string name="horario_atencion">Horario de Atención</string>
-    <string name="asistencia">Asistencia</string>
+    <string name="asistencia">Inasistencias</string>
 
     <string name="codigo">Código</string>
     <string name="configuracion">Configuración</string>

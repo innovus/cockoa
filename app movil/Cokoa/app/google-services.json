@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "869853204816",
-    "firebase_url": "https://cockoa-1f3c5.firebaseio.com",
-    "project_id": "cockoa-1f3c5",
-    "storage_bucket": "cockoa-1f3c5.appspot.com"
+    "project_number": "773659179446",
+    "firebase_url": "https://juan-4c4bd.firebaseio.com",
+    "project_id": "juan-4c4bd",
+    "storage_bucket": "juan-4c4bd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:869853204816:android:abcfdc1c1a0d57a7",
+        "mobilesdk_app_id": "1:773659179446:android:70b4d826c25bc327",
         "android_client_info": {
-          "package_name": "com.example.android.cokoa"
+          "package_name": "com.example.android.cokoas"
         }
       },
       "oauth_client": [
         {
-          "client_id": "869853204816-i1qi04ru69qv0170p9vkk121qbi5278o.apps.googleusercontent.com",
+          "client_id": "773659179446-asvbv0g8uqd5g3rvqq147nadcjmlrdo9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBhQ1m0xlHpng0m7vUAFU3-7whPjOf7IBc"
+          "current_key": "AIzaSyAyPsVB-lw7rRpsxKnQey7_JJpgIxeUmJc"
         }
       ],
       "services": {
