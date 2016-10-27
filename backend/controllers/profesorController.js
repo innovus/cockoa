@@ -292,7 +292,7 @@ function insertNota(req,res){
 						});
 						var json = { "registration_ids": registrations_ids,
 							"notification":{
-								"title":"Inasistencia",
+								"title":"Nueva Nota",
  								"body":mensajeNotificacion
  							},
  							"data": {

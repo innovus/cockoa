@@ -2,8 +2,20 @@
 (function (){
 var app = angular.module('docentes');//creamos el modulo pokedex y le pasamos array con las dependencias
 
+app.controller('showActividadEstudianteController',['$scope','$uibModalInstance','actividad',function ($scope,$uibModalInstance,actividad) {
+  $scope.actividad = actividad
+  console.log("ya en el modal")
+  console.log(actividad)
+  $scope.ok = function(){
+    $uibModalInstance.close();
+  }
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
 
-app.controller('estudiantes_notasController',['$scope','$http','$filter','$cookieStore', '$cookies','periodoData','materiaData','logroData','actividadData','nota_actividadData','nota_logroData',function($scope,$http,$filter,$cookieStore,$cookies,periodoData,materiaData,logroData,actividadData,nota_actividadData,nota_logroData){
+}]);
+
+app.controller('estudiantes_notasController',['$scope','$http','$filter','$cookieStore', '$cookies','periodoData','materiaData','logroData','actividadData','nota_actividadData','nota_logroData','$uibModal',function($scope,$http,$filter,$cookieStore,$cookies,periodoData,materiaData,logroData,actividadData,nota_actividadData,nota_logroData,$uibModal){
   $scope.materia_seleccionada = null;
   $scope.periodos = [];
   $scope.periodo_actual = null
@@ -145,6 +157,26 @@ app.controller('estudiantes_notasController',['$scope','$http','$filter','$cooki
   })
     $scope.notaFinal = Math.round(promedio*100)/100;
 }
+
+  $scope.showActividad = function(actividad){
+   
+        
+        var modalInstance = null;
+        modalInstance = $uibModal.open({
+          animation: true,
+          backdrop: "static",
+          templateUrl: '/views/notas/actividad_modal.html',
+          controller: 'showActividadController',
+          size: 'sm',
+          resolve: {
+            actividad: function () {
+              return actividad
+            }
+          }
+        });
+
+
+  }
 
 
  
