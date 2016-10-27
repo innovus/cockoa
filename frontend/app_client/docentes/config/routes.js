@@ -11,6 +11,10 @@
             templateUrl: "/views/notas/notas.html",
             controller: "docentes_notasController"
         })
+        .when("/docentes/notasactividades",{
+            templateUrl: "/views/notasactividades/notasactividades.html",
+            controller: "docentes_notasActividadesController"
+        })
         .when("/docentes/logros",{
             templateUrl: "/views/logros/crud_logros.html",
             controller: "crudLogrosController"

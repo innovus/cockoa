@@ -10,6 +10,7 @@ var pgp2 = require('pg-promise')();
 var connectionString = 'postgres://localhost:5432/liceo1';
 var db = pgp(connectionString);
 var respuesta= require("../helpers/respuesta");
+var request = require('request');
 
 var carga_docenteDao = require("../app_core/dao/carga_docenteDao");
 var LogroDao = require("../app_core/dao/logroDao");
@@ -17,6 +18,7 @@ var ActividadDao = require("../app_core/dao/actividadDao");
 var Nota_logroDao = require("../app_core/dao/nota_logroDao");
 var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
+var DispositivoDao = require("../app_core/dao/dispositivoDao");
 
 
 function getCursosMaterias(req,res){
@@ -271,10 +273,57 @@ function insertNota(req,res){
 	}else if(req.params.table == "actividades"){
 		Nota_actividadDao.insertNotasActividades(req.body)
 		.then(function(){	
-			var notificacion = {'id_tipo_notificacion':2,'mensaje_notificacion':'Su hijo obtuvo una nota de '+req.body[0].nota_actividad,'id_estudiante':req.body[0].id_estudiante,'guia':req.body[0].id_actividad}
+			var mensajeNotificacion = 'Su hijo obtuvo una nota de '+req.body[0].nota_actividad
+			var notificacion = {'id_tipo_notificacion':2,'mensaje_notificacion':mensajeNotificacion,'id_estudiante':req.body[0].id_estudiante,'guia':req.body[0].id_actividad}
 			console.log(notificacion)
 			NotificacionDao.insertarNotificacion(notificacion)
 			.then(function(data){
+				console.log("exito notificacion insert")
+				DispositivoDao.findTokenByEstudiante(req.body[0].id_estudiante)	
+				.then(function(tokens){
+					var registrations_ids=[];
+					console.log(tokens)
+
+					if((tokens.length!=0)||(tokens)){
+						var json = null;
+						
+						tokens.forEach(function(token,index){
+							registrations_ids.push(token.token_dispositivo);
+						});
+						var json = { "registration_ids": registrations_ids,
+							"notification":{
+								"title":"Inasistencia",
+ 								"body":mensajeNotificacion
+ 							},
+ 							"data": {
+   								"codigo":req.body[0].id_actividad		
+ 							}
+  						}
+					var options = {
+					uri: 'https://fcm.googleapis.com/fcm/send',
+  					method: 'POST',
+  					headers: {
+  						"Content-Type": "application/json",
+  						"Authorization": "key=AIzaSyDdDo5XLcuuJyQh_crrOdXjYSfYDbsnogU"
+  					},
+  					json: json
+				};
+				console.log(options)
+				request(options, function (error, response, body) {
+					//console.log(response)
+					console.log(body)
+					console.log(error)
+					/*if (!error && response.statusCode == 200) {
+						console.log(body.id) // Print the shortened url.
+					}*/
+				});
+				}
+				}).catch(function(error){
+					console.log(error);
+				})
+
+
+				
 				console.log("se envio notificacion")
 
 			}).catch(function(error){
