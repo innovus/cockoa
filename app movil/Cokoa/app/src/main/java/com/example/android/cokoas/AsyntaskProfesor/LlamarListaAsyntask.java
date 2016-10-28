@@ -166,6 +166,12 @@ public class LlamarListaAsyntask extends AsyncTask<Void, Void, ArrayList<CursosP
 
                 CursosProfesor cursosProfesor = new CursosProfesor();
 
+                String id_carga_docente = areas.getString("id_carga_docente");
+                cursosProfesor.setIdCargaDocente(id_carga_docente);
+
+                String id_curso = areas.getString("id_curso");
+                cursosProfesor.setId_Curso(id_curso);
+
                 String nombre_materia = areas.getString("nombre_materia");
                 cursosProfesor.setNombreMateria(nombre_materia);
 

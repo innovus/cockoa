@@ -123,7 +123,7 @@ public class LogrosMateriaProfesorAsyntask extends AsyncTask<String, Void, Array
             }
         }
         try {
-            return getLogrosProfesor(forecastJsonStr);
+            return getLogrosProfesor(forecastJsonStr,params[1],params[0]);
         } catch (JSONException e) {
             Log.e("error", e.getMessage(), e);
             e.printStackTrace();
@@ -131,7 +131,7 @@ public class LogrosMateriaProfesorAsyntask extends AsyncTask<String, Void, Array
         return null;
     }
 
-    public ArrayList<LogroProfesor> getLogrosProfesor(String ArrayListLogroProfesor) throws JSONException {
+    public ArrayList<LogroProfesor> getLogrosProfesor(String ArrayListLogroProfesor,String idCurso,String idCargaDocente) throws JSONException {
         if (ArrayListLogroProfesor != null) {
             // Ahora tenemos una cadena que representa todas las areas en formato JSON .
             // Afortunadamente análisis es fácil: constructor toma la cadena JSON y lo convierte
@@ -144,9 +144,12 @@ public class LogrosMateriaProfesorAsyntask extends AsyncTask<String, Void, Array
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 LogroProfesor logroProfesor = new LogroProfesor();
+                String idLogro = jsonObject.getString("id_logro");
                 String descripcioLogro = jsonObject.getString("descripcion_logro");
+                logroProfesor.setIdLogro(idLogro);
                 logroProfesor.setDescripcionLogro(descripcioLogro);
-
+                logroProfesor.setId_curso(idCurso);
+                logroProfesor.setId_carga_docente(idCargaDocente);
                 logroProfesors.add(logroProfesor);
             }
             return logroProfesors;

@@ -25,7 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 12/07/2016.
+ * Created by juancarlospantoja@hotmail.com on 12/07/2016.
  */
 public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<CursosProfesor>> {
     private RecyclerView mRecyclerView;
@@ -170,6 +170,9 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
 
 
                 CursosProfesor cursosProfesor = new CursosProfesor();
+
+                String id_curso = areas.getString("id_curso");
+                cursosProfesor.setId_Curso(id_curso);
 
                 String id_carga_docente = areas.getString("id_carga_docente");
                 cursosProfesor.setIdCargaDocente(id_carga_docente);

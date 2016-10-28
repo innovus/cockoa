@@ -38,6 +38,9 @@ public class LogroMateriaProfesorAdapter extends RecyclerView.Adapter<LogroMater
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, InsertarNotaActividadActivity.class);
+                    intent.putExtra("id_curso", logroProfesor.getId_curso());
+                    intent.putExtra("id_carga_docente", logroProfesor.getId_carga_docente());
+                    intent.putExtra("id_logro", logroProfesor.getIdLogro());
                     intent.putExtra("descripcion_logro",logroProfesor.getDescripcionLogro());
 
                     activity.startActivity(intent);

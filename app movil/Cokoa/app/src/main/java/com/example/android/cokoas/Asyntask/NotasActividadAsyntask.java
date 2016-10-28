@@ -2,10 +2,13 @@ package com.example.android.cokoas.Asyntask;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,8 +89,9 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
                             String id_nota_actividad = notaActividads.get(j).getIdnotaActividad();
                             if(id_actividad.equals(id_nota_actividad)){
                                 actividadLogro.get(i).setNotaActividad(notaActividads.get(j).getNotaActividad());
+                               // i++;
                             }else {
-                                actividadLogro.get(i).setNotaActividad("---");
+                               // actividadLogro.get(i).setNotaActividad("---");
                             }
                         }
 
@@ -224,19 +228,18 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
 
 
         } else {
-           /* Snackbar.make(activity.findViewById(android.R.id.content), "No tienes conexión", Snackbar.LENGTH_LONG)
-                    .setAction("VOLVER A INTENTARLO", new View.OnClickListener() {
+            Snackbar.make(activity.findViewById(android.R.id.content), "Aun no se asignas actividades", Snackbar.LENGTH_LONG)
+                    .setAction("", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                           /* NotasActividadAsyntask notasActividadAsyntask = new NotasActividadAsyntask(activity);
-                            notasActividadAsyntask.execute();
+
                         }
                     })
                     .setActionTextColor(Color.YELLOW)
-                    .show();*/
-            Toast toast1 =
+                    .show();
+            /*Toast toast1 =
                     Toast.makeText(activity, "Aun no se asignas actividades", Toast.LENGTH_SHORT);
-            toast1.show();
+            toast1.show();*/
         }
 
         progressDialog.dismiss();

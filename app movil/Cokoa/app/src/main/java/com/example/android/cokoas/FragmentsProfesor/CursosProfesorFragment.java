@@ -18,7 +18,7 @@ import com.example.android.cokoas.R;
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 05/07/2016.
+ * Created by juancarlospantoja@hotmail.com on 05/07/2016.
  */
 public class CursosProfesorFragment extends Fragment {
     private RecyclerView mRecyclerView;

@@ -7,6 +7,24 @@ public class LogroProfesor {
     private String nombreLogro;
     private String idLogro;
     private String descripcionLogro;
+    private String id_curso;
+    private String id_carga_docente;
+
+    public String getId_curso() {
+        return id_curso;
+    }
+
+    public void setId_curso(String id_curso) {
+        this.id_curso = id_curso;
+    }
+
+    public String getId_carga_docente() {
+        return id_carga_docente;
+    }
+
+    public void setId_carga_docente(String id_carga_docente) {
+        this.id_carga_docente = id_carga_docente;
+    }
 
     public String getDescripcionLogro() {
         return descripcionLogro;

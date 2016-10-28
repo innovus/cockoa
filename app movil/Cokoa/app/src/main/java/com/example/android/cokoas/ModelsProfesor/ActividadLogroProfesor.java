@@ -7,6 +7,24 @@ public class ActividadLogroProfesor {
     private String nombreActividad;
     private String idActividad;
     private boolean casilla;
+    private String idCurso;
+    private String idCargaDocente;
+
+    public String getIdCurso() {
+        return idCurso;
+    }
+
+    public void setIdCurso(String idCurso) {
+        this.idCurso = idCurso;
+    }
+
+    public String getIdCargaDocente() {
+        return idCargaDocente;
+    }
+
+    public void setIdCargaDocente(String idCargaDocente) {
+        this.idCargaDocente = idCargaDocente;
+    }
 
     public boolean isCasilla() {
         return casilla;

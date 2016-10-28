@@ -1,10 +1,13 @@
 package com.example.android.cokoas.AsyntaskProfesor;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.example.android.cokoas.AdaptersProfesor.ActividadLogroMateriaProfesorAdapter;
 import com.example.android.cokoas.AppConstants.AppConstants;
@@ -27,7 +30,7 @@ import java.util.ArrayList;
 /**
  * Created by ASUS on 14/10/2016.
  */
-public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<Void, Void, ArrayList<ActividadLogroProfesor>> {
+public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<String, Void, ArrayList<ActividadLogroProfesor>> {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -42,7 +45,7 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<Void, Void,
     }
 
     @Override
-    protected ArrayList<ActividadLogroProfesor> doInBackground(Void... params) {
+    protected ArrayList<ActividadLogroProfesor> doInBackground(String... params) {
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -55,7 +58,7 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<Void, Void,
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "api/docentes/logros/44216/actividades");
+            URL url = new URL(serverUrls + "api/docentes/logros/"+params[0]+"/actividades");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -123,7 +126,7 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<Void, Void,
             }
         }
         try {
-            return getActividadLogroProfesor(forecastJsonStr);
+            return getActividadLogroProfesor(forecastJsonStr,params[1],params[2]);
             //return  null;
         } catch (JSONException e) {
             Log.e("error", e.getMessage(), e);
@@ -132,7 +135,7 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<Void, Void,
         return null;
     }
 
-    public ArrayList<ActividadLogroProfesor> getActividadLogroProfesor(String ArrayListLogroProfesor) throws JSONException {
+    public ArrayList<ActividadLogroProfesor> getActividadLogroProfesor(String ArrayListLogroProfesor,String idCurso,String idCargaDocente) throws JSONException {
         if (ArrayListLogroProfesor != null) {
             // Ahora tenemos una cadena que representa todas las areas en formato JSON .
             // Afortunadamente análisis es fácil: constructor toma la cadena JSON y lo convierte
@@ -151,7 +154,8 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<Void, Void,
                 logroProfesor.setNombreActividad(nombreActividad);
                 logroProfesor.setCasilla(false);
 
-
+                logroProfesor.setIdCurso(idCurso);
+                logroProfesor.setIdCargaDocente(idCargaDocente);
                 logroProfesors.add(logroProfesor);
             }
             return logroProfesors;
@@ -172,6 +176,16 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<Void, Void,
             mAdapter = new ActividadLogroMateriaProfesorAdapter(actividadLogroProfesors, activity);
             mRecyclerView.setAdapter(mAdapter);
 
+        }else{
+            Snackbar.make(activity.findViewById(android.R.id.content), "Aun no asignas actividades", Snackbar.LENGTH_LONG)
+                    .setAction("", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    })
+                    .setActionTextColor(Color.YELLOW)
+                    .show();
         }
     }
 }

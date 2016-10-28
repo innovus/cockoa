@@ -2,6 +2,7 @@ package com.example.android.cokoas.Adapters;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import com.example.android.cokoas.R;
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 10/06/2016.
+ * Created by juancarlospantoja@hotmail.com on 10/06/2016.
  */
 public class NotasActividadAdapters extends RecyclerView.Adapter<NotasActividadAdapters.ViewHolder> {
     private ArrayList<NotaActividad> notaActividads;
@@ -46,7 +47,14 @@ public class NotasActividadAdapters extends RecyclerView.Adapter<NotasActividadA
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.tituloActividad.setText(notaActividads.get(position).getNombreActividad());
         viewHolder.descActividad.setText(notaActividads.get(position).getDescActividad());
-        viewHolder.notaActividad.setText(notaActividads.get(position).getNotaActividad());
+
+        //Comprobamos si notaActividad es vacia
+        if (TextUtils.isEmpty(notaActividads.get(position).getNotaActividad())) {
+            viewHolder.notaActividad.setText("---");
+        } else {
+            viewHolder.notaActividad.setText(notaActividads.get(position).getNotaActividad());
+        }
+
 
     }
 

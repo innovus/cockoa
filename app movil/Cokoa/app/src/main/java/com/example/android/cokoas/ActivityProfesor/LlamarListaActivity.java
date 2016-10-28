@@ -35,6 +35,7 @@ public class LlamarListaActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private Button btnSelection;
+    String id_carga_docente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,22 +47,12 @@ public class LlamarListaActivity extends AppCompatActivity {
         mes = calendar.get(Calendar.MONTH) + 1;
         dia = calendar.get(Calendar.DAY_OF_MONTH);
         mostrarFecha();
-       /* if (savedInstanceState == null) {
 
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            SeleccionarInasistenciaFragment inasistenciaMateriaFragment  = new SeleccionarInasistenciaFragment();
-            fragmentTransaction.replace(R.id.frame_llamar_lista, inasistenciaMateriaFragment);
-            fragmentTransaction.commit();
-        }*/
-
-
-        // btnSelection = (Button) this.findViewById(R.id.buttonjuan);
-
-        //juan = (TextView) this.findViewById(R.id.text_fecha_inasistencia);
+         id_carga_docente = getIntent().getStringExtra("id_carga_docente");
+        String  id_curso = getIntent().getStringExtra("id_curso");
 
         ArrayList<EstudianteCurso> estudianteCursos = new ArrayList<>();
-        new ListaInasistenciaAsyntask(this).execute();
+        new ListaInasistenciaAsyntask(this).execute(id_curso);
         mRecyclerView = (RecyclerView) this.findViewById(R.id.my_recycler_view_llamrLista);
         mRecyclerView.setHasFixedSize(true);
         //usR UN ADMINISTRADOR PARA LINEARLAYOUT
@@ -75,9 +66,6 @@ public class LlamarListaActivity extends AppCompatActivity {
 
     public static void mostrarFecha(){
         mostrarFecha.setText(año+"/"+mes+"/"+dia);
-
-
-
     }
 
     public static class DatePickerFragment extends DialogFragment
@@ -115,6 +103,7 @@ public class LlamarListaActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(),"qe pasa");
     }
 
+    //insertar Inasistencia
     public void onManejadorEventoFecha(View v) {
        /* DialogFragment newFragment = new DatePickerFragment();
         Bundle args = new Bundle();
@@ -130,6 +119,7 @@ public class LlamarListaActivity extends AppCompatActivity {
         ArrayList<EstudianteCurso> estudianteCursos = ((InsertarInasistenciaAdapters) mAdapter).getInasistencia();
         for (int i=0;i<estudianteCursos.size();i++){
             EstudianteCurso estudianteCurso = estudianteCursos.get(i);
+            estudianteCurso.setIdCargaDocente(id_carga_docente);
             estudianteCurso.setFecha(mostrarFecha.getText().toString());
         }
         new InsertInasistenciaAsyntask(this).execute(estudianteCursos);

@@ -62,7 +62,7 @@ public class ActividadLogroMateriaProfesorAdapter extends RecyclerView.Adapter<A
                 public void onClick(View v) {
 
 
-                    new EstudianteNotaActividadProfesorAsyntask(activity).execute(actividadLogroProfesor.getIdActividad().toString());
+                    new EstudianteNotaActividadProfesorAsyntask(activity).execute(actividadLogroProfesor.getIdActividad().toString(),actividadLogroProfesor.getIdCurso(),actividadLogroProfesor.getIdCargaDocente());
 
                 }
             });

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 /**
  * Created by ASUS on 14/08/2016.
  */
-public class ListaInasistenciaAsyntask extends AsyncTask<Void,Void,ArrayList<EstudianteCurso>> {
+public class ListaInasistenciaAsyntask extends AsyncTask<String,Void,ArrayList<EstudianteCurso>> {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -44,9 +44,9 @@ public class ListaInasistenciaAsyntask extends AsyncTask<Void,Void,ArrayList<Est
     }
 
     @Override
-    protected ArrayList<EstudianteCurso> doInBackground(Void... params) {
+    protected ArrayList<EstudianteCurso> doInBackground(String... params) {
 
-        ArrayList<EstudianteCurso> estudianteCursos = EstudianteCurso();
+        ArrayList<EstudianteCurso> estudianteCursos = EstudianteCurso(params[0]);
         EstudianteNota(estudianteCursos);
 
 
@@ -56,7 +56,7 @@ public class ListaInasistenciaAsyntask extends AsyncTask<Void,Void,ArrayList<Est
 
     }
 
-    public ArrayList<EstudianteCurso> EstudianteCurso(){
+    public ArrayList<EstudianteCurso> EstudianteCurso(String id_curso){
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -69,7 +69,7 @@ public class ListaInasistenciaAsyntask extends AsyncTask<Void,Void,ArrayList<Est
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "api/cursos/239/estudiantes");
+            URL url = new URL(serverUrls + "api/cursos/"+id_curso+"/estudiantes");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

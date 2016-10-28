@@ -13,6 +13,16 @@ public class EstudianteCurso {
     private String fecha;
     private String idActividad;
 
+    private String idCargaDocente;
+
+    public String getIdCargaDocente() {
+        return idCargaDocente;
+    }
+
+    public void setIdCargaDocente(String idCargaDocente) {
+        this.idCargaDocente = idCargaDocente;
+    }
+
     public String getIdActividad() {
         return idActividad;
     }

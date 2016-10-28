@@ -64,6 +64,7 @@ public class CusosProfesorAdapters extends RecyclerView.Adapter<CusosProfesorAda
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, LogrosMateriaEstudianteProfesorActivity.class);
+                    intent.putExtra("id_curso",cursosProfesor.getId_Curso());
                     intent.putExtra("nombre_materia",cursosProfesor.getNombreMateria());
                     intent.putExtra("id_carda_docente",cursosProfesor.getIdCargaDocente());
                     activity.startActivity(intent);

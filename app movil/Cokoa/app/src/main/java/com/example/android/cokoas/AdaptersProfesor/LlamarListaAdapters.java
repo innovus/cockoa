@@ -42,7 +42,7 @@ public class LlamarListaAdapters extends RecyclerView.Adapter<LlamarListaAdapter
         viewHolder.nombreMateria.setText(cursosProfesors.get(position).getNombreMateria());
         viewHolder.curso.setText(cursosProfesors.get(position).getCurso());
         viewHolder.grado.setText(cursosProfesors.get(position).getGrado());
-
+        viewHolder.cursosProfesor = cursosProfesors.get(position);
     }
 
     @Override
@@ -52,6 +52,7 @@ public class LlamarListaAdapters extends RecyclerView.Adapter<LlamarListaAdapter
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nombreMateria, curso,grado;
+        CursosProfesor cursosProfesor;
         ImageView img;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -67,6 +68,10 @@ public class LlamarListaAdapters extends RecyclerView.Adapter<LlamarListaAdapter
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, LlamarListaActivity.class);
+                    intent.putExtra("id_carga_docente",cursosProfesor.getIdCargaDocente());
+                    intent.putExtra("id_curso",cursosProfesor.getId_Curso());
+                    // intent.putExtra("id_carda_docente",cursosProfesor.getIdCargaDocente());
+
                     activity.startActivity(intent);
                 }
             });

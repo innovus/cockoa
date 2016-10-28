@@ -10,7 +10,7 @@ import com.example.android.cokoas.AsyntaskProfesor.LogrosMateriaProfesorAsyntask
 import com.example.android.cokoas.R;
 
 public class LogrosMateriaEstudianteProfesorActivity extends AppCompatActivity {
-    String nombreMateria,idCargaDocente;
+    String nombreMateria,idCargaDocente,id_curso;
     TextView textView;
 
     @Override
@@ -19,10 +19,11 @@ public class LogrosMateriaEstudianteProfesorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_logros_materia_estudiante_profesor);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        id_curso = getIntent().getStringExtra("id_curso");
         idCargaDocente = getIntent().getStringExtra("id_carda_docente");
         textView = (TextView) this.findViewById(R.id.txtNombreMateriaProfesor);
         textView.setText(getIntent().getStringExtra("nombre_materia"));
-        new LogrosMateriaProfesorAsyntask(this).execute(idCargaDocente);
+        new LogrosMateriaProfesorAsyntask(this).execute(idCargaDocente,id_curso);
     }
 
     @Override

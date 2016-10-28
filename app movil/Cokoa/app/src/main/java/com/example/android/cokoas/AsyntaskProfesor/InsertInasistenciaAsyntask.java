@@ -29,26 +29,27 @@ public class InsertInasistenciaAsyntask extends AsyncTask<ArrayList<EstudianteCu
     private Activity activity;
     String serverUrls = AppConstants.serverUrl;
     private final String LOG_TAG = InsertInasistenciaAsyntask.class.getSimpleName();
+
     public InsertInasistenciaAsyntask(Activity activity) {
         super();
         this.activity = activity;
     }
+
     @Override
     protected Void doInBackground(ArrayList<EstudianteCurso>... params) {
         ArrayList<EstudianteCurso> estudianteCursos = params[0];
         JSONArray jsonArray = new JSONArray();
-        for (int i=0;i<estudianteCursos.size();i++){
+        for (int i = 0; i < estudianteCursos.size(); i++) {
             EstudianteCurso estudianteCurso = estudianteCursos.get(i);
-            if(estudianteCurso.isInasistencia()==true){
+            if (estudianteCurso.isInasistencia() == true) {
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject.put("id_periodo",1);
+
                     jsonObject.put("id_estudiante", Integer.parseInt(estudianteCurso.getCodigoEstudiante()));
-                    jsonObject.put("estado_inasistencia",2);
-                    jsonObject.put("fecha_inasistencia",estudianteCurso.getFecha());
-                    jsonObject.put("id_carga",2);
+                    jsonObject.put("estado_inasistencia", 1);
+                    jsonObject.put("fecha_inasistencia", estudianteCurso.getFecha());
+                    jsonObject.put("id_carga", estudianteCurso.getIdCargaDocente());
                     jsonArray.put(jsonObject);
-                    //{"id_periodo": 1, "id_estudiante":1 ,"estado_inasistencia":1,"fecha_inasistencia": "02/02/2016","id_carga": 1}
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -144,12 +145,12 @@ public class InsertInasistenciaAsyntask extends AsyncTask<ArrayList<EstudianteCu
                     Log.e(LOG_TAG, "Error ", e);
                 }
             }
-        } try {
+        }
+        try {
             return null;
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
-
 
 
         return null;

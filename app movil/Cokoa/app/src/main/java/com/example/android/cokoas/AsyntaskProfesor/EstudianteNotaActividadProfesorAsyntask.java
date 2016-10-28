@@ -44,17 +44,22 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
 
     @Override
     protected ArrayList<EstudianteCurso> doInBackground(String... params) {
-        if(estudianteCursos(params[0])!=null){
-            ArrayList<EstudianteCurso> estudianteCursos = estudianteCursos(params[0]);
-            if(notaActividadProfesors()!=null){
-                ArrayList<NotaActividadProfesor> notaActividadProfesors = notaActividadProfesors();
+        if(estudianteCursos(params[1])!=null){
+            ArrayList<EstudianteCurso> estudianteCursos = estudianteCursos(params[1]);
+            if(notaActividadProfesors(params[2])!=null){
+                ArrayList<NotaActividadProfesor> notaActividadProfesors = notaActividadProfesors(params[2]);
                 for(int i=0;i<estudianteCursos.size();i++){
+                    estudianteCursos.get(i).setIdActividad(params[0]);
                     String idEstudiante = estudianteCursos.get(i).getCodigoEstudiante();
                     for(int j=0;j<notaActividadProfesors.size();j++){
                         String idEstudiante_nota_actividad = notaActividadProfesors.get(j).getIdEstudiante();
+
                        // estudianteCursos.get(i).setIdActividad(notaActividadProfesors.get(j).getIdActividad());
                         if(idEstudiante.equals(idEstudiante_nota_actividad)){
-                            estudianteCursos.get(i).setNotaEstudiante(notaActividadProfesors.get(j).getNotaActividad());
+                            if(params[0].equals(notaActividadProfesors.get(j).getIdActividad())){
+                                estudianteCursos.get(i).setNotaEstudiante(notaActividadProfesors.get(j).getNotaActividad());
+                            }
+
 
                             //i++;
                         }else {
@@ -85,7 +90,7 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "api/cursos/239/estudiantes");
+            URL url = new URL(serverUrls + "api/cursos/"+params+"/estudiantes");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -212,7 +217,7 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
                 String codigo = areas.getString("id_estudiante");
                 estudianteCurso.setCodigoEstudiante(codigo);
 
-                estudianteCurso.setIdActividad(params);
+               // estudianteCurso.setIdActividad(params);
 
                 estudianteCursos.add(estudianteCurso);
 
@@ -226,7 +231,7 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
     }
 
 
-    public ArrayList<NotaActividadProfesor> notaActividadProfesors(){
+    public ArrayList<NotaActividadProfesor> notaActividadProfesors(String idCargaDocente){
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -239,7 +244,7 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "api/docentes/cargas/13375/logros/actividades/notas");
+            URL url = new URL(serverUrls + "api/docentes/cargas/"+idCargaDocente+"/logros/actividades/notas");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -323,11 +328,11 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
             ArrayList<NotaActividadProfesor> notaActividadProfesors = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-              //  String idActividad = jsonObject.getString("id_actividad");
+               String idActividad = jsonObject.getString("id_actividad");
                 String idEstudiante = jsonObject.getString("id_estudiante");
                 String notaActividad = jsonObject.getString("nota_actividad");
                 NotaActividadProfesor notaActividadProfesor = new NotaActividadProfesor();
-               // notaActividadProfesor.setIdActividad(idActividad);
+                notaActividadProfesor.setIdActividad(idActividad);
                 notaActividadProfesor.setIdEstudiante(idEstudiante);
                 notaActividadProfesor.setNotaActividad(notaActividad);
                 notaActividadProfesors.add(notaActividadProfesor);
