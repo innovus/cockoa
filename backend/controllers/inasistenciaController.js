@@ -5,6 +5,7 @@ var options = {
   promiseLib: promise
 };
 var respuesta= require("../helpers/respuesta");
+var request = require('request');
 
 
 var pgp = require('pg-promise')(options);
@@ -15,6 +16,7 @@ var pgp2 = require('pg-promise')();
 var InasistenciaDao = require("../app_core/dao/inasistenciaDao");
 var MateriaDao = require("../app_core/dao/materiaDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
+var DispositivoDao = require("../app_core/dao/dispositivoDao");
 
 function getCantidadInasistenciaMateria(req,res){
 	InasistenciaDao.findCantidadInasistenciasBYMateria(30011)
@@ -115,16 +117,69 @@ function addInasistencias (req,res){
 	InasistenciaDao.addInasistencias(req.body)
 	.then(function(){
 		var notificaciones = [];
+		var fecha = new Date(req.body[0].fecha_inasistencia)
+		var mensajeNotificacion = 'Su hijo falto en la fecha del  '+fecha.toLocaleDateString();
 		//recorremos inasistencias para crear el arreglo de notificaciones por cada inassistencia agregada
-		 req.body.forEach(function(inasistencia,index){
-		 	var fecha = new Date(inasistencia.fecha_inasistencia)
-		 	var notificacion = {'id_tipo_notificacion':1,'mensaje_notificacion':'Su hijo Falto en la fecha  del '+fecha.toLocaleDateString(),'id_estudiante':inasistencia.id_estudiante,'guia':inasistencia.id_carga}
-		 	notificaciones.push(notificacion)
-		 })
-		 
-		 console.log(notificaciones)
+		req.body.forEach(function(inasistencia,index){
+			var notificacion = {'id_tipo_notificacion':1,'mensaje_notificacion':mensajeNotificacion,'id_estudiante':inasistencia.id_estudiante,'guia':inasistencia.id_carga};
+			notificaciones.push(notificacion);
+		});
+		console.log("notificaciones")
+		console.log(notificaciones);
 		 NotificacionDao.insertarNotificaciones(notificaciones)
 		 .then(function(data){
+
+
+		 	DispositivoDao.findTokenByEstudiantes(notificaciones)	
+				.then(function(tokens){
+					console.log("succes by token by")
+					var registrations_ids=[];
+					console.log(tokens)
+
+					if((tokens.length!=0)||(tokens)){
+						var json = null;
+						
+						tokens.forEach(function(token,index){
+							registrations_ids.push(token.token_dispositivo);
+						});
+						var json = { "registration_ids": registrations_ids,
+							"notification":{
+								"title":"Inasistencia",
+ 								"body":mensajeNotificacion
+ 							},
+ 							"data": {
+   								"codigo":req.body[0].id_carga	
+ 							}
+  						}
+					var options = {
+					uri: 'https://fcm.googleapis.com/fcm/send',
+  					method: 'POST',
+  					headers: {
+  						"Content-Type": "application/json",
+  						"Authorization": "key=AIzaSyDdDo5XLcuuJyQh_crrOdXjYSfYDbsnogU"
+  					},
+  					json: json
+				};
+				console.log(options)
+				request(options, function (error, response, body) {
+					console.log("entro al request")
+					//console.log(response)
+					console.log(body)
+					console.log(error)
+					/*if (!error && response.statusCode == 200) {
+						console.log(body.id) // Print the shortened url.
+					}*/
+				});
+				}
+				}).catch(function(error){
+					console.log("error token by sttudiantes")
+					console.log(error);
+				})
+
+
+				
+				console.log("se envio notificacion")
+
 			console.log("se envio notificacion")
 
 		}).catch(function(error){

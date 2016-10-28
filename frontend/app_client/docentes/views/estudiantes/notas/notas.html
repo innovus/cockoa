@@ -98,7 +98,7 @@
               <table class="table  table-bordered col-md-4 abajo" >
                 <thead>
                   <tr>
-                    <th class="col-md-1" ng-repeat="actividad in logro.actividades"> A{{$index + 1 }} 
+                    <th class="col-md-1" ng-repeat="actividad in logro.actividades" ng-click="showActividad(actividad)" > A{{$index + 1 }} 
                     <span class="p-porcentajes">{{actividad.porcentaje_actividad}}%
                     </span>
                 
