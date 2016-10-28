@@ -107,18 +107,6 @@ function getActividadesByLogros(req,res){
 	});
 }
 
-/*
-  id_estudiante:{
-    id_logro:{
-      id_actividad:nota_actividad,
-      ............
-  },
-  ......
-},
-........
-}
-*/
-
 function getNotasActividades(req,res){
 	Nota_actividadDao.findNotasActividadesByCarga(req.params.id_carga)
 	.then(function(data){ 
@@ -296,7 +284,9 @@ function insertNota(req,res){
  								"body":mensajeNotificacion
  							},
  							"data": {
-   								"codigo":req.body[0].id_actividad		
+   								
+   								"guia":req.body[0].id_logro,
+   								"tipo":1		
  							}
   						}
 					var options = {

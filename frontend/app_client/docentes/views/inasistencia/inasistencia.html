@@ -77,7 +77,7 @@
                   <tbody>
                    <tr ng-repeat="estudiante in estudiantes">
                     <th><input type="checkbox" checklist-model="selected.ids_estudiantes" checklist-value="estudiante.id_estudiante"></th>
-                    <th>1</th>
+                    <th>{{$index + 1}}</th>
                     <th>{{estudiante.id_estudiante}}</th>
                     <th>{{estudiante.nombrecompleto}}</th>
                     <th>{{estudiante.inasistencias}}</th>

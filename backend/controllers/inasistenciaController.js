@@ -148,7 +148,10 @@ function addInasistencias (req,res){
  								"body":mensajeNotificacion
  							},
  							"data": {
-   								"codigo":req.body[0].id_carga	
+
+   								"fecha_notificacion":fecha.toLocaleDateString(),
+   								"guia":req.body[0].id_carga,
+   								"tipo":1
  							}
   						}
 					var options = {

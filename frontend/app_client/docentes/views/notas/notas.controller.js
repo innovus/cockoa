@@ -316,7 +316,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 
                     })
                   })// cierra forEach estudianrs prueba
-                  $scope.cabeceras.push({'id':logro.id_logro,'tipo':0,'mostrar':'Final'}); 
+                  $scope.cabeceras.push({'id':logro.id_logro,'tipo':0,'mostrar':'Final','porcentaje':logro.porcentaje_logro}); 
                   })//cierra prueba
               });//cierra for each logros
 
@@ -367,7 +367,9 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 
 
   }
-  $scope.after = function(cabecera,id_estudiante){
+
+  //entra cuando va a agregar una nota
+  $scope.after = function(cabecera,estudiante){
     var valorantes = $scope.valorBefore;
     console.log("valor antes")
     console.log(val_before)
@@ -387,7 +389,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
     if(cabecera.tipo == 0 ){
       var results = [{
         'id_logro':cabecera.id,
-        'id_estudiante': id_estudiante,
+        'id_estudiante': estudiante.id_estudiante,
         'nota_logro': parseFloat(cabecera.nota) 
 
       }]
@@ -412,6 +414,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
         .success(function(mensaje){
           console.log("succes")
           console.log(mensaje);
+          calcularNotaFinal(estudiante);
         
 
         }).error(function(error){
@@ -432,11 +435,11 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
 
         })
         .success(function(mensaje){
-       //   alert(mensaje.msg);
+          console.log(estudiante)
+          calcularNotaFinal(estudiante)
+          console.log(estudiante)
           swal("Good job!", mensaje.msg, "success")
-          console.log(mensaje);
-        
-
+          console.log(mensaje);  
         }).error(function(error){
           console.log(error);
           alert("Oops... Something went wrong!");
@@ -448,7 +451,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
     }else {
       var results = [{
         'id_actividad':cabecera.id,
-        'id_estudiante': id_estudiante,
+        'id_estudiante': estudiante.id_estudiante,
         'nota_actividad': parseFloat(cabecera.nota) 
 
       }]
@@ -585,6 +588,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
     });
 
   }
+  
 
   function getActividades (id_logro,cb){
     actividadData.findActividadesByLogro(id_logro)
@@ -636,7 +640,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
   }
   
   function fillCabecerasActvidades(cabeceras,actividad,estudiantes,notas_actividades,j,cb){
-    cabeceras.push({'id':actividad.id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividad.porcentaje_actividad+"%)")});
+    cabeceras.push({'id':actividad.id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividad.porcentaje_actividad+"%)"),'porcentaje':actividad.porcentaje_actividad});
     estudiantes.forEach(function(estudiante,h){
       fillNotasActividades(estudiante,actividad,notas_actividades,j,function(newEstudiante){
         estudiantes[h] = newEstudiante;
@@ -651,7 +655,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
         estudiantes[h] = newEstudiante;
       })
     })
-    cabeceras.push({'id':logro.id_logro,'tipo':0,'mostrar':'Final'}); 
+    cabeceras.push({'id':logro.id_logro,'tipo':0,'mostrar':'Final','porcentaje':logro.porcentaje_logro}); 
     cb(estudiantes,cabeceras)
 
 
@@ -713,7 +717,7 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
     }else{
       nota_a = selected[0].nota_actividad;
     }
-    estudiante.cabeceras.push({'id':actividad.id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividad.porcentaje_actividad+"%)"),'nota':nota_a})
+    estudiante.cabeceras.push({'id':actividad.id_actividad,'tipo':1,'mostrar':"A"+ (j+1) + (" ("+actividad.porcentaje_actividad+"%)"),'nota':nota_a,'porcentaje':actividad.porcentaje_actividad})
     cb(estudiante)
   }
   function fillNotasLogros(estudiante, logro,notas_logros,cb){
@@ -729,75 +733,40 @@ function docentes_notasController($scope,$http,$cookieStore,$cookies,CONFIG,peri
       }else{
         nota_a = selected[0].nota_logro;
       }
-      estudiante.cabeceras.push({'id':logro.id_logro,'tipo':0,'mostrar':'final','nota':nota_a});
+      estudiante.cabeceras.push({'id':logro.id_logro,'tipo':0,'mostrar':'final','nota':nota_a,'porcentaje':logro.porcentaje_logro});
+      calcularNotaFinal(estudiante);
       cb(estudiante);
   }
 
   function delNull(item){
-  if(item == null){
-    return "";
-  }else{
-    return item;
+    if(item == null){
+      return "";
+    }else{
+      return item;
+    }
   }
-}
+  function calcularNotaFinal(estudiante){
+    console.log(estudiante);
+
+    selected = $filter('filter')(estudiante.cabeceras, {tipo: 0})
+    console.log(selected)
+    var promedio = 0;
+    selected.forEach(function(logro,index){
+      if(logro.nota != "-"){
+        console.log("entro al if ")
+        console.log(logro.nota)
+        var nota = parseFloat(logro.nota);
+        var porcentaje = parseFloat(logro.porcentaje);
+        var valor = (nota*porcentaje)/100;
+        promedio =promedio + valor;
+        console.log(promedio)
+      }  
+
+  })
+    estudiante.notafinal=   Math.round(promedio*100)/100;
+  }
 
 }// body...     
 })();
 
 //---------------------------------------------------
-/*
-var crearCompraTransaccion= function (compraVariable, detallesCompra, idUsuario, callback){
-        sequelize.transaction({autocommit:false})
-        .then(function(t){
-              models.Compra.create({
-                  fecha_compra:compraVariable.fecha_compra,
-                  observacion:compraVariable.observacion,
-                  id_usuario:idUsuario
-              }, {transaction: t})
-              .then(function (compra){//si sale bn el create entoncess ... usaremos el compra para agregarle a los detalles de compra
-                  var detalles= detallesCompra;
-                  detalles.forEach(function(detalle){
-                      detalle.id_compra=compra.id_compra;
-                  });
-                  models.DetalleCompra.bulkCreate(detalles, {returning:true,transaction: t})//insertamos los detallescomra
-                  .then(function(detalles){//si sale bn entonces hacemos esto con detalles
-                        var registroDetalle={};
-                        var registrosDetalle=[];
-                        console.log(detalles);
-                        detalles.forEach(function(itemDetalle){
-                          registroDetalle={};
-                          registroDetalle.id_detalle_compra=itemDetalle.id_detalle_compra;
-                          registroDetalle.observacion="nueva observacion"+itemDetalle.id_detalle_compra;
-                          registrosDetalle.push(registroDetalle);
-                        });
-                        models.RegistroCompra.bulkCreate(registrosDetalle,{returning:true,transaction:t})
-                        .then(function(registrodetalles){
-
-                          t.commit();//si salen bn todas hago el commit 
-                          callback(registrodetalles,null);
-                        }).
-                        catch(function(error){
-                          t.rollback();//si sale error hago el roolback
-                          callback(null,error);     
-                        });
-                  }).catch(function(error){
-                        t.rollback();
-                        callback(null,error);
-                  });
-
-              }).catch(function(error){//si sale mal crear compra valla aqui y hagame el rollback
-                  t.rollback();
-                  callback(null,error);
-              });
-        });//finaliza transsaccion
-}
-
-{
-  "delete":[{"id_actividad":125},{id_actividad:123}],
-  "update":[{"id_logro":50042,"id_actividad":125,"descripcion_actividad":"prueba postman 12","porcentaje_actividad":17},{"id_logro":50042,"id_actividad":126,"descripcion_actividad":"prueba postman 22","porcentaje_actividad":18}],
-  "create":[{"id_logro":50042,"id_actividad":125,"descripcion_actividad":"prueba postman 12","porcentaje_actividad":17},{"id_logro":50042,"id_actividad":126,"descripcion_actividad":"prueba postman 22","porcentaje_actividad":18}]
-}
-
-[{"id_logro":50042,"id_actividad":125,"descripcion_actividad":"prueba postman 12","porcentaje_actividad":17},{"id_logro":50042,"id_actividad":126,"descripcion_actividad":"prueba postman 22","porcentaje_actividad":18}]
-
-*/
