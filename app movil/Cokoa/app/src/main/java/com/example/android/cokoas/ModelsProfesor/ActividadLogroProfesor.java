@@ -9,6 +9,15 @@ public class ActividadLogroProfesor {
     private boolean casilla;
     private String idCurso;
     private String idCargaDocente;
+    private String porcentajeActividad;
+
+    public String getPorcentajeActividad() {
+        return porcentajeActividad;
+    }
+
+    public void setPorcentajeActividad(String porcentajeActividad) {
+        this.porcentajeActividad = porcentajeActividad;
+    }
 
     public String getIdCurso() {
         return idCurso;

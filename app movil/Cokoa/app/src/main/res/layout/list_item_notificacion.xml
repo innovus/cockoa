@@ -25,12 +25,10 @@
             android:orientation="vertical">
             <de.hdodenhof.circleimageview.CircleImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/profile_image"
+                android:id="@+id/imgNotificacion"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:foregroundGravity="center"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_alarm_black_24dp"
+                android:src="@drawable/ic_book_black_24dp"
                 app:civ_border_color="#ffffff"
                 app:civ_border_width="2dp" />
         </LinearLayout>

@@ -146,8 +146,10 @@ public class LogrosMateriaProfesorAsyntask extends AsyncTask<String, Void, Array
                 LogroProfesor logroProfesor = new LogroProfesor();
                 String idLogro = jsonObject.getString("id_logro");
                 String descripcioLogro = jsonObject.getString("descripcion_logro");
+                String porcentajeLogro = jsonObject.getString("porcentaje_logro");
                 logroProfesor.setIdLogro(idLogro);
                 logroProfesor.setDescripcionLogro(descripcioLogro);
+                logroProfesor.setPorcentajeLogro(porcentajeLogro);
                 logroProfesor.setId_curso(idCurso);
                 logroProfesor.setId_carga_docente(idCargaDocente);
                 logroProfesors.add(logroProfesor);

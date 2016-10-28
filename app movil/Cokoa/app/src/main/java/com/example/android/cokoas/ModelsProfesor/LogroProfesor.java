@@ -9,6 +9,15 @@ public class LogroProfesor {
     private String descripcionLogro;
     private String id_curso;
     private String id_carga_docente;
+    private String porcentajeLogro;
+
+    public String getPorcentajeLogro() {
+        return porcentajeLogro;
+    }
+
+    public void setPorcentajeLogro(String porcentajeLogro) {
+        this.porcentajeLogro = porcentajeLogro;
+    }
 
     public String getId_curso() {
         return id_curso;

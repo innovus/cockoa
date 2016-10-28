@@ -150,8 +150,10 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<String, Voi
                 ActividadLogroProfesor logroProfesor = new ActividadLogroProfesor();
                 String idActividad = jsonObject.getString("id_actividad");
                 String nombreActividad = jsonObject.getString("descripcion_actividad");
+                String porcentaje = jsonObject.getString("porcentaje_actividad");
                 logroProfesor.setIdActividad(idActividad);
                 logroProfesor.setNombreActividad(nombreActividad);
+                logroProfesor.setPorcentajeActividad(porcentaje);
                 logroProfesor.setCasilla(false);
 
                 logroProfesor.setIdCurso(idCurso);

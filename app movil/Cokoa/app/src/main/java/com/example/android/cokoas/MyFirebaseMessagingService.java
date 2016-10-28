@@ -6,10 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.example.android.cokoas.Activities.LoginActivity;
+import com.example.android.cokoas.Activities.InasistenciaMateriaActivity;
+import com.example.android.cokoas.Activities.NotasActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -18,7 +21,8 @@ import com.google.firebase.messaging.RemoteMessage;
  */
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     public static final String TAG = "NOTICIAS";
     @Override
@@ -29,21 +33,39 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             if (remoteMessage.getNotification() != null) {
                 Log.d("FIREBASE", remoteMessage.getNotification().getBody());
-                mostrarNotificacion(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+                String guia = remoteMessage.getData().get("guia");
+                String tipo= remoteMessage.getData().get("tipo");
+                mostrarNotificacion(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(),guia,tipo);
             }
     }
 
-    public void mostrarNotificacion(String title, String body) {
-        Intent intent = new Intent(this, LoginActivity.class);
+    public void mostrarNotificacion(String title, String body,String guia,String tipo) {
+
+        Intent intent;
+
+        if(tipo.equals("2")){
+            intent = new Intent(this, NotasActivity.class);
+            intent.putExtra("id_materia",guia);
+            intent.putExtra("id_logro","50042");
+            intent.putExtra("descripcionLogro","Calificacion actividad");
+
+        }else {
+            intent = new Intent(this, InasistenciaMateriaActivity.class);
+             intent.putExtra("id_materia",guia);
+            /*intent.putExtra("id_logro","50042");
+            intent.putExtra("descripcionLogro","Calificacion actividad");*/
+
+        }
+
+
+
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         Uri sonud = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
+        // .setSmallIcon(R.drawable.ic_alarm_black_24dp)
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_alarm_black_24dp)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setSound(sonud)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

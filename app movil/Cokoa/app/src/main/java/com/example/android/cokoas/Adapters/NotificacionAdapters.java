@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.cokoas.Models.Notificacion;
@@ -33,7 +34,15 @@ public class NotificacionAdapters extends RecyclerView.Adapter<NotificacionAdapt
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.tituloNotificacion.setText(notificacions.get(position).getTipoNotificacion());
+
+        if(notificacions.get(position).getTipoNotificacion().equals("1")){
+            viewHolder.tituloNotificacion.setText("Inasistencia");
+            viewHolder.imgNotificacion.setImageResource(R.drawable.ic_alarm_black_24dp);
+        }else{
+            viewHolder.tituloNotificacion.setText("Nota Actividad");
+            viewHolder.imgNotificacion.setImageResource(R.drawable.ic_book_black_24dp);
+        }
+
         viewHolder.mensajeNotificacion.setText(notificacions.get(position).getMensajeNotificacion());
         viewHolder.fechaNotificacion.setText(notificacions.get(position).getFechaNotificacion());
     }
@@ -45,12 +54,14 @@ public class NotificacionAdapters extends RecyclerView.Adapter<NotificacionAdapt
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tituloNotificacion, mensajeNotificacion, fechaNotificacion;
+        public ImageView imgNotificacion;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tituloNotificacion = (TextView) itemView.findViewById(R.id.txtTituloNotificacion);
             mensajeNotificacion = (TextView) itemView.findViewById(R.id.txtMensajeNotificacion);
             fechaNotificacion = (TextView) itemView.findViewById(R.id.txtFechaNotificacion);
+            imgNotificacion = (ImageView) itemView.findViewById(R.id.imgNotificacion);
 
         }
 

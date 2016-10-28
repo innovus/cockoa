@@ -49,7 +49,7 @@ public class NotificacionFragment extends Fragment {
 
 
         /**prueba de notificaciones*/
-        Notificacion notificacion = new Notificacion();
+       /* Notificacion notificacion = new Notificacion();
         notificacion.setTipoNotificacion("Inasistencia");
         notificacion.setMensajeNotificacion("su hijo no asistio  a la clase de Ingles el dia 29/02/02");
         notificacion.setFechaNotificacion("08/092016");
@@ -61,7 +61,7 @@ public class NotificacionFragment extends Fragment {
         notificaciont.setMensajeNotificacion("Su hijo obtubo una nota de 3.5 en la materia de Ingles");
         notificaciont.setFechaNotificacion("08/092016");
 
-        notificacions.add(notificaciont);
+        notificacions.add(notificaciont);*/
 
         /***/
 

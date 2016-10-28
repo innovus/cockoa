@@ -9,6 +9,33 @@ public class Notificacion {
     private String mensajeNotificacion;
     private String fechaNotificacion;
     private Boolean estadoNotificacion;
+    private String idEstudiante;
+    private String estadoNotificaion;
+    private String guia;
+
+    public String getIdEstudiante() {
+        return idEstudiante;
+    }
+
+    public void setIdEstudiante(String idEstudiante) {
+        this.idEstudiante = idEstudiante;
+    }
+
+    public String getEstadoNotificaion() {
+        return estadoNotificaion;
+    }
+
+    public void setEstadoNotificaion(String estadoNotificaion) {
+        this.estadoNotificaion = estadoNotificaion;
+    }
+
+    public String getGuia() {
+        return guia;
+    }
+
+    public void setGuia(String guia) {
+        this.guia = guia;
+    }
 
     public String getIdNotificacion() {
         return idNotificacion;

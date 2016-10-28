@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -53,16 +54,26 @@ public class NotificacionAsyntask extends AsyncTask<Void, Void, ArrayList<Notifi
         // Contendra las respuesta del JSON en un Araylist
         String forecastJsonStr = null;
 
+
+
+
+
         try {
+            JSONObject jsonObjectNotificacion = new JSONObject();
+            jsonObjectNotificacion.put("id_estudiante", "30011");
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "estudiantes/notificacion/1193479112");
+            URL url = new URL(serverUrls + "estudiantes/notificaciones");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "application/json");
             String token = sessionManager.getKeyToken();
             Log.v("tokenSessionManager", "Json String" + token);
             urlConnection.setRequestProperty("Authorization", "Bearer " + token);
+            OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+            out.write(jsonObjectNotificacion.toString());
+            out.close();
             urlConnection.connect();
 
             // lee Respons de entrada en una cadena
@@ -111,6 +122,8 @@ public class NotificacionAsyntask extends AsyncTask<Void, Void, ArrayList<Notifi
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();

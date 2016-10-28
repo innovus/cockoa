@@ -28,12 +28,13 @@ public class LogroMateriaProfesorAdapter extends RecyclerView.Adapter<LogroMater
     }
 
     public  static  class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView descLogro;
+        public TextView descLogro,numeroLogroProfesor,porcentajeLogro;
         LogroProfesor logroProfesor;
         public ViewHolder(View itemView) {
             super(itemView);
             descLogro = (TextView) itemView.findViewById(R.id.txt_des_logro_materia_profesor);
-
+            numeroLogroProfesor = (TextView) itemView.findViewById(R.id.numeroLogroProfesor);
+            porcentajeLogro = (TextView) itemView.findViewById(R.id.txt_porcentaje_logro_profesor);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -59,6 +60,8 @@ public class LogroMateriaProfesorAdapter extends RecyclerView.Adapter<LogroMater
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.descLogro.setText(logroProfesors.get(position).getDescripcionLogro());
         viewHolder.logroProfesor = logroProfesors.get(position);
+        viewHolder.numeroLogroProfesor.setText("Logro "+Integer.toString(position+1));
+        viewHolder.porcentajeLogro.setText(logroProfesors.get(position).getPorcentajeLogro());
     }
 
     @Override
