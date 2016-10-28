@@ -1,1 +1,7 @@
 Documentos/~$tablas_app.xlsx
+backend/app.js
+backend/app_core/dao/carga_docenteDao.js
+backend/node_modules/pg-promise/node_modules/pg/lib/defaults.js
+frontend/app_client/docentes/config/configuracion.js
+backend/config.json
+backend/app.js

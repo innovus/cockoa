@@ -10,9 +10,10 @@ var queryFindCursosMateriasByFechaActual = "SELECT id_carga_docente, id_docente,
 	"FROM carga_docente NATURAL JOIN materia NATURAL JOIN curso "+ 
 	"WHERE vigente_carga_docente = 'S' AND id_docente = '6' "+ 
 	"AND id_periodo = "+ 
-		"(SELECT DISTINCT id_periodo FROM carga_docente natural join periodo "+ 
-		"WHERE fecha_inicio_periodo <= $fecha_actual AND fecha_fin_periodo >= $fecha_actual ) "+ 
-		"ORDER BY grado, grupo ";
+		"(SELECT  id_periodo "+
+	"FROM anio_lectivo NATURAL JOIN periodo WHERE id_estado_anio_lectivo = 1 AND fecha_inicio_periodo <= $fecha_actual "+
+	"AND numero_periodo =(SELECT  count(numero_periodo) as numero_periodos FROM periodo NATURAL JOIN anio_lectivo  "+
+	"WHERE id_estado_anio_lectivo = 1 AND fecha_inicio_periodo <= $fecha_actual))";
 
 var queries={
 	"carga_docente":{

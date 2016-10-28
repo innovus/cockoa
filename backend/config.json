@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "personal",
-    "password": "1",
-    "database": "liceofull",
+    "username": "postgres",
+    "password": "123",
+    "database": "liceo",
     "host": "127.0.0.1",
     "port":"5432",
     "dialect": "postgres"
