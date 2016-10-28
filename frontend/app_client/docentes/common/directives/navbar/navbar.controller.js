@@ -1,25 +1,18 @@
-(function(){
-    angular.module("docentes").controller("navbarCtrl",navbarCtrl);
+(function() {
+    angular.module("docentes").controller("navbarCtrl", navbarCtrl);
+    navigationCtrl.$inject = ["$location"];
 
-    navigationCtrl.$inject=["$location"];
-
-    function navbarCtrl($location){
-        
-        var navvm=this;
-        navvm.currentPath= $location.path();
-      
-        navvm.notas=function(){
-            
+    function navbarCtrl($location) {
+        var navvm = this;
+        navvm.currentPath = $location.path();
+        navvm.notas = function() {
             $location.path('/docentes/notas');
         };
-        navvm.inasistencias=function(){
-            
+        navvm.inasistencias = function() {
             $location.path('/docentes/inasistencias');
         };
-        navvm.logros=function(){
-            
+        navvm.logros = function() {
             $location.path('/docentes/logros');
         };
     }
-
 })();

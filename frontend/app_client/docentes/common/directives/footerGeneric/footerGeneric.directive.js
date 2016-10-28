@@ -1,6 +1,4 @@
-
-(function(){
-
+(function() {
     /** 
      * @ngdoc directive
      * @name compras.directive:footerGeneric
@@ -9,15 +7,13 @@
      * 
      * Esta es una directiva del pie de pagina
      * 
-    */
-    angular
-      .module("docentes")
-      .directive("footerGeneric",footerGeneric);
+     */
+    angular.module("docentes").directive("footerGeneric", footerGeneric);
 
-      function footerGeneric(){
+    function footerGeneric() {
         return {
-          restrict: "EA",
-          templateUrl:"/common/directives/footerGeneric/footerGeneric.template.html"
+            restrict: "EA",
+            templateUrl: "/common/directives/footerGeneric/footerGeneric.template.html"
         };
-      }
+    }
 })();

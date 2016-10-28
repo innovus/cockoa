@@ -1,7 +1,5 @@
-(function(){
-    angular
-    .module('docentes')
-    .constant("CONFIG",{
-        "http_address": "http://localhost:3001"
-    });      
+(function() {
+    angular.module('docentes').constant("CONFIG", {
+        "http_address": "http://localhost:3000"
+    });
 })();

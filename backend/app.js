@@ -103,8 +103,8 @@ app.use(function(err, req, res, next) {
   });
 });*/
 
-app.listen(3001, function(){
-  console.log('Servidor iniciado con express. Localhost Escuchando el puerto 3001')
+app.listen(3000, function(){
+  console.log('Servidor iniciado con express. Localhost Escuchando el puerto 3000')
 })
 
 

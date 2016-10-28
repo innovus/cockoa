@@ -1,76 +1,97 @@
-<navbarest></navbarest>
-  <aside class="main-sidebar">
+<navbarest>
+</navbarest>
+<aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-    <!-- Sidebar user panel -->
-    <div class="user-panel">
-        <div class="pull-left image">
-        <img src="/img/avatar04.png" class="img-circle" alt="User Image">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="/img/avatar04.png" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>
+                    {{ primer_nombre }} {{ primer_apellido }}
+                </p>
+                <small>
+                    Identificación: {{ numero_documento }}
+                </small>
+                <!--<a href="#"><i class="fa fa-circle text-success"></i> En linea</a>-->
+            </div>
         </div>
-        <div class="pull-left info">
-        <p>{{primer_nombre}} {{primer_apellido}}</p>
-            <small>Identificación: {{numero_documento}}</small>
-        <!--<a href="#"><i class="fa fa-circle text-success"></i> En linea</a>-->
-        </div>
-    </div>
-
-    <!-- sidebar menu: : style can be found in sidebar.less -->
-    <ul class="sidebar-menu">
-        <li class="header">Materias</li>
-        <li  class="treeview" ng-repeat="materia in materias">
-          <a ng-click="getInasistenciasByMateria(materia)"><span>{{materia.nombre_materia}} </span><i class="fa fa-angle-left pull-right"></i></a>
-          </li>
-          
-
-
-
-
-    </ul>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li class="header">
+                Materias
+            </li>
+            <li  class="treeview" ng-repeat="materia in materias">
+                <a ng-click="getInasistenciasByMateria(materia)">
+                    <span>
+                        {{ materia.nombre_materia }}
+                    </span>
+                    <i class="fa fa-angle-left pull-right">
+                    </i>
+                </a>
+            </li>
+        </ul>
     </section>
     <!-- /.sidebar -->
 </aside>
 <div class="wrapper">
-  <div class="content-wrapper">
-
-      <div container>
-     <section class="content-header">  
-      <h1>
-        Notas
-        <small> - </small>
-        
-      </h1>
-    </section>
-
-    <section class="content">
-
-
-
-            <div>
-    <h1>{{materia_seleccionada.nombre_materia}}</h1>
-    <div ng-grid ="gridOptions">
+    <div class="content-wrapper">
+        <div container>
+            <section class="content-header">
+                <h1>
+                    Notas
+                    <small>
+                        -
+                    </small>
+                </h1>
+            </section>
+            <section class="content">
+                <div>
+                    <h1>
+                        {{ materia_seleccionada.nombre_materia }}
+                    </h1>
+                    <div ng-grid ="gridOptions">
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Fecha
+                                </th>
+                                <th>
+                                    Periodo
+                                </th>
+                                <th>
+                                    Docente
+                                </th>
+                                <th>
+                                    Justificada
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="inasistencia in inasistencias">
+                                <td>
+                                    {{ inasistencia.fecha_inasistencia | date : format : shortDate }}
+                                </td>
+                                <td>
+                                    {{ inasistencia.numero_periodo }}
+                                </td>
+                                <td>
+                                    {{ inasistencia.nombrecompleto }}
+                                </td>
+                                <td>
+                                    {{ inasistencia.estado_inasistencia === 2 ? "Si" : "No" }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
     </div>
-    <table class="table">
-      <thead>
-          <tr>
-              <th>Fecha</th>
-              <th>Periodo</th>
-              <th>Docente</th>
-              <th>Justificada</th>
-          </tr>
-        </thead>
-        <tbody >
-           <tr ng-repeat="inasistencia in inasistencias">
-              <td>{{inasistencia.fecha_inasistencia | date : format : shortDate}}</td>
-              <td>{{inasistencia.numero_periodo}}</td>
-              <td>{{inasistencia.nombrecompleto}}</td>
-              <td>{{inasistencia.estado_inasistencia === 2 ? "Si" : "No" }}</td>
-          </tr>
-        </tbody>
-    </table>
-    </div>
-    </section>
-    </div>
-
-  </div>
 </div>
-<footer-generic></footer-generic>
+<footer-generic>
+</footer-generic>
