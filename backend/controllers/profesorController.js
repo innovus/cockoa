@@ -18,6 +18,7 @@ var Nota_logroDao = require("../app_core/dao/nota_logroDao");
 var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
 var DispositivoDao = require("../app_core/dao/dispositivoDao");
+var EstudianteDao = require("../app_core/dao/estudianteDao");
 
 function getCursosMaterias(req, res) {
     var hoy = new Date();
@@ -545,6 +546,16 @@ function guardarActividadesTransaccion(req, res) {
         }
     })
 }
+function getAllEstudianteByIdCurso(req,res){
+    EstudianteDao.findAllEstudianteByIdCurso(req.params.id_curso).then(function(data){
+         respuesta.sendJsonResponse(res, 200, data);
+    }).catch(function(error){
+        console.log(error)
+         respuesta.sendJsonResponse(res, 500, {});
+
+    })
+
+}
 
 function getNotasLogros(req, res) {
     Nota_logroDao.findNotasLogrosByCarga(req.params.id_carga).then(function(data) {
@@ -619,4 +630,5 @@ module.exports = {
     deleteActividades: deleteActividades,
     guardarActividadesTransaccion: guardarActividadesTransaccion,
     guardarLogrosTransaccion: guardarLogrosTransaccion,
+    getAllEstudianteByIdCurso: getAllEstudianteByIdCurso
 }

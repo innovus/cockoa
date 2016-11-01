@@ -9,20 +9,8 @@ var bodyParser = require('body-parser');
 var uglifyJs = require("uglify-js");
 var fs = require("fs");
 var app = express();
-var appClientFiles = ['app_client/docentes/app.js', ];
-var appClientFiles2 = ['app_client/app.js', ];
-/*
-var uglified= uglifyJs.minify(appClientFiles, {compress:false});
-fs.writeFile('public/angular/tienda.min.js', uglified.code, function(err){
-  if(err){
-    console.log(err);
-  }
-  else{
-    console.log("Script generated and saved: tienda.min.js");
-  }
-});
 
-*/
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
@@ -33,14 +21,14 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use(express.static(path.join(__dirname, 'app_client/estudiantes')));
-app.use(express.static(path.join(__dirname, 'app_client/docentes')));
+app.use(express.static(path.join(__dirname, 'app_client')));
 /*
 app.use(function(req,res){
     res.sendFile(path.join(__dirname,'app_client/estudiantes','index.html'));
 });
 */
 app.use(function(req, res) {
-    res.sendFile(path.join(__dirname, 'app_client/docentes', 'index.html'));
+    res.sendFile(path.join(__dirname, 'app_client', 'index.html'));
 });
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
