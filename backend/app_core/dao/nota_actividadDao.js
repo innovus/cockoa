@@ -1,8 +1,8 @@
 var Models=require("../models/index");
 var sequelize = Models.sequelize;
 
-var queriFindNotasActividadesByCarga = "SELECT  id_estudiante,id_logro, id_actividad, nota_actividad "+ 
-  "FROM actividad NATURAL JOIN nota_actividad NATURAL JOIN logro "+ 
+var queriFindNotasActividadesByCarga = "SELECT  id_estudiante,id_logro, id_actividad, nota_actividad "
++ "FROM actividad NATURAL JOIN nota_actividad NATURAL JOIN logro "+ 
   "WHERE id_carga_docente = $id_carga "+
   "ORDER BY id_estudiante, id_logro";
 
