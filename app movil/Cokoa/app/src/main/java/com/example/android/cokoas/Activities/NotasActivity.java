@@ -1,21 +1,20 @@
 package com.example.android.cokoas.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.android.cokoas.Fragments.NotasActividadFragment;
+import com.example.android.cokoas.Asyntask.NotaActividadNotificacionAsyntask;
+import com.example.android.cokoas.Asyntask.NotasActividadAsyntask;
 import com.example.android.cokoas.R;
 
 public class NotasActivity extends AppCompatActivity {
-    String id_materia,descripcionLogro;
+    String id_materia,descripcionLogro,notificacion;
     String id_logro;
+    String a;
 
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,25 +23,35 @@ public class NotasActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        id_materia = getIntent().getStringExtra("id_materia");
-        id_logro = getIntent().getStringExtra("id_logro");
-        descripcionLogro = getIntent().getStringExtra("descripcionLogro");
+        Intent startingIntent = getIntent();
+        Bundle className = startingIntent.getExtras();
+        a = (String) className.get("guia");
 
-
-        Bundle parametros = new Bundle();
-        parametros.putString("id_materia", id_materia);
-        parametros.putString("id_logro", id_logro);
-        parametros.putString("descripcionLogro",descripcionLogro);
-
-
-        if (savedInstanceState == null) {
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            NotasActividadFragment notasActividadFragment = new NotasActividadFragment();
-            notasActividadFragment.setArguments(parametros);
-            fragmentTransaction.replace(R.id.fragment_notas, notasActividadFragment);
-            fragmentTransaction.commit();
+        if (a == null) {
+            notificacion = getIntent().getStringExtra("notificacion");
+            if (notificacion == null) {
+                id_materia = getIntent().getStringExtra("id_materia");
+                id_logro = getIntent().getStringExtra("id_logro");
+                descripcionLogro = getIntent().getStringExtra("descripcionLogro");
+                new NotasActividadAsyntask(this).execute(id_materia,id_logro,descripcionLogro);
+            }
+            else {
+                new NotaActividadNotificacionAsyntask(this).execute(getIntent().getStringExtra("id_materia"));
+            }
+        }else {
+            new NotaActividadNotificacionAsyntask(this).execute(a);
         }
+
+
+
+
+
+
+
+
+       // new NotaActividadNotificacionAsyntask(this).execute("14");
+
+
     }
 
     @Override

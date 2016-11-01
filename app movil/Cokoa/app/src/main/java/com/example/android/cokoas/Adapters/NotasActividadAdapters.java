@@ -27,13 +27,16 @@ public class NotasActividadAdapters extends RecyclerView.Adapter<NotasActividadA
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tituloActividad, descActividad, notaActividad;
+        public TextView tituloActividad, descActividad, notaActividad,descripcionLogro;
+        NotaActividad notaActividadss;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tituloActividad = (TextView) itemView.findViewById(R.id.text_titulo_actividad);
             descActividad = (TextView) itemView.findViewById(R.id.text_des_actividad);
             notaActividad = (TextView) itemView.findViewById(R.id.text_nota_actividad);
+            descripcionLogro = (TextView) activity.findViewById(R.id.txtActividadLogro);
+
         }
     }
 
@@ -55,7 +58,9 @@ public class NotasActividadAdapters extends RecyclerView.Adapter<NotasActividadA
             viewHolder.notaActividad.setText(notaActividads.get(position).getNotaActividad());
         }
 
+        viewHolder.notaActividadss = notaActividads.get(position);
 
+        viewHolder.descripcionLogro.setText(notaActividads.get(position).getDescripcionLogro());
     }
 
     @Override

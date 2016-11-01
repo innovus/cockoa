@@ -42,4 +42,14 @@ public class NotaActividad {
     private String nombreActividad;
     private String descActividad;
     private String notaActividad;
+
+    private String descripcionLogro;
+
+    public String getDescripcionLogro() {
+        return descripcionLogro;
+    }
+
+    public void setDescripcionLogro(String descripcionLogro) {
+        this.descripcionLogro = descripcionLogro;
+    }
 }

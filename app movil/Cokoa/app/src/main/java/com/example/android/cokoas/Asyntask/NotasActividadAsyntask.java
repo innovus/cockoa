@@ -9,8 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.cokoas.Adapters.NotasActividadAdapters;
@@ -38,8 +36,6 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ImageView imageView;
-    private TextView textView;
     SessionManager sessionManager;
     String serverUrls = AppConstants.serverUrl;
     private Activity activity;
@@ -70,8 +66,8 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
     @Override
     protected ArrayList<NotaActividad> doInBackground(String... params) {
 
-        if(ActividadLogro(params[1])!=null){
-            ArrayList<String> status = new  ArrayList(ActividadLogro(params[1]));
+        if(ActividadLogro(params[1],params[2])!=null){
+            ArrayList<String> status = new  ArrayList(ActividadLogro(params[1],params[2]));
             if(status.get(0)=="204"){
                 Toast toast1 =
                         Toast.makeText(activity, "no tiene actividades", Toast.LENGTH_SHORT);
@@ -79,7 +75,7 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
 
 
             }else{
-                ArrayList<NotaActividad> actividadLogro = ActividadLogro(params[1]);
+                ArrayList<NotaActividad> actividadLogro = ActividadLogro(params[1],params[2]);
                 if(notasActividadLogro(params[1])!=null){
                     ArrayList<NotaActividad> notaActividads = notasActividadLogro(params[1]);
 
@@ -111,7 +107,7 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
 
     }
 
-    public ArrayList<NotaActividad> ActividadLogro(String idLogro){
+    public ArrayList<NotaActividad> ActividadLogro(String idLogro,String descripcionLogro){
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -192,7 +188,7 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
             }
         }
         try {
-            return getNotasActividad(forecastJsonStr);
+            return getNotasActividad(forecastJsonStr,descripcionLogro);
             //return  null;
         } catch (JSONException e) {
             Log.e("error", e.getMessage(), e);
@@ -245,7 +241,7 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
         progressDialog.dismiss();
     }
 
-    public static ArrayList<NotaActividad> getNotasActividad(String logroJsonStr) throws JSONException {
+    public static ArrayList<NotaActividad> getNotasActividad(String logroJsonStr,String descripcionLogro) throws JSONException {
          if (logroJsonStr != null) {
              // Ahora tenemos una cadena que representa todas las areas en formato JSON .
              // Afortunadamente análisis es fácil: constructor toma la cadena JSON y lo convierte
@@ -267,6 +263,8 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
                 notaActividad1.setIdnotaActividad(id_actividad);
                  notaActividad1.setNombreActividad("Actividad");
                  notaActividad1.setDescActividad(descActividad);
+                 notaActividad1.setDescripcionLogro(descripcionLogro);
+
                  //notaActividad1.setNotaActividad(notaActividads);
                  notasActividadArrayList.add(notaActividad1);
 

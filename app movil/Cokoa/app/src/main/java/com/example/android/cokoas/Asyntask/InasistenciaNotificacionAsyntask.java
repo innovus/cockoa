@@ -30,18 +30,19 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by ASUS on 01/07/2016.
+ * Created by ASUS on 30/10/2016.
  */
-public class InasistenciaMateriaAsyntask extends AsyncTask<String, Void, ArrayList<InasistenciaMateria>> {
+public class InasistenciaNotificacionAsyntask extends AsyncTask<String, Void, ArrayList<InasistenciaMateria>> {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SessionManager sessionManager;
+
     String serverUrls = AppConstants.serverUrl;
     private Activity activity;
-    private final String LOG_TAG = InasistenciaMateriaAsyntask.class.getSimpleName();
+    private final String LOG_TAG = InasistenciaNotificacionAsyntask.class.getSimpleName();
 
-    public InasistenciaMateriaAsyntask(Activity activity) {
+    public InasistenciaNotificacionAsyntask(Activity activity) {
         super();
         this.activity = activity;
     }
@@ -60,7 +61,7 @@ public class InasistenciaMateriaAsyntask extends AsyncTask<String, Void, ArrayLi
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "inasistencias/materias/"+params[0]);
+            URL url = new URL(serverUrls + "inasistencias/carga/"+params[0]+"/estudiante/"+params[1]+"");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -138,38 +139,6 @@ public class InasistenciaMateriaAsyntask extends AsyncTask<String, Void, ArrayLi
         return null;
     }
 
-    @Override
-    protected void onPostExecute(ArrayList<InasistenciaMateria> result) {
-        if (result != null) {
-            ArrayList<String> status = new ArrayList(result);
-            if (status.get(0) == "400") {
-                Toast toast1 =
-                        Toast.makeText(activity, "No tiene inasistencias", Toast.LENGTH_SHORT);
-                toast1.show();
-
-            }else {
-
-
-                int position = result.size()-1;
-
-                TextView nameMateria,nombreProfesor;
-                nameMateria = (TextView) activity.findViewById(R.id.id_text_nombreMateria);
-                nombreProfesor = (TextView) activity.findViewById(R.id.id_text_nombreProfesor);
-                nameMateria.setText( result.get(position).getNombreMateria());
-                nombreProfesor.setText(result.get(position).getNombreProfesor());
-
-                mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_inasistencia_materia);
-                mRecyclerView.setHasFixedSize(true);
-                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
-                mLayoutManager = new LinearLayoutManager(activity);
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                mAdapter = new InasistenciaMateriaAdapters(result, activity);
-                mRecyclerView.setAdapter(mAdapter);
-
-            }
-        }
-
-    }
 
     public static ArrayList<InasistenciaMateria> getInasisteciaMateria(String inasistenciaJsonStr) throws JSONException {
         if (inasistenciaJsonStr != null) {
@@ -220,7 +189,7 @@ public class InasistenciaMateriaAsyntask extends AsyncTask<String, Void, ArrayLi
                 inasistenciaMateria.setNumeroPeriodo(periodoInasistencia);
                 try {
                     Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(fechaInasistencia);
-                   String newstring = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                    String newstring = new SimpleDateFormat("yyyy-MM-dd").format(date);
                     inasistenciaMateria.setFechaInasistencia(newstring);
 
                 } catch (ParseException e) {
@@ -254,5 +223,36 @@ public class InasistenciaMateriaAsyntask extends AsyncTask<String, Void, ArrayLi
         return null;
     }
 
+    @Override
+    protected void onPostExecute(ArrayList<InasistenciaMateria> result) {
+        super.onPostExecute(result);
+        if (result != null) {
+            ArrayList<String> status = new ArrayList(result);
+            if (status.get(0) == "400") {
+                Toast toast1 =
+                        Toast.makeText(activity, "No tiene inasistencias", Toast.LENGTH_SHORT);
+                toast1.show();
 
+            }else {
+
+
+                int position = result.size()-1;
+
+                TextView nameMateria,nombreProfesor;
+                nameMateria = (TextView) activity.findViewById(R.id.id_text_nombreMateria);
+                nombreProfesor = (TextView) activity.findViewById(R.id.id_text_nombreProfesor);
+                nameMateria.setText( result.get(position).getNombreMateria());
+                nombreProfesor.setText(result.get(position).getNombreProfesor());
+
+                mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_inasistencia_materia);
+                mRecyclerView.setHasFixedSize(true);
+                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
+                mLayoutManager = new LinearLayoutManager(activity);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new InasistenciaMateriaAdapters(result, activity);
+                mRecyclerView.setAdapter(mAdapter);
+
+            }
+        }
+    }
 }

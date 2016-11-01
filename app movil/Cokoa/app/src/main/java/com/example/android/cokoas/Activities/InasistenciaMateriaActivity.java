@@ -1,47 +1,47 @@
 package com.example.android.cokoas.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.cokoas.Asyntask.InasistenciaMateriaAsyntask;
+import com.example.android.cokoas.Asyntask.InasistenciaNotificacionAsyntask;
 import com.example.android.cokoas.R;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.example.android.cokoas.SessionManager.SessionManager;
 
 public class InasistenciaMateriaActivity extends AppCompatActivity {
-    String id_materia;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
+    String notificacion;
+    SessionManager sessionManager;
+    String a;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inasistencia_materia);
+        sessionManager = new SessionManager(getApplication());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        id_materia = getIntent().getStringExtra("id_materia");
+
+        Intent startingIntent = getIntent();
+        Bundle className = startingIntent.getExtras();
+        a = (String) className.get("guia");
 
 
-       /* Bundle parametros = new Bundle();
-        parametros.putString("id_materia", id_materia);
-        if (savedInstanceState == null) {
-
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            InasistenciaMateriaFragment inasistenciaMateriaFragment = new InasistenciaMateriaFragment();
-            inasistenciaMateriaFragment.setArguments(parametros);
-            fragmentTransaction.replace(R.id.fragment_inasistencias_materia, inasistenciaMateriaFragment);
-            fragmentTransaction.commit();
-        }*/
-
-
-
-        new InasistenciaMateriaAsyntask(this).execute(id_materia);
+        if (a == null) {
+            notificacion = getIntent().getStringExtra("notificacion");
+            if (notificacion == null) {
+                new InasistenciaMateriaAsyntask(this).execute(getIntent().getStringExtra("id_materia"));
+            } else {
+                new InasistenciaNotificacionAsyntask(this).execute(getIntent().getStringExtra("id_materia"), sessionManager.getIdEstudiante());
+            }
+        } else {
+            new InasistenciaNotificacionAsyntask(this).execute(a, sessionManager.getIdEstudiante());
+        }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -55,14 +55,13 @@ public class InasistenciaMateriaActivity extends AppCompatActivity {
         }
     }
 
-    public void getTok(View view){
+    public void getTok(View view) {
 
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.d("firebase", "FBMToken: " + token);
+        // String token = FirebaseInstanceId.getInstance().getToken();
+        // Log.d("firebase", "FBMToken: " + token);
 
 
     }
-
 
 
 }

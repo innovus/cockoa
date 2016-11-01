@@ -42,7 +42,6 @@ public class NotasActividadFragment extends Fragment {
         id_materia = args.getString("id_materia");
         id_logro = args.getString("id_logro");
         descripcionLogro = args.getString("descripcionLogro");
-
         // descripcionLogro = getIntent().getStringExtra("descripcionLogro");
         TextView textView = (TextView) getActivity().findViewById(R.id.txtActividadLogro);
         textView.setText(descripcionLogro);

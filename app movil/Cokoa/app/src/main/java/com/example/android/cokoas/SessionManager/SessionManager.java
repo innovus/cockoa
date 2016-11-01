@@ -32,6 +32,8 @@ public class SessionManager {
     public static final String PASSWORD = "password";
     //Tipo Usuario
     public static final String USER = "usuario";
+    //id_estudiante
+    public static final String ID_ESTUDIANTE = "id_estudiante";
 
     // Constructor
     public SessionManager(Context context) {
@@ -51,6 +53,8 @@ public class SessionManager {
         editor.putString(CODIGO, codigo);
         editor.putString(PASSWORD, pass);
         editor.putString(USER, user);
+        editor.putString(ID_ESTUDIANTE, "30011");
+
         // commit changes
         editor.commit();
     }
@@ -109,6 +113,9 @@ public class SessionManager {
 
     public String getUser() {
         return pref.getString(USER, null);
+    }
+    public String getIdEstudiante() {
+        return pref.getString(ID_ESTUDIANTE, null);
     }
 
 }
