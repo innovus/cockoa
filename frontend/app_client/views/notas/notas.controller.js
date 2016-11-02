@@ -46,8 +46,6 @@
         });
     }
 
-
-
     /** 
      * @ngdoc controller
      * @name showLogroController
@@ -117,13 +115,10 @@
         $scope.notas_logros = null;
         $scope.notas_actividades = null;
         $scope.materias = []
-         $scope.selected = {
+        $scope.selected = {
             ids_estudiantes: []
         };
         var val_before;
-
-
-
 
 
         //Trae el periodo Actual
@@ -172,9 +167,6 @@
                     } //cierra el if
 
                 });//cierra forEach
-                for (var i = 0; i < data.length; i++) {
-
-                } //cierra for
             }).error(function(error) {
                 console.log(error);
                 $scope.periodos = []
@@ -185,8 +177,21 @@
             console.log("error periodo actual")
             console.log(error);
         });
+
+
         //funcion que se utiliza al dar click en la cabecera de un logro y muestra el logro en la ventana modal
-        $scope.showLogro = function(logro) {
+
+        /**
+         * @ngdoc method
+         * @name showLogro
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Este metodo es el que abre el modal y muestra el logro
+         *
+         * @param {json} Va en formato JSON un objeto logro 
+         * 
+        */
+        var showLogro = function(logro) {
             var modalInstance = null;
             modalInstance = $uibModal.open({
                 animation: true,
@@ -201,8 +206,19 @@
                 }
             });
         }
-        calcularFinal = function(estudiante) {}
-        $scope.showActividad = function(cabecera) {
+        
+        /**
+         * @ngdoc method
+         * @name showActividad
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Este metodo es el que abre el modal y muestra una 
+         * actividad en dettalle
+         *
+         * @param {json} Va en formato JSON un objeto cabecera 
+         * 
+        */
+        var showActividad = function(cabecera) {
                 if (cabecera.tipo == 1) {
                     actividadData.findActividadById(cabecera.id).success(function(data) {
                         console.log(data);
@@ -223,49 +239,35 @@
                         console.log(error)
                     })
                 } //cierra if
-            }
-            //funcion q abre ventana modal
-        $scope.open = function(size, id_logro) {
-            //$http.get(CONFIG.http_address+'/api/docentes/logros/'+id_logro+'/actividades/')
-            var modalInstance = null;
-            actividadData.findActividadesByLogro(id_logro).success(function(data) {
-                modalInstance = $uibModal.open({
-                    animation: true,
-                    backdrop: "static",
-                    templateUrl: '/views/logros/actividades.html',
-                    controller: 'actividadesModalController',
-                    size: size,
-                    resolve: {
-                        actividades: function() {
-                            return data
-                        },
-                        id_logro: function() {
-                            return id_logro
-                        }
-                    }
-                });
-                console.log(modalInstance)
-            }).error(function(error) {
-                console.log(error);
-            });
-            console.log(modalInstance)
-        };
+        }
+
         //funcion que se la usa cuando le da click en un tab
-        $scope.getPeriodoId = function(index) {
+        /**
+         * @ngdoc method
+         * @name getPeriodoId
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Este lo usamos cuando damos click en una tab (periodo), recibe el index de la posicion periodo en el array
+         * $scope.periodos para poder seleccionar el periodo, y que coloque en cargas, las cargas de ese periodo
+         *
+         * @param {int} es el index de la tab donde damos click
+         * 
+        */
+        var getPeriodoId = function(index) {
             $scope.periodoSeleccionado = $scope.periodos[index];
             periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
+               
                 $scope.cargas = data;
                 var encontrado = false;
                 //hace la busqueda si existe la misma carga en las nuevas cargas de este periodo
                 //para dejarla seleccionada con las nuevas
-                for (var i = 0; i < data.length; i++) {
-                    (function(i) {
-                        if (data[i].nombre_materia == $scope.cargaSeleccionada.nombre_materia && data[i].id_curso == $scope.cargaSeleccionada.id_curso) {
-                            $scope.cargaSeleccionada = data[i];
-                            encontrado = true;
-                        }
-                    })(i);
-                }
+                data.forEach(function(materia, index) {
+                    if (materia.nombre_materia == $scope.cargaSeleccionada.nombre_materia && materia.id_curso == $scope.cargaSeleccionada.id_curso) {
+                        $scope.cargaSeleccionada = materia;
+                        encontrado = true;
+                    }
+
+                })
                 if (encontrado == false) {
                     $scope.cargaSeleccionada = null;
                 }
@@ -274,11 +276,21 @@
                 console.log('Error: ' + data);
             });
         };
-        $scope.selectCurso = function(carga) {
-            seleccionarCarga(carga);
-        }
 
-        function seleccionarCarga(carga) {
+        /**
+         * @ngdoc method
+         * @name seleccionarCarga
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Este metodo lo usamos para traer las notas, los logros, las actividades y los estudiantes 
+         * segun la carga que le mandemos
+         * 
+         *
+         * @param {json} Va en formato JSON un objeto cabecera 
+         * 
+        */
+
+        var seleccionarCarga = function(carga) {
             $scope.data_received = false;
             myutils.showWait();
             $scope.status = true;
@@ -343,6 +355,8 @@
                         }) //cierra gerNotasLogros
                 }) //cierra getNotasActividades
         } //CIERA FUNCION SELECIONAR CARGA
+
+        /*
         $scope.mostrar_nota = function(id_estudiante, tipo, id) {
             //si es cero es logro
             if (tipo == 0) {
@@ -350,32 +364,39 @@
             } else {
                 return $scope.notas_actividades[id_estudiante][id]
             }
+        }*/
+
+        /**
+         * @ngdoc method
+         * @name before
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Metodo usado para obtener el valor de la nota antes de cambiarla
+         * 
+         *
+         * @param {json} Va en formato JSON un objeto cabecera 
+         * 
+        */
+        var before = function(cabecera) {
+            //$scope.valorBefore = valor1.mostrar;
+            $scope.valorBefore = cabecera.nota;
+            val_before = $scope.valorBefore;
+
         }
-        $scope.before = function(cabecera) {
-                //$scope.valorBefore = valor1.mostrar;
-                $scope.valorBefore = cabecera.nota;
-                val_before = $scope.valorBefore;
-                console.log("entro a before");
-                console.log(val_before);
-                console.log(isNaN(val_before))
-                console.log(cabecera.nota)
-                    /*
-    if(cabecera.nota == ""){
-      return "Debe Ingresar un numero"
-    }
 
-  if (isNaN(cabecera.nota)) {
-      console.log("entro a if isnan " + val_before);
-
-      return "Debe Ingresar un numero";
-    }
-    if(parseFloat(cabecera.nota) < 0 || parseFloat(cabecera.nota) > 5){
-      console.log("entro a parseFloat ");
-      return "Debe Ingresar un numero entre 0 y 5";
-    }*/
-            }
-            //entra cuando va a agregar una nota
-        $scope.after = function(cabecera, estudiante) {
+        //entra cuando va a agregar una nota
+        /**
+         * @ngdoc method
+         * @name after
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Metodo usado para validar y mandar la nueva nota agregada por el docente
+         * 
+         *
+         * @param {Json} Va en formato JSON un objeto Cabecera 
+         * @param {Json} Va en formato JSON un objeto Estudiante
+        */
+        var after = function(cabecera, estudiante) {
                 var valorantes = $scope.valorBefore;
                 console.log("valor antes")
                 console.log(val_before)
@@ -452,7 +473,9 @@
                 }
             }
             //
-        $scope.showNota = function(id_estudiante, tipo, id_nota) {
+
+/*
+        var showNota = function(id_estudiante, tipo, id_nota) {
             var selected = [];
             if (tipo == 0) {
                 selected = $filter('filter')($scope.notas_logros, {
@@ -469,6 +492,7 @@
                 //  return $filter('filter')($scope.notas_actividades, {id_estudiante: id_estudiante, id_actividad:id_nota})[0].nota_actividad 
             }
         }
+        
 
         function putCabeseras(estudiantes, cabeceras, notas_logros, notas_actividades, cb) {
             console.log("apenas entra")
@@ -505,108 +529,7 @@
             cb(estudiantes)
         }
 
-        function getEstudiantes(id_curso, cb) {
-            estudianteData.findEstudiantesByCurso(id_curso).success(function(est) {
-                for (var i = est.length - 1; i >= 0; i--) {
-                    est[i].nombre1 = delNull(est[i].nombre1);
-                    est[i].nombre2 = delNull(est[i].nombre2);
-                    est[i].apellido1 = delNull(est[i].apellido1);
-                    est[i].apellido2 = delNull(est[i].apellido2);
-                    est[i].nombrecompleto = est[i].apellido1 + " " + est[i].apellido2 + " " + est[i].nombre1 + " " + est[i].nombre2;
-                } //cierra dor
-                cb(est);
-            }).error(function(error) {
-                cb([]);
-                console.log('Error: ' + error);
-            }); //cierra get
-        } //cierra funcion
-        $scope.getMateriasYLogros = function(materia) {
-            $scope.materia_seleccionada = materia;
-            getNotasYLogros($scope.materia_seleccionada, $scope.periodoSeleccionado);
-        };
-
-        function getLogros(id_carga, cb) {
-            logroData.findLogrosByCarga(id_carga).success(function(logros) {
-                cb(logros);
-                //$scope.logros = logros;
-            }).error(function(error) {
-                console.log('Error: ' + error);
-                cb([]);
-            });
-        }
-
-        function getActividades(id_logro, cb) {
-            actividadData.findActividadesByLogro(id_logro).then(function(actividades) {
-                cb(actividades);
-                //$scope.logros = logros;
-            }).catch(function(error) {
-                console.log('Error: ' + error);
-                cb([]);
-            });
-        }
-
-        function getActividadesByLogros(ids_logro, cb) {
-            console.log(JSON.stringify(ids_logro));
-            actividadData.findActividadesByLogros(ids_logro).success(function(actividades) {
-                cb(actividades);
-                //$scope.logros = logros;
-            }).error(function(error) {
-                console.log('Error: ' + error);
-                cb([]);
-            });
-        }
-
-        function getNotasActividades(id_carga, cb) {
-            nota_actividadData.findNotasActividadByCarga(id_carga).success(function(notas) {
-                cb(notas);
-                //$scope.logros = logros;
-            }).error(function(error) {
-                console.log('Error: ' + error);
-                cb({});
-            });
-        }
-
-        function getNotasLogros(id_carga, cb) {
-            nota_logroData.findNotasLogrosByCarga(id_carga).success(function(notas) {
-                cb(notas);
-                //$scope.logros = logros;
-            }).error(function(error) {
-                console.log('Error: ' + error);
-                cb({});
-            });
-        }
-
-        function fillCabecerasActvidades(cabeceras, actividad, estudiantes, notas_actividades, j, cb) {
-            cabeceras.push({
-                'id': actividad.id_actividad,
-                'tipo': 1,
-                'mostrar': "A" + (j + 1) + (" (" + actividad.porcentaje_actividad + "%)"),
-                'porcentaje': actividad.porcentaje_actividad
-            });
-            estudiantes.forEach(function(estudiante, h) {
-                fillNotasActividades(estudiante, actividad, notas_actividades, j, function(newEstudiante) {
-                        estudiantes[h] = newEstudiante;
-                    }) //cierra fillNotasActividades 
-            })
-            cb(estudiantes, cabeceras);
-        }
-
-        function fillCabecerasLogros(estudiantes, logro, notas_logros, cabeceras, cb) {
-            estudiantes.forEach(function(estudiante, h) {
-                //  console.log("entro al for de estudiantes despues de recorrer actividades");
-                fillNotasLogros(estudiante, logro, notas_logros, function(newEstudiante) {
-                    estudiantes[h] = newEstudiante;
-                })
-            })
-            cabeceras.push({
-                'id': logro.id_logro,
-                'tipo': 0,
-                'mostrar': 'Final',
-                'porcentaje': logro.porcentaje_logro
-            });
-            cb(estudiantes, cabeceras)
-        }
-
+        
         function prueba2(logro, cabeceras, estudiantes, actividades, notas_actividades, cb) {
             // console.log("entro a getActividades este es el i " + index );
             console.log("entroa  prueba")
@@ -625,6 +548,214 @@
             });
             cb(estudiantes, cabeceras);
         }
+
+        
+        $scope.getMateriasYLogros = function(materia) {
+            $scope.materia_seleccionada = materia;
+            getNotasYLogros($scope.materia_seleccionada, $scope.periodoSeleccionado);
+        };*/
+           /**
+         * @ngdoc method
+         * @name getActividades
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Con el id de el logro se consulta las actividades que pertenecen a esa logro 
+         * 
+         * 
+         *
+         * @param {int} id d el logro
+         * @param {Callback} Pasamos al Callback un Array de las actividades
+        */
+        var getActividades= function(id_logro, cb) {
+            actividadData.findActividadesByLogro(id_logro).then(function(actividades) {
+                cb(actividades);
+                //$scope.logros = logros;
+            }).catch(function(error) {
+                console.log('Error: ' + error);
+                cb([]);
+            });
+        }
+
+
+        /**
+         * @ngdoc method
+         * @name getEstudiantes
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Con el id del curso obtiene todos los estudiantes de ese curso
+         * y entra a un callback pasando el array de estudiantes
+         * 
+         *
+         * @param {int} id del curso 
+         * @param {Callback} Pasamos al Callback un Array de estudiantes
+        */
+        var  getEstudiantes = function(id_curso, cb) {
+            estudianteData.findEstudiantesByCurso(id_curso).success(function(est) {
+                for (var i = est.length - 1; i >= 0; i--) {
+                    est[i].nombre1 = delNull(est[i].nombre1);
+                    est[i].nombre2 = delNull(est[i].nombre2);
+                    est[i].apellido1 = delNull(est[i].apellido1);
+                    est[i].apellido2 = delNull(est[i].apellido2);
+                    est[i].nombrecompleto = est[i].apellido1 + " " + est[i].apellido2 + " " + est[i].nombre1 + " " + est[i].nombre2;
+                } //cierra dor
+                cb(est);
+            }).error(function(error) {
+                cb([]);
+                console.log('Error: ' + error);
+            }); //cierra get
+        } //cierra funcion
+        
+
+        /**
+         * @ngdoc method
+         * @name getLogros
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Con el id de la carga se consulta los logros que pertenecen a esa carga 
+         * 
+         * 
+         *
+         * @param {int} id de la carga 
+         * @param {Callback} Pasamos al Callback un Array de los logros 
+        */
+        var getLogros = function (id_carga, cb) {
+            logroData.findLogrosByCarga(id_carga).success(function(logros) {
+                cb(logros);
+                //$scope.logros = logros;
+            }).error(function(error) {
+                console.log('Error: ' + error);
+                cb([]);
+            });
+        }
+
+     
+
+        /**
+         * @ngdoc method
+         * @name getActividadesByLogros
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Con el id de el logro se consulta las actividades que pertenecen a esa logro 
+         * 
+         * 
+         *
+         * @param {Array} Pasamos un array de logros
+         * @param {Callback} Pasamos al Callback un Array de las actividades
+        */
+        var getActividadesByLogros = function (logros, cb) {
+            console.log(JSON.stringify(logros));
+            actividadData.findActividadesByLogros(logros).success(function(actividades) {
+                cb(actividades);
+                //$scope.logros = logros;
+            }).error(function(error) {
+                console.log('Error: ' + error);
+                cb([]);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name getNotasActividades
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Con el id de la carga se consulta las notas de las actividades 
+         * 
+         * 
+         *
+         * @param {int} Pasamos el id de la carga
+         * @param {Callback} Pasamos al Callback un Array de las notas de las  actividades
+        */
+        function getNotasActividades(id_carga, cb) {
+            nota_actividadData.findNotasActividadByCarga(id_carga).success(function(notas) {
+                cb(notas);
+                //$scope.logros = logros;
+            }).error(function(error) {
+                console.log('Error: ' + error);
+                cb({});
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name getNotasLogros
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * Con el id de la carga se consulta las notas de los logros
+         * 
+         * 
+         *
+         * @param {int} Pasamos el id de el logro
+         * @param {Callback} Pasamos al Callback un Array de las notas de los logros
+        */
+        function getNotasLogros(id_carga, cb) {
+            nota_logroData.findNotasLogrosByCarga(id_carga).success(function(notas) {
+                cb(notas);
+                //$scope.logros = logros;
+            }).error(function(error) {
+                console.log('Error: ' + error);
+                cb({});
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name fillCabecerasActividades
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * este metodo llena en todos los estudiantes las cabeceras con sus notas
+         *
+         * @param {Array} es el array que contiene las cabeceras
+         * @param {Actividad} Pasamos en formato Json una actividad para agregrarlo a la cabecera
+         * @param {Array} es el array que contiene los estudiantes para agregarle las cabeceras a cada uno
+         * @param {Array} es el array que contiene notas de las actividades
+         * @param {int} este entero es la posicion de la actividad en el vector
+         * @param {Callback} Pasamos al Callback el array de estudiantes todos con las notas y las cabeceras
+        */
+        function fillCabecerasActvidades(cabeceras, actividad, estudiantes, notas_actividades, j, cb) {
+            cabeceras.push({
+                'id': actividad.id_actividad,
+                'tipo': 1,
+                'mostrar': "A" + (j + 1) + (" (" + actividad.porcentaje_actividad + "%)"),
+                'porcentaje': actividad.porcentaje_actividad
+            });
+            estudiantes.forEach(function(estudiante, h) {
+                fillNotasActividades(estudiante, actividad, notas_actividades, j, function(newEstudiante) {
+                        estudiantes[h] = newEstudiante;
+                    }) //cierra fillNotasActividades 
+            })
+            cb(estudiantes, cabeceras);
+        }
+
+        /**
+         * @ngdoc method
+         * @name fillCabecerasLogros
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * este metodo llena en todos los estudiantes las cabeceras con los logros
+         *
+         * @param {Array} es el array que contiene los estudiantes para agregarle las cabeceras a cada uno
+         * @param {Logro} pasamos el Logro en formato Json que vamos a agregar a la cabecera
+         * @param {Array} es el array que contiene notas de los logros
+         * @param {Array} es el array que contiene las cabeceras
+         * @param {Callback} Pasamos al Callback el array de estudiantes todos con las notas y las cabeceras
+        */
+        function fillCabecerasLogros(estudiantes, logro, notas_logros, cabeceras, cb) {
+            estudiantes.forEach(function(estudiante, h) {
+                //  console.log("entro al for de estudiantes despues de recorrer actividades");
+                fillNotasLogros(estudiante, logro, notas_logros, function(newEstudiante) {
+                    estudiantes[h] = newEstudiante;
+                })
+            })
+            cabeceras.push({
+                'id': logro.id_logro,
+                'tipo': 0,
+                'mostrar': 'Final',
+                'porcentaje': logro.porcentaje_logro
+            });
+            cb(estudiantes, cabeceras)
+        }
+
+
 
         function prueba(logro, cabeceras, estudiantes, actividades, notas_actividades, cb) {
             // console.log("entro a getActividades este es el i " + index );
@@ -645,27 +776,56 @@
             cb(estudiantes, cabeceras);
         }
 
-        function fillNotasActividades(estudiante, actividad, notas_actividades, j, cb) {
+        /**
+         * @ngdoc method
+         * @name fillNotasActividades
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * este metodo hace una busqueda en el array notas_actividades
+         * buscando la nota de un estudiante especifico y una actividad especivica
+         * para asignarle la nota a cada estudiante
+         * 
+         * @param {Estudiante} Pasamos en formato Json un estudiante para hacer la busqueda y asignarle la nota
+         * @param {Actividad} Pasamos en formato Json una actividad para hacer la bsuqueda
+         * @param {Array} es el array que contiene notas de las actividades
+         * @param {Callback} Pasamos al Callback el nuevo estudiante con su respectiva nota
+        */
+        var fillNotasActividades = function(estudiante, actividad, notas_actividades, j, cb) {
+            var notaEstudiante= "";
             selected = $filter('filter')(notas_actividades, {
                     id_estudiante: estudiante.id_estudiante,
                     id_actividad: actividad.id_actividad
                 })
                 //  console.log(selected[0])
-            var nota_a = "";
+            
             if (selected[0] == undefined) {
-                nota_a = "-"
+                notaEstudiante= "-"
             } else {
-                nota_a = selected[0].nota_actividad;
+                notaEstudiante= selected[0].nota_actividad;
             }
             estudiante.cabeceras.push({
                 'id': actividad.id_actividad,
                 'tipo': 1,
                 'mostrar': "A" + (j + 1) + (" (" + actividad.porcentaje_actividad + "%)"),
-                'nota': nota_a,
+                'nota': notaEstudiante,
                 'porcentaje': actividad.porcentaje_actividad
             })
             cb(estudiante)
         }
+        /**
+         * @ngdoc method
+         * @name fillNotasLogros
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * este metodo hace una busqueda en el array notas_logros
+         * buscando la nota de un estudiante especifico y un logro especifico
+         * para asignarle la nota a cada estudiante
+         * 
+         * @param {Estudiante} Pasamos en formato Json un estudiante para hacer la busqueda y asignarle la nota
+         * @param {Logro} Pasamos en formato Json un Logro para hacer la busqueda
+         * @param {Array} es el array que contiene notas de los logros
+         * @param {Callback} Pasamos al Callback el nuevo estudiante con su respectiva nota
+        */
 
         function fillNotasLogros(estudiante, logro, notas_logros, cb) {
             // console.log("entro al for de estudiantes despues de recorrer actividades");
@@ -691,8 +851,18 @@
             calcularNotaFinal(estudiante);
             cb(estudiante);
         }
+        /**
+         * @ngdoc method
+         * @name delNull
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * este metodo mandamos un item y cuando sea null nos pone unas cadenas en vacio
+         * 
+         * @param {String} 
+         * @return {String}
+        */
 
-        function delNull(item) {
+        var delNull = function(item) {
             if (item == null) {
                 return "";
             } else {
@@ -700,7 +870,16 @@
             }
         }
 
-        function calcularNotaFinal(estudiante) {
+        /**
+         * @ngdoc method
+         * @name calcularNotaFinal
+         * @methodOf docentes.docentesNotasController
+         * @description
+         * este metodo calcula la nota final de cada estudiante en esa respectiva carga
+         * 
+         * @param {Estudiante} Pasamos en formato Json un estudiante para asignarle la nota final
+        */
+        var  calcularNotaFinal =  function(estudiante) {
             console.log(estudiante);
             selected = $filter('filter')(estudiante.cabeceras, {
                 tipo: 0
@@ -720,6 +899,15 @@
             })
             estudiante.notafinal = Math.round(promedio * 100) / 100;
         }
+        $scope.before=before;
+        $scope.after=after;
+        $scope.showLogro=showLogro;
+        //$scope.showNota=showNota;
+        $scope.seleccionarCarga = seleccionarCarga;
+        $scope.getPeriodoId = getPeriodoId;
+        $scope.open = open;
+        $scope.showActividad = showActividad;
+
     } // body...     
 })();
 //---------------------------------------------------
