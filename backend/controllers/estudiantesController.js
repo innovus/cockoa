@@ -13,6 +13,22 @@ var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
 var Tipo_notificacionDao = require("../app_core/dao/tipo_notificacionDao");
 
+function getNotaActividadEstudiantebyMateria(req,res){
+    Nota_actividadDao.findNotaActividadEstudiantebyMateria(30011,req.params.id_actividad)
+    .then(function(data){
+        Respuesta.sendJsonResponse(res,200,data);
+        console.log("la fucnion salio bn" + data)
+
+    }).catch(function(err){
+        if(err.message == 'No data returned from the query.'){
+            respuesta.sendJsonResponse(res,200,[]);
+        }else{
+            console.log(err.message);
+            Respuesta.sendJsonResponse(res,500,[]);
+        }
+    });
+}
+
 function getNotaLogrosMaterias(req, res) {
     var hoy = new Date();
     var dia = hoy.getDate();
@@ -201,4 +217,5 @@ module.exports = {
     getTiposNotificacion: getTiposNotificacion,
     getNotificacionesPendientes: getNotificacionesPendientes,
     updateEstadoNotificacion: updateEstadoNotificacion,
+    getNotaActividadEstudiantebyMateria:getNotaActividadEstudiantebyMateria,
 }

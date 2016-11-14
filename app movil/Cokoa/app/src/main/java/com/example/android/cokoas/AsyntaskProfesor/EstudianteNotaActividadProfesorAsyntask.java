@@ -90,7 +90,7 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "api/cursos/"+params+"/estudiantes");
+            URL url = new URL(serverUrls + "api/docentes/cursos/"+params+"/estudiantes");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

@@ -1,7 +1,6 @@
 package com.example.android.cokoas;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -15,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.android.cokoas.ActivityProfesor.ExpandableActivity;
 import com.example.android.cokoas.Fragments.AsistenciaFragment;
 import com.example.android.cokoas.Fragments.CalificacionesFragment;
 import com.example.android.cokoas.Fragments.EventosFragment;
@@ -116,10 +114,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             horarioAtencionFragment.setArguments(parametro);
             fragmentTransaction.replace(R.id.fragment, horarioAtencionFragment);
             fragmentTransaction.commit();*/
-            Intent intent = new Intent(this, ExpandableActivity.class);
-
-
-            this.startActivity(intent);
+           /* Intent intent = new Intent(this, ExpandableActivity.class);
+            this.startActivity(intent);*/
 
         }
         return super.onOptionsItemSelected(item);
@@ -170,19 +166,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             item.setChecked(true);
             setFragment(2);
             drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (id == R.id.nav_eventos) {
+        } /*else if (id == R.id.nav_eventos) {
             item.setChecked(true);
             setFragment(3);
             drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (id == R.id.nav_notification) {
+        }*/ else if (id == R.id.nav_notification) {
             item.setChecked(true);
             setFragment(4);
             drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (id == R.id.nav_horario_atencion) {
+        }/* else if (id == R.id.nav_horario_atencion) {
             item.setChecked(true);
             setFragment(5);
             drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (id == R.id.nav_logOut) {
+        }*/ else if (id == R.id.nav_logOut) {
 
             sessionManager = new SessionManager(getApplication());
             sessionManager.logoutUser();

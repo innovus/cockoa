@@ -69,7 +69,7 @@ public class ListaInasistenciaAsyntask extends AsyncTask<String,Void,ArrayList<E
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "api/cursos/"+id_curso+"/estudiantes");
+            URL url = new URL(serverUrls + "api/docentes/cursos/"+id_curso+"/estudiantes");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -159,7 +159,7 @@ public class ListaInasistenciaAsyntask extends AsyncTask<String,Void,ArrayList<E
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "api/cursos/239/estudiantes");
+            URL url = new URL(serverUrls + "api/docentes/cursos/239/estudiantes");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

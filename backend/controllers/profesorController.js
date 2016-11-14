@@ -278,11 +278,12 @@ function insertNota(req, res) {
                             "registration_ids": registrations_ids,
                             "notification": {
                                 "title": "Nueva Nota",
-                                "body": mensajeNotificacion
+                                "body": mensajeNotificacion,
+                                "click_action":"OPEN_ACTIVITY_1"
                             },
                             "data": {
                                 "guia": req.body[0].id_logro,
-                                "tipo": 1
+                                "tipo": "2"
                             }
                         }
                         var options = {

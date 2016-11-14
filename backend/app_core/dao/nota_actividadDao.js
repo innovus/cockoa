@@ -11,13 +11,19 @@ var queryFindNotasActividadesByEstudiante = "SELECT id_actividad, nota_actividad
 
 var queryFindNotaActividadLogrobyEstudiante="select * from nota_actividad NATURAL JOIN actividad WHERE id_estudiante = $id_estudiante and id_logro=$id_logro";
 
+var queryFindNotaActividadEstudiantebyMateria = "SELECT * FROM logro NATURAL JOIN actividad NATURAL JOIN nota_actividad WHERE id_estudiante = $id_estudiante AND id_actividad = $id_actividad";
+
 var queries={
   "nota_actividad":{
     'findNotasActividadesByCarga':queriFindNotasActividadesByCarga,
     'findNotasActividadesByEstudiante':queryFindNotasActividadesByEstudiante, 
     'findNotaActividadLogrobyEstudiante':queryFindNotaActividadLogrobyEstudiante, 
-
+    'findNotaActividadEstudiantebyMateria':queryFindNotaActividadEstudiantebyMateria,
   }
+};
+
+var findNotaActividadEstudiantebyMateria = function(id_estudiante,id_actividad){
+  return sequelize.query(queries.nota_actividad.findNotaActividadEstudiantebyMateria,{bind:{id_estudiante:id_estudiante,id_actividad:id_actividad},type:sequelize.QueryTypes.SELECT})
 };
 
 var findNotaActividadLogrobyEstudiante = function(id_estudiante,id_logro){
@@ -96,3 +102,4 @@ module.exports.findNotasActividadesByEstudiante=findNotasActividadesByEstudiante
 module.exports.insertNotasActividades=insertNotasActividades;
 module.exports.updateNotaActividad = updateNotaActividad;
 module.exports.findNotaActividadLogrobyEstudiante=findNotaActividadLogrobyEstudiante;
+module.exports.findNotaActividadEstudiantebyMateria=findNotaActividadEstudiantebyMateria;
