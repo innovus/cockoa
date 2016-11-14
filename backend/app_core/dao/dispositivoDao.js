@@ -27,7 +27,7 @@ var findTokenByEstudiantes = function(ids_estudiante) {
 var findTokenByEstudiante = function(id_estudiante) {
         return sequelize.query(queries.dispositivo.findTokenByEstudiante, {
             bind: {
-                ids_estudiante: ids_estudiante
+                id_estudiante: id_estudiante
             },
             type: sequelize.QueryTypes.SELECT
         });

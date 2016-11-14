@@ -5,7 +5,7 @@ var queriFindNotasActividadesByCarga = "SELECT  id_estudiante,id_logro, id_activ
 + "FROM actividad NATURAL JOIN nota_actividad NATURAL JOIN logro "+ 
   "WHERE id_carga_docente = $id_carga "+
   "ORDER BY id_estudiante, id_logro";
-
+  
 var queryFindNotasActividadesByEstudiante = "SELECT id_actividad, nota_actividad,id_logro FROM nota_actividad "+ 
   "NATURAL JOIN actividad WHERE id_estudiante = $id_estudiante ";
 
