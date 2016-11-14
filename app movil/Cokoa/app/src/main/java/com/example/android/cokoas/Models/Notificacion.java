@@ -8,10 +8,19 @@ public class Notificacion {
     private String tipoNotificacion;
     private String mensajeNotificacion;
     private String fechaNotificacion;
-    private Boolean estadoNotificacion;
     private String idEstudiante;
-    private String estadoNotificaion;
+
     private String guia;
+
+    private String estadoNotificaion;
+
+    public String getEstadoNotificaion() {
+        return estadoNotificaion;
+    }
+
+    public void setEstadoNotificaion(String estadoNotificaion) {
+        this.estadoNotificaion = estadoNotificaion;
+    }
 
     public String getIdEstudiante() {
         return idEstudiante;
@@ -21,13 +30,7 @@ public class Notificacion {
         this.idEstudiante = idEstudiante;
     }
 
-    public String getEstadoNotificaion() {
-        return estadoNotificaion;
-    }
 
-    public void setEstadoNotificaion(String estadoNotificaion) {
-        this.estadoNotificaion = estadoNotificaion;
-    }
 
     public String getGuia() {
         return guia;
@@ -69,11 +72,5 @@ public class Notificacion {
         this.fechaNotificacion = fechaNotificacion;
     }
 
-    public Boolean getEstadoNotificacion() {
-        return estadoNotificacion;
-    }
 
-    public void setEstadoNotificacion(Boolean estadoNotificacion) {
-        this.estadoNotificacion = estadoNotificacion;
-    }
 }

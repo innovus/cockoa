@@ -27,7 +27,7 @@ public class NotasActividadAdapters extends RecyclerView.Adapter<NotasActividadA
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tituloActividad, descActividad, notaActividad,descripcionLogro;
+        public TextView tituloActividad, descActividad, notaActividad,descripcionLogro,porcentajeActividad;
         NotaActividad notaActividadss;
 
         public ViewHolder(View itemView) {
@@ -36,6 +36,7 @@ public class NotasActividadAdapters extends RecyclerView.Adapter<NotasActividadA
             descActividad = (TextView) itemView.findViewById(R.id.text_des_actividad);
             notaActividad = (TextView) itemView.findViewById(R.id.text_nota_actividad);
             descripcionLogro = (TextView) activity.findViewById(R.id.txtActividadLogro);
+            porcentajeActividad = (TextView) itemView.findViewById(R.id.porcentaje_actividad_estudiante);
 
         }
     }
@@ -61,6 +62,8 @@ public class NotasActividadAdapters extends RecyclerView.Adapter<NotasActividadA
         viewHolder.notaActividadss = notaActividads.get(position);
 
         viewHolder.descripcionLogro.setText(notaActividads.get(position).getDescripcionLogro());
+
+        viewHolder.porcentajeActividad.setText(notaActividads.get(position).getPorcentajeActividad()+"%");
     }
 
     @Override

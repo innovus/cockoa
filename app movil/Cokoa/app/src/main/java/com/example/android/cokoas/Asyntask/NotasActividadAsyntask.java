@@ -258,10 +258,12 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
                  JSONObject notaActividad = notasActividadArray.getJSONObject(i);
                  String id_actividad = notaActividad.getString("id_actividad");
                  String descActividad = notaActividad.getString("descripcion_actividad");
+                 String porcenjeActividad = notaActividad.getString("porcentaje_actividad");
                 // String notaActividads = notaActividad.getString("nota_actividad");
                  NotaActividad  notaActividad1 = new NotaActividad();
                 notaActividad1.setIdnotaActividad(id_actividad);
                  notaActividad1.setNombreActividad("Actividad");
+                 notaActividad1.setPorcentajeActividad(porcenjeActividad);
                  notaActividad1.setDescActividad(descActividad);
                  notaActividad1.setDescripcionLogro(descripcionLogro);
 

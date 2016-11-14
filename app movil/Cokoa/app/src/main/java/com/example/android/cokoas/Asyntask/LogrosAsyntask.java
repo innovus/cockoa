@@ -635,11 +635,13 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
                 String id_logro = logro.getString("id_logro");
                 // String titleLogro = logro.getString("nombre_logro");
                 String descLogro = logro.getString("descripcion_logro");
+                String porcentajeLogro = logro.getString("porcentaje_logro");
                 Logro logro1 = new Logro();
                 logro1.setId_materia(id_materia);
                 logro1.setId_logro(id_logro);
                 // logro1.setTitulo_logro(titleLogro);
                 logro1.setDesc_logro(descLogro);
+                logro1.setLogroPorcentaje(porcentajeLogro);
                 //logro1.setNumero_periodo(numero_periodo);
                 logroArrayList.add(logro1);
 

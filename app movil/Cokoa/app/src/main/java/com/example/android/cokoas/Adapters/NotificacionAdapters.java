@@ -1,6 +1,9 @@
 package com.example.android.cokoas.Adapters;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.cokoas.Activities.InasistenciaMateriaActivity;
+import com.example.android.cokoas.Activities.NotasActivity;
+import com.example.android.cokoas.Asyntask.NotificacionEstadoAsyntask;
 import com.example.android.cokoas.Models.Notificacion;
 import com.example.android.cokoas.R;
 
@@ -45,6 +51,14 @@ public class NotificacionAdapters extends RecyclerView.Adapter<NotificacionAdapt
 
         viewHolder.mensajeNotificacion.setText(notificacions.get(position).getMensajeNotificacion());
         viewHolder.fechaNotificacion.setText(notificacions.get(position).getFechaNotificacion());
+
+        if(notificacions.get(position).getEstadoNotificaion().equals("1")){
+            viewHolder.cardViewNotificacion.setCardBackgroundColor(Color.WHITE);
+        }
+
+
+
+        viewHolder.notificacion = notificacions.get(position);
     }
 
     @Override
@@ -54,7 +68,9 @@ public class NotificacionAdapters extends RecyclerView.Adapter<NotificacionAdapt
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tituloNotificacion, mensajeNotificacion, fechaNotificacion;
+        public CardView cardViewNotificacion;
         public ImageView imgNotificacion;
+        Notificacion notificacion;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -62,6 +78,35 @@ public class NotificacionAdapters extends RecyclerView.Adapter<NotificacionAdapt
             mensajeNotificacion = (TextView) itemView.findViewById(R.id.txtMensajeNotificacion);
             fechaNotificacion = (TextView) itemView.findViewById(R.id.txtFechaNotificacion);
             imgNotificacion = (ImageView) itemView.findViewById(R.id.imgNotificacion);
+            cardViewNotificacion = (CardView) itemView.findViewById(R.id.card_view_notificacaion);
+
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    new NotificacionEstadoAsyntask(activity).execute(notificacion.getIdNotificacion());
+
+                    if(notificacion.getTipoNotificacion().equals("2")){
+                        Intent intent = new Intent(activity, NotasActivity.class);
+                        intent.putExtra("id_materia",notificacion.getGuia());
+                        intent.putExtra("notificacion","True");
+                        activity.startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(activity, InasistenciaMateriaActivity.class);
+                        intent.putExtra("id_materia",notificacion.getGuia());
+                        intent.putExtra("notificacion","True");
+                        activity.startActivity(intent);
+                    }
+
+                }
+            });
+
+
+
+
+
 
         }
 

@@ -24,8 +24,6 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
-
         <activity
             android:name=".Activities.LogrosActivity"
             android:label="Logros"
@@ -33,18 +31,20 @@
         <activity
             android:name=".Activities.NotasActivity"
             android:label="Nota Actividad"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="OPEN_ACTIVITY_1" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Activities.InasistenciaMateriaActivity"
             android:label="Inasistencia"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="OPEN_ACTIVITY_2" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -55,13 +55,16 @@
         <activity
             android:name=".ActivityProfesor.LlamarListaActivity"
             android:label="LLamar lista" />
-        <activity android:name=".ActivityProfesor.InsertarNotaActividadActivity"></activity>
+        <activity
+            android:name=".ActivityProfesor.InsertarNotaActividadActivity"
+            android:label="Calificar actividad" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_border_color_white_24dp" />
 
-        <service android:name=".MyFirebaseInstanceIdService"
+        <service
+            android:name=".MyFirebaseInstanceIdService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -75,6 +78,7 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".ActivityProfesor.ExpandableActivity"></activity>
     </application>
 
 </manifest>

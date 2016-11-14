@@ -61,7 +61,7 @@ public class LogroMateriaProfesorAdapter extends RecyclerView.Adapter<LogroMater
         viewHolder.descLogro.setText(logroProfesors.get(position).getDescripcionLogro());
         viewHolder.logroProfesor = logroProfesors.get(position);
         viewHolder.numeroLogroProfesor.setText("Logro "+Integer.toString(position+1));
-        viewHolder.porcentajeLogro.setText(logroProfesors.get(position).getPorcentajeLogro());
+        viewHolder.porcentajeLogro.setText(logroProfesors.get(position).getPorcentajeLogro()+"%");
     }
 
     @Override

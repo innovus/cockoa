@@ -12,6 +12,15 @@ public class Logro {
     private String desc_logro;
     private double nota_logro;
     private  double porcentajeLogro;
+    private String logroPorcentaje;
+
+    public String getLogroPorcentaje() {
+        return logroPorcentaje;
+    }
+
+    public void setLogroPorcentaje(String logroPorcentaje) {
+        this.logroPorcentaje = logroPorcentaje;
+    }
 
     public double getPorcentajeLogro() {
         return porcentajeLogro;

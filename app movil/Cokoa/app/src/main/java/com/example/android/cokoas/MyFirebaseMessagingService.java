@@ -4,6 +4,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -64,12 +66,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
        // int icon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? R.drawable.ic_book_black_24dp: R.mipmap.ic_launcher;
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-       // Uri sonud = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+       Uri sonud = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         // .setSmallIcon(R.drawable.ic_alarm_black_24dp)
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_border_color_white_24dp)
                 .setContentTitle(title)
                 .setContentText(body)
+                .setSound(sonud)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
 

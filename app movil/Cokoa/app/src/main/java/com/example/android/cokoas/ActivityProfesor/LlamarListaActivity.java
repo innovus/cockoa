@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -41,6 +42,8 @@ public class LlamarListaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_llamar_lista);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         mostrarFecha = (TextView) findViewById(R.id.text_fecha_inasistencia);
         Calendar calendar = Calendar.getInstance();
         año = calendar.get(Calendar.YEAR);
@@ -105,17 +108,7 @@ public class LlamarListaActivity extends AppCompatActivity {
 
     //insertar Inasistencia
     public void onManejadorEventoFecha(View v) {
-       /* DialogFragment newFragment = new DatePickerFragment();
-        Bundle args = new Bundle();
-        int vista = v.getBottom(); //.getId();
-        args.putLong("vista",vista);
-        newFragment.setArguments(args);
-        newFragment.show(getSupportFragmentManager(),"qe pasa");*/
 
-
-
-       // ArrayList<EstudianteCurso> estudianteCursos = ((InsertarInasistenciaAdapters) mAdapter).getInasistencia();
-       // ArrayList<EstudianteCurso> estudianteCursos = InsertarInasistenciaAdapters
         ArrayList<EstudianteCurso> estudianteCursos = ((InsertarInasistenciaAdapters) mAdapter).getInasistencia();
         for (int i=0;i<estudianteCursos.size();i++){
             EstudianteCurso estudianteCurso = estudianteCursos.get(i);
@@ -125,6 +118,19 @@ public class LlamarListaActivity extends AppCompatActivity {
         new InsertInasistenciaAsyntask(this).execute(estudianteCursos);
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (item.getItemId()) {
+            case android.R.id.home: //hago un case por si en un futuro agrego mas opciones
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 

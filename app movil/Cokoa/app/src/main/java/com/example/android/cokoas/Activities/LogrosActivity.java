@@ -40,22 +40,18 @@ public class LogrosActivity extends AppCompatActivity {
         parametro.putString("nombreMateria" ,nombreMateria);
         parametro.putString("periodo_actual", "null");
         parametro.putString("sheckPeriodo", "false");//sheckPeriodo
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
 
         if (savedInstanceState == null) {
-
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
             LogrosFragment logrosFragment = new LogrosFragment();
             logrosFragment.setArguments(parametro);
             fragmentTransaction.replace(R.id.fragments, logrosFragment);
             fragmentTransaction.commit();
-
-
         }
     }
 

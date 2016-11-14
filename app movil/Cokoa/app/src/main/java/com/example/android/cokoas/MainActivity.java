@@ -1,6 +1,7 @@
 package com.example.android.cokoas;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.cokoas.ActivityProfesor.ExpandableActivity;
 import com.example.android.cokoas.Fragments.AsistenciaFragment;
 import com.example.android.cokoas.Fragments.CalificacionesFragment;
 import com.example.android.cokoas.Fragments.EventosFragment;
@@ -23,7 +25,6 @@ import com.example.android.cokoas.Fragments.PerfilFragment;
 import com.example.android.cokoas.FragmentsProfesor.CursosProfesorFragment;
 import com.example.android.cokoas.FragmentsProfesor.LlamarListaFragment;
 import com.example.android.cokoas.SessionManager.SessionManager;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id==R.id.action_perfil){
-            String token = FirebaseInstanceId.getInstance().getToken();
+           /* String token = FirebaseInstanceId.getInstance().getToken();
             Bundle parametro = new Bundle();
             parametro.putString("token", token);
             fragmentManager = getSupportFragmentManager();
@@ -114,7 +115,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             HorarioAtencionFragment horarioAtencionFragment = new HorarioAtencionFragment();
             horarioAtencionFragment.setArguments(parametro);
             fragmentTransaction.replace(R.id.fragment, horarioAtencionFragment);
-            fragmentTransaction.commit();
+            fragmentTransaction.commit();*/
+            Intent intent = new Intent(this, ExpandableActivity.class);
+
+
+            this.startActivity(intent);
+
         }
         return super.onOptionsItemSelected(item);
     }

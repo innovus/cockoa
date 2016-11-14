@@ -38,9 +38,5 @@ public class InsertarNotaActividadActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
-
-
-
     }
 }

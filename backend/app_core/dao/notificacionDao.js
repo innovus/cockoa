@@ -1,7 +1,7 @@
 var Models=require("../models/index");
 var sequelize = Models.sequelize;
 
-var queryFindNotificacionesByEstudiante = "SELECT * FROM notificacion WHERE id_estudiante=$id_estudiante ORDER BY fecha_notificacion DESC"
+var queryFindNotificacionesByEstudiante = "SELECT * FROM notificacion WHERE id_estudiante=$id_estudiante ORDER BY id_notificacion DESC"
 var queryFindNotificacionesByEstudianteAndEstado= "SELECT * FROM notificacion WHERE id_estudiante=$id_estudiante and estado_notificacion = '0'"
 var queryUpdateEstadoNotificacion = "UPDATE notificacion SET estado_notificacion = '1' WHERE id_notificacion = $id_notificacion" ;
 //var queryFindCantidadNotificacionesEstadoCero =

@@ -6,6 +6,19 @@ package com.example.android.cokoas.Models;
 public class NotaActividad {
 
     private String idnotaActividad;
+    private String nombreActividad;
+    private String descActividad;
+    private String notaActividad;
+    private String descripcionLogro;
+    private String porcentajeActividad;
+
+    public String getPorcentajeActividad() {
+        return porcentajeActividad;
+    }
+
+    public void setPorcentajeActividad(String porcentajeActividad) {
+        this.porcentajeActividad = porcentajeActividad;
+    }
 
     public String getIdnotaActividad() {
         return idnotaActividad;
@@ -39,11 +52,7 @@ public class NotaActividad {
         this.notaActividad = notaActividad;
     }
 
-    private String nombreActividad;
-    private String descActividad;
-    private String notaActividad;
 
-    private String descripcionLogro;
 
     public String getDescripcionLogro() {
         return descripcionLogro;
