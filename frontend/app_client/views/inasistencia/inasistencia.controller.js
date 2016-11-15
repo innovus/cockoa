@@ -1,6 +1,6 @@
 //una function javascript q se llama asi misma
 //(function (){
-var app = angular.module('docentes'); //creamos el modulo pokedex y le pasamos array con las dependencias
+var app = angular.module('docentes'); //creamos date modulo pokedex y le pasamos array con las dependencias
 app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log', '$filter', 'CONFIG', 'periodoData', 'inasistenciaData', 'estudianteData', function($scope, $http, $uibModal, $log, $filter, CONFIG, periodoData, inasistenciaData, estudianteData) {
     $scope.fechas = [];
     $scope.estudiantes = [];
@@ -155,14 +155,16 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
             }); //CIERRA GERINASISTENCIAS
         }); //CIERRA GETCURSOS
     } //CIERA FUNCION SELECIONAR CARGA
-    $scope.addInasistencia = function() {
+    $scope.addInasistencia = function(fecha) {
+        console.log(fecha)
+        console.log("date")
         var jsonenviar = [];
         for (var i = $scope.selected.ids_estudiantes.length - 1; i >= 0; i--) {
             var jsonsolo = {
                 "id_periodo": 1,
                 "id_estudiante": $scope.selected.ids_estudiantes[i],
                 "estado_inasistencia": 1,
-                "fecha_inasistencia": $scope.date_asistencia,
+                "fecha_inasistencia": fecha,
                 "id_carga": $scope.carga_seleccionada.id_carga_docente
             }
             jsonenviar.push(jsonsolo);

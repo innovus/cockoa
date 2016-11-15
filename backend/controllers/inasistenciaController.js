@@ -131,6 +131,7 @@ function getInasistenciaPorCarga(req,res){
 }
 //funcion que recibe un arreglo de inasistencias y las agrega en la base de datos
 function addInasistencias (req,res){
+    console.log(req.body)
     InasistenciaDao.addInasistencias(req.body)
     .then(function(){
         var notificaciones = [];

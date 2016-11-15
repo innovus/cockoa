@@ -124,11 +124,12 @@
                                     <div class="input-group">
                                         <input type="date" ng-model="date_asistencia" class="form-control" aria-label="Fecha"/>
                                         <div class="input-group-btn">
-                                            <button class="btn btn-default" type="submit" ng-click="addInasistencia()">
+                                            <button class="btn btn-default" type="submit" ng-click="addInasistencia(date_asistencia)">
                                                 Agregar
                                             </button>
                                         </div>
                                     </div>
+                                    {{ date_asistencia }}
                                 </form>
                             </div>
                             <!-- /.col-lg-12 -->
