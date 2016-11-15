@@ -192,10 +192,12 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     }
 
     function seleccionarCarga(carga) {
+
         $scope.carga_seleccionada = carga;
         getLogros(carga.id_carga_docente, function(logros) {
             $scope.logros = logros;
             console.log($scope.logros);
+            $scope.isPorcentajeCien = checkPorcentaje();
         }); //CIERRA GET LOGROS
     } //CIERA FUNCION SELECIONAR CARGA
     function getLogros(id_carga, cb) {
