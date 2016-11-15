@@ -256,7 +256,7 @@ function insertNota(req, res) {
         })
     } else if (req.params.table == "actividades") {
         Nota_actividadDao.insertNotasActividades(req.body).then(function() {
-            var mensajeNotificacion = 'Su hijo obtuvo una nota de ' + req.body[0].nota_actividad
+            var mensajeNotificacion = 'Se ha ingresado una nueva nota de ' + req.body[0].nota_actividad
             var notificacion = {
                 'id_tipo_notificacion': 2,
                 'mensaje_notificacion': mensajeNotificacion,
