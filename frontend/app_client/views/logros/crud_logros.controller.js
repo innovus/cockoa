@@ -239,18 +239,22 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
                 seleccionarCarga($scope.carga_seleccionada);
                 swal("Ok...", "logros Guardados!", "success");
             }).error(function(error) {
-                if (error == "todos vacios "){
+                if (error == "todos vacios"){
+                    console.log("entro al if")
                     swal("Oops...", "No tienes ningun Cambio", "error");
 
-                }
-                console.log(error)
-                if (error.name == "SequelizeForeignKeyConstraintError" && error.parent.table == "nota_logro") {
+                }else{
+                      if (error.name == "SequelizeForeignKeyConstraintError" && error.parent.table == "nota_logro") {
                     swal("Oops...", "Debe eliminar primero las notas de los estudiantes", "error");
                 } else if (error.name == "SequelizeForeignKeyConstraintError" && error.parent.table == "actividad") {
                     swal("Oops...", "Debe eliminar primero las actividades", "error");
                 } else {
                     swal("Oops...", "Algo Salio mal", "error");
                 }
+
+                }
+               
+              
 
                 seleccionarCarga($scope.carga_seleccionada);
                 $scope.logrosPorEliminar = [];
