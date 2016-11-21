@@ -130,6 +130,17 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
     };
     $scope.selectCurso = function(carga) {
         seleccionarCarga(carga);
+         for (var i = 0; i < $scope.periodos.length; i++) {
+                //entra cuando el periodo actual es encontrado en el vector
+                // console.log(data[i].id_periodo)
+                console.log($scope.periodo_actual)
+                if ($scope.periodos[i].id_periodo == $scope.periodo_actual.id_periodo) {
+                    //selecciona el periodo actual en las tabs
+                    $scope.activeTabIndex = i;
+                    //
+                    $scope.periodo_sel = $scope.periodos[i];
+                }
+            }
     }
 
     function seleccionarCarga(carga) {
@@ -174,7 +185,7 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
         inasistenciaData.createInasistenciasEstudiantes(jsonenviar).success(function(response) {
             console.log($scope.carga_seleccionada.id_carga_docente)
             console.log(response);
-            swal("Good job!", response.mensaje, "success")
+            swal("Buen Trabajo!", response.mensaje, "success")
             seleccionarCarga($scope.carga_seleccionada);
         }).error(function(error) {
             console.log('Error: ' + error);
@@ -252,7 +263,7 @@ app.controller('ModalInasistenciaCtrl', function($scope, $uibModalInstance, fech
         console.log("entro a updateEstado")
         inasistenciaData.updateEstadoInasistencia(fecha).success(function(mensaje) {
             //   alert(mensaje.msg);
-            swal("Good job!", mensaje.msg, "success")
+            swal("Buen Trabajo!", mensaje.msg, "success")
             console.log(mensaje);
         }).error(function(error) {
             console.log(error);

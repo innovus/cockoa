@@ -1,126 +1,147 @@
-<navigation></navigation>
-
-  <aside class="main-sidebar">
+<navigation>
+</navigation>
+<aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-    <!-- Sidebar user panel -->
-    <div class="user-panel">
-        <div class="pull-left image">
-        <img src="/img/avatar04.png" class="img-circle" alt="User Image">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="/img/avatar04.png" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>
+                    {{ primer_nombre }} {{ primer_apellido }}
+                </p>
+                <small>
+                    Identificación: {{ numero_documento }}
+                </small>
+                <!--<a href="#"><i class="fa fa-circle text-success"></i> En linea</a>-->
+            </div>
         </div>
-        <div class="pull-left info">
-        <p>{{primer_nombre}} {{primer_apellido}}</p>
-            <small>Identificación: {{numero_documento}}</small>
-        <!--<a href="#"><i class="fa fa-circle text-success"></i> En linea</a>-->
-        </div>
-    </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->
-    <ul class="sidebar-menu">
-        <li class="header">Materias</li>
-        <li  class="treeview" ng-repeat="materia in materias">
-          <a ><span>{{materia.nombre_materia}} </span><i class="fa fa-angle-left pull-right"></i></a>
-          <ul class="treeview-menu">
-             <li ng-repeat="carga in materia.cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}</a></li>
-          </ul>
-          </li>
-    </ul>
+        <ul class="sidebar-menu">
+            <li class="header">
+                Materias
+            </li>
+            <li  class="treeview" ng-repeat="materia in materias">
+                <a>
+                    <span>
+                        {{ materia.nombre_materia }}
+                    </span>
+                    <i class="fa fa-angle-left pull-right">
+                    </i>
+                </a>
+                <ul class="treeview-menu">
+                    <li ng-repeat="carga in materia.cargas">
+                        <a href="#" ng-click="selectCurso(carga)">
+                            {{ carga.grado }}-{{ carga.grupo }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </section>
     <!-- /.sidebar -->
 </aside>
-
 <div class="wrapper">
-
-  <div class="content-wrapper">
-  <div container>
-
-  <section class="content-header">  
-      <h1>
-        {{carga_seleccionada.nombre_materia}}
-        <small> {{carga_seleccionada.grado}}-{{carga_seleccionada.grupo}}</small>
-        
-      </h1>
-    </section>
-
-    <section class="content">
-
-
-
-    <uib-tabset  active="activeTabIndex">
-      <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{periodo.numero_periodo}}" ng-click="getPeriodoId($index)">
-        <div  ng-cloak >
-          <md-content class="md-padding" layout-xs="column" layout="row">
-
-
-            <div class="modal-body">
-
-
-
-            <!-- tabla -->
-                <table class="table  table-hover table-condensed" ng-show = "carga_seleccionada != null" > 
-      <thead>
-        <tr>
-          <th class="col-md-1">No</th>
-          <th class="col-md-7">Descripcion</th>
-          <th class="col-md-2">Porcentaje
-          </th>
-          <th class="col-md-2" >Acciones</th>
-        </tr>
-      </thead>
-      <tbody >
-        <tr ng-repeat="logro in logros">
-          <td>{{($index + 1)}}</td>
-          <td>
-            <!-- editable username (text with validation) -->
-            <span editable-textarea="logro.descripcion_logro" e-name="descripcion_logro" e-form="rowform" >
-              {{ logro.descripcion_logro || 'Vacia' }}
-            </span>
-          
-          </td>
-          <td>
-            <span editable-text="logro.porcentaje_logro" onbeforesave="validarPorcentaje($data)" e-name="porcentaje_logro" e-form="rowform" >
-              {{ logro.porcentaje_logro || 'Vacio' }}%
-            </span>
-          </td>
-          <th style="white-space: nowrap="><!-- form -->
-            <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onbeforesave="updateLogro($data, logro)" onaftersave="validarPorcentajeTotal()" shown="inserted == logro"  oncancel="cancelform(logro, $index)">
-              <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
-                Ok
-              </button>
-              <button  type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
-                cancel
-              </button>
-            </form>
-            <div class="buttons" ng-show="!rowform.$visible">
-             <a href="#" class="btn btn-default" role="button" ng-click="open('lg',logro.id_logro)" >Ver</a>
-              <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
-              <button class="btn btn-danger" ng-click="deleteLogro(logro,$index)">del</button>
-            </div>  
-          </th>
-        </tr>
-      </tbody>
-    </table>
-    <div class="has-error">
-      <label ng-show="!isPorcentajeCien" class="control-label" for="inputError1">La sumatoria del porcentaje debe ser igual a 100%</label>
-      <span ng-show="!isPorcentajeCien"> </span>
-    </div>
-    <button class="btn btn-default" ng-click="create_nuevo_logro()" ng-show = "carga_seleccionada != null">Agregar</button>
-              <div class="modal-footer">
-              <button class="btn btn-primary" type="button" ng-show = "carga_seleccionada != null" ng-click="btnGuardar()">Guardar</button>
-            </div>
-            </div>
-
-          </md-content>
+    <div class="content-wrapper">
+        <div container>
+            <section class="content-header">
+                <h1>
+                    {{ carga_seleccionada.nombre_materia }}
+                    {{ carga_seleccionada.grado }}-{{ carga_seleccionada.grupo }}
+                </h1>
+            </section>
+            <section class="content">
+                <uib-tabset  active="activeTabIndex">
+                    <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{ periodo.numero_periodo }}" ng-click="getPeriodoId($index)">
+                        <div  ng-cloak>
+                            <md-content class="md-padding" layout-xs="column" layout="row">
+                                <div class="modal-body">
+                                    <!-- tabla -->
+                                    <table class="table  table-hover table-condensed" ng-show = "carga_seleccionada != null">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-1">
+                                                    No
+                                                </th>
+                                                <th class="col-md-5">
+                                                    Descripcion
+                                                </th>
+                                                <th class="col-md-2">
+                                                    Porcentaje
+                                                </th>
+                                                <th class="col-md-4">
+                                                    Acciones
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="logro in logros">
+                                                <td>
+                                                    {{ ($index + 1) }}
+                                                </td>
+                                                <td>
+                                                    <!-- editable username (text with validation) -->
+                                                    <span editable-textarea="logro.descripcion_logro" e-name="descripcion_logro" e-form="rowform">
+                                                        {{ logro.descripcion_logro || 'Vacia' }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span editable-text="logro.porcentaje_logro" onbeforesave="validarPorcentaje($data)" e-name="porcentaje_logro" e-form="rowform">
+                                                        {{ logro.porcentaje_logro || 'Vacio' }}%
+                                                    </span>
+                                                </td>
+                                                <th style="white-space: nowrap=">
+                                                    <!-- form  -->
+                                                    <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onbeforesave="updateLogro($data, logro)" onaftersave="validarPorcentajeTotal()" shown="inserted == logro"  oncancel="cancelform(logro, $index)">
+                                                        <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                                                            Ok
+                                                        </button>
+                                                        <button  type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                                                            Cancelar
+                                                        </button>
+                                                    </form>
+                                                    <div class="buttons" ng-show="!rowform.$visible">
+                                                        <a href="#" class="btn btn-default" role="button" ng-click="open('lg',logro.id_logro)">
+                                                            Actividades
+                                                        </a>
+                                                        <button class="btn btn-primary" ng-click="rowform.$show()">
+                                                            Editar
+                                                        </button>
+                                                        <button class="btn btn-danger" ng-click="deleteLogro(logro,$index)">
+                                                            Eliminar
+                                                        </button>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="has-error">
+                                        <label ng-show="!isPorcentajeCien" class="control-label" for="inputError1">
+                                            La sumatoria del porcentaje debe ser igual a 100%
+                                        </label>
+                                        <span ng-show="!isPorcentajeCien">
+                                        </span>
+                                    </div>
+                                    <button class="btn btn-default" ng-click="create_nuevo_logro()" ng-show = "carga_seleccionada != null">
+                                        Agregar
+                                    </button>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" type="button" ng-show = "carga_seleccionada != null" ng-click="btnGuardar()">
+                                            Guardar
+                                        </button>
+                                    </div>
+                                </div>
+                            </md-content>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </section>
         </div>
-      </uib-tab>
-    </uib-tabset>
-    </section>
-  </div>
-  </div>
-  <!-- Page Wraper -->
+    </div>
+    <!-- Page Wraper -->
 </div>
-  <!-- Wraper -->
-
-<footer-generic></footer-generic>
-
-
-
+<!-- Wraper -->
+<footer-generic>
+</footer-generic>

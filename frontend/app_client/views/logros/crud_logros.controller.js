@@ -20,10 +20,10 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     //Trae el periodo Actual
     //periodoData.findPeriodoActual()
     //$http.get(CONFIG.http_address+'/api/todos/periodos/actual')
-    periodoData.findPeriodoActual().success(function(data) {
+    periodoData.findPeriodoActual().success(function(periodo) {
         console.log("entro al succes del controller")
-        $scope.periodo_actual = data[0];
-        console.log(data);
+        $scope.periodo_actual = periodo[0];
+        console.log(periodo);
         periodoData.findPeriodos().success(function(data) {
             $scope.periodos = data;
             console.log("succes findPeriodos")
@@ -188,7 +188,19 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         });
     };
     $scope.selectCurso = function(carga) {
+            for (var i = 0; i < $scope.periodos.length; i++) {
+                //entra cuando el periodo actual es encontrado en el vector
+                // console.log(data[i].id_periodo)
+                console.log($scope.periodo_actual)
+                if ($scope.periodos[i].id_periodo == $scope.periodo_actual.id_periodo) {
+                    //selecciona el periodo actual en las tabs
+                    $scope.activeTabIndex = i;
+                    //
+                    $scope.periodo_sel = $scope.periodos[i];
+                }
+            }
         seleccionarCarga(carga);
+
     }
 
     function seleccionarCarga(carga) {
@@ -198,6 +210,17 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             $scope.logros = logros;
             console.log($scope.logros);
             $scope.isPorcentajeCien = checkPorcentaje();
+
+
+            //////////////////
+
+         
+
+
+
+            /////////////////
+
+
         }); //CIERRA GET LOGROS
     } //CIERA FUNCION SELECIONAR CARGA
     function getLogros(id_carga, cb) {

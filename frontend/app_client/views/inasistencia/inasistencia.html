@@ -33,7 +33,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li ng-repeat="carga in materia.cargas">
-                        <a ng-click="selectCurso(carga)">
+                        <a href="#" ng-click="selectCurso(carga)">
                             {{ carga.grado }}-{{ carga.grupo }}
                         </a>
                     </li>
@@ -49,9 +49,7 @@
             <section class="content-header">
                 <h1>
                     {{ carga_seleccionada.nombre_materia }}
-                    <small>
-                        {{ carga_seleccionada.grado }}-{{ carga_seleccionada.grupo }}
-                    </small>
+                    {{ carga_seleccionada.grado }}-{{ carga_seleccionada.grupo }}
                 </h1>
             </section>
             <section class="content">
@@ -84,8 +82,6 @@
                                                                 <th>
                                                                     Faltas
                                                                 </th>
-                                                                <th colspan="1">
-                                                                </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -103,11 +99,8 @@
                                                                     {{ estudiante.nombrecompleto }}
                                                                 </th>
                                                                 <th>
-                                                                    {{ estudiante.inasistencias }}
-                                                                </th>
-                                                                <th>
-                                                                    <a ng-click="open('lg',carga_seleccionada.id_carga_docente,estudiante.id_estudiante)">
-                                                                        Ver
+                                                                    <a href="#" ng-click="open('lg',carga_seleccionada.id_carga_docente,estudiante.id_estudiante)">
+                                                                        {{ estudiante.inasistencias }}
                                                                     </a>
                                                                 </th>
                                                             </tr>
