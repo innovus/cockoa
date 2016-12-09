@@ -23,7 +23,7 @@
             templateUrl: "/views/inasistencia/inasistencia.html",
             controller: "inasistenciaController"
         })
-        .when("/estudiantes/notas/:param",{
+        .when("/estudiantes/notas",{
             templateUrl: "/views/estudiantes/notas/notas.html",
             controller: "estudiantes_notasController"
         })

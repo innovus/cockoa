@@ -124,7 +124,8 @@
         //Trae el periodo Actual
         periodoData.findPeriodoActual().success(function(data) {
             $scope.periodoActual = data[0];
-            console
+            console.log("periodo actual")
+            console.log($scope.periodoActual)
 
             //Trae todos los periodos y pone el actual
             periodoData.findPeriodos().success(function(periodos) {
@@ -140,6 +141,10 @@
                         //
                         $scope.periodoSeleccionado = $scope.periodos[i];
                         // Trae todas las cargas de un periodo seleccionado
+
+                        console.log("periodo seleccionado")
+                        console.log($scope.periodoSeleccionado)
+
                         periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(cargas) {
                             $scope.cargas = cargas;
                             //recorremos las cargas para organizarlas para el acordeon del sliderbar por materias
@@ -255,6 +260,8 @@
         */
         var getPeriodoId = function(index) {
             $scope.periodoSeleccionado = $scope.periodos[index];
+            console.log("periodo seleccionado")
+                        console.log($scope.periodoSeleccionado)
             periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
                
                 $scope.cargas = data;

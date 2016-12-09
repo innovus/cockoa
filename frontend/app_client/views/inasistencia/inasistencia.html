@@ -68,7 +68,7 @@
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
-                                                                <th colspan="1">
+                                                                <th ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo" colspan="1">
                                                                 </th>
                                                                 <th>
                                                                     No
@@ -86,7 +86,7 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr ng-repeat="estudiante in estudiantes">
-                                                                <th>
+                                                                <th ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo">
                                                                     <input type="checkbox" checklist-model="selected.ids_estudiantes" checklist-value="estudiante.id_estudiante"/>
                                                                 </th>
                                                                 <th>
@@ -114,7 +114,7 @@
                                         <!-- /.panel-body -->
                                     </div>
                                     <!-- /.panel -->
-                                    <div class="input-group">
+                                    <div ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo" class="input-group">
                                         <input type="date" ng-model="date_asistencia" class="form-control" aria-label="Fecha"/>
                                         <div class="input-group-btn">
                                             <button class="btn btn-default" type="submit" ng-click="addInasistencia(date_asistencia)">

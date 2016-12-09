@@ -102,14 +102,14 @@
                                                             Cancelar
                                                         </button>
                                                     </form>
-                                                    <div class="buttons" ng-show="!rowform.$visible">
+                                                    <div  class="buttons" ng-show="!rowform.$visible">
                                                         <a href="#" class="btn btn-default" role="button" ng-click="open('lg',logro.id_logro)">
                                                             Actividades
                                                         </a>
-                                                        <button class="btn btn-primary" ng-click="rowform.$show()">
+                                                        <button ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo"  class="btn btn-primary" ng-click="rowform.$show()">
                                                             Editar
                                                         </button>
-                                                        <button class="btn btn-danger" ng-click="deleteLogro(logro,$index)">
+                                                        <button  ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo" class="btn btn-danger" ng-click="deleteLogro(logro,$index)">
                                                             Eliminar
                                                         </button>
                                                     </div>
@@ -124,10 +124,10 @@
                                         <span ng-show="!isPorcentajeCien">
                                         </span>
                                     </div>
-                                    <button class="btn btn-default" ng-click="create_nuevo_logro()" ng-show = "carga_seleccionada != null">
+                                    <button ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo"  class="btn btn-default" ng-click="create_nuevo_logro()" ng-show = "carga_seleccionada != null">
                                         Agregar
                                     </button>
-                                    <div class="modal-footer">
+                                    <div ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo"  class="modal-footer">
                                         <button class="btn btn-primary" type="button" ng-show = "carga_seleccionada != null" ng-click="btnGuardar()">
                                             Guardar
                                         </button>

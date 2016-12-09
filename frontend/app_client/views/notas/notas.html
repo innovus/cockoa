@@ -98,9 +98,18 @@
                                                                     {{ estudiante.nombrecompleto }}
                                                                 </td>
                                                                 <td ng-repeat="cabecera in estudiante.cabeceras track by $index">
-                                                                    <a  href="#" style="border-bottom-width: 0px;" editable-text="cabecera.nota" onbeforesave="before(cabecera)" onaftersave="after(cabecera,estudiante)">
-                                                                        {{ cabecera.nota }}
-                                                                    </a>
+                                                                    <div ng-if="periodoSeleccionado.id_periodo == periodoActual.id_periodo">
+                                                                        <!-- code to render a large video block-->
+                                                                        <a  href="#" style="border-bottom-width: 0px;" editable-text="cabecera.nota" onbeforesave="before(cabecera)" onaftersave="after(cabecera,estudiante)">
+                                                                            {{ cabecera.nota }}
+                                                                        </a>
+                                                                    </div>
+                                                                    <div ng-if="periodoSeleccionado.id_periodo != periodoActual.id_periodo">
+                                                                        <!-- code to render the regular video block -->
+                                                                        <p>
+                                                                            {{ cabecera.nota }}
+                                                                        </p>
+                                                                    </div>
                                                                 </td>
                                                                 <td>
                                                                     {{ estudiante.notafinal }}

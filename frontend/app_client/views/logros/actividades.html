@@ -15,7 +15,7 @@
                     <th>
                         Porcentaje
                     </th>
-                    <th>
+                    <th ng-show="permisoEdicion">
                         Acciones
                     </th>
                 </tr>
@@ -36,7 +36,7 @@
                             {{ actividad.porcentaje_actividad || 'Vacio' }}%
                         </span>
                     </td>
-                    <th style="white-space: nowrap=">
+                    <th  ng-show="permisoEdicion" style="white-space: nowrap=">
                         <!-- form  -->
                         <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onbeforesave="updateActividad ($data, actividad)" onaftersave="validarPorcentajeTotal()" shown="inserted == actividad"  oncancel="cancelform(actividad, $index)">
                             <button  type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
@@ -65,13 +65,13 @@
             <span ng-show="!isPorcentajeCien">
             </span>
         </div>
-        <button class="btn btn-default" ng-click="addActividad()">
+        <button ng-show="permisoEdicion" class="btn btn-default" ng-click="addActividad()">
             Agregar
         </button>
     </div>
     <!-- modal body  -->
     <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="ok()">
+        <button ng-show="permisoEdicion" class="btn btn-primary" type="button" ng-click="ok()">
             Guardar
         </button>
         <button class="btn btn-warning" type="button" ng-click="cancel()">
