@@ -1,3 +1,11 @@
+/**
+ * @file archivo que contiene el modulo de funciones varias que tienen acceso los estudiantes
+ * @name estudiantesController.js
+ * @author Jorge Luis Viveros Arcos <jorge.innovus@gmail.com>
+ * @license UDENAR
+ * @copyright 2016 Udenar
+ **/
+
 "use strict"
 var promise = require('bluebird');
 var options = {
@@ -5,6 +13,7 @@ var options = {
     promiseLib: promise
 };
 var Respuesta = require("../helpers/respuesta");
+var FuncionesSeguridad = require("../helpers/funcionesSeguridad");
 var MateriaDao = require("../app_core/dao/materiaDao");
 var ActividadDao = require("../app_core/dao/actividadDao");
 var LogroDao = require("../app_core/dao/logroDao");
@@ -13,7 +22,38 @@ var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
 var Tipo_notificacionDao = require("../app_core/dao/tipo_notificacionDao");
 
+
+
+/**
+* funcion que trae las notas de actividades de un estudiante por materia
+* @param {Object} req - objeto de peticion.
+* @param {Object} res - objeto de respuesta.
+**/
 function getNotaActividadEstudiantebyMateria(req,res){
+
+    var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+
+
+        console.log(decoded.id);
+        console.log(decoded.rol);
+        Nota_actividadDao.findNotaActividadEstudiantebyMateria(30011,req.params.id_actividad)
+        .then(function(data){
+            Respuesta.sendJsonResponse(res,200,data);
+            console.log("la fucnion salio bn" + data)
+
+        }).catch(function(err){
+            if(err.message == 'No data returned from the query.'){
+                respuesta.sendJsonResponse(res,200,[]);
+            }else{
+                console.log(err.message);
+                Respuesta.sendJsonResponse(res,500,[]);
+            }
+        });
+    }).catch(function(error){
+        Respuesta.sendJsonResponse(res,500,error);
+    });
+
     Nota_actividadDao.findNotaActividadEstudiantebyMateria(30011,req.params.id_actividad)
     .then(function(data){
         Respuesta.sendJsonResponse(res,200,data);
@@ -50,7 +90,14 @@ function getNotaLogrosMaterias(req, res) {
 }
 
 function getMateriasEstudiante(req, res) {
-    MateriaDao.findMateriasByEstudiante(30011).then(function(data) {
+
+    var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        console.log("decode")
+        console.log(decoded);
+        //console.log(decoded.body.rol);
+
+        MateriaDao.findMateriasByEstudiante(30011).then(function(data) {
         Respuesta.sendJsonResponse(res, 200, data);
         console.log("la fucnion salio bn" + data)
     }).catch(function(err) {
@@ -61,6 +108,10 @@ function getMateriasEstudiante(req, res) {
             Respuesta.sendJsonResponse(res, 500, []);
         }
     });
+    });
+
+    
+
 }
 //////esta va en todos se repite con docentes////
 function getActividadesEstudiante(req, res) {
