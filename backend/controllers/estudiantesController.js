@@ -21,6 +21,8 @@ var Nota_logroDao = require("../app_core/dao/nota_logroDao");
 var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
 var Tipo_notificacionDao = require("../app_core/dao/tipo_notificacionDao");
+var EstudianteDao = require("../app_core/dao/estudianteDao");
+
 
 
 
@@ -37,6 +39,12 @@ function getNotaActividadEstudiantebyMateria(req,res){
 
         console.log(decoded.id);
         console.log(decoded.rol);
+        PersonaDao.findPersonaByIdUsuario(id_usuario).then(function(persona){
+           
+        }).catch(function(error){
+            callback("");
+        });
+
         Nota_actividadDao.findNotaActividadEstudiantebyMateria(30011,req.params.id_actividad)
         .then(function(data){
             Respuesta.sendJsonResponse(res,200,data);
@@ -91,26 +99,40 @@ function getNotaLogrosMaterias(req, res) {
 
 function getMateriasEstudiante(req, res) {
 
+
     var token=req.headers.authorization.split(' ')[1];
     FuncionesSeguridad.getTokenData(token).then(function(decoded){
-        console.log("decode")
-        console.log(decoded);
-        //console.log(decoded.body.rol);
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+                MateriaDao.findMateriasByEstudiante(estudiante[0].id_estudiante).then(function(data) {
+                    console.log(data)
+                    Respuesta.sendJsonResponse(res, 200, data);
+                    console.log("la fucnion salio bn" + data)
+                }).catch(function(err) {
+                    if (err.message == 'No data returned from the query.') {
+                        Respuesta.sendJsonResponse(res, 200, []);
+                    } else {
+                        console.log(err.message);
+                        Respuesta.sendJsonResponse(res, 500, []);
+                    }
+                });
 
-        MateriaDao.findMateriasByEstudiante(30011).then(function(data) {
-        Respuesta.sendJsonResponse(res, 200, data);
-        console.log("la fucnion salio bn" + data)
-    }).catch(function(err) {
-        if (err.message == 'No data returned from the query.') {
-            Respuesta.sendJsonResponse(res, 200, []);
-        } else {
-            console.log(err.message);
-            Respuesta.sendJsonResponse(res, 500, []);
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
         }
+        //console.log(decoded.body.rol);
     });
-    });
-
-    
+   
 
 }
 //////esta va en todos se repite con docentes////

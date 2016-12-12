@@ -60,6 +60,8 @@ var autorizacion= function(req,res,next){
 };
 
 function getTokenData(token){
+  console.log("token")
+  console.log(token)
 
    console.log(process.env.TOKENINFO); 
    var deferred= Q.defer();
@@ -80,11 +82,11 @@ function getTokenData(token){
           }
           else if(httpResponse.statusCode==200){
               console.log("respuestaaaaa:");
-             // console.log(httpResponse);    
-              deferred.resolve("jojojojo");
+  
+              deferred.resolve(JSON.parse(body));
           } 
           else{
-              deferred.reject(body);
+              deferred.reject(JSON.parse(body));
           }   
    });
 
