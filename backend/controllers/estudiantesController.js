@@ -37,15 +37,12 @@ function getNotaActividadEstudiantebyMateria(req,res){
     FuncionesSeguridad.getTokenData(token).then(function(decoded){
 
 
-        console.log(decoded.id);
-        console.log(decoded.rol);
-        PersonaDao.findPersonaByIdUsuario(id_usuario).then(function(persona){
-           
-        }).catch(function(error){
-            callback("");
-        });
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
 
-        Nota_actividadDao.findNotaActividadEstudiantebyMateria(30011,req.params.id_actividad)
+                Nota_actividadDao.findNotaActividadEstudiantebyMateria(studiante[0].id_estudiante,req.params.id_actividad)
         .then(function(data){
             Respuesta.sendJsonResponse(res,200,data);
             console.log("la fucnion salio bn" + data)
@@ -58,23 +55,18 @@ function getNotaActividadEstudiantebyMateria(req,res){
                 Respuesta.sendJsonResponse(res,500,[]);
             }
         });
-    }).catch(function(error){
-        Respuesta.sendJsonResponse(res,500,error);
-    });
+    }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
 
-    Nota_actividadDao.findNotaActividadEstudiantebyMateria(30011,req.params.id_actividad)
-    .then(function(data){
-        Respuesta.sendJsonResponse(res,200,data);
-        console.log("la fucnion salio bn" + data)
-
-    }).catch(function(err){
-        if(err.message == 'No data returned from the query.'){
-            respuesta.sendJsonResponse(res,200,[]);
         }else{
-            console.log(err.message);
-            Respuesta.sendJsonResponse(res,500,[]);
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
         }
-    });
+
+
+        });
+
 }
 
 function getNotaLogrosMaterias(req, res) {
@@ -102,7 +94,7 @@ function getMateriasEstudiante(req, res) {
 
     var token=req.headers.authorization.split(' ')[1];
     FuncionesSeguridad.getTokenData(token).then(function(decoded){
-        
+
         //solamente si el rol es de un estudiante
         if(decoded.rol == 7){
             EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
@@ -138,6 +130,39 @@ function getMateriasEstudiante(req, res) {
 //////esta va en todos se repite con docentes////
 function getActividadesEstudiante(req, res) {
 
+    var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+                MateriaDao.findMateriasByEstudiante(estudiante[0].id_estudiante).then(function(data) {
+                    console.log(data)
+                    Respuesta.sendJsonResponse(res, 200, data);
+                    console.log("la fucnion salio bn" + data)
+                }).catch(function(err) {
+                    if (err.message == 'No data returned from the query.') {
+                        Respuesta.sendJsonResponse(res, 200, []);
+                    } else {
+                        console.log(err.message);
+                        Respuesta.sendJsonResponse(res, 500, []);
+                    }
+                });
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
     ActividadDao.findActividadesByLogro(req.params.id_logro).then(function(data) {
         console.log("la fucnion salio bn" + data)
         if ((data.length <= 0) || (!data)) {
@@ -156,8 +181,16 @@ function getActividadesEstudiante(req, res) {
 }
 ///
 function getLogrosEstudiante(req, res) {
-    console.log("entro aqui a get Logros estudiantes");
-    LogroDao.findLogrosByMateriaAndPeriodo(30011, req.params.id_materia, req.params.id_periodo).then(function(data) {
+
+     var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+
+                    LogroDao.findLogrosByMateriaAndPeriodo(estudiante[0].id_estudiante, req.params.id_materia, req.params.id_periodo).then(function(data) {
         Respuesta.sendJsonResponse(res, 200, data);
         console.log("la fucnion salio bn" + data)
             //cb(data)
@@ -169,10 +202,34 @@ function getLogrosEstudiante(req, res) {
             Respuesta.sendJsonResponse(res, 500, []);
         }
     });
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
 }
 /////
 function getNotasLogros(req, res) {
-    Nota_logroDao.findNotasLogrosByEstudiante(30011, req.params.id_materia, req.params.id_periodo).then(function(data) {
+
+
+     var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+
+                    Nota_logroDao.findNotasLogrosByEstudiante(estudiante[0].id_estudiante, req.params.id_materia, req.params.id_periodo).then(function(data) {
         var data1 = {};
         //(function(i){
         console.log("antes del for")
@@ -189,10 +246,34 @@ function getNotasLogros(req, res) {
             Respuesta.sendJsonResponse(res, 500, []);
         }
     });
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
+
 }
 
 function getNotificaciones(req, res) {
-    NotificacionDao.findNotificacionesByEstudiante(req.body.id_estudiante).then(function(data) {
+
+    var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+
+                    NotificacionDao.findNotificacionesByEstudiante(estudiante[0].id_estudiante).then(function(data) {
         console.log(req.body);
         Respuesta.sendJsonResponse(res, 200, data);
     }).catch(function(err) {
@@ -203,10 +284,39 @@ function getNotificaciones(req, res) {
             Respuesta.sendJsonResponse(res, 500, []);
         }
     });
+
+
+
+
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
+
 }
 
 function getNotificacionesPendientes(req, res) {
-    NotificacionDao.findNotificacionesByEstudianteAndEstado(req.body.id_estudiante).then(function(data) {
+
+        var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+
+
+    NotificacionDao.findNotificacionesByEstudianteAndEstado(estudiante[0].id_estudiante).then(function(data) {
         Respuesta.sendJsonResponse(res, 200, data);
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
@@ -216,6 +326,24 @@ function getNotificacionesPendientes(req, res) {
             Respuesta.sendJsonResponse(res, 500, []);
         }
     });
+
+
+
+
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
 }
 
 function getTiposNotificacion(req, res) {
@@ -245,7 +373,16 @@ function updateEstadoNotificacion(req, res) {
 }
 
 function getNotasActividades(req, res) {
-    Nota_actividadDao.findNotasActividadesByEstudiante(30011).then(function(data) {
+
+         var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+
+                    Nota_actividadDao.findNotasActividadesByEstudiante(estudiante[0].id_estudiante).then(function(data) {
 
         console.log(data)
         Respuesta.sendJsonResponse(res, 200, data);
@@ -257,10 +394,33 @@ function getNotasActividades(req, res) {
             Respuesta.sendJsonResponse(res, 500, []);
         }
     });
+
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
 }
 
 function getNotasActividadbyLogro(req, res) {
-    Nota_actividadDao.findNotaActividadLogrobyEstudiante(30011, req.params.id_logro).then(function(data) {
+
+    var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+
+                       Nota_actividadDao.findNotaActividadLogrobyEstudiante(estudiante[0].id_estudiante, req.params.id_logro).then(function(data) {
         console.log("la fucnion salio bn" + data)
         if ((data.length <= 0) || (!data)) {
             return Respuesta.status(400).json({});
@@ -275,6 +435,21 @@ function getNotasActividadbyLogro(req, res) {
             Respuesta.sendJsonResponse(res, 500, []);
         }
     });
+
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
 }
 
 module.exports = {
