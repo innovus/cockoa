@@ -1,7 +1,6 @@
 "use strict"
 var promise = require('bluebird');
 
-
 var respuesta = require("../helpers/respuesta");
 var request = require('request');
 var carga_docenteDao = require("../app_core/dao/carga_docenteDao");
@@ -12,7 +11,7 @@ var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
 var DispositivoDao = require("../app_core/dao/dispositivoDao");
 var EstudianteDao = require("../app_core/dao/estudianteDao");
-var FuncionesSeguridad = require("../helpers/funcionesSeguridad");
+var DocenteDao = require("../app_core/dao/docenteDao");
 
 function getCursosMaterias(req, res) {
     var hoy = new Date();
