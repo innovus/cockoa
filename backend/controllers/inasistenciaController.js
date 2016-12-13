@@ -8,15 +8,12 @@ var respuesta= require("../helpers/respuesta");
 var request = require('request');
 
 
-var pgp = require('pg-promise')(options);
-var connectionString = 'postgres://localhost:5432/liceo1';
-var db = pgp(connectionString);
-var pgp2 = require('pg-promise')();
-
 var InasistenciaDao = require("../app_core/dao/inasistenciaDao");
 var MateriaDao = require("../app_core/dao/materiaDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
 var DispositivoDao = require("../app_core/dao/dispositivoDao");
+var EstudianteDao = require("../app_core/dao/estudianteDao");
+var FuncionesSeguridad = require("../helpers/funcionesSeguridad");
 
 
 function getInasistenciasEstudianteByCarga(req,res){
@@ -36,7 +33,17 @@ function getInasistenciasEstudianteByCarga(req,res){
 } 
 
 function getCantidadInasistenciaMateria(req,res){
-    InasistenciaDao.findCantidadInasistenciasBYMateria(30011)
+
+     var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante);
+
+
+                    InasistenciaDao.findCantidadInasistenciasBYMateria(30011)
     .then(function(data){
         respuesta.sendJsonResponse(res,200,data);
         console.log("la fucnion salio bn" + data)
@@ -49,6 +56,27 @@ function getCantidadInasistenciaMateria(req,res){
             respuesta.sendJsonResponse(res,500,[]);
         }
     });
+
+
+
+
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
+
+
+
 }
 
 //inasistencias de una carga
@@ -59,33 +87,6 @@ function getInasistenciasCarga(req,res){
         respuesta.sendJsonResponse(res,200,data);
         console.log("la fucnion salio bn" + data)
 
-    }).catch(function(err){
-        if(err.message == 'No data returned from the query.'){
-            respuesta.sendJsonResponse(res,200,[]);
-        }else{
-            console.log(err.message);
-            respuesta.sendJsonResponse(res,500,[]);
-        }
-    });
-
-}
-
-//cantidad de inasistencias de una carga para un estudiante
-function getCantidadInasistenciasCarga(req,res){
-
-     InasistenciaDao.findCantidadInasistenciasByCarga(req.params.id_carga)
-    .then(function(data){
-        var data1 = {};
-        //(function(i){
-            console.log("antes del for")
-            for (var i = data.length - 1; i >= 0; i--) {
-
-                console.log("entro al for " + i )
-                data1[data[i].id_estudiante] = data[i].cantidad;
-            }
-
-        respuesta.sendJsonResponse(res,200,data1);
-        console.log("la fucnion salio bn" + data1)
     }).catch(function(err){
         if(err.message == 'No data returned from the query.'){
             respuesta.sendJsonResponse(res,200,[]);
@@ -129,6 +130,35 @@ function getInasistenciaPorCarga(req,res){
         }
     });
 }
+
+
+//trae un vector de los estudiantes que tienen faltas con el id de el estudiante y alfrente la cantidad de inasistencias cantidad de inasistencias de una carga para un estudiante
+function getCantidadInasistenciasCarga(req,res){
+
+     InasistenciaDao.findCantidadInasistenciasByCarga(req.params.id_carga)
+    .then(function(data){
+        var data1 = {};
+        //(function(i){
+            console.log("antes del for")
+            for (var i = data.length - 1; i >= 0; i--) {
+
+                console.log("entro al for " + i )
+                data1[data[i].id_estudiante] = data[i].cantidad;
+            }
+
+        respuesta.sendJsonResponse(res,200,data1);
+        console.log("la fucnion salio bn" + data1)
+    }).catch(function(err){
+        if(err.message == 'No data returned from the query.'){
+            respuesta.sendJsonResponse(res,200,[]);
+        }else{
+            console.log(err.message);
+            respuesta.sendJsonResponse(res,500,[]);
+        }
+    });
+
+}
+
 //funcion que recibe un arreglo de inasistencias y las agrega en la base de datos
 function addInasistencias (req,res){
     console.log(req.body)
@@ -216,7 +246,17 @@ function addInasistencias (req,res){
     
 }
 function getMateriasWithInasistenciaByEstudiante(req,res){
-    MateriaDao.findMateriasWithInasistenciaByEstudiante(30011)
+
+        var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+
+
+                    MateriaDao.findMateriasWithInasistenciaByEstudiante(estudiante[0].id_estudiante)
     .then(function (data){
         respuesta.sendJsonResponse(res,200,data);
         console.log("la fucnion salio bn" + data);
@@ -228,9 +268,40 @@ function getMateriasWithInasistenciaByEstudiante(req,res){
             respuesta.sendJsonResponse(res,500,[]);
         }
     });
+
+
+
+
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
+
+
+
 }
 function getInasistenciasByMateria(req,res){
-    InasistenciaDao.findInasistenciasByMateria(30011,req.params.id_materia)
+
+     var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+
+
+    InasistenciaDao.findInasistenciasByMateria(estudiante[0].id_estudiante,req.params.id_materia)
     .then(function (data){
         respuesta.sendJsonResponse(res,200,data);
         console.log("la fucnion salio bn" + data);
@@ -242,6 +313,26 @@ function getInasistenciasByMateria(req,res){
             respuesta.sendJsonResponse(res,500,[]);
         }
     });
+
+
+
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
+
+
+
 }
 function updateEstadoInasistencia(req,res){
     InasistenciaDao.updateEstadoInasistencia(req.body)

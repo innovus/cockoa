@@ -1,14 +1,7 @@
 "use strict"
 var promise = require('bluebird');
-var options = {
-    // Initialization Options
-    promiseLib: promise
-};
-//"pg-promise": "^3.9.1",
-var pgp = require('pg-promise')(options);
-var pgp2 = require('pg-promise')();
-var connectionString = 'postgres://localhost:5432/liceo1';
-var db = pgp(connectionString);
+
+
 var respuesta = require("../helpers/respuesta");
 var request = require('request');
 var carga_docenteDao = require("../app_core/dao/carga_docenteDao");
@@ -19,6 +12,7 @@ var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
 var DispositivoDao = require("../app_core/dao/dispositivoDao");
 var EstudianteDao = require("../app_core/dao/estudianteDao");
+var FuncionesSeguridad = require("../helpers/funcionesSeguridad");
 
 function getCursosMaterias(req, res) {
     var hoy = new Date();

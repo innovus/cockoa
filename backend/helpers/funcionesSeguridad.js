@@ -24,6 +24,7 @@ var Q= require("q");
 var autorizacion= function(req,res,next){
   console.log(process.env.ARGUS);
   var ip= codificarIp(req.ip);
+  console.log("ip")
   console.log(ip);
   ip = ip.replace('..ffff.','');
   console.log(ip)
