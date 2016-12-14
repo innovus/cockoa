@@ -21,9 +21,37 @@ var Q= require("q");
 * @param {function} next - funcion next.
 * @returns {function} next- funcion next para continuar con la ejecucion del codigo que llama al middleware
 **/
+var loginMovil = function(req,res){
+  var data= { username: "1004575444", password: "1004575444"};
+  Request.post(
+    {
+      url:process.env.LOGINMOVIL,
+      form:data
+    },
+    function(err,httpResponse,body){
+
+      if(err){
+                console.log(err);
+                Respuesta.sendJsonResponse(res,500,{"error":"existe un error en la autenticacion de la sesion"});
+            }
+            else if(httpResponse.statusCode==200){
+              console.log("entro a 200")
+
+               Respuesta.sendJsonResponse(res,200,body);
+
+            }
+            else{
+
+                Respuesta.sendJsonResponse(res,500,body);
+            }
+
+    }
+  );
+
+}
 var autorizacion= function(req,res,next){
   console.log(process.env.ARGUS);
-  var ip= codificarIp(req.ip);
+  var ip= codificarIp("190.157.30.117");
   console.log("ip")
   console.log(ip);
   ip = ip.replace('..ffff.','');
@@ -45,6 +73,7 @@ var autorizacion= function(req,res,next){
                 Respuesta.sendJsonResponse(res,500,{"error":"existe un error en la autenticacion de la sesion"});
             }
             else if(httpResponse.statusCode==200){
+              console.log("entro a 200")
 
                 return next();
             }
@@ -83,6 +112,7 @@ function getTokenData(token){
           }
           else if(httpResponse.statusCode==200){
               console.log("respuestaaaaa:");
+              console.log(body)
   
               deferred.resolve(JSON.parse(body));
           } 
@@ -102,3 +132,4 @@ var codificarIp=function(ip){
 
 module.exports.autorizacion= autorizacion;
 module.exports.getTokenData=getTokenData;
+module.exports.loginMovil =loginMovil ;

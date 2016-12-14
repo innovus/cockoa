@@ -20,6 +20,7 @@ router.get('/materias', FuncionesSeguridad.autorizacion, inasistenciaController.
 router.get('/materias/:id_materia',FuncionesSeguridad.autorizacion, inasistenciaController.getInasistenciasByMateria);
 router.get('/cantida/inasistencia/materia',FuncionesSeguridad.autorizacion, inasistenciaController.getCantidadInasistenciaMateria);//getInasistenciasEstudianteByCarga
 router.get('/carga/:id_carga/estudiante/:id_estudiante', FuncionesSeguridad.autorizacion, inasistenciaController.getInasistenciasEstudianteByCarga);
+router.get('/loginmovil',FuncionesSeguridad.loginMovil);
 /*
 router.get('/cargas/:id_carga', function(req,res){
 	inasistenciaController.getInasistenciasCarga(req.params.id_carga, function(data){

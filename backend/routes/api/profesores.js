@@ -1,3 +1,5 @@
+
+
 var express = require('express');
 var router = express.Router();
 //var users = require('../queries/users');
@@ -14,7 +16,7 @@ router.delete('/logros/:id_logro' ,FuncionesSeguridad.autorizacion , profesoresC
 router.get('/cursos/:id_curso/estudiantes',FuncionesSeguridad.autorizacion,profesoresController.getAllEstudianteByIdCurso);
 router.delete('/actividades/:id_actividad' ,FuncionesSeguridad.autorizacion , profesoresController.deleteActividad);
 router.post('/logros/actividades' ,FuncionesSeguridad.autorizacion, profesoresController.getActividadesByLogros);
-router.post('/logros',,FuncionesSeguridad.autorizacion profesoresController.createLogro);
+router.post('/logros',FuncionesSeguridad.autorizacion, profesoresController.createLogro);
 router.get('/cargas/:id_carga/logros/notas' ,FuncionesSeguridad.autorizacion, profesoresController.getNotasLogros);
 router.get('/cargas/:id_carga/logros/actividades/notas' ,FuncionesSeguridad.autorizacion , profesoresController.getNotasActividades);
 router.put('/actividades' ,FuncionesSeguridad.autorizacion , profesoresController.updateActividades);
