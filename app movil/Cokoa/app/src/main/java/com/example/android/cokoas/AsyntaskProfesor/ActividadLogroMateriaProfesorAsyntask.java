@@ -170,16 +170,32 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<String, Voi
     protected void onPostExecute(ArrayList<ActividadLogroProfesor> actividadLogroProfesors) {
         super.onPostExecute(actividadLogroProfesors);
         if(actividadLogroProfesors!=null){
-            mRecyclerView = (RecyclerView) activity.findViewById(R.id.recycler_actividad_logro_materia_profesor);
-            mRecyclerView.setHasFixedSize(true);
-            //usR UN ADMINISTRADOR PARA LINEARLAYOUT
-            mLayoutManager = new LinearLayoutManager(activity);
-            mRecyclerView.setLayoutManager(mLayoutManager);//LogroMateriaProfesorAdapter
-            mAdapter = new ActividadLogroMateriaProfesorAdapter(actividadLogroProfesors, activity);
-            mRecyclerView.setAdapter(mAdapter);
+
+            Log.v("tokenSessionManager", "cantidad de actividades" + actividadLogroProfesors.size());
+
+            if(actividadLogroProfesors.size()>0){
+                mRecyclerView = (RecyclerView) activity.findViewById(R.id.recycler_actividad_logro_materia_profesor);
+                mRecyclerView.setHasFixedSize(true);
+                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
+                mLayoutManager = new LinearLayoutManager(activity);
+                mRecyclerView.setLayoutManager(mLayoutManager);//LogroMateriaProfesorAdapter
+                mAdapter = new ActividadLogroMateriaProfesorAdapter(actividadLogroProfesors, activity);
+                mRecyclerView.setAdapter(mAdapter);
+            }else{
+                Snackbar.make(activity.findViewById(android.R.id.content), "Aun no asigna actividades a este logro", Snackbar.LENGTH_LONG)
+                        .setAction("", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        })
+                        .setActionTextColor(Color.YELLOW)
+                        .show();
+            }
+
 
         }else{
-            Snackbar.make(activity.findViewById(android.R.id.content), "Aun no asignas actividades", Snackbar.LENGTH_LONG)
+            Snackbar.make(activity.findViewById(android.R.id.content), "Aun no asignas actividades a este logro", Snackbar.LENGTH_LONG)
                     .setAction("", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

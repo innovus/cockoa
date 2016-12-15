@@ -1,8 +1,11 @@
 package com.example.android.cokoas.AsyntaskProfesor;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
 
 import com.example.android.cokoas.AppConstants.AppConstants;
 import com.example.android.cokoas.SessionManager.SessionManager;
@@ -96,7 +99,7 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
             }
             forecastJsonStr = buffer.toString();
 
-            Log.v("revisar json ", "post" + forecastJsonStr);
+            Log.v("a ver ", "post" + forecastJsonStr);
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
@@ -127,7 +130,10 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
                 }
             }
         } try {
-            return null;
+            /*int statuss = 0;
+            statuss = urlConnection.getResponseCode();
+            return Integer.toString(statuss);*/
+            return getStatuss(forecastJsonStr);
         }catch (Exception e){
 
         }
@@ -136,8 +142,52 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
         return null;
     }
 
+    public static String getStatuss(String statussJson)throws JSONException{
+        if(statussJson!=null){
+
+            String s = "1";
+            JSONObject jsonObject = new JSONObject(statussJson);
+            s = jsonObject.getString("status");
+            return s;
+        }
+        return null;
+    }
+
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+
+        if(s!=null){
+            if(s.equals("0")){
+                Snackbar.make(activity.findViewById(android.R.id.content), "Se ingreso correctamente la calificación", Snackbar.LENGTH_LONG)
+                        .setAction("", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                            }
+                        })
+                        .setActionTextColor(Color.YELLOW)
+                        .show();
+            }else {
+                Snackbar.make(activity.findViewById(android.R.id.content), "No se ingreso la calificación", Snackbar.LENGTH_LONG)
+                        .setAction("", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                            }
+                        })
+                        .setActionTextColor(Color.YELLOW)
+                        .show();
+            }
+        }else {
+            Snackbar.make(activity.findViewById(android.R.id.content), "No se ingreso la calificación", Snackbar.LENGTH_LONG)
+                    .setAction("", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        }
+                    })
+                    .setActionTextColor(Color.YELLOW)
+                    .show();
+        }
+
+
     }
 }

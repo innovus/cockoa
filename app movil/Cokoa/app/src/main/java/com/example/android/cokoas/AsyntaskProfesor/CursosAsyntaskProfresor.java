@@ -96,7 +96,7 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
             }
             forecastJsonStr = buffer.toString();
 
-            Log.v("revisar json ", "Json String" + forecastJsonStr);
+            Log.v("revisar json ", "Json Stringssss" + forecastJsonStr);
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
@@ -141,8 +141,13 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
     @Override
     protected void onPostExecute(ArrayList<CursosProfesor> cursosProfesors) {
         if(cursosProfesors!=null){
+            ArrayList arrayList = new ArrayList();
+            arrayList = cursosProfesors;
+            Log.v("revisar json ", "Revisar erro" + cursosProfesors);
+            Log.v("revisar json ", "Revisar error" + arrayList.size());
+
              mRecyclerView = (RecyclerView) activity.findViewById(R.id.my_recycler_view);
-                mRecyclerView.setHasFixedSize(true);
+//                mRecyclerView.setHasFixedSize(true);
                 //usR UN ADMINISTRADOR PARA LINEARLAYOUT
                 mLayoutManager = new LinearLayoutManager(activity);
                 mRecyclerView.setLayoutManager(mLayoutManager);

@@ -2,6 +2,8 @@ package com.example.android.cokoas.AdaptersProfesor;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import com.example.android.cokoas.AsyntaskProfesor.InsertNotaActividadAsyntask;
 import com.example.android.cokoas.ModelsProfesor.EstudianteCurso;
 import com.example.android.cokoas.R;
+import com.example.android.cokoas.SessionManager.SessionManager;
 
 import java.util.ArrayList;
 
@@ -32,6 +35,7 @@ import java.util.ArrayList;
 public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCursoAdapters.ViewHolder> {
     public static ArrayList<EstudianteCurso> estudianteCursos;
     public static Activity activity;
+    SessionManager sessionManager;
 
 
     public EstudianteCursoAdapters(ArrayList<EstudianteCurso> estudianteCursos, Activity activity) {
@@ -83,11 +87,29 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
                                         public void onClick(DialogInterface dialog, int which) {
 
                                             Log.v("revisar json ", "postsf" + estudianteCursos.get(position).getIdActividad());
-                                            new InsertNotaActividadAsyntask(activity).execute(estudianteCursos.get(position).getIdActividad(),viewHolder.notaEstudiante.getText().toString(), viewHolder.codigoEstudiante.getText().toString());
-                                            viewHolder.notaEstudiante.setFocusable(false);
-                                            viewHolder.notaEstudiante.setCursorVisible(false);
-                                            viewHolder.linearLayout.setVisibility(View.GONE);
-                                            viewHolder.cbSelect.setVisibility(View.GONE);
+                                            sessionManager = new SessionManager(activity);
+                                            if(sessionManager.connectionCheck(activity)) {
+                                                new InsertNotaActividadAsyntask(activity).execute(estudianteCursos.get(position).getIdActividad(),viewHolder.notaEstudiante.getText().toString(), viewHolder.codigoEstudiante.getText().toString());
+                                                viewHolder.notaEstudiante.setFocusable(false);
+                                                viewHolder.notaEstudiante.setCursorVisible(false);
+                                                viewHolder.linearLayout.setVisibility(View.GONE);
+                                                viewHolder.cbSelect.setVisibility(View.GONE);
+                                            }else {
+                                                auc[0] = 1;
+                                                viewHolder.cbSelect
+                                                        .setChecked(false);
+                                                auc[0] = 0;
+                                                Snackbar.make(activity.findViewById(android.R.id.content), "No se pudo registrar la calificación. Comprueba la conexión de red o inténtalo de nuevo más tarde", Snackbar.LENGTH_LONG)
+                                                        .setAction("", new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+
+                                                            }
+                                                        })
+                                                        .setActionTextColor(Color.YELLOW)
+                                                        .show();
+                                            }
+
                                         }
                                     })
                             .setNegativeButton("CANCELAR",

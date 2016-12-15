@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_weight="2"
-            android:gravity="center"
+            android:gravity="left"
             android:orientation="vertical">
 
             <TextView
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_weight="5"
-            android:gravity="center"
+            android:gravity="left"
             android:orientation="vertical">
 
             <TextView

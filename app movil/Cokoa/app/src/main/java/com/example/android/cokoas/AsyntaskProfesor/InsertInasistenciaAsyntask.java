@@ -1,8 +1,13 @@
 package com.example.android.cokoas.AsyntaskProfesor;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 
 import com.example.android.cokoas.AppConstants.AppConstants;
 import com.example.android.cokoas.ModelsProfesor.EstudianteCurso;
@@ -22,13 +27,14 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 17/08/2016.
+ * Created by juancarlospantoja@hotmail.com on 17/08/2016.
  */
-public class InsertInasistenciaAsyntask extends AsyncTask<ArrayList<EstudianteCurso>, Void, Void> {
+public class InsertInasistenciaAsyntask extends AsyncTask<ArrayList<EstudianteCurso>, Void, String> {
     SessionManager sessionManager;
     private Activity activity;
     String serverUrls = AppConstants.serverUrl;
     private final String LOG_TAG = InsertInasistenciaAsyntask.class.getSimpleName();
+    ProgressDialog progressDialog;
 
     public InsertInasistenciaAsyntask(Activity activity) {
         super();
@@ -36,7 +42,19 @@ public class InsertInasistenciaAsyntask extends AsyncTask<ArrayList<EstudianteCu
     }
 
     @Override
-    protected Void doInBackground(ArrayList<EstudianteCurso>... params) {
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(true);
+        progressDialog.getWindow().setGravity(Gravity.CENTER);
+        progressDialog.show();
+    }
+
+    @Override
+    protected String doInBackground(ArrayList<EstudianteCurso>... params) {
         ArrayList<EstudianteCurso> estudianteCursos = params[0];
         JSONArray jsonArray = new JSONArray();
         for (int i = 0; i < estudianteCursos.size(); i++) {
@@ -147,7 +165,7 @@ public class InsertInasistenciaAsyntask extends AsyncTask<ArrayList<EstudianteCu
             }
         }
         try {
-            return null;
+            return mensajeInasistencia(forecastJsonStr);
         } catch (Exception e) {
 
         }
@@ -155,4 +173,60 @@ public class InsertInasistenciaAsyntask extends AsyncTask<ArrayList<EstudianteCu
 
         return null;
     }
+
+    public String mensajeInasistencia(String mensajeJson) throws JSONException{
+        if(mensajeJson!=null){
+            String s = "";
+            JSONObject jsonObject = new JSONObject(mensajeJson);
+            s = jsonObject.getString("mensaje");
+            Log.v("revisar json ", "MEnxaje" + s);
+            return s;
+        }
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+        if(s!=null){
+
+
+            if(s.equals("Inasistencias insertada")){
+                Snackbar.make(activity.findViewById(android.R.id.content), "Se ingreso correctamente la insasistencia", Snackbar.LENGTH_LONG)
+                        .setAction("", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                            }
+                        })
+                        .setActionTextColor(Color.YELLOW)
+                        .show();
+                progressDialog.dismiss();
+            }else{
+                Snackbar.make(activity.findViewById(android.R.id.content), "NO se ingreso la inasistencia", Snackbar.LENGTH_LONG)
+                        .setAction("", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                            }
+                        })
+                        .setActionTextColor(Color.YELLOW)
+                        .show();
+                progressDialog.dismiss();
+
+            }
+        }else {
+            Snackbar.make(activity.findViewById(android.R.id.content), "NO se ingreso la inasistencia", Snackbar.LENGTH_LONG)
+                    .setAction("", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        }
+                    })
+                    .setActionTextColor(Color.YELLOW)
+                    .show();
+            progressDialog.dismiss();
+        }
+        progressDialog.dismiss();
+
+    }
+
+
 }

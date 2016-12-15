@@ -1,8 +1,10 @@
 package com.example.android.cokoas;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.android.cokoas.Fragments.AsistenciaFragment;
 import com.example.android.cokoas.Fragments.CalificacionesFragment;
@@ -38,15 +41,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sessionManager = new SessionManager(getApplication());//R.layout.activity_main
         if (savedInstanceState == null) {
 
-            if(sessionManager.getUser().equals("1")){
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment, new CalificacionesFragment())
-                        .commit();
+            if(sessionManager.getUser().equals("7")){
+                if(sessionManager.connectionCheck(this)) {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.fragment, new CalificacionesFragment())
+                            .commit();
+                }else{
+                    Snackbar.make(this.findViewById(android.R.id.content), "Comprueba la conexión de red o inténtalo de nuevo más tarde", Snackbar.LENGTH_LONG)
+                            .setAction("", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            })
+                            .setActionTextColor(Color.YELLOW)
+                            .show();
+                }
+
 
             }else {
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment, new CursosProfesorFragment())
-                        .commit();
+                if(sessionManager.getUser().equals("6")){
+                    if(sessionManager.connectionCheck(this)) {
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.fragment, new CursosProfesorFragment())
+                                .commit();
+                    }else {
+                        Snackbar.make(this.findViewById(android.R.id.content), "Comprueba la conexión de red o inténtalo de nuevo más tarde", Snackbar.LENGTH_LONG)
+                                .setAction("", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                })
+                                .setActionTextColor(Color.YELLOW)
+                                .show();
+                    }
+                }else {
+                    Snackbar.make(this.findViewById(android.R.id.content), "Usuario no valido", Snackbar.LENGTH_LONG)
+                            .setAction("", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            })
+                            .setActionTextColor(Color.YELLOW)
+                            .show();
+                }
+
+
             }
 
         }
@@ -71,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        if(sessionManager.getUser().equals("1")){
+        if(sessionManager.getUser().equals("7")){
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.activity_main_drawer);
             navigationView.getMenu().findItem(R.id.nav_calificaciones).setChecked(true);
@@ -205,66 +247,80 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setFragment(int position) {
-        switch (position) {
-            case 0:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                PerfilFragment perfilFragment = new PerfilFragment();
-                fragmentTransaction.replace(R.id.fragment, perfilFragment);
-                fragmentTransaction.commit();
-                break;
-            case 1:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                CalificacionesFragment calificacionesFragment = new CalificacionesFragment();
-                fragmentTransaction.replace(R.id.fragment, calificacionesFragment);
-                fragmentTransaction.commit();
-                break;
-            case 2:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                AsistenciaFragment asistenciaFragment = new AsistenciaFragment();
-                fragmentTransaction.replace(R.id.fragment, asistenciaFragment);
-                fragmentTransaction.commit();
-                break;
-            case 3:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                EventosFragment eventosFragment = new EventosFragment();
-                fragmentTransaction.replace(R.id.fragment,eventosFragment );
-                fragmentTransaction.commit();
-                break;
-            case 4:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                NotificacionFragment notificacionFragment = new NotificacionFragment();
-                fragmentTransaction.replace(R.id.fragment, notificacionFragment);
-                fragmentTransaction.commit();
-                break;
-            case 5:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                HorarioAtencionFragment horarioAtencionFragment = new HorarioAtencionFragment();
-                fragmentTransaction.replace(R.id.fragment, horarioAtencionFragment);
-                fragmentTransaction.commit();
-                break;
-            case 6:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                CursosProfesorFragment cursosProfesorFragment = new CursosProfesorFragment();
-                fragmentTransaction.replace(R.id.fragment, cursosProfesorFragment);
-                fragmentTransaction.commit();
-                break;
-            case 7:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                LlamarListaFragment llamarListaFragment = new LlamarListaFragment();
-                fragmentTransaction.replace(R.id.fragment, llamarListaFragment);
-                fragmentTransaction.commit();
+        sessionManager = new SessionManager(getApplication());
+        if(sessionManager.connectionCheck(this)) {
+            switch (position) {
+                case 0:
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    PerfilFragment perfilFragment = new PerfilFragment();
+                    fragmentTransaction.replace(R.id.fragment, perfilFragment);
+                    fragmentTransaction.commit();
+                    break;
+                case 1:
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    CalificacionesFragment calificacionesFragment = new CalificacionesFragment();
+                    fragmentTransaction.replace(R.id.fragment, calificacionesFragment);
+                    fragmentTransaction.commit();
+                    break;
+                case 2:
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    AsistenciaFragment asistenciaFragment = new AsistenciaFragment();
+                    fragmentTransaction.replace(R.id.fragment, asistenciaFragment);
+                    fragmentTransaction.commit();
+                    break;
+                case 3:
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    EventosFragment eventosFragment = new EventosFragment();
+                    fragmentTransaction.replace(R.id.fragment,eventosFragment );
+                    fragmentTransaction.commit();
+                    break;
+                case 4:
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    NotificacionFragment notificacionFragment = new NotificacionFragment();
+                    fragmentTransaction.replace(R.id.fragment, notificacionFragment);
+                    fragmentTransaction.commit();
+                    break;
+                case 5:
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    HorarioAtencionFragment horarioAtencionFragment = new HorarioAtencionFragment();
+                    fragmentTransaction.replace(R.id.fragment, horarioAtencionFragment);
+                    fragmentTransaction.commit();
+                    break;
+                case 6:
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    CursosProfesorFragment cursosProfesorFragment = new CursosProfesorFragment();
+                    fragmentTransaction.replace(R.id.fragment, cursosProfesorFragment);
+                    fragmentTransaction.commit();
+                    break;
+                case 7:
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    LlamarListaFragment llamarListaFragment = new LlamarListaFragment();
+                    fragmentTransaction.replace(R.id.fragment, llamarListaFragment);
+                    fragmentTransaction.commit();
 
-                break;
+                    break;
 
+            }
+        }else{
+            Snackbar.make(this.findViewById(android.R.id.content), "Comprueba la conexión de red o inténtalo de nuevo más tarde", Snackbar.LENGTH_LONG)
+                    .setAction("", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    })
+                    .setActionTextColor(Color.YELLOW)
+                    .show();
         }
+
     }
 
 }

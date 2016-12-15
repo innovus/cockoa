@@ -1,10 +1,13 @@
 package com.example.android.cokoas.AsyntaskProfesor;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.example.android.cokoas.AdaptersProfesor.LogroMateriaProfesorAdapter;
 import com.example.android.cokoas.AppConstants.AppConstants;
@@ -25,7 +28,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by ASUS on 13/10/2016.
+ * Created by juancarlospantoja@hotmail.com on 13/10/2016.
  */
 public class LogrosMateriaProfesorAsyntask extends AsyncTask<String, Void, ArrayList<LogroProfesor>> {
     private RecyclerView mRecyclerView;
@@ -166,13 +169,27 @@ public class LogrosMateriaProfesorAsyntask extends AsyncTask<String, Void, Array
 
 
         if(logroProfesors!=null){
-            mRecyclerView = (RecyclerView) activity.findViewById(R.id.recycler_logro_materia_profesor);
-            mRecyclerView.setHasFixedSize(true);
-            //usR UN ADMINISTRADOR PARA LINEARLAYOUT
-            mLayoutManager = new LinearLayoutManager(activity);
-            mRecyclerView.setLayoutManager(mLayoutManager);//LogroMateriaProfesorAdapter
-            mAdapter = new LogroMateriaProfesorAdapter(logroProfesors, activity);
-            mRecyclerView.setAdapter(mAdapter);
+            if(logroProfesors.size()>0){
+                mRecyclerView = (RecyclerView) activity.findViewById(R.id.recycler_logro_materia_profesor);
+                mRecyclerView.setHasFixedSize(true);
+                //usR UN ADMINISTRADOR PARA LINEARLAYOUT
+                mLayoutManager = new LinearLayoutManager(activity);
+                mRecyclerView.setLayoutManager(mLayoutManager);//LogroMateriaProfesorAdapter
+                mAdapter = new LogroMateriaProfesorAdapter(logroProfesors, activity);
+                mRecyclerView.setAdapter(mAdapter);
+            }else{
+                Snackbar.make(activity.findViewById(android.R.id.content), "Aun no le a asignado logros a esta Materia", Snackbar.LENGTH_LONG)
+                        .setAction("", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        })
+                        .setActionTextColor(Color.YELLOW)
+                        .show();
+            }
+
+
         }
     }
 }

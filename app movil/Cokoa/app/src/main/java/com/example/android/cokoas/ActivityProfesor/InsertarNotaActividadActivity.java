@@ -1,16 +1,21 @@
 package com.example.android.cokoas.ActivityProfesor;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.cokoas.AsyntaskProfesor.ActividadLogroMateriaProfesorAsyntask;
 import com.example.android.cokoas.R;
+import com.example.android.cokoas.SessionManager.SessionManager;
 
 public class InsertarNotaActividadActivity extends AppCompatActivity {
     String idLogro,descripcionLogro,idCurso,idCargaDocente;
     TextView textView;
+    SessionManager sessionManage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +29,23 @@ public class InsertarNotaActividadActivity extends AppCompatActivity {
         textView = (TextView) this.findViewById(R.id.txt_desc_Logro_en_materia_profesor);
         textView.setText(descripcionLogro);
 
-        new ActividadLogroMateriaProfesorAsyntask(this).execute(idLogro,idCurso,idCargaDocente);
+
+        sessionManage = new SessionManager(getApplication());
+        if(sessionManage.connectionCheck(this)) {
+            new ActividadLogroMateriaProfesorAsyntask(this).execute(idLogro,idCurso,idCargaDocente);
+        }else{
+            Snackbar.make(this.findViewById(android.R.id.content), "Comprueba la conexión de red o inténtalo de nuevo más tarde", Snackbar.LENGTH_LONG)
+                    .setAction("", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    })
+                    .setActionTextColor(Color.YELLOW)
+                    .show();
+        }
+
+
     }
 
     @Override
