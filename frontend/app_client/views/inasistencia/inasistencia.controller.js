@@ -11,9 +11,9 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
     };
     $scope.materia_seleccionada = null;
     $scope.periodos = [];
-    $scope.periodo_sel = null;
+    $scope.periodoSeleccionado = null;
     $scope.activeTabIndex = 0;
-    $scope.periodo_actual = null;
+    $scope.periodoActual = null;
     $scope.materias = [];
     //option de faltas justificada o no
     $scope.estado_inasistencia = [{
@@ -25,24 +25,24 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
     }];
     //Trae el periodo Actual
     periodoData.findPeriodoActual().success(function(data) {
-        $scope.periodo_actual = data[0];
+        $scope.periodoActual = data[0];
         console.log("entro a perdiodo actual");
-        console.log($scope.periodo_actual)
+        console.log($scope.periodoActual)
             //Trae todos los periodos y pone el actual
         periodoData.findPeriodos().success(function(data) {
             $scope.periodos = data;
             console.log("periodo actual")
-            console.log($scope.periodo_actual);
+            console.log($scope.periodoActual);
             //recorre el vector de todos los periodos 
             for (var i = 0; i < data.length; i++) {
                 //entra cuando el periodo actual es encontrado en el vector
-                if (data[i].id_periodo == $scope.periodo_actual.id_periodo) {
+                if (data[i].id_periodo == $scope.periodoActual.id_periodo) {
                     //selecciona el periodo actual en las tabs
                     $scope.activeTabIndex = i;
                     //
-                    $scope.periodo_sel = $scope.periodos[i];
+                    $scope.periodoSeleccionado = $scope.periodos[i];
                     // Trae todas las cargas de un periodo seleccionado
-                    periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo).success(function(data) {
+                    periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
                         $scope.cargas = data;
                         console.log("cargas")
                         console.log($scope.cargas)
@@ -82,8 +82,8 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
     /////////////////////
     //funcion que se la usa cuando le da click en un tab
     $scope.getPeriodoId = function(index) {
-        $scope.periodo_sel = $scope.periodos[index];
-        periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo).success(function(data) {
+        $scope.periodoSeleccionado = $scope.periodos[index];
+        periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
             $scope.cargas = data;
             var encontrado = false;
             //hace la busqueda si existe la misma carga en las nuevas cargas de este periodo
@@ -121,7 +121,12 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
                 resolve: {
                     fechas: function() {
                         return data
+                    },
+                    permisoEdicion: function(){
+                        if ($scope.periodoSeleccionado.id_periodo == $scope.periodoActual.id_periodo) return true;
+                        else return false;
                     }
+
                 }
             });
         }).error(function(error) {
@@ -130,6 +135,17 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
     };
     $scope.selectCurso = function(carga) {
         seleccionarCarga(carga);
+         for (var i = 0; i < $scope.periodos.length; i++) {
+                //entra cuando el periodo actual es encontrado en el vector
+                // console.log(data[i].id_periodo)
+                console.log($scope.periodoActual)
+                if ($scope.periodos[i].id_periodo == $scope.periodoActual.id_periodo) {
+                    //selecciona el periodo actual en las tabs
+                    $scope.activeTabIndex = i;
+                    //
+                    $scope.periodoSeleccionado = $scope.periodos[i];
+                }
+            }
     }
 
     function seleccionarCarga(carga) {
@@ -174,7 +190,7 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
         inasistenciaData.createInasistenciasEstudiantes(jsonenviar).success(function(response) {
             console.log($scope.carga_seleccionada.id_carga_docente)
             console.log(response);
-            swal("Good job!", response.mensaje, "success")
+            swal("Buen Trabajo!", response.mensaje, "success")
             seleccionarCarga($scope.carga_seleccionada);
         }).error(function(error) {
             console.log('Error: ' + error);
@@ -230,7 +246,8 @@ function clearCookieData(cookies) {
     var accessToken = "";
     cookies.remove("accessToken");
 }
-app.controller('ModalInasistenciaCtrl', function($scope, $uibModalInstance, fechas, $filter, inasistenciaData) {
+app.controller('ModalInasistenciaCtrl', function($scope, $uibModalInstance, fechas,permisoEdicion, $filter, inasistenciaData) {
+    $scope.permisoEdicion = permisoEdicion;
     $scope.fechas = fechas;
     $scope.justificadas = [{
         value: 0,
@@ -252,7 +269,7 @@ app.controller('ModalInasistenciaCtrl', function($scope, $uibModalInstance, fech
         console.log("entro a updateEstado")
         inasistenciaData.updateEstadoInasistencia(fecha).success(function(mensaje) {
             //   alert(mensaje.msg);
-            swal("Good job!", mensaje.msg, "success")
+            swal("Buen Trabajo!", mensaje.msg, "success")
             console.log(mensaje);
         }).error(function(error) {
             console.log(error);

@@ -33,7 +33,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li ng-repeat="carga in materia.cargas">
-                        <a ng-click="selectCurso(carga)">
+                        <a href="#" ng-click="selectCurso(carga)">
                             {{ carga.grado }}-{{ carga.grupo }}
                         </a>
                     </li>
@@ -49,9 +49,7 @@
             <section class="content-header">
                 <h1>
                     {{ carga_seleccionada.nombre_materia }}
-                    <small>
-                        {{ carga_seleccionada.grado }}-{{ carga_seleccionada.grupo }}
-                    </small>
+                    {{ carga_seleccionada.grado }}-{{ carga_seleccionada.grupo }}
                 </h1>
             </section>
             <section class="content">
@@ -70,7 +68,7 @@
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
-                                                                <th colspan="1">
+                                                                <th ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo" colspan="1">
                                                                 </th>
                                                                 <th>
                                                                     No
@@ -84,13 +82,11 @@
                                                                 <th>
                                                                     Faltas
                                                                 </th>
-                                                                <th colspan="1">
-                                                                </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr ng-repeat="estudiante in estudiantes">
-                                                                <th>
+                                                                <th ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo">
                                                                     <input type="checkbox" checklist-model="selected.ids_estudiantes" checklist-value="estudiante.id_estudiante"/>
                                                                 </th>
                                                                 <th>
@@ -103,11 +99,8 @@
                                                                     {{ estudiante.nombrecompleto }}
                                                                 </th>
                                                                 <th>
-                                                                    {{ estudiante.inasistencias }}
-                                                                </th>
-                                                                <th>
-                                                                    <a ng-click="open('lg',carga_seleccionada.id_carga_docente,estudiante.id_estudiante)">
-                                                                        Ver
+                                                                    <a href="#" ng-click="open('lg',carga_seleccionada.id_carga_docente,estudiante.id_estudiante)">
+                                                                        {{ estudiante.inasistencias }}
                                                                     </a>
                                                                 </th>
                                                             </tr>
@@ -121,7 +114,7 @@
                                         <!-- /.panel-body -->
                                     </div>
                                     <!-- /.panel -->
-                                    <div class="input-group">
+                                    <div ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo" class="input-group">
                                         <input type="date" ng-model="date_asistencia" class="form-control" aria-label="Fecha"/>
                                         <div class="input-group-btn">
                                             <button class="btn btn-default" type="submit" ng-click="addInasistencia(date_asistencia)">

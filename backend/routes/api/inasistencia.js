@@ -1,20 +1,26 @@
 var express = require('express');
 var router = express.Router();
-//var users = require('../queries/users');
+var FuncionesSeguridad= require('../../helpers/funcionesSeguridad');
+
 
 
 var inasistenciaController = require('../../controllers/inasistenciaController');
 var authenticate = require('./auth').authenticate;
 
-router.get('/mi_inasistencia', /*authenticate,*/inasistenciaController.getMiInasistencia);
-router.get('/cargas/:id_carga/estudiantes/:id_estudiante',/* authenticate,*/ inasistenciaController.getInasistenciaPorCarga);
-router.post('/inasistencia',/*authenticate,*/ inasistenciaController.addInasistencias)
-router.put('/estado',/*authenticate,*/ inasistenciaController.updateEstadoInasistencia)
-router.get('/cargas/:id_carga',inasistenciaController.getCantidadInasistenciasCarga);
-router.get('/materias',inasistenciaController.getMateriasWithInasistenciaByEstudiante);
-router.get('/materias/:id_materia',inasistenciaController.getInasistenciasByMateria);
-router.get('/cantida/inasistencia/materia',inasistenciaController.getCantidadInasistenciaMateria);//getInasistenciasEstudianteByCarga
-router.get('/carga/:id_carga/estudiante/:id_estudiante',/* authenticate,*/ inasistenciaController.getInasistenciasEstudianteByCarga);
+router.get('/mi_inasistencia', FuncionesSeguridad.autorizacion, inasistenciaController.getMiInasistencia);
+
+
+router.get('/cargas/:id_carga/estudiantes/:id_estudiante',FuncionesSeguridad.autorizacion, inasistenciaController.getInasistenciaPorCarga);
+router.post('/inasistencia',FuncionesSeguridad.autorizacion,  inasistenciaController.addInasistencias)
+router.put('/estado',FuncionesSeguridad.autorizacion,  inasistenciaController.updateEstadoInasistencia)
+
+
+router.get('/cargas/:id_carga', FuncionesSeguridad.autorizacion, inasistenciaController.getCantidadInasistenciasCarga);
+router.get('/materias', FuncionesSeguridad.autorizacion, inasistenciaController.getMateriasWithInasistenciaByEstudiante);
+router.get('/materias/:id_materia',FuncionesSeguridad.autorizacion, inasistenciaController.getInasistenciasByMateria);
+router.get('/cantida/inasistencia/materia',FuncionesSeguridad.autorizacion, inasistenciaController.getCantidadInasistenciaMateria);//getInasistenciasEstudianteByCarga
+router.get('/carga/:id_carga/estudiante/:id_estudiante', FuncionesSeguridad.autorizacion, inasistenciaController.getInasistenciasEstudianteByCarga);
+router.get('/loginmovil',FuncionesSeguridad.loginMovil);
 /*
 router.get('/cargas/:id_carga', function(req,res){
 	inasistenciaController.getInasistenciasCarga(req.params.id_carga, function(data){

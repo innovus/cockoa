@@ -17,7 +17,7 @@
                     <th>
                         Justificada
                     </th>
-                    <th>
+                    <th ng-show="permisoEdicion">
                         Acciones
                     </th>
                 </tr>
@@ -33,7 +33,7 @@
                             {{ show_estado_inasistencia(fecha) }}
                         </span>
                     </th>
-                    <th>
+                    <th ng-show="permisoEdicion">
                         <!-- form -->
                         <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onaftersave="updateEstado(fecha)">
                             <button  type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">

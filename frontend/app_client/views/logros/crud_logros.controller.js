@@ -4,9 +4,9 @@ app.run(function(editableOptions) {
 });
 app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookieStore', '$cookies', 'CONFIG', 'periodoData', 'actividadData', 'logroData', '$mdBottomSheet', '$mdToast', '$timeout', '$filter', function($scope, $http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter) {
     $scope.periodos = [];
-    $scope.periodo_sel = null;
+    $scope.periodoSeleccionado = null;
     $scope.activeTabIndex = 0;
-    $scope.periodo_actual = null;
+    $scope.periodoActual = null;
     $scope.logros = [];
     $scope.estudiantes = [];
     $scope.date_asistencia = new Date();
@@ -20,10 +20,10 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     //Trae el periodo Actual
     //periodoData.findPeriodoActual()
     //$http.get(CONFIG.http_address+'/api/todos/periodos/actual')
-    periodoData.findPeriodoActual().success(function(data) {
+    periodoData.findPeriodoActual().success(function(periodo) {
         console.log("entro al succes del controller")
-        $scope.periodo_actual = data[0];
-        console.log(data);
+        $scope.periodoActual = periodo[0];
+        console.log(periodo);
         periodoData.findPeriodos().success(function(data) {
             $scope.periodos = data;
             console.log("succes findPeriodos")
@@ -32,15 +32,15 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             for (var i = 0; i < data.length; i++) {
                 //entra cuando el periodo actual es encontrado en el vector
                 // console.log(data[i].id_periodo)
-                console.log($scope.periodo_actual)
-                if (data[i].id_periodo == $scope.periodo_actual.id_periodo) {
+                console.log($scope.periodoActual)
+                if (data[i].id_periodo == $scope.periodoActual.id_periodo) {
                     //selecciona el periodo actual en las tabs
                     $scope.activeTabIndex = i;
                     //
-                    $scope.periodo_sel = $scope.periodos[i];
+                    $scope.periodoSeleccionado = $scope.periodos[i];
                     // Trae todas las cargas de un periodo seleccionado
-                    //$http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
-                    periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo).success(function(data) {
+                    //$http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodoSeleccionado.id_periodo)
+                    periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
                         $scope.cargas = data;
                         //recorremos las cargas para organizarlas para el acordeon del sliderbar por materias
                         angular.forEach(data, function(carga) {
@@ -93,6 +93,10 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
                     },
                     id_logro: function() {
                         return id_logro
+                    },
+                    permisoEdicion: function(){
+                        if ($scope.periodoSeleccionado.id_periodo == $scope.periodoActual.id_periodo) return true;
+                        else return false;
                     }
                 }
             });
@@ -164,9 +168,9 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     ////////
     //funcion que se la usa cuando le da click en un tab
     $scope.getPeriodoId = function(index) {
-        $scope.periodo_sel = $scope.periodos[index];
-        //$http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodo_sel.id_periodo)
-        periodoData.findCargasByPeriodo($scope.periodo_sel.id_periodo).success(function(data) {
+        $scope.periodoSeleccionado = $scope.periodos[index];
+        //$http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodoSeleccionado.id_periodo)
+        periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
             $scope.cargas = data;
             var encontrado = false;
             //hace la busqueda si existe la misma carga en las nuevas cargas de este periodo
@@ -188,7 +192,19 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         });
     };
     $scope.selectCurso = function(carga) {
+            for (var i = 0; i < $scope.periodos.length; i++) {
+                //entra cuando el periodo actual es encontrado en el vector
+                // console.log(data[i].id_periodo)
+                console.log($scope.periodoActual)
+                if ($scope.periodos[i].id_periodo == $scope.periodoActual.id_periodo) {
+                    //selecciona el periodo actual en las tabs
+                    $scope.activeTabIndex = i;
+                    //
+                    $scope.periodoSeleccionado = $scope.periodos[i];
+                }
+            }
         seleccionarCarga(carga);
+
     }
 
     function seleccionarCarga(carga) {
@@ -198,6 +214,17 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             $scope.logros = logros;
             console.log($scope.logros);
             $scope.isPorcentajeCien = checkPorcentaje();
+
+
+            //////////////////
+
+         
+
+
+
+            /////////////////
+
+
         }); //CIERRA GET LOGROS
     } //CIERA FUNCION SELECIONAR CARGA
     function getLogros(id_carga, cb) {
@@ -295,9 +322,10 @@ app.config(function($mdThemingProvider) {
   $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();
   $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
 });*/
-app.controller('actividadesModalController', function($http, $scope, $q, $uibModalInstance, actividades, id_logro, actividadData) {
+app.controller('actividadesModalController', function($http, $scope, $q, $uibModalInstance, actividades, id_logro,permisoEdicion, actividadData) {
     $scope.actividades = actividades;
     $scope.id_logro = id_logro;
+    $scope.permisoEdicion = permisoEdicion;
     $scope.actividadesPorEliminar = [];
     $scope.isPorcentajeCien = true;
     console.log(actividades)

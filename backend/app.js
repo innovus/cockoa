@@ -1,3 +1,5 @@
+
+require('dotenv').load();
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -77,7 +79,8 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });*/
+/*
 app.listen(3000, function() {
     console.log('Servidor iniciado con express. Localhost Escuchando el puerto 3000')
-})
+})*/
 module.exports = app;

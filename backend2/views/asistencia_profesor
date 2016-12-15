@@ -1,0 +1,51 @@
+<html>
+<head>
+	<title>Asistencia</title>
+</head>
+<body>
+	<header id="app-header">
+		<h1>Cockoa</h1>
+	</header>
+
+	<section id="app-body">
+		<div>
+		<h1>Asistencia</h1>
+		<table>
+			<thead>
+    			<tr>
+      				<th>Fecha</th>
+      				<th>Periodo</th>
+      				<th>Docente</th>
+      				<th>Materia</th>
+      				<th>Tipo</th>
+      				<th>Justificada</th>
+    			</tr>
+  			</thead>
+  			<tbody>
+   				 <tr>
+      				<th>18/03/2016</th>
+      				<th>1</th>
+      				<th>Monica Media Huertas</th>
+      				<th>Ciencias Sociales</th>
+      				<th>Falta</th>
+      				<th>Si</th>
+    			</tr>
+     			<tr>
+      				<th>18/03/2016</th>
+      				<th>1</th>
+      				<th>Monica Media Huertas</th>
+      				<th>Ciencias Sociales</th>
+      				<th>Falta</th>
+      				<th>Si</th>
+    			</tr>
+    		</tbody>
+		</table>
+		</div>
+	</section>
+
+	<footer id="app-footer">
+		<p>Este es el footer</p>
+	</footer>
+
+</body>
+</html>

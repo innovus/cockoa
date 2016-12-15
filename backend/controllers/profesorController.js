@@ -1,15 +1,7 @@
 "use strict"
 var promise = require('bluebird');
-var options = {
-    // Initialization Options
-    promiseLib: promise
-};
-//"pg-promise": "^3.9.1",
-var pgp = require('pg-promise')(options);
-var pgp2 = require('pg-promise')();
-var connectionString = 'postgres://localhost:5432/liceo1';
-var db = pgp(connectionString);
-var respuesta = require("../helpers/respuesta");
+
+var Respuesta = require("../helpers/respuesta");
 var request = require('request');
 var carga_docenteDao = require("../app_core/dao/carga_docenteDao");
 var LogroDao = require("../app_core/dao/logroDao");
@@ -19,78 +11,144 @@ var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
 var DispositivoDao = require("../app_core/dao/dispositivoDao");
 var EstudianteDao = require("../app_core/dao/estudianteDao");
+var DocenteDao = require("../app_core/dao/docenteDao");
+
+var FuncionesSeguridad = require("../helpers/funcionesSeguridad");
 
 function getCursosMaterias(req, res) {
+
     var hoy = new Date();
     var dia = hoy.getDate();
     var mes = hoy.getMonth();
     var anio = hoy.getFullYear();
     var fecha_actual = String(anio + "-" + mes + "-" + dia);
-    carga_docenteDao.findCursosMateriasByFechaActual(fecha_actual).then(function(data) {
-        respuesta.sendJsonResponse(res, 200, data);
+
+
+    var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        console.log(decoded.rol)
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 6){
+            DocenteDao.findDocenteByIdUsuario(decoded.id).then(function(docente){
+                console.log(docente[0].id_docente)
+
+
+        
+    carga_docenteDao.findCursosMateriasByFechaActual(fecha_actual,docente[0].id_docente).then(function(data) {
+        Respuesta.sendJsonResponse(res, 200, data);
         console.log("la fucnion salio bn" + data)
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
-            respuesta.sendJsonResponse(res, 200, []);
+            Respuesta.sendJsonResponse(res, 200, []);
         } else {
             console.log(err.message);
-            respuesta.sendJsonResponse(res, 500, []);
+            Respuesta.sendJsonResponse(res, 500, []);
         }
     });
+
+
+
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            console.log("entro al else")
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
 }
 
 function getCursosMateriasPorPeriodo(req, res) {
-    carga_docenteDao.findCursosMateriasByPeriodo(req.params.id_periodo).then(function(data) {
-        respuesta.sendJsonResponse(res, 200, data);
+
+        var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        console.log(decoded.rol)
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 6){
+            DocenteDao.findDocenteByIdUsuario(decoded.id).then(function(docente){
+                console.log(docente[0].id_docente)
+
+
+    carga_docenteDao.findCursosMateriasByPeriodo(req.params.id_periodo, docente[0].id_docente).then(function(data) {
+        Respuesta.sendJsonResponse(res, 200, data);
         console.log("la fucnion salio bn" + data)
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
-            respuesta.sendJsonResponse(res, 200, []);
+            Respuesta.sendJsonResponse(res, 200, []);
         } else {
             console.log(err.message);
-            respuesta.sendJsonResponse(res, 500, []);
+            Respuesta.sendJsonResponse(res, 500, []);
         }
     });
+
+
+
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            console.log("entro al else")
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
+
+
 }
 
 function getLogros(req, res) {
     LogroDao.findLogrosByCargaDocente(req.params.id_carga).then(function(data) {
-        respuesta.sendJsonResponse(res, 200, data);
+        Respuesta.sendJsonResponse(res, 200, data);
         console.log("la fucnion salio bn" + data)
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
-            respuesta.sendJsonResponse(res, 200, []);
+            Respuesta.sendJsonResponse(res, 200, []);
         } else {
             console.log(err.message);
-            respuesta.sendJsonResponse(res, 500, []);
+            Respuesta.sendJsonResponse(res, 500, []);
         }
     });
 }
 
 function getActividades(req, res) {
     ActividadDao.findActividadesByLogro(req.params.id_logro).then(function(data) {
-        respuesta.sendJsonResponse(res, 200, data);
+        Respuesta.sendJsonResponse(res, 200, data);
         console.log("la fucnion salio bn" + data)
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
-            respuesta.sendJsonResponse(res, 200, []);
+            Respuesta.sendJsonResponse(res, 200, []);
         } else {
             console.log(err.message);
-            respuesta.sendJsonResponse(res, 500, []);
+            Respuesta.sendJsonResponse(res, 500, []);
         }
     });
 }
 
 function getActividadesByLogros(req, res) {
     ActividadDao.findActividadesByLogros(req.body).then(function(data) {
-        respuesta.sendJsonResponse(res, 200, data);
+        Respuesta.sendJsonResponse(res, 200, data);
         console.log("la fucnion salio bn" + data)
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
-            respuesta.sendJsonResponse(res, 200, []);
+            Respuesta.sendJsonResponse(res, 200, []);
         } else {
             console.log(err.message);
-            respuesta.sendJsonResponse(res, 500, []);
+            Respuesta.sendJsonResponse(res, 500, []);
         }
     });
 }
@@ -143,14 +201,14 @@ function getNotasActividades(req, res) {
 
         	}
         }*/
-        //respuesta.sendJsonResponse(res,200,estudiantes);
-        respuesta.sendJsonResponse(res, 200, data);
+        //Respuesta.sendJsonResponse(res,200,estudiantes);
+        Respuesta.sendJsonResponse(res, 200, data);
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
-            respuesta.sendJsonResponse(res, 200, []);
+            Respuesta.sendJsonResponse(res, 200, []);
         } else {
             console.log(err.message);
-            respuesta.sendJsonResponse(res, 500, []);
+            Respuesta.sendJsonResponse(res, 500, []);
         }
     });
 }
@@ -173,17 +231,17 @@ function updateActividades(req, res) {
    });
 	if(sumatoria != 100) {
 		console.log("sumatoria != 100")
-		respuesta.sendJsonResponse(res,500,{'status':2,'msg':'La sumatoria debe ser 100%'})
+		Respuesta.sendJsonResponse(res,500,{'status':2,'msg':'La sumatoria debe ser 100%'})
 
 	}else{*/
     ActividadDao.updateActividades(req.body).then(function() {
-            respuesta.sendJsonResponse(res, 200, {
+            Respuesta.sendJsonResponse(res, 200, {
                 'status': 0,
                 'msg': 'Todos los ingresos correctos'
             })
         }).catch(function(error) {
             console.log(error)
-            respuesta.sendJsonResponse(res, 500, {
+            Respuesta.sendJsonResponse(res, 500, {
                 'status': 1,
                 'msg': error
             })
@@ -198,19 +256,19 @@ function updatePorcentajesLogros(req, res) {
     });
     console.log(sumatoria)
     if (sumatoria != 100) {
-        respuesta.sendJsonResponse(res, 500, {
+        Respuesta.sendJsonResponse(res, 500, {
             'status': 2,
             'msg': 'La sumatoria debe ser 100%'
         })
     } else {
         LogroDao.updatePorcentajesLogros(req.body).then(function() {
-            respuesta.sendJsonResponse(res, 200, {
+            Respuesta.sendJsonResponse(res, 200, {
                 'status': 0,
                 'msg': 'Todos los ingresos correctos'
             })
         }).catch(function(error) {
             console.log(error)
-            respuesta.sendJsonResponse(res, 500, {
+            Respuesta.sendJsonResponse(res, 500, {
                 'status': 1,
                 'msg': error
             })
@@ -243,13 +301,13 @@ function insertNota(req, res) {
     if (req.params.table == "logros") {
         console.log("es logros")
         Nota_logroDao.insertNotasLogros(req.body).then(function() {
-            respuesta.sendJsonResponse(res, 200, {
+            Respuesta.sendJsonResponse(res, 200, {
                 'status': 0,
                 'msg': 'Todos los ingresos correctos'
             })
         }).catch(function(error) {
             console.log(error)
-            respuesta.sendJsonResponse(res, 500, {
+            Respuesta.sendJsonResponse(res, 500, {
                 'status': 1,
                 'msg': error
             })
@@ -313,13 +371,13 @@ function insertNota(req, res) {
                 console.log("error notificacion")
                 console.log(error)
             })
-            respuesta.sendJsonResponse(res, 200, {
+            Respuesta.sendJsonResponse(res, 200, {
                 'status': 0,
                 'msg': 'Todos los ingresos correctos'
             })
         }).catch(function(error) {
             console.log(error)
-            respuesta.sendJsonResponse(res, 500, {
+            Respuesta.sendJsonResponse(res, 500, {
                 'status': 1,
                 'msg': error
             })
@@ -331,26 +389,26 @@ function updateNota(req, res) {
     console.log("Entro a updateNota")
     if (req.params.table == "logros") {
         Nota_logroDao.updateNotaLogro(req.body).then(function() {
-            respuesta.sendJsonResponse(res, 200, {
+            Respuesta.sendJsonResponse(res, 200, {
                 'status': 0,
                 'msg': 'Actualizo la nota con exito'
             })
         }).catch(function(error) {
             console.log(error)
-            respuesta.sendJsonResponse(res, 500, {
+            Respuesta.sendJsonResponse(res, 500, {
                 'status': 1,
                 'msg': error
             })
         })
     } else if (req.params.table == "actividades") {
         Nota_actividadDao.updateNotaActividad(req.body).then(function() {
-            respuesta.sendJsonResponse(res, 200, {
+            Respuesta.sendJsonResponse(res, 200, {
                 'status': 0,
                 'msg': 'Actualizo la nota con exito'
             })
         }).catch(function(error) {
             console.log(error)
-            respuesta.sendJsonResponse(res, 500, {
+            Respuesta.sendJsonResponse(res, 500, {
                 'status': 1,
                 'msg': error
             })
@@ -361,13 +419,13 @@ function updateNota(req, res) {
 function deleteLogro(req, res) {
     console.log("Eliminar Logro");
     LogroDao.deleteLogro(req.params.id_logro).then(function() {
-        respuesta.sendJsonResponse(res, 200, {
+        Respuesta.sendJsonResponse(res, 200, {
             'status': 0,
             'msg': 'Elimino el logro con exito'
         })
     }).catch(function(error) {
         console.log(error)
-        respuesta.sendJsonResponse(res, 500, {
+        Respuesta.sendJsonResponse(res, 500, {
             'status': 1,
             'msg': error
         })
@@ -377,13 +435,13 @@ function deleteLogro(req, res) {
 function deleteActividad(req, res) {
     console.log("Eliminar Actividad");
     ActividadDao.deleteActividad(req.params.id_actividad).then(function() {
-        respuesta.sendJsonResponse(res, 200, {
+        Respuesta.sendJsonResponse(res, 200, {
             'status': 0,
             'msg': 'Elimino la actividad con exito'
         })
     }).catch(function(error) {
         console.log(error)
-        respuesta.sendJsonResponse(res, 500, {
+        Respuesta.sendJsonResponse(res, 500, {
             'status': 1,
             'msg': error
         })
@@ -393,13 +451,13 @@ function deleteActividad(req, res) {
 function deleteActividades(req, res) {
     console.log("Eliminar Actividad");
     ActividadDao.deleteActividades(req.body).then(function() {
-        respuesta.sendJsonResponse(res, 200, {
+        Respuesta.sendJsonResponse(res, 200, {
             'status': 0,
             'msg': 'Elimino la actividad con exito'
         })
     }).catch(function(error) {
         console.log(error)
-        respuesta.sendJsonResponse(res, 500, {
+        Respuesta.sendJsonResponse(res, 500, {
             'status': 1,
             'msg': error
         })
@@ -408,12 +466,12 @@ function deleteActividades(req, res) {
 
 function updateDescripcionLogro(req, res) {
     LogroDao.updateDescripcionLogro(req.body).then(function() {
-        respuesta.sendJsonResponse(res, 200, {
+        Respuesta.sendJsonResponse(res, 200, {
             'status': 0,
             'msg': 'Actualizo el Logro con exito'
         })
     }).catch(function() {
-        respuesta.sendJsonResponse(res, 500, {
+        Respuesta.sendJsonResponse(res, 500, {
             'status': 0,
             'msg': 'Se produjo un erro en la actualizacion'
         })
@@ -423,13 +481,13 @@ function updateDescripcionLogro(req, res) {
 function createActividad(req, res) {
     ActividadDao.createActividad(req.body).then(function(actividad) {
         console.log(actividad)
-        respuesta.sendJsonResponse(res, 200, {
+        Respuesta.sendJsonResponse(res, 200, {
             'id_actividad': actividad[0],
             'status': 0,
             'msg': 'Se agrego la actividad con exito'
         })
     }).catch(function() {
-        respuesta.sendJsonResponse(res, 500, {
+        Respuesta.sendJsonResponse(res, 500, {
             'status': 0,
             'msg': 'Se produjo un error'
         })
@@ -439,12 +497,12 @@ function createActividad(req, res) {
 function createActividades(req, res) {
     ActividadDao.createActividades(req.body).then(function(actividad) {
         console.log(actividad)
-        respuesta.sendJsonResponse(res, 200, {
+        Respuesta.sendJsonResponse(res, 200, {
             'status': 0,
             'msg': 'Se agrego la actividad con exito'
         })
     }).catch(function() {
-        respuesta.sendJsonResponse(res, 500, {
+        Respuesta.sendJsonResponse(res, 500, {
             'status': 0,
             'msg': 'Se produjo un error'
         })
@@ -453,13 +511,13 @@ function createActividades(req, res) {
 
 function createLogro(req, res) {
     LogroDao.createLogro(req.body).then(function(logro) {
-        respuesta.sendJsonResponse(res, 200, {
+        Respuesta.sendJsonResponse(res, 200, {
             'id_logro': logro[0],
             'status': 0,
             'msg': 'Se agrego el logro con exito'
         })
     }).catch(function() {
-        respuesta.sendJsonResponse(res, 500, {
+        Respuesta.sendJsonResponse(res, 500, {
             'status': 0,
             'msg': 'Se produjo un error'
         })
@@ -468,12 +526,12 @@ function createLogro(req, res) {
 
 function updateDescripcionActividad(req, res) {
     ActividadDao.updateDescripcionActividad(req.body).then(function() {
-        respuesta.sendJsonResponse(res, 200, {
+        Respuesta.sendJsonResponse(res, 200, {
             'status': 0,
             'msg': 'Se actualizo la actividad con exito'
         })
     }).catch(function() {
-        respuesta.sendJsonResponse(res, 500, {
+        Respuesta.sendJsonResponse(res, 500, {
             'status': 0,
             'msg': 'Se produjo un error'
         })
@@ -482,9 +540,9 @@ function updateDescripcionActividad(req, res) {
 
 function getActividadById(req, res) {
     ActividadDao.findActividadById(req.params.id_actividad).then(function(data) {
-        respuesta.sendJsonResponse(res, 200, data);
+        Respuesta.sendJsonResponse(res, 200, data);
     }).catch(function(error) {
-        respuesta.sendJsonResponse(res, 500, {});
+        Respuesta.sendJsonResponse(res, 500, {});
     })
 }
 
@@ -511,9 +569,9 @@ function guardarLogrosTransaccion(req, res) {
     console.log(createA);
     LogroDao.guardarLogrosTransaccion(deleteA, updateA, createA, function(bien, error) {
         if (bien == null) {
-            respuesta.sendJsonResponse(res, 500, error);
+            Respuesta.sendJsonResponse(res, 500, error);
         } else {
-            respuesta.sendJsonResponse(res, 200, bien);
+            Respuesta.sendJsonResponse(res, 200, bien);
         }
     })
 }
@@ -541,18 +599,18 @@ function guardarActividadesTransaccion(req, res) {
     console.log(createA);
     ActividadDao.guardarActividadesTransaccion(deleteA, updateA, createA, function(bien, error) {
         if (bien == null) {
-            respuesta.sendJsonResponse(res, 500, error);
+            Respuesta.sendJsonResponse(res, 500, error);
         } else {
-            respuesta.sendJsonResponse(res, 200, bien);
+            Respuesta.sendJsonResponse(res, 200, bien);
         }
     })
 }
 function getAllEstudianteByIdCurso(req,res){
     EstudianteDao.findAllEstudianteByIdCurso(req.params.id_curso).then(function(data){
-         respuesta.sendJsonResponse(res, 200, data);
+         Respuesta.sendJsonResponse(res, 200, data);
     }).catch(function(error){
         console.log(error)
-         respuesta.sendJsonResponse(res, 500, {});
+         Respuesta.sendJsonResponse(res, 500, {});
 
     })
 
@@ -594,16 +652,16 @@ function getNotasLogros(req, res) {
         	
         	}
 
-        respuesta.sendJsonResponse(res,200,estudiantes);
+        Respuesta.sendJsonResponse(res,200,estudiantes);
         console.log(estudiantes);
         */
-        respuesta.sendJsonResponse(res, 200, data);
+        Respuesta.sendJsonResponse(res, 200, data);
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
-            respuesta.sendJsonResponse(res, 200, []);
+            Respuesta.sendJsonResponse(res, 200, []);
         } else {
             console.log(err.message);
-            respuesta.sendJsonResponse(res, 500, []);
+            Respuesta.sendJsonResponse(res, 500, []);
         }
     });
 }
