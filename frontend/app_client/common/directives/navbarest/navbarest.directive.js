@@ -1,4 +1,14 @@
 (function() {
+
+     /** 
+     * @ngdoc directive
+     * @name docentes.directive:navbarest
+     * @restrict EA
+     * @description
+     * 
+     * Esta es una directiva en para la abrra superior de los estudiantes
+     * 
+    */
     angular.module('docentes').directive('navbarest', navbarest);
 
     function navbarest() {

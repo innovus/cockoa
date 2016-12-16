@@ -9,7 +9,7 @@
                 url: CONFIG.http_address + '/estudiantes/notificaciones',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization' : 'Bearer '+autenticacion.getToken(),
+                    'Authorization' : 'Bearer '+CONFIG.token,
                 }
             })
         };
@@ -19,7 +19,7 @@
                 url: CONFIG.http_address + '/estudiantes/notificaciones/pendientes',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization' : 'Bearer '+autenticacion.getToken(),
+                    'Authorization' : 'Bearer '+CONFIG.token,
                 }
             })
         };
@@ -36,7 +36,7 @@
                 url: CONFIG.http_address + '/estudiantes/notificaciones/estado',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization' : 'Bearer '+autenticacion.getToken(),
+                    'Authorization' : 'Bearer '+CONFIG.token,
                 },
                 data: {
                     'id_notificacion': id_notificacion

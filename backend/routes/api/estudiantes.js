@@ -15,7 +15,7 @@ router.get('/actividades/notas', FuncionesSeguridad.autorizacion,estudiantesCont
 
 //de post a get
 router.get('/notificaciones/',FuncionesSeguridad.autorizacion ,estudiantesController.getNotificaciones);
-router.get('/notas/logros/materia/:id_estudiante',FuncionesSeguridad.autorizacion,estudiantesController.getNotaLogrosMaterias);
+router.get('/notas/logros/materia/',FuncionesSeguridad.autorizacion,estudiantesController.getNotaLogrosMaterias);
 router.get('/logro/:id_logro/notas/actividad/',FuncionesSeguridad.autorizacion,estudiantesController.getNotasActividadbyLogro);
 router.get('/tipos_notificaciones/'/*authenticate,*/,estudiantesController.getTiposNotificacion);
 

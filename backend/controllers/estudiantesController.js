@@ -76,7 +76,16 @@ function getNotaLogrosMaterias(req, res) {
     var anio = hoy.getFullYear();
     var fecha_actual = String(anio + "-" + mes + "-" + dia);
 
-    Nota_logroDao.findNotasLogrosByMateria(fecha_actual, req.params.id_estudiante).
+        var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+
+
+                    Nota_logroDao.findNotasLogrosByMateria(fecha_actual, estudiante[0].id_estudiante).
     then(function(data) {
         Respuesta.sendJsonResponse(res, 200, data);
     }).catch(function(err) {
@@ -87,6 +96,21 @@ function getNotaLogrosMaterias(req, res) {
             Respuesta.sendJsonResponse(res, 500, []);
         }
     });
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
+
 }
 
 function getMateriasEstudiante(req, res) {

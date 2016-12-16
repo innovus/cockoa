@@ -1,8 +1,8 @@
 (function() {
     angular.module("docentes").controller("navbarestCtrl", navbarestCtrl);
-    navbarestCtrl.$inject = ["$scope", "$location", "notificacionData", "$filter","$window", "autenticacion","$cookieStore","$log"];
+    navbarestCtrl.$inject = ["$scope", "$location", "notificacionData", "$filter","$window", "autenticacion","$cookieStore","$log","CONFIG"];
 
-    function navbarestCtrl($scope, $location, notificacionData, $filter,$window, autenticacion,$cookieStore,$log) {
+    function navbarestCtrl($scope, $location, notificacionData, $filter,$window, autenticacion,$cookieStore,$log, CONFIG) {
         console.log("hizo algo")
         $scope.notificaciones = [];
         $scope.cantidadNotificaciones = 0;
