@@ -1,13 +1,57 @@
 (function() {
     angular.module("docentes").controller("navbarestCtrl", navbarestCtrl);
-    navbarestCtrl.$inject = ["$scope", "$location", "notificacionData", "$filter"];
+    navbarestCtrl.$inject = ["$scope", "$location", "notificacionData", "$filter","$window", "autenticacion","$cookieStore","$log"];
 
-    function navbarestCtrl($scope, $location, notificacionData, $filter) {
+    function navbarestCtrl($scope, $location, notificacionData, $filter,$window, autenticacion,$cookieStore,$log) {
         console.log("hizo algo")
         $scope.notificaciones = [];
         $scope.cantidadNotificaciones = 0;
         $scope.notificaciones_pendientes = [];
         cargarNotificaciones();
+
+
+
+        $scope.currentPath= $location.path();
+        $scope.isLoggedIn= false;
+        $scope.currentUser=null;
+        $scope.rutaInicio=CONFIG.http_seguridad;
+        $scope.opciones=null;
+
+
+        var init= function(){
+            
+            autenticacion.isLoggedIn(function(data,error){
+                if(error){
+                    $log.log(error);
+                }
+                else if(data){
+                    $scope.currentUser=data;
+                    $scope.isLoggedIn=true;
+                    autenticacion.obtenerRutas().success(function(data){
+                         $log.debug(data);
+                         $scope.opciones=data;
+                    }).error(function(error){
+                         console.log(error);
+                         $log.debug(error);   
+                    });
+                }    
+            });
+        };
+
+        $scope.logout=function(){
+            autenticacion.logout().success(function(data){
+                if($cookieStore.get("udenar")){
+                  $cookieStore.remove("udenar");
+                }
+                else{
+                    console.log("no existe la cookie");
+                }
+                $window.location="http://localhost:4000";
+            }).error(function(data){
+                alert("hubo un error en la cerrada  de la sesion");    
+            });     
+        };
+
 
         function cargarNotificaciones() {
             notificacionData.findNotificationByEstudiante(30011).success(function(data) {
@@ -42,19 +86,6 @@
                 $location.path('/estudiantes/inasistencias');
             }
         }
-        var navvm = this;
-        navvm.currentPath = $location.path();
-        navvm.notas = function() {
-            $location.path('/notas');
-        };
-        navvm.inasistencias = function() {
-            $location.path('/inasistencias');
-        };
-        navvm.logros = function() {
-            $location.path('/logros');
-        };
-        navvm.notificaciones = function() {
-            $location.path('/notificaciones');
-        };
+        init();
     }
 })();

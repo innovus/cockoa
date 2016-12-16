@@ -7,7 +7,8 @@
             scope: {
                 content: '=content'
             },
-            templateUrl: '/common/directives/navbar/navbar.template.html'
+            templateUrl: '/common/directives/navbar/navbar.template.html',
+            controller: 'navbarCtrl'
         };
     }
 })();

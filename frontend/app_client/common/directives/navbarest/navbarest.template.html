@@ -56,6 +56,12 @@
                         </li>
                     </ul>
                 </li>
+                <li ng-repeat="opcion in opciones">
+                    <a href="{{ opcion.ruta }}">
+                        {{ opcion.nombre_opcion }}
+                    </a>
+                </li>
+                <!--
                 <li>
                     <a href="/#/estudiantes/inasistencias">
                         Asistencia
@@ -66,6 +72,7 @@
                         Notas
                     </a>
                 </li>
+                -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="/img/avatar04.png" class="user-image" alt="User Image"/>
