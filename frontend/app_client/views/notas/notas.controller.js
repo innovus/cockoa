@@ -9,16 +9,7 @@
 
 
 (function() {
-    /** 
-     * @ngdoc controller
-     * @name waitController
-     * requires $mdDialog, $rootScope
-     * @description
-     * controlador que se usa para que se active un modal con un icono de cargando
-     * para que el usuario no de click en algo hasta que cargen los datos por completo
-     * 
-     * 
-     */
+    
 
     angular.module('docentes').run(function(editableOptions) {
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
@@ -30,7 +21,7 @@
 
     /** 
      * @ngdoc controller
-     * @name waitController
+     * @name docentes.controller:waitController
      * requires $mdDialog, $rootScope
      * @description
      * controlador que se usa para que se active un modal con un icono de cargando
@@ -48,7 +39,7 @@
 
     /** 
      * @ngdoc controller
-     * @name showLogroController
+     * @name docentes.controller:showLogroController
      * @requires $scope, $uibModalInstance, logro
      * @description
      * Este recibe un logro como parametro que es el que me va a mostrar en la ventana modal
@@ -68,7 +59,7 @@
 
     /** 
      * @ngdoc controller
-     * @name showActividadController
+     * @name  docentes.controller:showActividadController
      * @requires $scope, $uibModalInstance, actividad
      * @description
      * Este recibe una actividad como parametro que es el que me va a mostrar en la ventana modal
@@ -91,7 +82,7 @@
 
     /** 
      * @ngdoc controller
-     * @name docentesNotasController
+     * @name docentes.controller:docentesNotasController
      * requires $scope, CONFIG, periodoData, estudianteData, actividadData,logroData, nota_actividadData,nota_logroData, $filter, uibModal, myutils
      * @description
      * Este controlador maneja toda la parte principal de la pagina de notas por parte del docente 
@@ -189,11 +180,11 @@
         /**
          * @ngdoc method
          * @name showLogro
-         * @methodOf docentes.docentesNotasController
+         * @methodOf docentes.controller:docentesNotasController
          * @description
          * Este metodo es el que abre el modal y muestra el logro
          *
-         * @param {json} Va en formato JSON un objeto logro 
+         * @param {Object} logro logro es de tipo objject 
          * 
         */
         var showLogro = function(logro) {
@@ -862,11 +853,13 @@
          * @ngdoc method
          * @name delNull
          * @methodOf docentes.docentesNotasController
+         *
+         * @param {string} item item es un string al que queremos quitarle cuando sea un campo null
          * @description
          * este metodo mandamos un item y cuando sea null nos pone unas cadenas en vacio
          * 
-         * @param {String} 
-         * @return {String}
+         
+         * @return {string} item item retorna el mismo item pero cuando es null pone ""
         */
 
         var delNull = function(item) {

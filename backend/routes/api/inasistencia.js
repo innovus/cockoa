@@ -19,7 +19,7 @@ router.get('/cargas/:id_carga', FuncionesSeguridad.autorizacion, inasistenciaCon
 router.get('/materias', FuncionesSeguridad.autorizacion, inasistenciaController.getMateriasWithInasistenciaByEstudiante);
 router.get('/materias/:id_materia',FuncionesSeguridad.autorizacion, inasistenciaController.getInasistenciasByMateria);
 router.get('/cantida/inasistencia/materia',FuncionesSeguridad.autorizacion, inasistenciaController.getCantidadInasistenciaMateria);//getInasistenciasEstudianteByCarga
-router.get('/carga/:id_carga/estudiante/:id_estudiante', FuncionesSeguridad.autorizacion, inasistenciaController.getInasistenciasEstudianteByCarga);
+router.get('/estudiante/carga/:id_carga/', FuncionesSeguridad.autorizacion, inasistenciaController.getInasistenciasEstudianteByCarga);
 router.get('/loginmovil',FuncionesSeguridad.loginMovil);
 /*
 router.get('/cargas/:id_carga', function(req,res){

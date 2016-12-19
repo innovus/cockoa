@@ -1,60 +1,71 @@
-//una function javascript q se llama asi misma
 (function() {
+
+    /** 
+     * @ngdoc controller
+     * @name docentes.controller:inasistenciaEstudianteController 
+     * @requires $scope,$http,$cookieStore, materiaData, inasistenciaData
+     * @description
+     * 
+     * Esta es una controllador para manejar la vista de inasistencias del estudiante
+     * 
+    */
+
+
     var app = angular.module('docentes'); //creamos el modulo pokedex y le pasamos array con las dependencias
     //creamos un controlador
     //definimos el primer controlador, le pasamos el nombre
     //del controlador y le pasamos una function javascript
     //Agregamos el objecto pokemon asociado al controlador
-    app.controller('inasistenciaEstudianteController', ['$scope', '$http', '$cookieStore', '$cookies', 'materiaData', 'inasistenciaData', function($scope, $http, $cookieStore, $cookies, materiaData, inasistenciaData) {
+    app.controller('inasistenciaEstudianteController', ['$scope', '$http', '$cookieStore', 'materiaData', 'inasistenciaData', function($scope, $http, $cookieStore, materiaData, inasistenciaData) {
         $scope.materia_seleccionada = null;
         $scope.inasistencias = null;
         //////////////////////
+
+
+        /** 
+        * @ngdoc method
+        * @name getInasistenciasByMateria
+        * @methodOf docentes.controller:inasistenciaEstudianteController 
+        * @param {Object} materia materia es un objeto donde tiene todos los datos de una materia
+        *
+        * @description
+        * 
+        * Este metodo se lo usa para obtener las inasistencias de una materia
+        * 
+        * 
+        */ 
         $scope.getInasistenciasByMateria = function(materia) {
-                $scope.materia_seleccionada = materia;
-                inasistenciaData.findInasistenciasByMateria(materia.id_materia).success(function(data) {
-                    $scope.inasistencias = data;
-                    for (var i = $scope.inasistencias.length - 1; i >= 0; i--) {
-                        $scope.inasistencias[i].nombre1 = delNull($scope.inasistencias[i].nombre1);
-                        $scope.inasistencias[i].nombre2 = delNull($scope.inasistencias[i].nombre2);
-                        $scope.inasistencias[i].apellido1 = delNull($scope.inasistencias[i].apellido1);
-                        $scope.inasistencias[i].apellido2 = delNull($scope.inasistencias[i].apellido2);
-                        $scope.inasistencias[i].nombrecompleto = $scope.inasistencias[i].nombre1 + " " + $scope.inasistencias[i].nombre2 + " " + $scope.inasistencias[i].apellido1 + " " + $scope.inasistencias[i].apellido2;
-                    } //cierra dor
-                    console.log(data);
-                }).error(function(error) {
-                    console.log('Error: ' + error);
-                })
-            }
-            // Cuando se cargue la página, pide del API todos los TODOs
-            // $http.get('/estudiantes/materias')
-        materiaData.findMateriasWithInasistenciaByEstudiante().success(function(data) {
-            $scope.materias = data;
-            console.log($scope.materias)
-        }).error(function(data) {
-            console.log('Error: ' + data);
-        });
-        //////////////////////
-        //  $scope.formData = {};
-        // Cuando se cargue la página, pide del API todos los TODOs
+            $scope.materia_seleccionada = materia;
+            inasistenciaData.findInasistenciasByMateria(materia.id_materia).success(function(data) {
+                $scope.inasistencias = data;
+                for (var i = $scope.inasistencias.length - 1; i >= 0; i--) {
+                    $scope.inasistencias[i].nombre1 = delNull($scope.inasistencias[i].nombre1);
+                    $scope.inasistencias[i].nombre2 = delNull($scope.inasistencias[i].nombre2);
+                    $scope.inasistencias[i].apellido1 = delNull($scope.inasistencias[i].apellido1);
+                    $scope.inasistencias[i].apellido2 = delNull($scope.inasistencias[i].apellido2);
+                    $scope.inasistencias[i].nombrecompleto = $scope.inasistencias[i].nombre1 + " " + $scope.inasistencias[i].nombre2 + " " + $scope.inasistencias[i].apellido1 + " " + $scope.inasistencias[i].apellido2;
+                } //cierra dor
+                console.log(data);
+            }).error(function(error) {
+                console.log('Error: ' + error);
+            })
+        }
+
+
+
+        /** 
+        * @ngdoc method
+        * @name selectCurso
+        * @methodOf docentes.controller:inasistenciaEstudianteController  
+        * @param {String} id_curso id_curso es el id de el curso a consultar
+        *
+        * @description
+        * 
+        * Este metodo se lo usa para que cuando un estudiante de click en una notificacion pendiente
+        * 
+        * 
+        */ 
         /*
-    $http.get('/inasistencias/inasistencias')
-      .success(function(data) {
-        //JSON.stringify(data).replace(/null/i, "\"\""); 
-        $scope.inasistencias = data;
-        console.log(data)
-        console.log($cookies.accessToken);
-            
-        for (var i = $scope.inasistencias.length - 1; i >= 0; i--) {
-          $scope.inasistencias[i].nombre1 = delNull($scope.inasistencias[i].nombre1);
-          $scope.inasistencias[i].nombre2 = delNull($scope.inasistencias[i].nombre2);
-          $scope.inasistencias[i].apellido1 = delNull($scope.inasistencias[i].apellido1);
-          $scope.inasistencias[i].apellido2 = delNull($scope.inasistencias[i].apellido2);
-          $scope.inasistencias[i].nombrecompleto = $scope.inasistencias[i].nombre1 + " "+ $scope.inasistencias[i].nombre2 + " " + $scope.inasistencias[i].apellido1 + " "+  $scope.inasistencias[i].apellido2; 
-        };
-      }).error(function(data) {
-        console.log('Error: ' + data);
-      });
-*/
         $scope.selectCurso = function(id_curso) {
             $http.get('/api/cursos/' + id_curso + '/estudiantes').success(function(est) {
                 $scope.estudiantes = est;
@@ -71,6 +82,15 @@
                 console.log('Error: ' + error);
             })
         }
+        */
+
+
+         materiaData.findMateriasWithInasistenciaByEstudiante().success(function(data) {
+            $scope.materias = data;
+            console.log($scope.materias)
+        }).error(function(data) {
+            console.log('Error: ' + data);
+        });
     }]);
 })();
 
@@ -80,19 +100,4 @@ function delNull(item) {
     } else {
         return item;
     }
-}
-
-function setCookieData(cookies, accesstoken) {
-    var accessToken = accesstoken;
-    cookies.put("accessToken", accesstoken);
-}
-
-function getCookieData(cookies) {
-    var accessToken = cookies.get("accessToken");
-    return accessToken;
-}
-
-function clearCookieData(cookies) {
-    var accessToken = "";
-    cookies.remove("accessToken");
 }

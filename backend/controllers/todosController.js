@@ -6,6 +6,8 @@ var options = {
 };
 var PeriodoDao = require("../app_core/dao/periodoDao");
 var respuesta = require("../helpers/respuesta");
+var PersonaDao = require("../app_core/dao/personaDao");
+var FuncionesSeguridad = require("../helpers/funcionesSeguridad");
 
 function getPeriodosDisponibles(req, res) {
     var hoy = new Date();
@@ -28,6 +30,25 @@ function getPeriodosDisponibles(req, res) {
     })
 }
 
+function getPerfil(req,res){
+    var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        PersonaDao.findPersonaByIdUsuario(decoded.id).then(function(persona){
+            respuesta.sendJsonResponse(res, 200, persona);
+
+        }).catch(function(err){
+            if (err.message == 'No data returned from the query.') {
+                respuesta.sendJsonResponse(res, 200, {});
+            } else {
+                console.log(err.message);
+                respuesta.sendJsonResponse(res, 500, {});
+            }
+
+        })
+    });
+
+}
+
 function getPeriodoActual(req, res) {
     var hoy = new Date();
     var dia = hoy.getDate();
@@ -48,5 +69,6 @@ function getPeriodoActual(req, res) {
 }
 module.exports = {
     getPeriodosDisponibles: getPeriodosDisponibles,
-    getPeriodoActual: getPeriodoActual
+    getPeriodoActual: getPeriodoActual,
+    getPerfil: getPerfil,
 }

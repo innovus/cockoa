@@ -4124,7 +4124,6 @@ function InterimElementProvider() {
  * });
  * ```
  *
- * @returns {$$mdMeta.$service}
  *
  */
 angular.module('material.core.meta', [])
@@ -5940,7 +5939,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    *
    * The theme name that is passed in must match the name of the theme that was defined as part of the configuration block.
    *
-   * @param name {string} theme name to generate
+   * @param name {string} themeName to generate
    */
 
   /**

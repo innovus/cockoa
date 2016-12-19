@@ -17,7 +17,18 @@ var FuncionesSeguridad = require("../helpers/funcionesSeguridad");
 
 
 function getInasistenciasEstudianteByCarga(req,res){
-    InasistenciaDao.findInasistenciasEstudianteByCarga(req.params.id_carga,req.params.id_estudiante)
+
+
+         var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+        
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante);
+
+
+                        InasistenciaDao.findInasistenciasEstudianteByCarga(req.params.id_carga,estudiante[0].id_estudiante)
     .then(function(data){
         respuesta.sendJsonResponse(res,200,data);
         console.log("la fucnion salio bn" + data)
@@ -30,6 +41,26 @@ function getInasistenciasEstudianteByCarga(req,res){
             respuesta.sendJsonResponse(res,500,[]);
         }
     });
+
+
+
+
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
+
+
 } 
 
 function getCantidadInasistenciaMateria(req,res){
@@ -43,7 +74,7 @@ function getCantidadInasistenciaMateria(req,res){
                 console.log(estudiante[0].id_estudiante);
 
 
-                    InasistenciaDao.findCantidadInasistenciasBYMateria(30011)
+                    InasistenciaDao.findCantidadInasistenciasBYMateria(estudiante[0].id_estudiante)
     .then(function(data){
         respuesta.sendJsonResponse(res,200,data);
         console.log("la fucnion salio bn" + data)

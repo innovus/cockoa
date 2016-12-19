@@ -1,4 +1,15 @@
 (function() {
+
+     /** 
+     * @ngdoc controller
+     * @name docentes.controller:navbarestCtrl  
+     * @requires $scope, $location, notificacionData,$filter, $window, autenticacion,$cookieStore,$log, CONFIG
+     * @description
+     * 
+     * Esta es una controllador para manejar la barra superior del ESTUDIANTE
+     * 
+    */
+
     angular.module("docentes").controller("navbarestCtrl", navbarestCtrl);
     navbarestCtrl.$inject = ["$scope", "$location", "notificacionData", "$filter","$window", "autenticacion","$cookieStore","$log","CONFIG"];
 
@@ -6,16 +17,16 @@
         console.log("hizo algo")
         $scope.notificaciones = [];
         $scope.cantidadNotificaciones = 0;
-        $scope.notificaciones_pendientes = [];
-        cargarNotificaciones();
-
-
+        $scope.notificacionesPendientes = [];
 
         $scope.currentPath= $location.path();
         $scope.isLoggedIn= false;
         $scope.currentUser=null;
         $scope.rutaInicio=CONFIG.http_seguridad;
         $scope.opciones=null;
+
+
+        cargarNotificaciones();
 
 
         var init= function(){
@@ -53,19 +64,44 @@
         };
 
 
+
+        /** 
+        * @ngdoc method
+        * @name cargarNotificaciones
+        * @methodOf docentes.controller:navbarestCtrl  
+        * @description
+        * 
+        * Este metodo consulta  las notificaciones que tiene el estudiante
+        * y la cantidad de notificaciones pendientes
+        * 
+        */
+
         function cargarNotificaciones() {
-            notificacionData.findNotificationByEstudiante(30011).success(function(data) {
+            notificacionData.findNotificationByEstudiante().success(function(data) {
                 console.log("entro al succes")
                 $scope.notificaciones = data;
-                $scope.notificaciones_pendientes = $filter('filter')($scope.notificaciones, {
+                $scope.notificacionesPendientes = $filter('filter')($scope.notificaciones, {
                     estado_notificacion: "0"
                 });
-                $scope.cantidadNotificaciones = $scope.notificaciones_pendientes.length
+                $scope.cantidadNotificaciones = $scope.notificacionesPendientes.length
                 console.log(data)
             }).error(function(error) {
                 console.log(error);
             });
         }
+
+        /** 
+        * @ngdoc method
+        * @name clickNotificacion
+        * @methodOf docentes.controller:navbarestCtrl  
+        * @param {Object} notificacion notificacion es un objeto donde tiene todos los datos de una notificacion
+        *
+        * @description
+        * 
+        * Este metodo se lo usa para que cuando un estudiante de click en una notificacion pendiente
+        * se cambie el estado y la proxima vez salga 
+        * 
+        */ 
         $scope.clickNotificacion = function(notificacion) {
             if (notificacion.estado_notificacion == "0") {
                 notificacionData.updateEstadoNotificacion(notificacion.id_notificacion).success(function(data) {

@@ -3,7 +3,7 @@
     notificacionData.$inject = ['$http', 'CONFIG','autenticacion'];
 
     function notificacionData($http, CONFIG, autenticacion) {
-        var findNotificationByEstudiante = function(id_estudiante) {
+        var findNotificationByEstudiante = function() {
             return $http({
                 method: 'GET',
                 url: CONFIG.http_address + '/estudiantes/notificaciones',
@@ -36,7 +36,7 @@
                 url: CONFIG.http_address + '/estudiantes/notificaciones/estado',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization' : 'Bearer '+CONFIG.token,
+                    'Authorization' : 'Bearer '+CONFIG.tokenfindNotificationByEstudiante,
                 },
                 data: {
                     'id_notificacion': id_notificacion

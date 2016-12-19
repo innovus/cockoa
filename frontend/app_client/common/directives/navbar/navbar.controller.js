@@ -1,4 +1,14 @@
 (function() {
+     /** 
+     * @ngdoc controller
+     * @name docentes.controller:navbarCtrl  
+     * @requires $scope, $location, $window, autenticacion,$cookieStore,$log
+     * @description
+     * 
+     * Esta es una controllador para manejar la barra superior del docente
+     * 
+    */
+
     angular.module("docentes").controller("navbarCtrl", navbarestCtrl);
     navbarestCtrl.$inject = ["$scope", "$location","$window", "autenticacion","$cookieStore","$log"];
 
