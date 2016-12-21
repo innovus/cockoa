@@ -42,7 +42,7 @@ function getNotaActividadEstudiantebyMateria(req,res){
             EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
                 console.log(estudiante[0].id_estudiante)
 
-                Nota_actividadDao.findNotaActividadEstudiantebyMateria(studiante[0].id_estudiante,req.params.id_actividad)
+                Nota_actividadDao.findNotaActividadEstudiantebyMateria(estudiante[0].id_estudiante,req.params.id_actividad)
         .then(function(data){
             Respuesta.sendJsonResponse(res,200,data);
             console.log("la fucnion salio bn" + data)

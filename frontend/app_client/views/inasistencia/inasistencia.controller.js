@@ -1,15 +1,24 @@
 //una function javascript q se llama asi misma
 //(function (){
 var app = angular.module('docentes'); //creamos date modulo pokedex y le pasamos array con las dependencias
+
+/** 
+     * @ngdoc controller
+     * @name docentes.controller:inasistenciaController
+     * @requires $scope, $http, $uibModal, $log, $filter, CONFIG, periodoData, inasistenciaData, estudianteData
+     * @description
+     * 
+     * Esta es una controllador que maneja la vista de inasistencia de un docente 
+     * 
+    */
 app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log', '$filter', 'CONFIG', 'periodoData', 'inasistenciaData', 'estudianteData', function($scope, $http, $uibModal, $log, $filter, CONFIG, periodoData, inasistenciaData, estudianteData) {
     $scope.fechas = [];
     $scope.estudiantes = [];
-    $scope.date_asistencia = new Date();
-    $scope.carga_seleccionada = null;
+    $scope.fechaInasistencia = new Date();
+    $scope.cargaSeleccionada = null;
     $scope.selected = {
         ids_estudiantes: []
     };
-    $scope.materia_seleccionada = null;
     $scope.periodos = [];
     $scope.periodoSeleccionado = null;
     $scope.activeTabIndex = 0;
@@ -81,6 +90,20 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
     });
     /////////////////////
     //funcion que se la usa cuando le da click en un tab
+
+    /** 
+        * @ngdoc method
+        * @name getPeriodoId
+        * @methodOf docentes.controller:inasistenciaController
+        * @param {Int} index index es un entero que contiene la posicion dentro del vector periodos de el periodo que estoy seleccioando 
+        * en las tabs
+        *
+        * @description
+        * 
+        * Este metodo se lo usa en el momento que un usuario hace click en una tab de periodos y carge las inasistencias de ese periodo
+        * 
+        * 
+        */ 
     $scope.getPeriodoId = function(index) {
         $scope.periodoSeleccionado = $scope.periodos[index];
         periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
@@ -90,27 +113,44 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
             //para dejarla seleccionada con las nuevas
             for (var i = 0; i < data.length; i++) {
                 (function(i) {
-                    if (data[i].nombre_materia == $scope.carga_seleccionada.nombre_materia && data[i].id_curso == $scope.carga_seleccionada.id_curso) {
-                        $scope.carga_seleccionada = data[i];
+                    if (data[i].nombre_materia == $scope.cargaSeleccionada.nombre_materia && data[i].id_curso == $scope.cargaSeleccionada.id_curso) {
+                        $scope.cargaSeleccionada = data[i];
                         console.log("if ycarga seleccionada");
-                        console.log($scope.carga_seleccionada)
+                        console.log($scope.cargaSeleccionada)
                         encontrado = true;
                     }
                 })(i);
             }
             if (encontrado == false) {
-                $scope.carga_seleccionada = null;
-                console.log($scope.carga_seleccionada)
+                $scope.cargaSeleccionada = null;
+                console.log($scope.cargaSeleccionada)
             }
             console.log("sale de for");
-            console.log($scope.carga_seleccionada);
-            seleccionarCarga($scope.carga_seleccionada);
+            console.log($scope.cargaSeleccionada);
+            seleccionarCarga($scope.cargaSeleccionada);
         }).error(function(data) {
             console.log('Error: ' + data);
         });
     };
     //funcion q abre ventana modal
-    $scope.open = function(size, id_carga, id_estudiante) {
+
+    /** 
+        * @ngdoc method
+        * @name open
+        * @methodOf docentes.controller:inasistenciaController
+        * @param {String} size size es el tamaño de la ventana modal puede ser "lg" o "sm" 
+        * @param {Int} id_carga id_carga es el id de la carga que vamos a consultar
+        * @param {Int} id_estudiante es el es el id de el estudiante que vamos a consultar
+        * 
+        *
+        * @description
+        * 
+        * Este metodo se lo usa en el momento que un usuario hace click en la cantidad de faltas y mira las faltas de un estudiante espevcifico en una ventama modal
+        * 
+        * 
+        */
+
+    var open = function(size, id_carga, id_estudiante) {
         //$http.get(CONFIG.http_address+'/inasistencias/cargas/'+id_carga+'/estudiantes/'+id_estudiante)
         inasistenciaData.findInasistenciasByCargaAndEstudiante(id_carga, id_estudiante).success(function(data) {
             var modalInstance = $uibModal.open({
@@ -149,7 +189,7 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
     }
 
     function seleccionarCarga(carga) {
-        $scope.carga_seleccionada = carga;
+        $scope.cargaSeleccionada = carga;
         $scope.estudiantes = [];
         $scope.cantidad = {};
         $scope.selected.ids_estudiantes = [];
@@ -181,17 +221,17 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
                 "id_estudiante": $scope.selected.ids_estudiantes[i],
                 "estado_inasistencia": 1,
                 "fecha_inasistencia": fecha,
-                "id_carga": $scope.carga_seleccionada.id_carga_docente
+                "id_carga": $scope.cargaSeleccionada.id_carga_docente
             }
             jsonenviar.push(jsonsolo);
         } //cierra for
         console.log("json que vamos a enviar")
         console.log(jsonenviar);
         inasistenciaData.createInasistenciasEstudiantes(jsonenviar).success(function(response) {
-            console.log($scope.carga_seleccionada.id_carga_docente)
+            console.log($scope.cargaSeleccionada.id_carga_docente)
             console.log(response);
             swal("Buen Trabajo!", response.mensaje, "success")
-            seleccionarCarga($scope.carga_seleccionada);
+            seleccionarCarga($scope.cargaSeleccionada);
         }).error(function(error) {
             console.log('Error: ' + error);
             swal("Oops...", " Algo salio mal!", "error");
@@ -222,6 +262,8 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
             console.log('Error: ' + error);
         });
     }
+
+    $scope.open = open;
 }]);
 
 function delNull(item) {

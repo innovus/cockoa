@@ -340,7 +340,7 @@ function insertNota(req, res) {
                                 "click_action":"OPEN_ACTIVITY_1"
                             },
                             "data": {
-                                "guia": req.body[0].id_logro,
+                                "guia": req.body[0].id_actividad,
                                 "tipo": "2"
                             }
                         }
