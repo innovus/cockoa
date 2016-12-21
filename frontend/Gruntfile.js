@@ -1,10 +1,7 @@
 module.exports= function(grunt){
     grunt.initConfig({
         ngdocs:{
-        	options:{
-        		starPage:'/api',
-        		
-        	}
+
         	api:{
         		src:["app_client/**/*.js","!app_client/lib/**/*.js","!app_client/views/notas/notas.controller.js"]
         	}

@@ -2,6 +2,16 @@ var app = angular.module('docentes'); //creamos el modulo pokedex y le pasamos a
 app.run(function(editableOptions) {
     editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
+
+    /** 
+     * @ngdoc controller
+     * @name docentes.controller:crudLogrosController
+     * @requires $scope, $http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter
+     * @description
+     * 
+     * Esta es una controllador que maneja la vista principal de el crud de logros de un docente
+     * 
+    */
 app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookieStore', '$cookies', 'CONFIG', 'periodoData', 'actividadData', 'logroData', '$mdBottomSheet', '$mdToast', '$timeout', '$filter', function($scope, $http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter) {
     $scope.periodos = [];
     $scope.periodoSeleccionado = null;
@@ -9,8 +19,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     $scope.periodoActual = null;
     $scope.logros = [];
     $scope.estudiantes = [];
-    $scope.date_asistencia = new Date();
-    $scope.carga_seleccionada = null;
+    $scope.cargaSeleccionada = null;
     $scope.materias = [];
     $scope.selected = {
         ids_estudiantes: []
@@ -74,10 +83,21 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         console.log("entro al error del controller")
         console.log(error);
     });
-    //Trae todos los periodos y pone el actual
-    //$http.get(CONFIG.http_address+'/api/todos/periodos')
-    //funcion q abre ventana modal
-    $scope.open = function(size, id_logro) {
+    /** 
+        * @ngdoc method
+        * @name open
+        * @methodOf docentes.controller:crudLogrosController
+        * @param {String} size size es el tamaño de la ventana modal puede ser "lg" o "sm" 
+        * @param {Int} id_logro id_logro es el id de el logro que vamos a consultar
+        * 
+        *
+        * @description
+        * 
+        * Este metodo se lo usa en el momento que un usuario hace click en actividades para abrir un modal y consulte las actividades de el logro el cual se le pasa
+        * 
+    */
+
+    var open = function(size, id_logro) {
         //$http.get(CONFIG.http_address+'/api/docentes/logros/'+id_logro+'/actividades/')
         var modalInstance = null;
         actividadData.findActividadesByLogro(id_logro).success(function(data) {
@@ -106,10 +126,12 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         });
         console.log(modalInstance)
     };
-    $scope.create_nuevo_logro = function() {
+
+    
+    var create_nuevo_logro = function() {
         console.log("entreo a create")
         $scope.inserted = {
-            id_carga_docente: $scope.carga_seleccionada.id_carga_docente,
+            id_carga_docente: $scope.cargaSeleccionada.id_carga_docente,
             porcentaje_logro: "0",
             nombre_logro: "Prueba",
             descripcion_logro: null,
@@ -122,7 +144,10 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     /////////////////////
     //////// fin trae cargas
     ///////form editable
-    $scope.updateLogro = function(data, logro) {
+
+    
+
+    var updateLogro = function(data, logro) {
         console.log(data);
         console.log(logro)
         angular.extend(logro, data);
@@ -135,7 +160,9 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         console.log("logro con tipo")
         console.log(logro)
     };
-    $scope.validarPorcentaje = function(data) {
+
+
+    var validarPorcentaje = function(data) {
         console.log("entro enbefore")
         console.log(data);
         // console.log(actividad)
@@ -150,7 +177,11 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             console.log("no entro")
         }
     }
-    $scope.deleteLogro = function(logro, index) {
+
+    
+
+
+    var deleteLogro = function(logro, index) {
         if (logro.id_logro != undefined) {
             $scope.logrosPorEliminar.push(logro);
         }
@@ -158,7 +189,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         $scope.logros.splice(index, 1);
         $scope.isPorcentajeCien = checkPorcentaje();
     }
-    $scope.cancelform = function(logro, index) {
+    var cancelform = function(logro, index) {
         if (logro.descripcion_logro == null) {
             $scope.logros.splice(index, 1);
         }
@@ -167,7 +198,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     };
     ////////
     //funcion que se la usa cuando le da click en un tab
-    $scope.getPeriodoId = function(index) {
+    var getPeriodoId = function(index) {
         $scope.periodoSeleccionado = $scope.periodos[index];
         //$http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodoSeleccionado.id_periodo)
         periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
@@ -177,21 +208,23 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             //para dejarla seleccionada con las nuevas
             for (var i = 0; i < data.length; i++) {
                 (function(i) {
-                    if (data[i].nombre_materia == $scope.carga_seleccionada.nombre_materia && data[i].id_curso == $scope.carga_seleccionada.id_curso) {
-                        $scope.carga_seleccionada = data[i];
+                    if (data[i].nombre_materia == $scope.cargaSeleccionada.nombre_materia && data[i].id_curso == $scope.cargaSeleccionada.id_curso) {
+                        $scope.cargaSeleccionada = data[i];
                         encontrado = true;
                     }
                 })(i);
             }
             if (encontrado == false) {
-                $scope.carga_seleccionada = null;
+                $scope.cargaSeleccionada = null;
             }
-            seleccionarCarga($scope.carga_seleccionada);
+            seleccionarCarga($scope.cargaSeleccionada);
         }).error(function(data) {
             console.log('Error: ' + data);
         });
     };
-    $scope.selectCurso = function(carga) {
+
+    
+    var selectCurso = function(carga) {
             for (var i = 0; i < $scope.periodos.length; i++) {
                 //entra cuando el periodo actual es encontrado en el vector
                 // console.log(data[i].id_periodo)
@@ -209,20 +242,12 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
 
     function seleccionarCarga(carga) {
 
-        $scope.carga_seleccionada = carga;
+        $scope.cargaSeleccionada = carga;
         getLogros(carga.id_carga_docente, function(logros) {
             $scope.logros = logros;
             console.log($scope.logros);
             $scope.isPorcentajeCien = checkPorcentaje();
 
-
-            //////////////////
-
-         
-
-
-
-            /////////////////
 
 
         }); //CIERRA GET LOGROS
@@ -237,7 +262,10 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             cb([]);
         });
     }
-    $scope.btnGuardar = function() {
+
+    
+
+    var btnGuardar = function() {
         console.log("logros por eliminar");
         console.log($scope.logrosPorEliminar)
         console.log("logros");
@@ -265,7 +293,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             console.log($scope.logros)
             logroData.saveLogros($scope.logrosPorEliminar, $scope.logros).success(function(mensaje) {
                 console.log(mensaje);
-                seleccionarCarga($scope.carga_seleccionada);
+                seleccionarCarga($scope.cargaSeleccionada);
                 swal("Ok...", "logros Guardados!", "success");
             }).error(function(error) {
                 if (error == "todos vacios"){
@@ -285,7 +313,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
                
               
 
-                seleccionarCarga($scope.carga_seleccionada);
+                seleccionarCarga($scope.cargaSeleccionada);
                 $scope.logrosPorEliminar = [];
 
             });
@@ -309,10 +337,21 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             return false
         }
     }
-    $scope.validarPorcentajeTotal = function() {
+    var validarPorcentajeTotal = function() {
         console.log("nunca entro")
         $scope.isPorcentajeCien = checkPorcentaje();
     }
+
+    $scope.open = open;
+    $scope.create_nuevo_logro = create_nuevo_logro;
+    $scope.updateLogro = updateLogro;
+    $scope.validarPorcentaje = validarPorcentaje;
+    $scope.deleteLogro = $scope.deleteLogro;
+    $scope.cancelform = cancelform;
+    $scope.getPeriodoId = getPeriodoId;
+    $scope.selectCurso = selectCurso;
+    $scope.btnGuardar =btnGuardar;
+    $scope.validarPorcentajeTotal= validarPorcentajeTotal;
 
 }]);
 /*
@@ -343,7 +382,8 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
             return false
         }
     }
-    $scope.saveColumn = function(column) {
+    $scope.saveColumn = saveColumn
+    var saveColumn = function(column) {
         console.log(column)
         var results = [];
         var sumatoria = 0;
@@ -374,7 +414,10 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
     };
     // add user
     //tipo: 0 es para saber que es un dato para insertar
-    $scope.addActividad = function() {
+
+    $scope.saveColumn = saveColumn;
+    $scope.addActividad = addActividad;
+    var addActividad = function() {
         $scope.inserted = {
             //id_actividad: 100,
             id_logro: $scope.id_logro,
@@ -386,7 +429,11 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         $scope.actividades.push($scope.inserted);
         $scope.isPorcentajeCien = checkPorcentaje();
     };
-    $scope.updateActividad = function(data, actividad) {
+    $scope.saveColumn = saveColumn;
+    $scope.addActividad = addActividad;
+    $scope.updateActividad = updateActividad;
+
+    var updateActividad = function(data, actividad) {
         console.log(data);
         console.log(actividad)
         console.log("union")
@@ -400,7 +447,13 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         console.log("actividad con tipo")
         console.log(actividad)
     };
-    $scope.deleteActividad = function(actividad, index) {
+
+    $scope.saveColumn = saveColumn;
+    $scope.addActividad = addActividad;
+    $scope.updateActividad = updateActividad;
+    $scope.deleteActividad  = deleteActividad ;
+
+    var deleteActividad = function(actividad, index) {
         if (actividad.id_actividad != undefined) {
             $scope.actividadesPorEliminar.push(actividad);
         }
@@ -408,7 +461,8 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         $scope.actividades.splice(index, 1);
         $scope.isPorcentajeCien = checkPorcentaje();
     }
-    $scope.validarPorcentaje = function(data) {
+    
+    var validarPorcentaje = function(data) {
         console.log(data);
         // console.log(actividad)
         console.log("union")
@@ -422,26 +476,27 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
             console.log("no entro")
         }
     }
-    $scope.validarPorcentajeTotal = function() {
+    var validarPorcentajeTotal = function() {
             console.log("nunca entro")
             $scope.isPorcentajeCien = checkPorcentaje();
         }
         //esta funcion la usamos cuando le damos ok en una actividad
-    $scope.guardarActividadTemporal = function(data, actividad) {
+    var guardarActividadTemporal = function(data, actividad) {
         console.log(data);
         console.log(actividad)
         console.log("union")
         angular.extend(actividad, data);
         console.log(actividad)
     }
-    $scope.cancelform = function(actividad, index) {
+    var cancelform = function(actividad, index) {
         if (actividad.descripcion_actividad == null) {
             $scope.actividades.splice(index, 1);
         }
         console.log(actividad)
         console.log(index)
     };
-    $scope.ok = function() {
+    
+    var ok = function() {
         console.log($scope.isPorcentajeCien)
         console.log("actividades por eliminar");
         console.log($scope.actividadesPorEliminar)
@@ -481,7 +536,17 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         //  console.log(editableForm)
         // $uibModalInstance.close();
     };
-    $scope.cancel = function() {
+    var cancel = function() {
         $uibModalInstance.dismiss('cancel');
     };
+    $scope.saveColumn = saveColumn;
+    $scope.addActividad = addActividad;
+    $scope.updateActividad = updateActividad;
+    $scope.deleteActividad  = deleteActividad ;
+    $scope.validarPorcentaje  = validarPorcentaje ;
+    $scope.validarPorcentajeTotal = validarPorcentajeTotal;
+    $scope.guardarActividadTemporal = guardarActividadTemporal;
+    $scope.cancelform  = cancelform ;
+    $scope.ok = ok
+    $scope.cancel = cancel
 });

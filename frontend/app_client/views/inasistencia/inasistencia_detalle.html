@@ -23,14 +23,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="fecha in fechas">
+                <tr ng-repeat="fecha in inasistenciasEstudiante">
                     <th>
                         {{ fecha.fecha_inasistencia | date : format : shortDate }}
                     </th>
                     <th>
                         <!-- editable status -->
                         <span editable-select="fecha.estado_inasistencia" e-name="estado_inasistencia" e-form="rowform" e-ng-options="s.value as s.text for s in justificadas">
-                            {{ show_estado_inasistencia(fecha) }}
+                            {{ showEstadoInasistencia(fecha) }}
                         </span>
                     </th>
                     <th ng-show="permisoEdicion">

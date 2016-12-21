@@ -32,12 +32,30 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "docentes.controller:inasistenciaController",
+      "shortName": "inasistenciaController",
+      "type": "controller",
+      "moduleName": "docentes",
+      "shortDescription": "Esta es una controllador que maneja la vista de inasistencia de un docente ",
+      "keywords": "$filter $http $log $scope $uibmodal addinasistencia agregar agregaran api aqui base callback cantidad carga carge cargen cb click con config consultadas consultados consultar contiene controllador controller curso datos de del dentro docente docentes el en entero es ese espevcifico esta este estoy estudiante estudiantedata estudiantes faltas fecha getcursos getinasistencias getperiodoid hace id_carga id_curso id_estudiante inasistencia inasistenciadata inasistencias la las lg listado lo los mandamos mandar maneja materia method metodo mira modal momento objeto open para pasa pasamos periodo periododata periodos posicion puede reutilizamos se seleccioando selecciona seleccionarcurso selectcurso ser siempre size sm tab tabs tama tipo una usa usuario utiliza vamos vector ventama ventana vista"
+    },
+    {
+      "section": "api",
       "id": "docentes.controller:inasistenciaEstudianteController",
       "shortName": "inasistenciaEstudianteController",
       "type": "controller",
       "moduleName": "docentes",
       "shortDescription": "Esta es una controllador para manejar la vista de inasistencias del estudiante",
       "keywords": "$cookiestore $http $scope api click consultar controllador controller cuando curso datos de del docentes donde el en es esta este estudiante getinasistenciasbymateria id_curso inasistenciadata inasistencias la las lo los manejar materia materiadata method metodo notificacion objeto obtener para pendiente se selectcurso tiene todos una usa vista"
+    },
+    {
+      "section": "api",
+      "id": "docentes.controller:ModalInasistenciaCtrl",
+      "shortName": "ModalInasistenciaCtrl",
+      "type": "controller",
+      "moduleName": "docentes",
+      "shortDescription": "Esta es un controlador que se lo utiliza para visualizar en una ventana modal las inasistencias de un estudiante",
+      "keywords": "$filter $scope $uibmodalinstance actualizar api boton cancel cancelar cierra contiene controlador controller cuando datos de docentes el en es esta estado este estudiante inasistencia inasistenciadata inasistencias inasistenciasestudiante las le lo los method metodo modal mostrar objeto para permisoedicion se select showestadoinasistencia todos una updateestado utiliza ventana visualizar"
     },
     {
       "section": "api",

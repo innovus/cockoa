@@ -12,7 +12,7 @@ var app = angular.module('docentes'); //creamos date modulo pokedex y le pasamos
      * 
     */
 app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log', '$filter', 'CONFIG', 'periodoData', 'inasistenciaData', 'estudianteData', function($scope, $http, $uibModal, $log, $filter, CONFIG, periodoData, inasistenciaData, estudianteData) {
-    $scope.fechas = [];
+    $scope.inasistenciasEstudiante = [];
     $scope.estudiantes = [];
     $scope.fechaInasistencia = new Date();
     $scope.cargaSeleccionada = null;
@@ -159,7 +159,7 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
                 controller: 'ModalInasistenciaCtrl',
                 size: size,
                 resolve: {
-                    fechas: function() {
+                    inasistenciasEstudiante: function() {
                         return data
                     },
                     permisoEdicion: function(){
@@ -173,7 +173,25 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
             console.log(error);
         });
     };
-    $scope.selectCurso = function(carga) {
+
+        /** 
+        * @ngdoc method
+        * @name selectCurso
+        * @methodOf docentes.controller:inasistenciaController
+        * @param {Object} carga carga mandamos un objeto tipo Carga 
+        * 
+        *
+        * @description
+        * 
+        * Este metodo se lo usa en el momento que un usuario hace click en una materia para que 
+        * cargen el listado de estudiantes de el curso que el selecciona con las inasistencias de los estudiantes
+        * 
+        * 
+        */
+
+    
+
+    var selectCurso = function(carga) {
         seleccionarCarga(carga);
          for (var i = 0; i < $scope.periodos.length; i++) {
                 //entra cuando el periodo actual es encontrado en el vector
@@ -187,6 +205,19 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
                 }
             }
     }
+    /** 
+        * @ngdoc method
+        * @name seleccionarCurso
+        * @methodOf docentes.controller:inasistenciaController
+        * @param {Object} carga carga mandamos un objeto tipo Carga 
+        * 
+        *
+        * @description
+        * 
+        * Este metodo que reutilizamos siempre que vamos a consultar las inasistencias y el listado de estudiantes de una carga
+        * 
+        * 
+        */
 
     function seleccionarCarga(carga) {
         $scope.cargaSeleccionada = carga;
@@ -211,7 +242,22 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
             }); //CIERRA GERINASISTENCIAS
         }); //CIERRA GETCURSOS
     } //CIERA FUNCION SELECIONAR CARGA
-    $scope.addInasistencia = function(fecha) {
+
+
+    /** 
+        * @ngdoc method
+        * @name addInasistencia
+        * @methodOf docentes.controller:inasistenciaController
+        * @param {Date} fecha fecha se lo utiliza para mandar la fecha de las inasistencias que se agregaran
+        * 
+        *
+        * @description
+        * 
+        * Este metodo se lo utiliza para agregar inasistencias
+        * 
+        * 
+        */
+    var addInasistencia = function(fecha) {
         console.log(fecha)
         console.log("date")
         var jsonenviar = [];
@@ -238,6 +284,22 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
         });
     }
 
+    /** 
+        * @ngdoc method
+        * @name getCursos
+        * @methodOf docentes.controller:inasistenciaController
+        * @param {Int} id_curso id_curso aqui pasamos el id de curso
+        * @param {Function} cb cb a este callback  se pasa el vector de los estudiantes consultados
+        *
+        * 
+        *
+        * @description
+        * 
+        * Este metodo se lo utiliza para consultar los estudiantes de un curso en las base de  datos
+        * 
+        * 
+        */
+
     function getCursos(id_curso, cb) {
         estudianteData.findEstudiantesByCurso(id_curso).success(function(est) {
             console.log("hizo la consulta y sige estudiantes");
@@ -254,6 +316,22 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
             console.log('Error: ' + error);
         }); //cierra get
     } //cierra funcion
+
+    /** 
+        * @ngdoc method
+        * @name getInasistencias
+        * @methodOf docentes.controller:inasistenciaController
+        * @param {Int} id_carga id_carga aqui pasamos el id de la carga
+        * @param {Function} cb cb a este callback  se pasa las inasistencias consultadas
+        *
+        * 
+        *
+        * @description
+        * 
+        * Este metodo se lo utiliza para consultar las inasistencias de un curso en un periodo
+        * 
+        * 
+        */
     function getInasistencias(id_carga, cb) {
         inasistenciaData.findInasistenciasByCarga(id_carga).success(function(cantidad) {
             cb(cantidad);
@@ -264,6 +342,8 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
     }
 
     $scope.open = open;
+    $scope.selectCurso =selectCurso;
+    $scope.addInasistencia =addInasistencia;
 }]);
 
 function delNull(item) {
@@ -274,23 +354,18 @@ function delNull(item) {
     }
 }
 
-function setCookieData(cookies, accesstoken) {
-    var accessToken = accesstoken;
-    cookies.put("accessToken", accesstoken);
-}
-
-function getCookieData(cookies) {
-    var accessToken = cookies.get("accessToken");
-    return accessToken;
-}
-
-function clearCookieData(cookies) {
-    var accessToken = "";
-    cookies.remove("accessToken");
-}
-app.controller('ModalInasistenciaCtrl', function($scope, $uibModalInstance, fechas,permisoEdicion, $filter, inasistenciaData) {
+/** 
+     * @ngdoc controller
+     * @name docentes.controller:ModalInasistenciaCtrl
+     * @requires $scope, $uibModalInstance, inasistenciasEstudiante,permisoEdicion, $filter, inasistenciaData
+     * @description
+     * 
+     * Esta es un controlador que se lo utiliza para visualizar en una ventana modal las inasistencias de un estudiante
+     * 
+    */
+app.controller('ModalInasistenciaCtrl', function($scope, $uibModalInstance, inasistenciasEstudiante,permisoEdicion, $filter, inasistenciaData) {
     $scope.permisoEdicion = permisoEdicion;
-    $scope.fechas = fechas;
+    $scope.inasistenciasEstudiante = inasistenciasEstudiante;
     $scope.justificadas = [{
         value: 0,
         text: 'Si'
@@ -298,18 +373,50 @@ app.controller('ModalInasistenciaCtrl', function($scope, $uibModalInstance, fech
         value: 1,
         text: 'No'
     }];
-    $scope.show_estado_inasistencia = function(fecha) {
+
+    /** 
+        * @ngdoc method
+        * @name showEstadoInasistencia
+        * @methodOf docentes.controller:ModalInasistenciaCtrl
+        * @param {Object} inasistencia inasistencia es un objeto que contiene todos los datos de una inasistencia
+        *
+        * 
+        *
+        * @description
+        * 
+        * Este metodo se lo utiliza para mostrar el estado en el select de una inasistencia
+        * 
+        * 
+        */
+      
+    var showEstadoInasistencia = function(inasistencia) {
         var selected = [];
-        //if(fecha.estado_inasistencia) {
+        //if(inasistencia.estado_inasistencia) {
         selected = $filter('filter')($scope.justificadas, {
-            value: fecha.estado_inasistencia
+            value: inasistencia.estado_inasistencia
         });
         //}
         return selected[0].text;
     };
-    $scope.updateEstado = function(fecha) {
+
+    /** 
+        * @ngdoc method
+        * @name updateEstado
+        * @methodOf docentes.controller:ModalInasistenciaCtrl
+        * @param {Object} inasistencia inasistencia es un objeto que contiene todos los datos de una inasistencia
+        *
+        * 
+        *
+        * @description
+        * 
+        * Este metodo se lo utiliza para actualizar el estado de una inasistencia
+        * 
+        * 
+        */
+    
+    var updateEstado = function(inasistencia) {
         console.log("entro a updateEstado")
-        inasistenciaData.updateEstadoInasistencia(fecha).success(function(mensaje) {
+        inasistenciaData.updateEstadoInasistencia(inasistencia).success(function(mensaje) {
             //   alert(mensaje.msg);
             swal("Buen Trabajo!", mensaje.msg, "success")
             console.log(mensaje);
@@ -319,15 +426,41 @@ app.controller('ModalInasistenciaCtrl', function($scope, $uibModalInstance, fech
         });
     }
     console.log("en el modulo modal")
-    console.log($scope.fechas);
-    // $scope.fechas = fechas;
+    console.log($scope.inasistenciasEstudiante);
+    // $scope.inasistenciasEstudiante = inasistenciasEstudiante;
     /*$scope.selected = {
-      fecha: $scope.fechas[0]
+      inasistencia: $scope.inasistenciasEstudiante[0]
     };*/
-    $scope.ok = function() {
+
+    /** 
+        * @ngdoc method
+        * @name ok
+        * @methodOf docentes.controller:ModalInasistenciaCtrl
+        * @description
+        * 
+        * Este metodo cierra el modal cuando le de en ok
+        * 
+        * 
+        */
+    
+    var ok = function() {
         $uibModalInstance.close();
     };
-    $scope.cancel = function() {
+    /** 
+        * @ngdoc method
+        * @name cancel
+        * @methodOf docentes.controller:ModalInasistenciaCtrl
+        * @description
+        * 
+        * Este metodo cierra el modal cuando le de en boton cancelar
+        * 
+        * 
+        */
+    var cancel = function() {
         $uibModalInstance.dismiss('cancel');
     };
+    $scope.cancel = cancel;
+    $scope.ok = ok;
+    $scope.updateEstado = updateEstado;
+    $scope.showEstadoInasistencia  = showEstadoInasistencia;
 });
