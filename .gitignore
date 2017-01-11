@@ -5,3 +5,5 @@ backend/node_modules/pg-promise/node_modules/pg/lib/defaults.js
 frontend/app_client/docentes/config/configuracion.js
 backend/config.json
 backend/app.js
+backend/node_modules/
+frontend/node_modules/
