@@ -53,6 +53,7 @@ var autorizacion= function(req,res,next){
   console.log(process.env.ARGUS);
   //var ip= codificarIp("190.157.30.117");
    var ip= codificarIp(req.ip);
+   console.log("si entro a autorizacion")
 
 
   console.log("ip")

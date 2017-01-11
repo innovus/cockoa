@@ -67,6 +67,7 @@ function getCursosMaterias(req, res) {
 }
 
 function getCursosMateriasPorPeriodo(req, res) {
+    console.log("entro a get cursocontrollers por periodo")
 
         var token=req.headers.authorization.split(' ')[1];
     FuncionesSeguridad.getTokenData(token).then(function(decoded){

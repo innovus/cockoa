@@ -31,7 +31,7 @@
 
         var init= function(){
             
-            autenticacion.isLoggedIn(function(data,error){
+           /* autenticacion.isLoggedIn(function(data,error){
                 if(error){
                     $log.log(error);
                 }
@@ -46,7 +46,7 @@
                          $log.debug(error);   
                     });
                 }    
-            });
+            });*/
         };
 
         $scope.logout=function(){

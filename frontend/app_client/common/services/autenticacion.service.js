@@ -37,7 +37,8 @@
          */
         var getToken= function(){
           
-            return $cookieStore.get("udenar");
+            //return $cookieStore.get("udenar");
+            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6IjNkYTQxZjZiNDJiMjJhYzc4MGFkNWQ3NDk1Y2E5NmY2IiwiaGFzaHIiOiJjMTg4ZDU0MjlkZTcwODBkMWRhY2Y1MTM2M2QxODc5YSIsImV4cCI6MTQ4NDc3MzMxOCwiaWF0IjoxNDg0MTY4NTE4fQ.mmt_V5cTZf7x5K_4z4ZzG2z5F1OPJTP98fS2_VmluwA";
         };
 
         var getCookieToken= function(){
@@ -65,12 +66,15 @@
         var isLoggedIn= function(callback){
             var token= getToken();
             if(token){
-                $http.post(CONFIG.http_seguridad+"/darinfoUsuario",null,{ headers:{Authorization : 'Bearer '+getToken()} })
+                $http.post(CONFIG.http_seguridad+"/darinfousuario",null,{ headers:{Authorization : 'Bearer '+getToken()} })
                 .success(function(data){
                     $log.log(data);
+                    console.log("succes darinfo")
                     callback(data,null);
                 }).error(function(e){
                     $log.error(e);
+                    console.log("error dar ingo")
+                    console.log(e);
                     callback(null,e);
                 });
             }
