@@ -4,10 +4,10 @@
 
     function nota_actividadData($http, CONFIG, autenticacion) {
         var findNotasActividadByCarga = function(id_carga) {
-            return $http.get(CONFIG.http_address + '/api/docentes/cargas/' + id_carga + '/logros/actividades/notas',{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
+            return $http.get(CONFIG.http_address + '/api/docentes/cargas/' + id_carga + '/logros/actividades/notas',{ headers:{Authorization : 'Bearer '+CONFIG.token} })
         };
         var findNotasActividadByEstudianteAndLogro = function() {
-            return $http.get(CONFIG.http_address + '/estudiantes/actividades/notas',{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
+            return $http.get(CONFIG.http_address + '/estudiantes/actividades/notas',{ headers:{Authorization : 'Bearer '+CONFIG.token} })
         }
 
         var createNotasActividadesByEstudiante=function(notas){
@@ -16,7 +16,7 @@
                             url: CONFIG.http_address + '/api/docentes/actividades/notas',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization' : 'Bearer '+autenticacion.getToken(),
+                                'Authorization' : 'Bearer '+CONFIG.token,
                             },
                             data: notas
                         })
@@ -29,7 +29,7 @@
                             url: CONFIG.http_address + '/api/docentes/actividades/notas',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization' : 'Bearer '+autenticacion.getToken(),
+                                'Authorization' : 'Bearer '+CONFIG.token,
                             },
                             data: notas
                         })

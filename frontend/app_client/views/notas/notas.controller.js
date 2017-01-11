@@ -1,13 +1,3 @@
-    /**
-    * @file archivo que contiene el controlador de  waitController showLogroController, ShowActividadController y docentesNotasController el principñ
-    * @name notas.controller.js
-    * @author Jorge Luis Viveros <jorge.innovus@gmail.com>
-    * @licence UDENAR
-    * @copyright 2016 Udenar
-    *
-    */
-
-
 (function() {
     
 
@@ -23,6 +13,7 @@
      * @ngdoc controller
      * @name docentes.controller:waitController
      * requires $mdDialog, $rootScope
+     *
      * @description
      * controlador que se usa para que se active un modal con un icono de cargando
      * para que el usuario no de click en algo hasta que cargen los datos por completo
@@ -84,6 +75,7 @@
      * @ngdoc controller
      * @name docentes.controller:docentesNotasController
      * requires $scope, CONFIG, periodoData, estudianteData, actividadData,logroData, nota_actividadData,nota_logroData, $filter, uibModal, myutils
+     *
      * @description
      * Este controlador maneja toda la parte principal de la pagina de notas por parte del docente 
      * 
@@ -180,11 +172,13 @@
         /**
          * @ngdoc method
          * @name showLogro
-         * @methodOf docentes.controller:docentesNotasController
+         * @methodOf  docentes.controller:docentesNotasController
+         *
+         * @param {Object} logro logro es de tipo objject 
+         *
          * @description
          * Este metodo es el que abre el modal y muestra el logro
          *
-         * @param {Object} logro logro es de tipo objject 
          * 
         */
         var showLogro = function(logro) {

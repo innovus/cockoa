@@ -23,21 +23,28 @@
         <div class="navbar-custom-menu">
             <!--aqui ponemos el menu de arriba  -->
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="/#/docentes/inasistencias">
-                        Asistencia
+                <li ng-repeat="opcion in opciones">
+                    <a href="{{ opcion.ruta }}">
+                        {{ opcion.nombre_opcion }}
                     </a>
                 </li>
-                <li>
-                    <a href="/#/docentes/notas">
-                        Notas
-                    </a>
-                </li>
-                <li>
-                    <a href="/#/docentes/logros">
-                        Logros
-                    </a>
-                </li>
+                <!--
+                    <li>
+                        <a href="/#/docentes/inasistencias">
+                            Asistencia
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/#/docentes/notas">
+                            Notas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/#/docentes/logros">
+                            Logros
+                        </a>
+                    </li>
+                    -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="/img/avatar04.png" class="user-image" alt="User Image"/>

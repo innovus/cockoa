@@ -207,7 +207,7 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
     }
     /** 
         * @ngdoc method
-        * @name seleccionarCurso
+        * @name seleccionarCarga
         * @methodOf docentes.controller:inasistenciaController
         * @param {Object} carga carga mandamos un objeto tipo Carga 
         * 

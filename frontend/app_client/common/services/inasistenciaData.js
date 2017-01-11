@@ -4,16 +4,16 @@
 
     function inasistenciaData($http, CONFIG, autenticacion) {
         var findInasistenciasByCargaAndEstudiante = function(id_carga, id_estudiante) {
-            return $http.get(CONFIG.http_address + '/inasistencias/cargas/' + id_carga + '/estudiantes/' + id_estudiante,{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
+            return $http.get(CONFIG.http_address + '/inasistencias/cargas/' + id_carga + '/estudiantes/' + id_estudiante,{ headers:{Authorization : 'Bearer '+CONFIG.token} })
         };
         var findInasistenciasByCarga = function(id_carga) {
-            return $http.get(CONFIG.http_address + '/inasistencias/cargas/' + id_carga,{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
+            return $http.get(CONFIG.http_address + '/inasistencias/cargas/' + id_carga,{ headers:{Authorization : 'Bearer '+CONFIG.token} })
         };
         var createInasistenciasEstudiantes = function(jsonenviar) {
-            return $http.post(CONFIG.http_address + "/inasistencias/inasistencia", jsonenviar,{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
+            return $http.post(CONFIG.http_address + "/inasistencias/inasistencia", jsonenviar,{ headers:{Authorization : 'Bearer '+CONFIG.token} })
         };
         var findInasistenciasByMateria = function(id_materia) {
-            return $http.get(CONFIG.http_address + '/inasistencias/materias/' + id_materia,{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
+            return $http.get(CONFIG.http_address + '/inasistencias/materias/' + id_materia,{ headers:{Authorization : 'Bearer '+CONFIG.token} })
         }
         var updateEstadoInasistencia = function(inasistencia) {
             return $http({
@@ -21,7 +21,7 @@
                 url: CONFIG.http_address + '/inasistencias/estado',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization' : 'Bearer '+autenticacion.getToken(),
+                    'Authorization' : 'Bearer '+CONFIG.token,
                 },
                 data: inasistencia
             })

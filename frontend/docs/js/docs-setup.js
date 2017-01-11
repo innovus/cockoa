@@ -14,12 +14,21 @@ NG_DOCS={
     },
     {
       "section": "api",
-      "id": "compras.service: autenticacion",
-      "shortName": "autenticacion",
-      "type": "service",
-      "moduleName": "compras",
-      "shortDescription": "servicio que permite la comunicacion con el web service de autenticacion",
-      "keywords": "$http $window api autenticacion cliente compras comunicacion con config de del el en gettoken guardado guardar la local method navegador permite savetoken se service servicio storage token va web"
+      "id": "docentes.controller:actividadesModalController",
+      "shortName": "actividadesModalController",
+      "type": "controller",
+      "moduleName": "docentes",
+      "shortDescription": "Esta es una controllador que maneja la vista en detalle de las actividades, se la utiliza cuando se le da click en ",
+      "keywords": "$http $q $scope $uibmodalinstance actividad actividaddata actividades actualizar addactividad aggrega agregar agregarla antes api bien boton cancel cancelar cancelform carga checkporcentaje cierra click column con controllador controller cuando da damos dar data datos db de del deleteactividad deseamos despues detalle docentes el eliminar eliminara en entre es esta este guardar guarde hacer id_logro identificador ingresan la las le lista lo logro los maneja method metodo modal modificado numeros objeto para pasamos permisoedicion porcentaje posicion retorna reutilizamos savecolumn se si temporalmente tiene todo total transaccion true una updateactividad utiliza va vacia valida validar validarporcentaje validarporcentajetotal vamos van vector ventana ver vista"
+    },
+    {
+      "section": "api",
+      "id": "docentes.controller:crudLogrosController",
+      "shortName": "crudLogrosController",
+      "type": "controller",
+      "moduleName": "docentes",
+      "shortDescription": "Esta es una controllador que maneja la vista principal de el crud de logros de un docente",
+      "keywords": "$cookies $cookiestore $filter $http $mdbottomsheet $mdtoast $scope $timeout $uibmodal abrir actividaddata actividades actualizar agrega agregar api boton btnguardar cancelar cancelform carga carge cargen cb checkporcentaje click con config consultados consultar consulte contiene controllador controller crearlogro crud cual cuando curso damos dar data datos de del deletelogro dentro deseamos despues docente docentes el eliminar eliminara en entero entre es ese especifica esta este estoy estudiantes funcion getlogros getperiodoid guardar guarde hace hacemos id_carga id_logro identificador inasistencias ingresan la las le lg listado lo logro logrodata logros los mandamos maneja materia method metodo modal modificado momento nuevo numeros objeto obtener open para pasa pasamos periodo periododata periodos porcentaje porcentajes posicion principal puede retorna reutilizamos se sea seleccioando selecciona seleccionarcarga selectcurso ser si siempre size sm suma tab tabla tabs tama temporalmente tiene tipo total true una updatelogro usa usuario utiliza utilizamos va validar validarporcentaje validarporcentajetotal vamos van vector ventana verifica vista"
     },
     {
       "section": "api",
@@ -37,7 +46,7 @@ NG_DOCS={
       "type": "controller",
       "moduleName": "docentes",
       "shortDescription": "Esta es una controllador que maneja la vista de inasistencia de un docente ",
-      "keywords": "$filter $http $log $scope $uibmodal addinasistencia agregar agregaran api aqui base callback cantidad carga carge cargen cb click con config consultadas consultados consultar contiene controllador controller curso datos de del dentro docente docentes el en entero es ese espevcifico esta este estoy estudiante estudiantedata estudiantes faltas fecha getcursos getinasistencias getperiodoid hace id_carga id_curso id_estudiante inasistencia inasistenciadata inasistencias la las lg listado lo los mandamos mandar maneja materia method metodo mira modal momento objeto open para pasa pasamos periodo periododata periodos posicion puede reutilizamos se seleccioando selecciona seleccionarcurso selectcurso ser siempre size sm tab tabs tama tipo una usa usuario utiliza vamos vector ventama ventana vista"
+      "keywords": "$filter $http $log $scope $uibmodal addinasistencia agregar agregaran api aqui base callback cantidad carga carge cargen cb click con config consultadas consultados consultar contiene controllador controller curso datos de del dentro docente docentes el en entero es ese espevcifico esta este estoy estudiante estudiantedata estudiantes faltas fecha getcursos getinasistencias getperiodoid hace id_carga id_curso id_estudiante inasistencia inasistenciadata inasistencias la las lg listado lo los mandamos mandar maneja materia method metodo mira modal momento objeto open para pasa pasamos periodo periododata periodos posicion puede reutilizamos se seleccioando selecciona seleccionarcarga selectcurso ser siempre size sm tab tabs tama tipo una usa usuario utiliza vamos vector ventama ventana vista"
     },
     {
       "section": "api",
@@ -110,6 +119,15 @@ NG_DOCS={
       "moduleName": "docentes",
       "shortDescription": "Esta es una directiva en para la abrra superior de los estudiantes",
       "keywords": "abrra api de directiva directive docentes ea en es esta estudiantes la los para superior una"
+    },
+    {
+      "section": "api",
+      "id": "docentes.service: autenticacion",
+      "shortName": "autenticacion",
+      "type": "service",
+      "moduleName": "docentes",
+      "shortDescription": "servicio que permite la comunicacion con el web service de autenticacion",
+      "keywords": "$http $window api autenticacion cliente comunicacion con config de del docentes el en gettoken guardado guardar la local method navegador permite savetoken se service servicio storage token va web"
     }
   ],
   "apis": {

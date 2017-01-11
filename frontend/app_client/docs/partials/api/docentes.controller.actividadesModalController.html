@@ -1,0 +1,67 @@
+<h1><code ng:non-bindable="">actividadesModalController</code>
+<div><span class="hint">controller in module <code ng:non-bindable="">docentes</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="docentes-controller-page docentes-controller-actividadesmodalcontroller-page"><p>Esta es una controllador que maneja la vista en detalle de las actividades, se la utiliza cuando se le da click en 
+ver actividades y carga una ventana modal con las actividades de un logro </p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/ng.$http,">$http,</a></code>
+<div class="docentes-controller-page docentes-controller-actividadesmodalcontroller-page"><p>$scope, $q, $uibModalInstance, actividades, id_logro,permisoEdicion, actividadData</p>
+</div></li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_addactividad">addActividad()</h3>
+<div class="addactividad"><div class="addactividad-page"><p>Este metodo aggrega una actividad vacia para que este lista para agregar datos y agregarla en la db</p>
+</div></div>
+</li>
+<li><h3 id="methods_cancel">cancel()</h3>
+<div class="cancel"><div class="cancel-page"><p>Este metodo cierra el modal cuando le de en boton cancelar</p>
+</div></div>
+</li>
+<li><h3 id="methods_cancelform">cancelform(actividad, index)</h3>
+<div class="cancelform"><div class="cancelform-page"><p>Este metodo se lo utiliza para que despues de dar en el boton agregar actividad si deseamos que no se guarde la actividad le damos en cancelar
+y se eliminara del vector de actividades</p>
+</div><h5 id="methods_cancelform_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>actividad</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="cancelform-page"><p>actividad es un objeto que tiene los datos de una actividad</p>
+</div></td></tr><tr><td>index</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="cancelform-page"><p>index es la posicion en el vector actividades</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_checkporcentaje">checkPorcentaje()</h3>
+<div class="checkporcentaje"><div class="checkporcentaje-page"><p>Este metodo retorna true si el porcentaje es = 100</p>
+</div><h5 id="methods_checkporcentaje_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">Boolean</a></td><td><div class="checkporcentaje-page"><p>true si el porcentaje es 100</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_deleteactividad">deleteActividad(actividad, index)</h3>
+<div class="deleteactividad"><div class="deleteactividad-page"><p>Este es el metodo se lo utiliza para eliminar un actividad de el vector $scope.actividades </p>
+</div><h5 id="methods_deleteactividad_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>actividad</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="deleteactividad-page"><p>actividad es un objeto que tiene los datos de un actividad</p>
+</div></td></tr><tr><td>index</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="deleteactividad-page"><p>index es la posicion en el vector actividades de el actividad que se va a eliminar</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_ok">ok()</h3>
+<div class="ok"><div class="ok-page"><p>Este metodo cierra el modal cuando le de en ok y valida que todo este bien antes de hacer la transaccion</p>
+</div></div>
+</li>
+<li><h3 id="methods_savecolumn">saveColumn(column)</h3>
+<div class="savecolumn"><h5 id="methods_savecolumn_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>column</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="savecolumn-page"><p>column pasamos el identificador de una carga</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_updateactividad">updateActividad(data, actividad)</h3>
+<div class="updateactividad"><div class="updateactividad-page"><p>Este es el metodo para guardar los datos de la actividad modificado temporalmente </p>
+</div><h5 id="methods_updateactividad_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>data</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="updateactividad-page"><p>data es la actividad con los datos que se van a actualizar</p>
+</div></td></tr><tr><td>actividad</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="updateactividad-page"><p>actividad es la actividad que se va a actualizar</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_validarporcentaje">validarPorcentaje(data)</h3>
+<div class="validarporcentaje"><div class="validarporcentaje-page"><p>Este es el metodo para validar si un porcentaje esta entre el 100% y si se ingresan numeros </p>
+</div><h5 id="methods_validarporcentaje_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>data</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="validarporcentaje-page"><p>data el el porcentaje que vamos a validar</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_validarporcentajetotal">validarPorcentajeTotal()</h3>
+<div class="validarporcentajetotal"><div class="validarporcentajetotal-page"><p>Este metodo lo reutilizamos para validar el porcentaje total</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>

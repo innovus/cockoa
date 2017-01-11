@@ -4,10 +4,10 @@
 
     function materiaData($http, CONFIG, autenticacion) {
         var findMateriasByEstudiante = function() {
-            return $http.get(CONFIG.http_address + '/estudiantes/materias',{ headers:{Authorization : 'Bearer '+CONFIG.token} })
+            return $http.get(CONFIG.http_address + '/estudiantes/materias',{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
         };
         var findMateriasWithInasistenciaByEstudiante = function() {
-            return $http.get(CONFIG.http_address + '/inasistencias/materias/',{ headers:{Authorization : 'Bearer '+CONFIG.token} })
+            return $http.get(CONFIG.http_address + '/inasistencias/materias/',{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
         };
         return {
             findMateriasByEstudiante: findMateriasByEstudiante,

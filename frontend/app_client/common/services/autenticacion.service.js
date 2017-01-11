@@ -2,7 +2,7 @@
 
     /**
      * @ngdoc service
-     * @name compras.service: autenticacion
+     * @name docentes.service: autenticacion
      * @requires $http
      * @requires CONFIG
      * @requires $window
@@ -21,7 +21,7 @@
         /**
          * @ngdoc method
          * @name saveToken
-         * @methodOf compras.service: autenticacion
+         * @methodOf docentes.service: autenticacion
          * @param {String} token token que se va a guardar en el local storage
          */
 
@@ -32,7 +32,7 @@
          /**
          * @ngdoc method
          * @name getToken
-         * @methodOf compras.service: autenticacion
+         * @methodOf docentes.service: autenticacion
          * @returns {String} token guardado en el navegador del cliente
          */
         var getToken= function(){
