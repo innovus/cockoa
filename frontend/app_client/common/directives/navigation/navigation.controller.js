@@ -31,14 +31,15 @@
 
         var init= function(){
             
-           /* autenticacion.isLoggedIn(function(data,error){
+            autenticacion.isLoggedIn(function(data,error){
                 if(error){
                     $log.log(error);
                 }
                 else if(data){
                     $scope.currentUser=data;
                     $scope.isLoggedIn=true;
-                    autenticacion.obtenerRutas().success(function(data){
+                    console.log($scope.currentUser)
+                   autenticacion.obtenerRutas().success(function(data){
                          $log.debug(data);
                          $scope.opciones=data;
                     }).error(function(error){
@@ -46,7 +47,7 @@
                          $log.debug(error);   
                     });
                 }    
-            });*/
+            });
         };
 
         $scope.logout=function(){
