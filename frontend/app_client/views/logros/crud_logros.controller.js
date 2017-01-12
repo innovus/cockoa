@@ -12,7 +12,7 @@ app.run(function(editableOptions) {
      * Esta es una controllador que maneja la vista principal de el crud de logros de un docente
      * 
     */
-app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookieStore', '$cookies', 'CONFIG', 'periodoData', 'actividadData', 'logroData', '$mdBottomSheet', '$mdToast', '$timeout', '$filter', function($scope, $http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter) {
+app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookieStore', '$cookies', 'CONFIG', 'periodoData', 'actividadData', 'logroData', '$mdBottomSheet', '$mdToast', '$timeout', '$filter','myutils', function($scope, $http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter,myutils) {
     $scope.periodos = [];
     $scope.periodoSeleccionado = null;
     $scope.activeTabIndex = 0;
@@ -203,6 +203,10 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         console.log("union")
             //angular.extend(actividad, data );
             //console.log(actividad)
+        console.log("antes");
+        console.log(data);
+        data = data.toString().replace(/\,/g,'.'); 
+        console.log(data)
         if (isNaN(data)) {
             return "Debe ingresar un numero";
             console.log("entro")
@@ -277,6 +281,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         * 
     */
     var getPeriodoId = function(index) {
+        myutils.showWait();
         $scope.periodoSeleccionado = $scope.periodos[index];
         //$http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodoSeleccionado.id_periodo)
         periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
@@ -296,6 +301,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
                 $scope.cargaSeleccionada = null;
             }
             seleccionarCarga($scope.cargaSeleccionada);
+
         }).error(function(data) {
             console.log('Error: ' + data);
         });
@@ -317,6 +323,8 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         * 
         */
     var selectCurso = function(carga) {
+        myutils.showWait();
+        
             for (var i = 0; i < $scope.periodos.length; i++) {
                 //entra cuando el periodo actual es encontrado en el vector
                 // console.log(data[i].id_periodo)
@@ -329,7 +337,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
                 }
             }
         seleccionarCarga(carga);
-
+    
     }
 
 
@@ -347,14 +355,17 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         * 
         */
     function seleccionarCarga(carga) {
+        
+
+         
 
         $scope.cargaSeleccionada = carga;
         getLogros(carga.id_carga_docente, function(logros) {
             $scope.logros = logros;
             console.log($scope.logros);
             $scope.isPorcentajeCien = checkPorcentaje();
-
-
+            myutils.hideWait();
+            
 
         }); //CIERRA GET LOGROS
     } //CIERA FUNCION SELECIONAR CARGA
@@ -475,7 +486,9 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     function checkPorcentaje() {
         var sumatoria = 0;
         angular.forEach($scope.logros, function(logro) {
+            logro.porcentaje_logro = logro.porcentaje_logro.toString().replace(/\,/g,'.'); 
             sumatoria = sumatoria + parseFloat(logro.porcentaje_logro);
+            console.log(parseFloat(logro.porcentaje_logro));
         });
         if (sumatoria == 100) {
             console.log("return true")
@@ -552,7 +565,9 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
     function checkPorcentaje() {
         var sumatoria = 0;
         angular.forEach($scope.actividades, function(actividad) {
+            actividad.porcentaje_actividad = actividad.porcentaje_actividad.toString().replace(/\,/g,'.'); 
             sumatoria = sumatoria + parseFloat(actividad.porcentaje_actividad);
+
         });
         if (sumatoria == 100) {
             return true
@@ -703,6 +718,7 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         console.log("union")
             //angular.extend(actividad, data );
             //console.log(actividad)
+        data = data.toString().replace(/\,/g,'.'); 
         if (isNaN(data)) {
             return "Debe ingresar un numero";
             console.log("entro")

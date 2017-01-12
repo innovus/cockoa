@@ -22,6 +22,7 @@ var Nota_actividadDao = require("../app_core/dao/nota_actividadDao");
 var NotificacionDao = require("../app_core/dao/notificacionDao");
 var Tipo_notificacionDao = require("../app_core/dao/tipo_notificacionDao");
 var EstudianteDao = require("../app_core/dao/estudianteDao");
+var DispositivoDao = require("../app_core/dao/dispositivoDao");
 
 
 
@@ -66,6 +67,79 @@ function getNotaActividadEstudiantebyMateria(req,res){
 
 
         });
+
+}
+
+function createDispositivo(req,res){
+            var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+
+
+                    DispositivoDao.createDispositivo(req.body.token_dispositivo, estudiante[0].id_estudiante).
+    then(function(data) {
+        Respuesta.sendJsonResponse(res, 200, data);
+    }).catch(function(err) {
+        if (err.message == 'No data returned from the query.') {
+            Respuesta.sendJsonResponse(res, 200, []);
+        } else {
+            console.log(err.message);
+            Respuesta.sendJsonResponse(res, 500, []);
+        }
+    });
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
+
+}
+function deleteDispositivo(req,res){
+            var token=req.headers.authorization.split(' ')[1];
+    FuncionesSeguridad.getTokenData(token).then(function(decoded){
+
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+                console.log(estudiante[0].id_estudiante)
+
+
+                    DispositivoDao.deleteDispositivo(req.body.token_dispositivo).
+    then(function(data) {
+        Respuesta.sendJsonResponse(res, 200, data);
+    }).catch(function(err) {
+        if (err.message == 'No data returned from the query.') {
+            Respuesta.sendJsonResponse(res, 200, []);
+        } else {
+            console.log(err.message);
+            Respuesta.sendJsonResponse(res, 500, []);
+        }
+    });
+
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+
+
+        }
+        //console.log(decoded.body.rol);
+    });
 
 }
 
@@ -490,4 +564,6 @@ module.exports = {
     getNotificacionesPendientes: getNotificacionesPendientes,
     updateEstadoNotificacion: updateEstadoNotificacion,
     getNotaActividadEstudiantebyMateria:getNotaActividadEstudiantebyMateria,
+    deleteDispositivo: deleteDispositivo,
+    createDispositivo: createDispositivo,
 }

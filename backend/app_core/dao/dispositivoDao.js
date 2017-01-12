@@ -32,6 +32,18 @@ var findTokenByEstudiante = function(id_estudiante) {
             type: sequelize.QueryTypes.SELECT
         });
     }
+var deleteDispositivo = function(token_dispositivo) {
+    var cadena = "DELETE FROM dispositivo " + "WHERE token_dispositivo = " + token_dispositivo;
+    return sequelize.query(cadena, {
+        type: sequelize.QueryTypes.DELETE
+    });
+};
+var createDispositivo = function(token_dispositivo,id_estudiante) {
+    var cadena = "INSERT INTO dispositivo (token_dispositivo,id_estudiante) " + "VALUES ('" + token_dispositivo + "','" + id_estudiante + "' ) ";
+    return sequelize.query(cadena, {
+        type: sequelize.QueryTypes.INSERT
+    });
+}
     /*
     var insertarNotificacion = function(logro){
       var cadena = "INSERT INTO logro (id_carga_docente,descripcion_logro,porcentaje_logro) "+
@@ -43,3 +55,6 @@ var findTokenByEstudiante = function(id_estudiante) {
     */
 module.exports.findTokenByEstudiante = findTokenByEstudiante;
 module.exports.findTokenByEstudiantes = findTokenByEstudiantes;
+
+module.exports.deleteDispositivo = deleteDispositivo;
+module.exports.createDispositivo = createDispositivo;

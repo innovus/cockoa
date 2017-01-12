@@ -395,6 +395,7 @@
                 console.log("entro a after");
                 console.log(cabecera)
                 var results = {};
+                cabecera.nota = cabecera.nota.toString().replace(/\,/g,'.'); 
                 if (isNaN(cabecera.nota)) {
                     console.log("entro a if isnan " + val_before);
                     return "Debe Ingresar un numero";
