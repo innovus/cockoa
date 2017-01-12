@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.example.android.cokoas.Fragments.PerfilFragment;
 import com.example.android.cokoas.FragmentsProfesor.CursosProfesorFragment;
 import com.example.android.cokoas.FragmentsProfesor.LlamarListaFragment;
 import com.example.android.cokoas.SessionManager.SessionManager;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             if(sessionManager.getUser().equals("7")){
                 if(sessionManager.connectionCheck(this)) {
+                    String token = FirebaseInstanceId.getInstance().getToken();
+                    Log.d("Firebase", "FBMToken: " + token);
                     getSupportFragmentManager().beginTransaction()
                             .add(R.id.fragment, new CalificacionesFragment())
                             .commit();
