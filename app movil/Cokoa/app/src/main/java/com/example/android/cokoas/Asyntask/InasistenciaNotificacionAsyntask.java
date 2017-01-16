@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by ASUS on 30/10/2016.
+ * Created by juancarlospantoja@hotmail.com on 30/10/2016.
  */
 public class InasistenciaNotificacionAsyntask extends AsyncTask<String, Void, ArrayList<InasistenciaMateria>> {
     private RecyclerView mRecyclerView;
@@ -61,7 +61,7 @@ public class InasistenciaNotificacionAsyntask extends AsyncTask<String, Void, Ar
         try {
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            URL url = new URL(serverUrls + "inasistencias/carga/"+params[0]+"/estudiante/"+params[1]+"");
+            URL url = new URL(serverUrls + "inasistencias/estudiante/carga/"+params[0]+"");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

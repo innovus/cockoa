@@ -15,7 +15,7 @@ var queryFindInasistenciasByCarga = "SELECT nombre_materia, nombre1, nombre2, ap
 
 var queryFindInasistenciasEstudianteByCarga ="SELECT * FROM inasistencia NATURAL "+
     "JOIN carga_docente NATURAL JOIN docente JOIN persona ON docente.identificacion = persona.identificacion "+
-    "NATURAL JOIN materia NATURAL JOIN periodo WHERE id_carga_docente=$id_carga AND id_estudiante=$id_estudiante";
+    "NATURAL JOIN materia NATURAL JOIN periodo WHERE id_carga_docente=$id_carga AND id_estudiante=$id_estudiante order by fecha_inasistencia desc ";
 
 
 var queryFindCantidadInasistenciasBYMateria = "select id_materia,nombre_materia,count(*) as total_inasistencia from inasistencia join carga_docente "+
@@ -52,7 +52,7 @@ var queryFindInasistenciasByMateria = "SELECT carga_docente.id_materia,nombre_ma
     "WHERE materia.id_materia= $id_materia AND inasistencia.id_estudiante= $id_estudiante "+
     /*  "(SELECT estudiante.id_estudiante FROM usuario NATURAL JOIN persona "+
         "NATURAL JOIN estudiante WHERE usuario.id_usuario = $id_usuario ) "+*/
-    "ORDER by fecha_inasistencia"
+    "ORDER by fecha_inasistencia desc"
 
 var addInasistencias= function(inasistencias){
    var cadena="INSERT INTO inasistencia(id_estudiante,estado_inasistencia,fecha_inasistencia,id_carga) VALUES ";

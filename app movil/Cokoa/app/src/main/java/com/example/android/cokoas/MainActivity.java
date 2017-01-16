@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.android.cokoas.Asyntask.EliminarTokenFirebaseAsyntask;
 import com.example.android.cokoas.Fragments.AsistenciaFragment;
 import com.example.android.cokoas.Fragments.CalificacionesFragment;
 import com.example.android.cokoas.Fragments.EventosFragment;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(sessionManager.connectionCheck(this)) {
                     String token = FirebaseInstanceId.getInstance().getToken();
                     Log.d("Firebase", "FBMToken: " + token);
+                    //new GuardarTokenFirebaseAsyntask(this).execute(token);
                     getSupportFragmentManager().beginTransaction()
                             .add(R.id.fragment, new CalificacionesFragment())
                             .commit();
@@ -227,7 +229,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }*/ else if (id == R.id.nav_logOut) {
 
             sessionManager = new SessionManager(getApplication());
-            sessionManager.logoutUser();
+            new EliminarTokenFirebaseAsyntask(this).execute(FirebaseInstanceId.getInstance().getToken());
+            //sessionManager.logoutUser();
             finish();
 
         }else if (id== R.id.nav_calificaciones_profesor){

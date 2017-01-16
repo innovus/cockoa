@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.android.cokoas.Asyntask.LoginAsyntask;
 import com.example.android.cokoas.Asyntask.LoginMovilAsyntask;
 import com.example.android.cokoas.R;
 import com.example.android.cokoas.SessionManager.SessionManager;
@@ -27,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
             editCodigo.setText(sessionManager.getCodigo());
             editPassword.setText(sessionManager.getPassword());
             if(sessionManager.connectionCheck(this)) {
-                new LoginMovilAsyntask(this).execute(editCodigo.getText().toString(), editPassword.getText().toString());
+                new LoginAsyntask(this).execute(editCodigo.getText().toString(), editPassword.getText().toString());
             } else {
                 int position = editCodigo.length();
                 editCodigo.setSelection(position);
@@ -44,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         if(sessionManager.connectionCheck(this)) {
             if (editCodigo.getText().length() > 0 && editPassword.getText().length() > 0) {
                 new LoginMovilAsyntask(this).execute(editCodigo.getText().toString(), editPassword.getText().toString());
+
+
             } else {
                 Toast toast1 =
                         Toast.makeText(this, "Campos vacios", Toast.LENGTH_SHORT);

@@ -33,7 +33,7 @@ var findTokenByEstudiante = function(id_estudiante) {
         });
     }
 var deleteDispositivo = function(token_dispositivo) {
-    var cadena = "DELETE FROM dispositivo " + "WHERE token_dispositivo = " + token_dispositivo;
+    var cadena = "DELETE FROM dispositivo " + "WHERE token_dispositivo = '" + token_dispositivo +"'";
     return sequelize.query(cadena, {
         type: sequelize.QueryTypes.DELETE
     });

@@ -38,10 +38,10 @@ public class InasistenciaMateriaActivity extends AppCompatActivity {
                 if (notificacion == null) {
                     new InasistenciaMateriaAsyntask(this).execute(getIntent().getStringExtra("id_materia"));
                 } else {
-                    new InasistenciaNotificacionAsyntask(this).execute(getIntent().getStringExtra("id_materia"), sessionManager.getIdEstudiante());
+                    new InasistenciaNotificacionAsyntask(this).execute(getIntent().getStringExtra("id_materia"));
                 }
             } else {
-                new InasistenciaNotificacionAsyntask(this).execute(a, sessionManager.getIdEstudiante());
+                new InasistenciaNotificacionAsyntask(this).execute(a);
             }
         }else {
             Snackbar.make(this.findViewById(android.R.id.content), "Comprueba la conexión de red o inténtalo de nuevo más tarde", Snackbar.LENGTH_LONG)

@@ -11,6 +11,7 @@ import com.example.android.cokoas.AppConstants.AppConstants;
 import com.example.android.cokoas.MainActivity;
 import com.example.android.cokoas.R;
 import com.example.android.cokoas.SessionManager.SessionManager;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -166,6 +167,9 @@ public class LoginMovilAsyntask extends AsyncTask<String, Void, String[]> {
                 editPassword = (EditText) activity.findViewById(R.id.input_password);
                 sessionManager = new SessionManager(activity.getApplication());
                 sessionManager.createLoginSession(result[0], editCodigo.getText().toString(), editPassword.getText().toString(), result[1]);
+                if(result[1].equals("7")){
+                    new GuardarTokenFirebaseAsyntask(activity).execute(FirebaseInstanceId.getInstance().getToken());
+                }
                 Intent intent = new Intent(activity, MainActivity.class);
                 activity.startActivity(intent);
                 activity.finish();

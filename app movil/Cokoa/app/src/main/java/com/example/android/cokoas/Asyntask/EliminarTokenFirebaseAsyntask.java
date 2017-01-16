@@ -23,17 +23,14 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 /**
- * Created by juancarlospantoja@hotmail.com on 11/01/2017.
+ * Created by juancarlospantoja@hotmail.com on 16/01/2017.
  */
-public class GuardarTokenFirebaseAsyntask extends AsyncTask<String,Void,Void> {
-
+public class EliminarTokenFirebaseAsyntask extends AsyncTask<String ,Void, Void>{
     SessionManager sessionManager;
     String serverUrls = AppConstants.serverUrl;
     private Activity activity;
-    static private final String LOG_TAG = GuardarTokenFirebaseAsyntask.class.getSimpleName();
     ProgressDialog progressDialog;
-
-    public GuardarTokenFirebaseAsyntask(Activity activity){
+    public EliminarTokenFirebaseAsyntask(Activity activity){
         super();
         this.activity = activity;
     }
@@ -52,6 +49,7 @@ public class GuardarTokenFirebaseAsyntask extends AsyncTask<String,Void,Void> {
 
     @Override
     protected Void doInBackground(String... params) {
+
         JSONObject jsonObject = new JSONObject();
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
@@ -65,9 +63,11 @@ public class GuardarTokenFirebaseAsyntask extends AsyncTask<String,Void,Void> {
         //jsonObjectNotificacion.put("id_notificacion", params[0]);
         try {
             jsonObject.put("token_dispositivo", params[0]);//token_dispositivo
-            URL url = new URL( serverUrls+ "estudiantes/dispositivo");
+            URL url = new URL( serverUrls+ "estudiantes/dispositivos");
 
             urlConnection = (HttpURLConnection) url.openConnection();
+            //httpConn.setDoOutput(true);
+           // urlConnection.setDoInput(true);
             urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type", "application/json");
             String token = sessionManager.getKeyToken();
@@ -124,6 +124,8 @@ public class GuardarTokenFirebaseAsyntask extends AsyncTask<String,Void,Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        sessionManager = new SessionManager(activity.getApplication());
+        sessionManager.logoutUser();
         progressDialog.dismiss();
     }
 }

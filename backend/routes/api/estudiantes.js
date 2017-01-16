@@ -24,7 +24,7 @@ router.get('/notificaciones/pendientes',FuncionesSeguridad.autorizacion,estudian
 router.put('/notificaciones/estado',FuncionesSeguridad.autorizacion,estudiantesController.updateEstadoNotificacion);
 router.get('/actividad/nota/:id_actividad',FuncionesSeguridad.autorizacion,estudiantesController.getNotaActividadEstudiantebyMateria);//getNotaActividadEstudiantebyMateria
 
-router.delete('/dispositivo',FuncionesSeguridad.autorizacion,estudiantesController.deleteDispositivo);
-router.POST('/dispositivo',FuncionesSeguridad.autorizacion,estudiantesController.createDispositivo);//getNotaActividadEstudiantebyMateria
+router.post('/dispositivos',FuncionesSeguridad.autorizacion,estudiantesController.deleteDispositivo);
+router.post('/dispositivo',FuncionesSeguridad.autorizacion,estudiantesController.createDispositivo);//getNotaActividadEstudiantebyMateria
 
 module.exports = router;
