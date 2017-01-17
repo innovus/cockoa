@@ -16,6 +16,9 @@ var queryFindMateriasByEstudiante = "SELECT id_materia, persona.nombre1,nombre2,
 		"and fecha_inicio_periodo <= '7/10/2016') "+
     "AND estudiante.id_estudiante = $id_estudiante";
 
+    var queryFindMateriaByActividad = "SELECT nombre_materia "+ 
+	"FROM actividad NATURAL JOIN logro NATURAL JOIN carga_docente NATURAL JOIN materia "+
+	" WHERE id_actividad =$id_actividad";
 
 
 
@@ -48,6 +51,7 @@ var queries={
 	"materia":{
 		'findMateriasByEstudiante':queryFindMateriasByEstudiante,
 		'findMateriasWithInasistenciaByEstudiante':queryFindMateriasWithInasistenciaByEstudiante,
+		'findMateriaByActividad':queryFindMateriaByActividad,
 	}
 };
 
@@ -57,7 +61,11 @@ var findMateriasByEstudiante = function(id_estudiante){
 var findMateriasWithInasistenciaByEstudiante = function (id_estudiante){
 	return sequelize.query(queries.materia.findMateriasWithInasistenciaByEstudiante, {bind:{id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT})
 };
+var findMateriaByActividad = function(id_actividad){
+	return sequelize.query(queries.materia.findMateriaByActividad, {bind:{id_actividad:id_actividad},type:sequelize.QueryTypes.SELECT})
+}
 
 module.exports.findMateriasByEstudiante=findMateriasByEstudiante;
 module.exports.findMateriasWithInasistenciaByEstudiante=findMateriasWithInasistenciaByEstudiante;
+module.exports.findMateriaByActividad = findMateriaByActividad;
 

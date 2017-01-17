@@ -12,6 +12,7 @@ var NotificacionDao = require("../app_core/dao/notificacionDao");
 var DispositivoDao = require("../app_core/dao/dispositivoDao");
 var EstudianteDao = require("../app_core/dao/estudianteDao");
 var DocenteDao = require("../app_core/dao/docenteDao");
+var MateriaDao = require("../app_core/dao/materiaDao");
 
 var FuncionesSeguridad = require("../helpers/funcionesSeguridad");
 
@@ -315,12 +316,17 @@ function insertNota(req, res) {
         })
     } else if (req.params.table == "actividades") {
         Nota_actividadDao.insertNotasActividades(req.body).then(function() {
-            var mensajeNotificacion = 'Se ha ingresado una nueva nota de ' + req.body[0].nota_actividad
+
+            //se consume este para saber la materia a la que pertenece la nota
+            MateriaDao.findMateriaByActividad(req.body[0].id_actividad).then(function(nombre_materia){
+                console.log(nombre_materia)
+                var mensajeNotificacion = 'Se ha ingresado una nueva nota de ' + req.body[0].nota_actividad + ' en ' + nombre_materia[0].nombre_materia;
             var notificacion = {
                 'id_tipo_notificacion': 2,
                 'mensaje_notificacion': mensajeNotificacion,
                 'id_estudiante': req.body[0].id_estudiante,
-                'guia': req.body[0].id_actividad
+                'guia': req.body[0].id_actividad,
+                'nombre_materia': nombre_materia[0].nombre_materia,
             }
             console.log(notificacion)
             NotificacionDao.insertarNotificacion(notificacion).then(function(data) {
@@ -360,7 +366,7 @@ function insertNota(req, res) {
                             console.log(body)
                             console.log(error)
                                 /*if (!error && response.statusCode == 200) {
-                                	console.log(body.id) // Print the shortened url.
+                                    console.log(body.id) // Print the shortened url.
                                 }*/
                         });
                     }
@@ -381,8 +387,16 @@ function insertNota(req, res) {
             Respuesta.sendJsonResponse(res, 500, {
                 'status': 1,
                 'msg': error
-            })
-        })
+            });
+        });
+    }).catch(function(error){
+        console.log(error)
+        Respuesta.sendJsonResponse(res, 500, {
+                'status': 1,
+                'msg': error
+            });
+    });
+
     }
 }
 
