@@ -153,17 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id==R.id.action_perfil){
-           /* String token = FirebaseInstanceId.getInstance().getToken();
-            Bundle parametro = new Bundle();
-            parametro.putString("token", token);
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            HorarioAtencionFragment horarioAtencionFragment = new HorarioAtencionFragment();
-            horarioAtencionFragment.setArguments(parametro);
-            fragmentTransaction.replace(R.id.fragment, horarioAtencionFragment);
-            fragmentTransaction.commit();*/
-           /* Intent intent = new Intent(this, ExpandableActivity.class);
-            this.startActivity(intent);*/
+
 
         }
         return super.onOptionsItemSelected(item);

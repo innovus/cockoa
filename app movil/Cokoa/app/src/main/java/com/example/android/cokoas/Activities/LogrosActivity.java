@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.android.cokoas.Fragments.LogrosFragment;
 import com.example.android.cokoas.R;
@@ -21,7 +20,6 @@ import com.example.android.cokoas.R;
 import java.util.ArrayList;
 import java.util.List;
 
-//implements OnItemSelectedListener
 public class LogrosActivity extends AppCompatActivity {
     String id_materia,nombreMateria;
     String periodo_actual;
@@ -77,7 +75,7 @@ public class LogrosActivity extends AppCompatActivity {
 
 
 
-       // ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.spinner_list_item_array, android.R.layout.simple_spinner_item);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.my_spinner_textview, list);
 
         adapter.setDropDownViewResource(R.layout.my_spinner_textview);
@@ -85,7 +83,6 @@ public class LogrosActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
         spinner.setGravity(Gravity.CENTER);
 
-        // spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -93,9 +90,8 @@ public class LogrosActivity extends AppCompatActivity {
 
 
 
-                String s = Long.toString(id);
                 if(position!=0){
-                    Toast.makeText(parent.getContext(), "Selected: " + s, Toast.LENGTH_LONG).show();
+
                     aux = 1;
                     id_materia = getIntent().getStringExtra("id_materia");
                     periodo_actual = getIntent().getStringExtra("periodo_actual");
