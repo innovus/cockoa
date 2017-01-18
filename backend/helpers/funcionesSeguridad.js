@@ -62,6 +62,7 @@ var autorizacion= function(req,res,next){
   console.log(ip)
   if (req.headers.authorization && req.headers.authorization.search('Bearer ') === 0) {
       var token = req.headers.authorization.split(' ')[1];
+      console.log(token)
       var data= {
         token: token,
         ip:ip
@@ -82,6 +83,7 @@ var autorizacion= function(req,res,next){
                 return next();
             }
             else{
+              console.log("entro aqui")
 
                 Respuesta.sendJsonResponse(res,500,body);
             }

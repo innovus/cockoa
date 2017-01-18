@@ -38,7 +38,7 @@
         var getToken= function(){
           
             //return $cookieStore.get("udenar");
-            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6IjNkYTQxZjZiNDJiMjJhYzc4MGFkNWQ3NDk1Y2E5NmY2IiwiaGFzaHIiOiJjMTg4ZDU0MjlkZTcwODBkMWRhY2Y1MTM2M2QxODc5YSIsImV4cCI6MTQ4NDc3MzMxOCwiaWF0IjoxNDg0MTY4NTE4fQ.mmt_V5cTZf7x5K_4z4ZzG2z5F1OPJTP98fS2_VmluwA";
+            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6IjNkYTQxZjZiNDJiMjJhYzc4MGFkNWQ3NDk1Y2E5NmY2IiwiaGFzaHIiOiJjMTg4ZDU0MjlkZTcwODBkMWRhY2Y1MTM2M2QxODc5YSIsImV4cCI6MTQ4NTM3ODM3OSwiaWF0IjoxNDg0NzczNTc5fQ.vSMVUSusKz7lVK7Hw5SKr4CVVXcgkSBYODThB50huQ8";
         };
 
         var getCookieToken= function(){

@@ -20,6 +20,10 @@ var queryFindMateriasByEstudiante = "SELECT id_materia, persona.nombre1,nombre2,
 	"FROM actividad NATURAL JOIN logro NATURAL JOIN carga_docente NATURAL JOIN materia "+
 	" WHERE id_actividad =$id_actividad";
 
+	var queryFindMateriaByCargaDocente = "SELECT nombre_materia "+ 
+	"FROM materia NATURAL JOIN carga_docente "+
+	" WHERE id_carga_docente =$id_carga_docente";
+
 
 
 	//"WHERE periodo.id_periodo = 1 AND estudiante.id_estudiante = $id_estudiante";
@@ -52,6 +56,7 @@ var queries={
 		'findMateriasByEstudiante':queryFindMateriasByEstudiante,
 		'findMateriasWithInasistenciaByEstudiante':queryFindMateriasWithInasistenciaByEstudiante,
 		'findMateriaByActividad':queryFindMateriaByActividad,
+		'findMateriaByCargaDocente':queryFindMateriaByCargaDocente,
 	}
 };
 
@@ -64,8 +69,14 @@ var findMateriasWithInasistenciaByEstudiante = function (id_estudiante){
 var findMateriaByActividad = function(id_actividad){
 	return sequelize.query(queries.materia.findMateriaByActividad, {bind:{id_actividad:id_actividad},type:sequelize.QueryTypes.SELECT})
 }
+var findMateriaByCargaDocente = function(id_carga_docente){
+	return sequelize.query(queries.materia.findMateriaByCargaDocente, {bind:{id_carga_docente:id_carga_docente},type:sequelize.QueryTypes.SELECT})
+}
 
 module.exports.findMateriasByEstudiante=findMateriasByEstudiante;
 module.exports.findMateriasWithInasistenciaByEstudiante=findMateriasWithInasistenciaByEstudiante;
 module.exports.findMateriaByActividad = findMateriaByActividad;
+module.exports.findMateriaByCargaDocente = findMateriaByCargaDocente;
+
+
 

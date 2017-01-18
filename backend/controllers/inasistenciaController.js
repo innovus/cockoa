@@ -14,6 +14,7 @@ var NotificacionDao = require("../app_core/dao/notificacionDao");
 var DispositivoDao = require("../app_core/dao/dispositivoDao");
 var EstudianteDao = require("../app_core/dao/estudianteDao");
 var FuncionesSeguridad = require("../helpers/funcionesSeguridad");
+var MateriaDao = require("../app_core/dao/materiaDao");
 
 
 function getInasistenciasEstudianteByCarga(req,res){
@@ -192,15 +193,19 @@ function getCantidadInasistenciasCarga(req,res){
 
 //funcion que recibe un arreglo de inasistencias y las agrega en la base de datos
 function addInasistencias (req,res){
+    console.log("body add inasistencias")
     console.log(req.body)
     InasistenciaDao.addInasistencias(req.body)
     .then(function(){
-        var notificaciones = [];
-        var fecha = new Date(req.body[0].fecha_inasistencia)
-        var mensajeNotificacion = 'Se agrego una nueva inasistencia el dia  '+fecha.toLocaleDateString();
+        
+        MateriaDao.findMateriaByCargaDocente(req.body[0].id_carga).then(function(nombre_materia){
+            var notificaciones = [];
+            var fecha = new Date(req.body[0].fecha_inasistencia)
+            var mensajeNotificacion = 'Se agrego una nueva inasistencia el dia  '+fecha.toLocaleDateString() + ' en ' +nombre_materia[0].nombre_materia;
+
         //recorremos inasistencias para crear el arreglo de notificaciones por cada inassistencia agregada
         req.body.forEach(function(inasistencia,index){
-            var notificacion = {'id_tipo_notificacion':1,'mensaje_notificacion':mensajeNotificacion,'id_estudiante':inasistencia.id_estudiante,'guia':inasistencia.id_carga};
+            var notificacion = {'id_tipo_notificacion':1,'mensaje_notificacion':mensajeNotificacion,'id_estudiante':inasistencia.id_estudiante,'guia':inasistencia.id_carga,'nombre_materia':nombre_materia[0].nombre_materia};
             notificaciones.push(notificacion);
         });
         console.log("notificaciones")
@@ -270,6 +275,16 @@ function addInasistencias (req,res){
 
         //manda la respuesta
         respuesta.sendJsonResponse(res,200,{'mensaje':'Inasistencias insertada'});
+
+        }).catch(function(error) {
+            console.log(error)
+            Respuesta.sendJsonResponse(res, 500, {
+                'status': 1,
+                'msg': error
+            });
+        });
+
+
     }).catch(function(error){
         respuesta.sendJsonResponse(res,500,[]);
         console.log("Error" , error.message || error);
