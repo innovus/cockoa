@@ -11,7 +11,7 @@ var queryFindNotasActividadesByEstudiante = "SELECT id_actividad, nota_actividad
 
 var queryFindNotaActividadLogrobyEstudiante="select * from nota_actividad NATURAL JOIN actividad WHERE id_estudiante = $id_estudiante and id_logro=$id_logro";
 
-var queryFindNotaActividadEstudiantebyMateria = "SELECT * FROM logro NATURAL JOIN actividad NATURAL JOIN nota_actividad WHERE id_estudiante = $id_estudiante AND id_actividad = $id_actividad";
+var queryFindNotaActividadEstudiantebyMateria = "SELECT * FROM materia NATURAL JOIN logro NATURAL JOIN actividad NATURAL JOIN nota_actividad NATURAL JOIN carga_docente WHERE id_estudiante = $id_estudiante AND id_actividad = $id_actividad";
 
 var queries={
   "nota_actividad":{

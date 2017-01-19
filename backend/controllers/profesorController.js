@@ -348,7 +348,8 @@ function insertNota(req, res) {
                             },
                             "data": {
                                 "guia": req.body[0].id_actividad,
-                                "tipo": "2"
+                                "tipo": "2",
+                                "nombre_materia": nombre_materia[0].nombre_materia
                             }
                         }
                         var options = {

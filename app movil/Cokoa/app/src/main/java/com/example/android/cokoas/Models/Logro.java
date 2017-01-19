@@ -13,6 +13,15 @@ public class Logro {
     private double nota_logro;
     private  double porcentajeLogro;
     private String logroPorcentaje;
+    private String nombreMateria;
+
+    public String getNombreMateria() {
+        return nombreMateria;
+    }
+
+    public void setNombreMateria(String nombreMateria) {
+        this.nombreMateria = nombreMateria;
+    }
 
     public String getLogroPorcentaje() {
         return logroPorcentaje;

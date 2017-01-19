@@ -31,9 +31,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Log.d("FIREBASE", remoteMessage.getNotification().getBody());
                 String guia = remoteMessage.getData().get("guia");
                 String tipo= remoteMessage.getData().get("tipo");
+                String nombreMateria= remoteMessage.getData().get("nombre_materia");
                 String click_action=remoteMessage.getNotification().getClickAction();
                 //int  smalIcon = R.drawable.ic_stat_name;
-                mostrarNotificacion(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(),guia,tipo,click_action);
+                mostrarNotificacion(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(),nombreMateria,guia,tipo,click_action);
 
 
 
@@ -45,7 +46,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
     }
 
-    public void mostrarNotificacion(String title, String body,String guia,String tipo,String click_action) {
+    public void mostrarNotificacion(String title, String body,String nombreMateria,String guia,String tipo,String click_action) {
 
         Intent intent;
 
@@ -53,11 +54,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent = new Intent(click_action);
             intent.putExtra("id_materia",guia);
             intent.putExtra("notificacion","True");
+            intent.putExtra("nombre_materia",nombreMateria);
 
         }else {
             intent = new Intent(click_action);
              intent.putExtra("id_materia",guia);
             intent.putExtra("notificacion","True");
+            intent.putExtra("nombre_materia",nombreMateria);
         }
 
 

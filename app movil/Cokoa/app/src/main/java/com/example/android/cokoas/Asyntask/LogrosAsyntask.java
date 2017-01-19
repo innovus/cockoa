@@ -65,6 +65,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
     @Override
     protected ArrayList<Logro> doInBackground(String... params) {
         String materia = params[0];
+        String nombreMateria = params[3];
 
         if(params[1].equals("true")){
             if(id_periodos()!=null){
@@ -75,7 +76,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
                 String s1=s.get(0);
                 try {
                     JSONObject jsonObject = new JSONObject(s1);
-                    ArrayList<Logro> logroArrayList= logros(materia,a.get(numero-1));
+                    ArrayList<Logro> logroArrayList= logros(materia,a.get(numero-1),nombreMateria);
                    // String s2=jsonObject.getString("47703");
                     for (int i=0;i<logroArrayList.size();i++){
 
@@ -119,7 +120,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
                     String s1=s.get(0);
                     try {
                         JSONObject jsonObject = new JSONObject(s1);
-                        ArrayList<Logro> logroArrayList= logros(materia,id_periodo);
+                        ArrayList<Logro> logroArrayList= logros(materia,id_periodo,nombreMateria);
                         // String s2=jsonObject.getString("47703");
                         for (int i=0;i<logroArrayList.size();i++){
 
@@ -466,7 +467,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
         return null;
     }
 
-    public  ArrayList<Logro> logros(String materia,String id_periodo){
+    public  ArrayList<Logro> logros(String materia,String id_periodo,String nombreMateria){
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -551,7 +552,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
             }
         }
         try {
-            return getLogros(forecastJsonStr);
+            return getLogros(forecastJsonStr,nombreMateria);
             //return  null;
         } catch (JSONException e) {
             Log.e("error", e.getMessage(), e);
@@ -633,7 +634,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
         progressDialog.dismiss();
     }
 
-    public static ArrayList<Logro> getLogros(String logroJsonStr) throws JSONException {
+    public static ArrayList<Logro> getLogros(String logroJsonStr,String nombreMateria) throws JSONException {
 
         if (logroJsonStr != null) {
             // Ahora tenemos una cadena que representa todas las areas en formato JSON .
@@ -661,6 +662,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
                 // logro1.setTitulo_logro(titleLogro);
                 logro1.setDesc_logro(descLogro);
                 logro1.setLogroPorcentaje(porcentajeLogro);
+                logro1.setNombreMateria(nombreMateria);
                 //logro1.setNumero_periodo(numero_periodo);
                 logroArrayList.add(logro1);
 

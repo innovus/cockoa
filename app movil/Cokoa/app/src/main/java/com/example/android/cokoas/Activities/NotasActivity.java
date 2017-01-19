@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.android.cokoas.Asyntask.NotaActividadNotificacionAsyntask;
 import com.example.android.cokoas.Asyntask.NotasActividadAsyntask;
@@ -17,8 +18,9 @@ import com.example.android.cokoas.SessionManager.SessionManager;
 public class NotasActivity extends AppCompatActivity {
     String id_materia,descripcionLogro,notificacion;
     String id_logro;
-    String a;
+    String a,nombreMateria;
     SessionManager sessionManager;
+    TextView txtNombreMateria,txtDescripcionLogro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +28,12 @@ public class NotasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notas);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        txtNombreMateria = (TextView) findViewById(R.id.txt_nombre_materia_actividad);
+        txtDescripcionLogro = (TextView) findViewById(R.id.txtActividadLogro);
         Intent startingIntent = getIntent();
         Bundle className = startingIntent.getExtras();
         a = (String) className.get("guia");
+
 
         sessionManager = new SessionManager(this);
         if(sessionManager.connectionCheck(this)) {
@@ -39,12 +43,16 @@ public class NotasActivity extends AppCompatActivity {
                     id_materia = getIntent().getStringExtra("id_materia");
                     id_logro = getIntent().getStringExtra("id_logro");
                     descripcionLogro = getIntent().getStringExtra("descripcionLogro");
-                    new NotasActividadAsyntask(this).execute(id_materia,id_logro,descripcionLogro);
+                    nombreMateria = getIntent().getStringExtra("nombreMateria");
+                    txtNombreMateria.setText(nombreMateria);
+                    txtDescripcionLogro.setText(descripcionLogro);
+                    new NotasActividadAsyntask(this).execute(id_materia,id_logro,descripcionLogro,nombreMateria);
                 }
                 else {
                     new NotaActividadNotificacionAsyntask(this).execute(getIntent().getStringExtra("id_materia"));
                 }
             }else {
+
                 new NotaActividadNotificacionAsyntask(this).execute(a);
             }
         }else{

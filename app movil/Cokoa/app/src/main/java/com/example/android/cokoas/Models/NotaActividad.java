@@ -11,6 +11,15 @@ public class NotaActividad {
     private String notaActividad;
     private String descripcionLogro;
     private String porcentajeActividad;
+    private String nombreMateria;
+
+    public String getNombreMateria() {
+        return nombreMateria;
+    }
+
+    public void setNombreMateria(String nombreMateria) {
+        this.nombreMateria = nombreMateria;
+    }
 
     public String getPorcentajeActividad() {
         return porcentajeActividad;

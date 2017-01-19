@@ -153,6 +153,7 @@ public class NotaActividadNotificacionAsyntask extends AsyncTask<String,Void,Arr
                 String notaActividads = notaActividad.getString("nota_actividad");
                 String descripcioLogro = notaActividad.getString("descripcion_logro");
                 String porcentajeActividad = notaActividad.getString("porcentaje_actividad");
+                String nombreMateria = notaActividad.getString("nombre_materia");
                 NotaActividad  notaActividad1 = new NotaActividad();
                 notaActividad1.setDescripcionLogro(descripcioLogro);
                 notaActividad1.setPorcentajeActividad(porcentajeActividad);
@@ -160,7 +161,9 @@ public class NotaActividadNotificacionAsyntask extends AsyncTask<String,Void,Arr
                 notaActividad1.setNombreActividad("Actividad");
                 notaActividad1.setDescActividad(descActividad);
                 notaActividad1.setNotaActividad(notaActividads);
+                notaActividad1.setNombreMateria(nombreMateria);
                 notasActividadArrayList.add(notaActividad1);
+
 
             }
 

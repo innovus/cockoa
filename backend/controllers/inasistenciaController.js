@@ -234,7 +234,8 @@ function addInasistencias (req,res){
                             },
                             "data": {
                                 "guia":req.body[0].id_carga,
-                                "tipo":"1"  
+                                "tipo":"1",
+                                "nombre_materia": nombre_materia[0].nombre_materia
                             }
                         }
                     var options = {

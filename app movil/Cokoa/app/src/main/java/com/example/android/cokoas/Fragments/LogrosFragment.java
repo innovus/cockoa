@@ -59,9 +59,9 @@ public class LogrosFragment extends Fragment {
         sessionManager = new SessionManager(getActivity());
         if(sessionManager.connectionCheck(getActivity())) {
             if (sheckPeriodo.equals("false")) {
-                new LogrosAsyntask(this.getActivity()).execute(id_materia, "false");
+                new LogrosAsyntask(this.getActivity()).execute(id_materia, "false",numero_periodo,nombreMateria);
             } else {
-                new LogrosAsyntask(this.getActivity()).execute(id_materia, "true", numero_periodo);
+                new LogrosAsyntask(this.getActivity()).execute(id_materia, "true", numero_periodo,nombreMateria);
             }
         }else {
             Snackbar.make(getActivity().findViewById(android.R.id.content), "Comprueba la conexión de red o inténtalo de nuevo más tarde", Snackbar.LENGTH_LONG)
