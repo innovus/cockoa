@@ -22,6 +22,7 @@
         $scope.currentPath= $location.path();
         $scope.isLoggedIn= false;
         $scope.currentUser=null;
+        $scope.perfil = null;
         $scope.rutaInicio=CONFIG.http_seguridad;
         $scope.opciones=null;
 
@@ -37,7 +38,7 @@
                 }
                 else if(data){
                     $scope.currentUser=data;
-                    $scope.isLoggedIn=true;
+                    console.log("q pasa")
                     autenticacion.obtenerRutas().success(function(data){
                          $log.debug(data);
                          $scope.opciones=data;
@@ -45,7 +46,22 @@
                          console.log(error);
                          $log.debug(error);   
                     });
-                }    
+
+                     autenticacion.getPerfil().success(function(perfil){
+                        $scope.perfil=perfil;
+                            console.log("este es perfil")
+                            console.log(perfil)
+                            $scope.isLoggedIn=true;
+                            console.log("no entreo nunca")
+                         }).error(function(err){
+                             console.log("este es error del perfil")
+                            console.log(err)
+                            $log.log(error);
+
+                         })   
+
+                    }
+                    
             });
         };
 

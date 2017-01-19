@@ -1,6 +1,8 @@
 var Models = require("../models/index");
 var sequelize = Models.sequelize;
-var queryFindEstudianteByIdUsuario = "SELECT id_estudiante FROM estudiante NATURAL JOIN persona "+
+var queryFindEstudianteByIdUsuario = "SELECT identificacion, id_estudiante, "+
+" nombre1, nombre2, apellido1,apellido2,sexo, direccion, telefono, celular, "+
+" email, lugar_nacimiento, fecha_nacimiento FROM estudiante NATURAL JOIN persona "+
     " WHERE id_usuario = $id_usuario ";
 
 var queryFindAllEstudianteByIdCurso = "SELECT nombre1,nombre2, apellido1, apellido2, estudiante.id_estudiante "+

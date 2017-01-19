@@ -38,7 +38,8 @@
         var getToken= function(){
           
             //return $cookieStore.get("udenar");
-            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6IjNkYTQxZjZiNDJiMjJhYzc4MGFkNWQ3NDk1Y2E5NmY2IiwiaGFzaHIiOiJjMTg4ZDU0MjlkZTcwODBkMWRhY2Y1MTM2M2QxODc5YSIsImV4cCI6MTQ4NTM3ODM3OSwiaWF0IjoxNDg0NzczNTc5fQ.vSMVUSusKz7lVK7Hw5SKr4CVVXcgkSBYODThB50huQ8";
+           // return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6IjNkYTQxZjZiNDJiMjJhYzc4MGFkNWQ3NDk1Y2E5NmY2IiwiaGFzaHIiOiJjMTg4ZDU0MjlkZTcwODBkMWRhY2Y1MTM2M2QxODc5YSIsImV4cCI6MTQ4NTM3ODM3OSwiaWF0IjoxNDg0NzczNTc5fQ.vSMVUSusKz7lVK7Hw5SKr4CVVXcgkSBYODThB50huQ8";
+            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6ImRlNzM1NjI2N2JlNGI5N2EwYjZhMDBiYzdlNTk3ZDlmIiwiaGFzaHIiOiJmNDVkZjA4YjIyYzljMTlmNWZkYmY4ZjgxN2E1ZDJlOSIsImV4cCI6MTQ4NTQ0NzAzNSwiaWF0IjoxNDg0ODQyMjM1fQ.XzUF9Sjfz00LoEBxrZuN7LYdAJtLFNWU1yokX-WYL6U";
         };
 
         var getCookieToken= function(){
@@ -50,6 +51,9 @@
      
                 saveToken(data.token);
             });        
+        };
+        var getPerfil= function(){
+            return $http.get(CONFIG.http_address + '/api/todos/perfil/',{ headers:{Authorization : 'Bearer '+CONFIG.token}});       
         };
 
         var login= function(user){
@@ -69,7 +73,7 @@
                 $http.post(CONFIG.http_seguridad+"/darinfousuario",null,{ headers:{Authorization : 'Bearer '+getToken()} })
                 .success(function(data){
                     $log.log(data);
-                    console.log("succes darinfo")
+                    console.log("succes daringo")
                     callback(data,null);
                 }).error(function(e){
                     $log.error(e);
@@ -100,7 +104,8 @@
             login:login,
             register:register,
             saveToken:saveToken,
-            getToken:getToken
+            getToken:getToken,
+            getPerfil:getPerfil,
         };
     }
 })();

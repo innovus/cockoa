@@ -5,9 +5,11 @@ var options = {
     promiseLib: promise
 };
 var PeriodoDao = require("../app_core/dao/periodoDao");
-var respuesta = require("../helpers/respuesta");
+var Respuesta = require("../helpers/respuesta");
 var PersonaDao = require("../app_core/dao/personaDao");
 var FuncionesSeguridad = require("../helpers/funcionesSeguridad");
+var EstudianteDao = require("../app_core/dao/estudianteDao");
+var DocenteDao = require("../app_core/dao/docenteDao");
 
 function getPeriodosDisponibles(req, res) {
     var hoy = new Date();
@@ -19,13 +21,13 @@ function getPeriodosDisponibles(req, res) {
     console.log(queri)
     db.many(queri)*/
     PeriodoDao.findPeriodosDisponibles(fecha_actual).then(function(data) {
-        respuesta.sendJsonResponse(res, 200, data);
+        Respuesta.sendJsonResponse(res, 200, data);
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
-            respuesta.sendJsonResponse(res, 200, {});
+            Respuesta.sendJsonResponse(res, 200, {});
         } else {
             console.log(err.message);
-            respuesta.sendJsonResponse(res, 500, {});
+            Respuesta.sendJsonResponse(res, 500, {});
         }
     })
 }
@@ -33,18 +35,38 @@ function getPeriodosDisponibles(req, res) {
 function getPerfil(req,res){
     var token=req.headers.authorization.split(' ')[1];
     FuncionesSeguridad.getTokenData(token).then(function(decoded){
-        PersonaDao.findPersonaByIdUsuario(decoded.id).then(function(persona){
-            respuesta.sendJsonResponse(res, 200, persona);
 
-        }).catch(function(err){
-            if (err.message == 'No data returned from the query.') {
-                respuesta.sendJsonResponse(res, 200, {});
-            } else {
-                console.log(err.message);
-                respuesta.sendJsonResponse(res, 500, {});
-            }
 
-        })
+        //solamente si el rol es de un estudiante
+        if(decoded.rol == 7){
+            EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
+
+                console.log("to bbn to fine");
+                console.log(estudiante[0]);
+                Respuesta.sendJsonResponse(res,200,estudiante[0]);
+              
+            }).catch(function(e){
+                console.log("erro what happend")
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+        }else if(decoded.rol == 6){
+                DocenteDao.findDocenteByIdUsuario(decoded.id).then(function(docente){
+                console.log(docente[0].id_docente)
+                Respuesta.sendJsonResponse(res,200,docente[0]);
+                console.log("la fucnion salio bn" + docente[0])
+            }).catch(function(e){
+                Respuesta.sendJsonResponse(res, 500, {"error":"Error Usuario"});
+                console.log(e)
+            });
+
+
+        }else{
+            Respuesta.sendJsonResponse(res, 500, {"error":"No tiene permisos"});
+        }
+
+
     });
 
 }
@@ -57,13 +79,13 @@ function getPeriodoActual(req, res) {
     var fecha_actual = String(anio + "-" + mes + "-" + dia);
     console.log(fecha_actual)
     PeriodoDao.findPeriodoActual(fecha_actual).then(function(data) {
-        respuesta.sendJsonResponse(res, 200, data);
+        Respuesta.sendJsonResponse(res, 200, data);
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
-            respuesta.sendJsonResponse(res, 200, {});
+            Respuesta.sendJsonResponse(res, 200, {});
         } else {
             console.log(err.message);
-            respuesta.sendJsonResponse(res, 500, {});
+            Respuesta.sendJsonResponse(res, 500, {});
         }
     })
 }

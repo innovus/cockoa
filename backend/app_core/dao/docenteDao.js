@@ -4,7 +4,9 @@ var sequelize = Models.sequelize;
 //var queriFindMateriasByCurso = "SELECT id_carga_docente, id_docente, id_materia, nombre_materia, id_curso, grado, grupo " + "FROM carga_docente NATURAL JOIN materia NATURAL JOIN curso " + "WHERE vigente_carga_docente = '1' AND id_docente = '1' " + "AND id_periodo = " + "(SELECT DISTINCT id_periodo FROM carga_docente natural join periodo " + "WHERE fecha_inicio_periodo <= '" + fecha_actual + "' AND fecha_fin_periodo >= '" + fecha_actual + "' ) " + "ORDER BY grado, grupo ";
 
 
-var queryFindDocenteByIdUsuario = "SELECT id_docente FROM docente NATURAL JOIN persona "+
+var queryFindDocenteByIdUsuario = "SELECT identificacion, id_docente, "+
+" nombre1, nombre2, apellido1,apellido2,sexo, direccion, telefono, celular, "+
+" email, lugar_nacimiento, fecha_nacimiento  FROM docente NATURAL JOIN persona "+
     " WHERE id_usuario = $id_usuario ";
 
 var queries = {
