@@ -195,13 +195,13 @@ public class InasistenciaNotificacionAsyntask extends AsyncTask<String, Void, Ar
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                if(tipoInasistencia.equals("0")){
+                    inasistenciaMateria.setTipoInasistencia("Falta");
+                    inasistenciaMateria.setJustificadaInasistencia("Si");
+                }
                 if(tipoInasistencia.equals("1")){
                     inasistenciaMateria.setTipoInasistencia("Falta");
                     inasistenciaMateria.setJustificadaInasistencia("No");
-                }
-                if(tipoInasistencia.equals("2")){
-                    inasistenciaMateria.setTipoInasistencia("Falta");
-                    inasistenciaMateria.setJustificadaInasistencia("Si");
                 }
                 if(tipoInasistencia.equals("3")){
                     inasistenciaMateria.setTipoInasistencia("Retraso");

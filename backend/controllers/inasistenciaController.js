@@ -230,6 +230,8 @@ function addInasistencias (req,res){
                             "notification":{
                                 "title":"Inasistencia",
                                 "body":mensajeNotificacion,
+                                "icon" : "ic_border_color_white_24dp",
+                                "sound" : "defaull",
                                 "click_action":"OPEN_ACTIVITY_2"
                             },
                             "data": {
