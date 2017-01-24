@@ -12,6 +12,7 @@ public class AppConstants {
     public static final String serverUrls = "http://"+ipHome+":3001/";//autentificacion
     public static final String serverLoginMovil = "http://190.254.4.19:4006/";
     public static final String serverUrl = "http://"+ipHome+":3000/";
+    public static  final String urlFotografia = "http://"+ipHome+":5000/img/fotografias/";
     public static final String parametro1 = "username";//identificacion
     public static final String parametro2 = "password";
     public static final String parametro3 = "username";

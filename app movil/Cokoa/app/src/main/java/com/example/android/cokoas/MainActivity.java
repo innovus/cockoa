@@ -231,6 +231,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             item.setChecked(true);
             setFragment(7);
             drawerLayout.closeDrawer(GravityCompat.START);
+        }else if(id==R.id.nav_perfil_profesorr){
+            item.setChecked(true);
+            setFragment(8);
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if (id == R.id.offProfesor) {
 
@@ -248,9 +252,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(sessionManager.connectionCheck(this)) {
             switch (position) {
                 case 0:
+                    Bundle parametro = new Bundle();
+                    parametro.putString("Tipo_Perfil", "Estudiante");
                     fragmentManager = getSupportFragmentManager();
                     fragmentTransaction = fragmentManager.beginTransaction();
                     PerfilFragment perfilFragment = new PerfilFragment();
+                    perfilFragment.setArguments(parametro);
                     fragmentTransaction.replace(R.id.fragment, perfilFragment);
                     fragmentTransaction.commit();
                     break;
@@ -302,7 +309,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     LlamarListaFragment llamarListaFragment = new LlamarListaFragment();
                     fragmentTransaction.replace(R.id.fragment, llamarListaFragment);
                     fragmentTransaction.commit();
-
+                    break;
+                case 8:
+                    Bundle parametros = new Bundle();
+                    parametros.putString("Tipo_Perfil", "Profesor");
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    PerfilFragment perfilFragmentProfesor = new PerfilFragment();
+                    perfilFragmentProfesor.setArguments(parametros);
+                    fragmentTransaction.replace(R.id.fragment, perfilFragmentProfesor);
+                    fragmentTransaction.commit();
                     break;
 
             }

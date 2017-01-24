@@ -58,7 +58,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
         progressDialog.setMessage("Cargando...");
         progressDialog.setIndeterminate(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
         progressDialog.getWindow().setGravity(Gravity.CENTER);
         progressDialog.show();
     }
