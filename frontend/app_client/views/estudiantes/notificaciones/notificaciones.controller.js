@@ -12,7 +12,7 @@ var app = angular.module('docentes'); //creamos el modulo pokedex y le pasamos a
      * Esta es una controllador para consultar la actividad en detalle 
      * 
     */
-app.controller('notificacionesController', ['$scope', '$http', '$uibModal', '$log', '$filter', '$location', 'CONFIG', 'estudianteData', 'notificacionData', function($scope, $http, $uibModal, $log, $filter, $location, CONFIG, estudianteData, notificacionData) {
+app.controller('notificacionesController', ['$rootScope','$scope', '$http', '$uibModal', '$log', '$filter', '$location', 'CONFIG', 'estudianteData', 'notificacionData', function($rootScope,$scope, $http, $uibModal, $log, $filter, $location, CONFIG, estudianteData, notificacionData) {
     $scope.tipo_notificacion_seleccionada = null;
     $scope.notificaciones = [];
     $scope.todasNotificaciones = [];
@@ -93,9 +93,11 @@ app.controller('notificacionesController', ['$scope', '$http', '$uibModal', '$lo
         if (notificacion.id_tipo_notificacion == 2) {
             console.log(notificacion);
             console.log("entro al if")
+            $rootScope.notificacion = notificacion;
             $location.path('/estudiantes/notas');
         } else {
             console.log(notificacion);
+            $rootScope.notificacion = notificacion;
             console.log("entro al else")
             $location.path('/estudiantes/inasistencias');
         }

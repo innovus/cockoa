@@ -16,9 +16,11 @@
     //definimos el primer controlador, le pasamos el nombre
     //del controlador y le pasamos una function javascript
     //Agregamos el objecto pokemon asociado al controlador
-    app.controller('inasistenciaEstudianteController', ['$scope', '$http', '$cookieStore', 'materiaData', 'inasistenciaData', function($scope, $http, $cookieStore, materiaData, inasistenciaData) {
+    app.controller('inasistenciaEstudianteController', ['$rootScope','$scope', '$http', '$cookieStore', 'materiaData', 'inasistenciaData', function($rootScope,$scope, $http, $cookieStore, materiaData, inasistenciaData) {
         $scope.materia_seleccionada = null;
         $scope.inasistencias = null;
+        console.log("notificacion")
+        console.log($rootScope.notificacion);
         //////////////////////
 
 
@@ -34,8 +36,10 @@
         * 
         * 
         */ 
-        $scope.getInasistenciasByMateria = function(materia) {
+
+        getInasistenciasByMateria = function(materia) {
             $scope.materia_seleccionada = materia;
+            console.log(materia)
             inasistenciaData.findInasistenciasByMateria(materia.id_materia).success(function(data) {
                 $scope.inasistencias = data;
                 for (var i = $scope.inasistencias.length - 1; i >= 0; i--) {
@@ -50,6 +54,7 @@
                 console.log('Error: ' + error);
             })
         }
+        $scope.getInasistenciasByMateria = getInasistenciasByMateria;
 
 
 
@@ -91,6 +96,23 @@
         }).error(function(data) {
             console.log('Error: ' + data);
         });
+
+        if($rootScope.notificacion != undefined || $rootScope.notificacion != null){
+            console.log("nunca entro")
+            console.log($rootScope.notificacion.guia)
+             materiaData.findMateriasByActividad($rootScope.notificacion.guia).success(function(data) {
+                $rootScope.notificacion == null;
+                console.log(data);
+                getInasistenciasByMateria(data);
+
+                console.log($scope.materias)
+            }).error(function(data) {
+                console.log('Error: ' + data);
+            });
+
+
+        }
+
     }]);
 })();
 

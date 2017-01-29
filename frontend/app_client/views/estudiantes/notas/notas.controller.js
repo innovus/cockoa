@@ -34,7 +34,8 @@
      * Esta es una controllador que maneja la vista principal de notas de un estudiante
      * 
     */
-    app.controller('estudiantes_notasController', ['$scope', '$http', '$filter', '$cookieStore', '$cookies', 'periodoData', 'materiaData', 'logroData', 'actividadData', 'nota_actividadData', 'nota_logroData', '$uibModal', function($scope, $http, $filter, $cookieStore, $cookies, periodoData, materiaData, logroData, actividadData, nota_actividadData, nota_logroData, $uibModal) {
+    app.controller('estudiantes_notasController', ['$rootScope','$scope', '$http', '$filter', '$cookieStore', '$cookies', 'periodoData', 'materiaData', 'logroData', 'actividadData', 'nota_actividadData', 'nota_logroData', '$uibModal', function($rootScope,$scope, $http, $filter, $cookieStore, $cookies, periodoData, materiaData, logroData, actividadData, nota_actividadData, nota_logroData, $uibModal) {
+        console.log($rootScope.notificacion);
         $scope.materiaSeleccionada = null;
         $scope.periodos = [];
         $scope.periodoActual = null
@@ -69,6 +70,22 @@
         }).error(function(data) {
             console.log('Error: ' + data);
         });
+
+        if($rootScope.notificacion != undefined || $rootScope.notificacion != null){
+            console.log("nunca entro")
+            console.log($rootScope.notificacion.guia)
+             materiaData.findMateriasByActividad($rootScope.notificacion.guia).success(function(data) {
+                $rootScope.notificacion == null;
+                console.log(data[0]);
+                getMateriasYLogros(data[0]);
+
+                console.log($scope.materias)
+            }).error(function(data) {
+                console.log('Error: ' + data);
+            });
+
+
+        }
 
         
         /** 
@@ -107,6 +124,9 @@
 
         var getMateriasYLogros = function(materia) {
             $scope.materiaSeleccionada = materia;
+            console.log($scope.materiaSeleccionada)
+            console.log($scope.periodoSeleccionado)
+
             getNotasYLogros($scope.materiaSeleccionada, $scope.periodoSeleccionado);
         };
 

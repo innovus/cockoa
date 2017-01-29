@@ -4,10 +4,10 @@
 
     function nota_logroData($http, CONFIG, autenticacion) {
         var findNotasLogrosByCarga = function(id_carga) {
-            return $http.get(CONFIG.http_address + '/api/docentes/cargas/' + id_carga + '/logros/notas',{ headers:{Authorization : 'Bearer '+CONFIG.token} })
+            return $http.get(CONFIG.http_address + '/api/docentes/cargas/' + id_carga + '/logros/notas',{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
         };
         var findNotasLogrosByMateriaAndPeriodo = function(id_materia, id_periodo) {
-            return $http.get(CONFIG.http_address + '/estudiantes/materias/' + id_materia + '/notas/periodos/' + id_periodo,{ headers:{Authorization : 'Bearer '+CONFIG.token} })
+            return $http.get(CONFIG.http_address + '/estudiantes/materias/' + id_materia + '/notas/periodos/' + id_periodo,{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
         }
         var createNotasLogrosByEstudiante=function(notas){
             return $http({
@@ -15,7 +15,7 @@
                             url: CONFIG.http_address + '/api/docentes/logros/notas',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization' : 'Bearer '+CONFIG.token 
+                                'Authorization' : 'Bearer '+autenticacion.getToken() 
                             },
                             data: notas
                         })
@@ -28,7 +28,7 @@
                             url: CONFIG.http_address + '/api/docentes/logros/notas',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization' : 'Bearer '+CONFIG.token,
+                                'Authorization' : 'Bearer '+autenticacion.getToken(),
                             },
                             data: notas
                         })
