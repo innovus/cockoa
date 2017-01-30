@@ -34,7 +34,7 @@
      * Esta es una controllador que maneja la vista principal de notas de un estudiante
      * 
     */
-    app.controller('estudiantes_notasController', ['$rootScope','$scope', '$http', '$filter', '$cookieStore', '$cookies', 'periodoData', 'materiaData', 'logroData', 'actividadData', 'nota_actividadData', 'nota_logroData', '$uibModal', function($rootScope,$scope, $http, $filter, $cookieStore, $cookies, periodoData, materiaData, logroData, actividadData, nota_actividadData, nota_logroData, $uibModal) {
+    app.controller('estudiantes_notasController', ['$rootScope','$scope', '$http', '$filter', '$cookieStore', '$cookies', 'periodoData', 'materiaData', 'logroData', 'actividadData', 'nota_actividadData', 'nota_logroData', '$uibModal','myutils', function($rootScope,$scope, $http, $filter, $cookieStore, $cookies, periodoData, materiaData, logroData, actividadData, nota_actividadData, nota_logroData, $uibModal,myutils) {
         console.log($rootScope.notificacion);
         $scope.materiaSeleccionada = null;
         $scope.periodos = [];
@@ -42,13 +42,11 @@
         $scope.periodoSeleccionado = null;
         $scope.activeTabIndex = 0;
         $scope.notaFinal = 0;
-        //Trae el periodo Actual
-        periodoData.findPeriodoActual().success(function(data) {
-            $scope.periodoActual = data[0];
-        }).error(function(error) {
-            console.log(error);
-        });
+        
         periodoData.findPeriodos().success(function(data) {
+            //Trae el periodo Actual
+        periodoData.findPeriodoActual().success(function(actual) {
+            $scope.periodoActual = actual[0];
             $scope.periodos = data;
             for (var i = 0; i < data.length; i++) {
                 (function(i) {
@@ -59,6 +57,10 @@
                 })(i);
             }
             console.log(data);
+        }).error(function(error) {
+            console.log(error);
+        });
+            
         }).error(function(error) {
             console.log(error);
             $scope.periodos = [];
@@ -328,11 +330,15 @@
         * 
         */
         function getNotasYLogros(materia, periodo) {
+            
             $scope.materiaSeleccionada = materia;
             $scope.logros = [];
             $scope.notas = {};
             $scope.notasactividades = {};
-            getLogros(materia.id_materia, periodo.id_periodo, function(logros) {
+            if(materia != null || materia != undefined){
+                myutils.showWait();
+                console.log(materia)
+                getLogros(materia.id_materia, periodo.id_periodo, function(logros) {
                 getNotas(materia.id_materia, periodo.id_periodo, function(notas) {
                     $scope.notas = notas;
                     $scope.logros = logros;
@@ -369,12 +375,17 @@
                                     }
                                 }) //cierra foreach logros
                             calcularNotaFinal();
+                            myutils.hideWait();
+
                         }); //cierrra getnotasActividades
                     }); //cierra getActividadesByLogros
                     console.log("cierra for y scope logros")
                     console.log($scope.logros)
                 }); //cierra getNotas
+                
             }); //Cierra getLogros
+            }
+            
         } //cierra getNotasYLogros
 
         $scope.getPeriodoId  = getPeriodoId;

@@ -281,26 +281,38 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         * 
     */
     var getPeriodoId = function(index) {
-        myutils.showWait();
+        
         $scope.periodoSeleccionado = $scope.periodos[index];
         //$http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodoSeleccionado.id_periodo)
+
         periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
             $scope.cargas = data;
             var encontrado = false;
+            if($scope.cargaSeleccionada != null || $scope.cargaSeleccionada != undefined ){
+                myutils.showWait();
+                
+             }
             //hace la busqueda si existe la misma carga en las nuevas cargas de este periodo
             //para dejarla seleccionada con las nuevas
             for (var i = 0; i < data.length; i++) {
                 (function(i) {
-                    if (data[i].nombre_materia == $scope.cargaSeleccionada.nombre_materia && data[i].id_curso == $scope.cargaSeleccionada.id_curso) {
-                        $scope.cargaSeleccionada = data[i];
-                        encontrado = true;
+                    if($scope.cargaSeleccionada != null || $scope.cargaSeleccionada != undefined ){
+                        if (data[i].nombre_materia == $scope.cargaSeleccionada.nombre_materia && data[i].id_curso == $scope.cargaSeleccionada.id_curso) {
+                            $scope.cargaSeleccionada = data[i];
+                            encontrado = true;
+                        }
                     }
+                    
                 })(i);
             }
             if (encontrado == false) {
+                console.log(encontrado)
                 $scope.cargaSeleccionada = null;
+            }else{
+                seleccionarCarga($scope.cargaSeleccionada);
+
             }
-            seleccionarCarga($scope.cargaSeleccionada);
+            
 
         }).error(function(data) {
             console.log('Error: ' + data);

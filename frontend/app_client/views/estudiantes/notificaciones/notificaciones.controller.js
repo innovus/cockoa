@@ -12,7 +12,7 @@ var app = angular.module('docentes'); //creamos el modulo pokedex y le pasamos a
      * Esta es una controllador para consultar la actividad en detalle 
      * 
     */
-app.controller('notificacionesController', ['$rootScope','$scope', '$http', '$uibModal', '$log', '$filter', '$location', 'CONFIG', 'estudianteData', 'notificacionData', function($rootScope,$scope, $http, $uibModal, $log, $filter, $location, CONFIG, estudianteData, notificacionData) {
+app.controller('notificacionesController', ['$rootScope','$scope', '$http', '$uibModal', '$log', '$filter', '$location', 'CONFIG', 'estudianteData', 'notificacionData','myutils', function($rootScope,$scope, $http, $uibModal, $log, $filter, $location, CONFIG, estudianteData, notificacionData,myutils) {
     $scope.tipo_notificacion_seleccionada = null;
     $scope.notificaciones = [];
     $scope.todasNotificaciones = [];
@@ -25,6 +25,7 @@ app.controller('notificacionesController', ['$rootScope','$scope', '$http', '$ui
         console.log(error);
     });
     notificacionData.findNotificationByEstudiante().success(function(data) {
+        
         $scope.notificaciones = data;
         $scope.todasNotificaciones = data;
         console.log(data)

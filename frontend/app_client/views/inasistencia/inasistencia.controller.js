@@ -5,13 +5,13 @@ var app = angular.module('docentes'); //creamos date modulo pokedex y le pasamos
 /** 
      * @ngdoc controller
      * @name docentes.controller:inasistenciaController
-     * @requires $scope, $http, $uibModal, $log, $filter, CONFIG, periodoData, inasistenciaData, estudianteData
+     * @requires $scope, $http, $uibModal, $log, $filter, CONFIG, periodoData, inasistenciaData, estudianteData,myutils
      * @description
      * 
      * Esta es una controllador que maneja la vista de inasistencia de un docente 
      * 
     */
-app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log', '$filter', 'CONFIG', 'periodoData', 'inasistenciaData', 'estudianteData', function($scope, $http, $uibModal, $log, $filter, CONFIG, periodoData, inasistenciaData, estudianteData) {
+app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log', '$filter', 'CONFIG', 'periodoData', 'inasistenciaData', 'estudianteData','myutils', function($scope, $http, $uibModal, $log, $filter, CONFIG, periodoData, inasistenciaData, estudianteData,myutils) {
     $scope.inasistenciasEstudiante = [];
     $scope.estudiantes = [];
     $scope.fechaInasistencia = new Date();
@@ -105,6 +105,11 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
         * 
         */ 
     $scope.getPeriodoId = function(index) {
+         if($scope.cargaSeleccionada != null || $scope.cargaSeleccionada != undefined ){
+                myutils.showWait();
+                
+             }
+        
         $scope.periodoSeleccionado = $scope.periodos[index];
         periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
             $scope.cargas = data;
@@ -113,21 +118,29 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
             //para dejarla seleccionada con las nuevas
             for (var i = 0; i < data.length; i++) {
                 (function(i) {
-                    if (data[i].nombre_materia == $scope.cargaSeleccionada.nombre_materia && data[i].id_curso == $scope.cargaSeleccionada.id_curso) {
-                        $scope.cargaSeleccionada = data[i];
-                        console.log("if ycarga seleccionada");
-                        console.log($scope.cargaSeleccionada)
-                        encontrado = true;
-                    }
+                     if($scope.cargaSeleccionada != null || $scope.cargaSeleccionada != undefined ){
+                        if (data[i].nombre_materia == $scope.cargaSeleccionada.nombre_materia && data[i].id_curso == $scope.cargaSeleccionada.id_curso) {
+                            $scope.cargaSeleccionada = data[i];
+                            console.log("if ycarga seleccionada");
+                            console.log($scope.cargaSeleccionada)
+                            encontrado = true;
+                        }
+
+                     }
+                    
                 })(i);
             }
+           
             if (encontrado == false) {
                 $scope.cargaSeleccionada = null;
                 console.log($scope.cargaSeleccionada)
-            }
-            console.log("sale de for");
+            }else{
+
             console.log($scope.cargaSeleccionada);
             seleccionarCarga($scope.cargaSeleccionada);
+
+            }
+            
         }).error(function(data) {
             console.log('Error: ' + data);
         });
@@ -192,6 +205,8 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
     
 
     var selectCurso = function(carga) {
+        myutils.showWait();
+
         seleccionarCarga(carga);
          for (var i = 0; i < $scope.periodos.length; i++) {
                 //entra cuando el periodo actual es encontrado en el vector
@@ -220,6 +235,7 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
         */
 
     function seleccionarCarga(carga) {
+        
         $scope.cargaSeleccionada = carga;
         $scope.estudiantes = [];
         $scope.cantidad = {};
@@ -238,7 +254,8 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
                     else {
                         $scope.estudiantes[i].inasistencias = $scope.cantidad[$scope.estudiantes[i].id_estudiante];
                     } //CIERRA ELSE
-                } //cierra for       
+                } //cierra for 
+                myutils.hideWait();      
             }); //CIERRA GERINASISTENCIAS
         }); //CIERRA GETCURSOS
     } //CIERA FUNCION SELECIONAR CARGA

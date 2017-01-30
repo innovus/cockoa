@@ -16,7 +16,7 @@
     //definimos el primer controlador, le pasamos el nombre
     //del controlador y le pasamos una function javascript
     //Agregamos el objecto pokemon asociado al controlador
-    app.controller('inasistenciaEstudianteController', ['$rootScope','$scope', '$http', '$cookieStore', 'materiaData', 'inasistenciaData', function($rootScope,$scope, $http, $cookieStore, materiaData, inasistenciaData) {
+    app.controller('inasistenciaEstudianteController', ['$rootScope','$scope', '$http', '$cookieStore', 'materiaData', 'inasistenciaData','myutils', function($rootScope,$scope, $http, $cookieStore, materiaData, inasistenciaData,myutils) {
         $scope.materia_seleccionada = null;
         $scope.inasistencias = null;
         console.log("notificacion")
@@ -38,6 +38,7 @@
         */ 
 
         getInasistenciasByMateria = function(materia) {
+            myutils.showWait();
             $scope.materia_seleccionada = materia;
             console.log(materia)
             inasistenciaData.findInasistenciasByMateria(materia.id_materia).success(function(data) {
@@ -50,8 +51,10 @@
                     $scope.inasistencias[i].nombrecompleto = $scope.inasistencias[i].nombre1 + " " + $scope.inasistencias[i].nombre2 + " " + $scope.inasistencias[i].apellido1 + " " + $scope.inasistencias[i].apellido2;
                 } //cierra dor
                 console.log(data);
+                myutils.hideWait();
             }).error(function(error) {
                 console.log('Error: ' + error);
+                myutils.hideWait();
             })
         }
         $scope.getInasistenciasByMateria = getInasistenciasByMateria;
