@@ -7,3 +7,5 @@ backend/config.json
 backend/app.js
 backend/node_modules/
 frontend/node_modules/
+cockoap/backend/node_modules/
+cockoap/frontend/node_modules/
