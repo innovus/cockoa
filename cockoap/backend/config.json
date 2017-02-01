@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "personal",
+    "password": "1",
+    "database": "liceofull2",
+    "host": "127.0.0.1",
+    "port":"5432",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "personal",
+    "password": "1",
+    "database": "l",
+    "host": "127.0.0.1",
+    "port":"5432",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "root",
+    "password": "ud3n4r",
+    "database": "compras",
+    "port":"5432",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}

@@ -1,0 +1,64 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Faltas de
+    </h3>
+    <div class="modal-body">
+        <h1>
+            Asistencia
+        </h1>
+        <div ng-grid ="gridOptions">
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Fecha
+                    </th>
+                    <th>
+                        Justificada
+                    </th>
+                    <th ng-show="permisoEdicion">
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="fecha in inasistenciasEstudiante">
+                    <th>
+                        {{ fecha.fecha_inasistencia | date : format : shortDate }}
+                    </th>
+                    <th>
+                        <!-- editable status -->
+                        <span editable-select="fecha.estado_inasistencia" e-name="estado_inasistencia" e-form="rowform" e-ng-options="s.value as s.text for s in justificadas">
+                            {{ showEstadoInasistencia(fecha) }}
+                        </span>
+                    </th>
+                    <th ng-show="permisoEdicion">
+                        <!-- form -->
+                        <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline" onaftersave="updateEstado(fecha)">
+                            <button  type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                                Guardar
+                            </button>
+                            <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                                Cancelar
+                            </button>
+                        </form>
+                        <div class="buttons" ng-show="!rowform.$visible">
+                            <button class="btn btn-primary" ng-click="rowform.$show()">
+                                editar
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="ok()">
+            OK
+        </button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">
+            Cancel
+        </button>
+    </div>
+</div>

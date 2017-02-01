@@ -1,0 +1,82 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Actividades
+    </h3>
+    <div class="modal-body">
+        <table class="table table-bordered table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>
+                        No
+                    </th>
+                    <th>
+                        Descripcion
+                    </th>
+                    <th>
+                        Porcentaje
+                        <form editable-form="" name="nameform" ng-show="nameform.$visible" onaftersave="saveColumn('porcentaje_actividad')">
+                            <button class="btn btn-primary" ng-disabled="nameform.$waiting" type="submit">
+                                save
+                            </button>
+                            <button class="btn btn-default" ng-click="nameform.$cancel()" ng-disabled="nameform.$waiting" type="button">
+                                cancel
+                            </button>
+                        </form>
+                        <button class="btn btn-default" ng-click="nameform.$show()" ng-show="!nameform.$visible">
+                            <span aria-hidden="true" class="glyphicon glyphicon-pencil">
+                            </span>
+                        </button>
+                    </th>
+                    <th>
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="actividad in actividades">
+                    <th>
+                        {{($index + 1)}}
+                    </th>
+                    <th>
+                        <!-- editable username (text with validation) -->
+                        <span e-form="rowform" e-name="descripcion_actividad" editable-text="actividad.descripcion_actividad">
+                            {{ actividad.descripcion_actividad || 'empty' }}
+                        </span>
+                    </th>
+                    <th>
+                        <span e-form="rowform" e-name="porcentaje_actividad" editable-text="actividad.porcentaje_actividad" onbeforesave="checkPorcentaje('porcentaje_actividad')">
+                            {{ actividad.porcentaje_actividad || 'empty' }}%
+                        </span>
+                    </th>
+                    <th>
+                        <!-- form -->
+                        <form class="form-buttons form-inline" editable-form="" name="rowform" ng-show="rowform.$visible" shown="inserted == user">
+                            <button class="btn btn-primary" ng-disabled="rowform.$waiting" type="submit">
+                                save
+                            </button>
+                            <button class="btn btn-default" ng-click="rowform.$cancel()" ng-disabled="rowform.$waiting" type="button">
+                                cancel
+                            </button>
+                        </form>
+                        <div class="buttons" ng-show="!rowform.$visible">
+                            <button class="btn btn-primary" ng-click="rowform.$show()">
+                                edit
+                            </button>
+                            <button class="btn btn-danger" ng-click="removeUser($index)">
+                                del
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()" type="button">
+            OK
+        </button>
+        <button class="btn btn-warning" ng-click="cancel()" type="button">
+            Cancel
+        </button>
+    </div>
+</div>

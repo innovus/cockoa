@@ -1,0 +1,153 @@
+<navbarest>
+</navbarest>
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="/img/avatar04.png" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>
+                    {{ primer_nombre }} {{ primer_apellido }}
+                </p>
+                <small>
+                    Identificación: {{ numero_documento }}
+                </small>
+            </div>
+        </div>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li class="header">
+                Materias
+            </li>
+            <li  ng-repeat="materia in materias">
+                <a ng-click="getMateriasYLogros(materia)">
+                    {{ materia.nombre_materia }}
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
+<div class="wrapper">
+    <div class="content-wrapper">
+        <div container>
+            <section class="content-header">
+                <h1>
+                    Notas
+                    <small>
+                        -
+                    </small>
+                </h1>
+            </section>
+            <section class="content">
+                <uib-tabset  active="activeTabIndex">
+                    <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{ periodo.numero_periodo }}" ng-click="getPeriodoId($index)" active="2">
+                        <md-content class="md-padding">
+                            <div class ="materias">
+                                <md-card>
+                                    <md-card-title>
+                                        <md-card-title-text>
+                                            <span class="md-headline">
+                                                {{ materiaSeleccionada.nombre_materia }}
+                                            </span>
+                                            <span class="md-subhead">
+                                                Docente: {{ materiaSeleccionada.nombrecompleto }}
+                                            </span>
+                                        </md-card-title-text>
+                                    </md-card-title>
+                                    <md-card-content>
+                                        <table class="table  table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-sm-8" style="text-align:center;">
+                                                        Logros
+                                                    </th>
+                                                    <th class="col-sm-2" style="text-align:center;">
+                                                        Actividades
+                                                    </th>
+                                                    <th class="col-sm-1" style="text-align:center;">
+                                                        Final
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <md-card-title>
+                                                            <md-card-title-text>
+                                                                <span class="md-headline">
+                                                                    Final
+                                                                </span>
+                                                            </md-card-title-text>
+                                                        </md-card-title>
+                                                    </td>
+                                                    <td>
+                                                        <h3>
+                                                            {{ notaFinal }}
+                                                        </h3>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                <tr ng-repeat="logro in logros">
+                                                    <td>
+                                                        <md-card-title>
+                                                            <md-card-title-text>
+                                                                <span class="md-headline">
+                                                                    Logro {{ $index + 1 }}
+                                                                </span>
+                                                                <span class="md-subhead">
+                                                                    {{ logro.porcentaje_logro }} %
+                                                                </span>
+                                                            </md-card-title-text>
+                                                        </md-card-title>
+                                                        <md-card-content>
+                                                            <p>
+                                                                {{ logro.descripcion_logro }}
+                                                            </p>
+                                                        </md-card-content>
+                                                    </td>
+                                                    <th style="vertical-align: inherit;">
+                                                        <table class="table  table-bordered col-md-4 abajo">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="col-md-1" ng-repeat="actividad in logro.actividades" ng-click="showActividad(actividad)">
+                                                                        A{{ $index + 1 }}
+                                                                        <span class="p-porcentajes">
+                                                                            {{ actividad.porcentaje_actividad }}%
+                                                                        </span>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td ng-repeat="actividad in logro.actividades">
+                                                                        {{ actividad.nota }}
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </th>
+                                                    <th style="vertical-align: inherit;"  >
+                                                        <p>
+                                                            {{ logro.nota }}
+                                                        </p>
+                                                    </th>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </md-card-content>
+                                </md-card>
+                            </div>
+                        </md-content>
+                    </uib-tab>
+                </uib-tabset>
+            </section>
+        </div>
+    </div>
+</div>
+<footer-generic>
+</footer-generic>

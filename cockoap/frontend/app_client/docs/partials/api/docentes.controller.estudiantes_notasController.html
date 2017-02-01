@@ -1,0 +1,83 @@
+<h1><code ng:non-bindable="">estudiantes_notasController</code>
+<div><span class="hint">controller in module <code ng:non-bindable="">docentes</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="docentes-controller-page docentes-controller-estudiantes-notascontroller-page"><p>Esta es una controllador que maneja la vista principal de notas de un estudiante</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/ng.$scope,">$scope,</a></code>
+<div class="docentes-controller-page docentes-controller-estudiantes-notascontroller-page"><p>$http, $filter, $cookieStore, $cookies, periodoData, materiaData, logroData, actividadData, nota_actividadData, nota_logroData, $uibModal</p>
+</div></li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_calcularnotafinal">calcularNotaFinal()</h3>
+<div class="calcularnotafinal"><div class="calcularnotafinal-page"><p>Este metodo se lo usa para calcular la nota final de los logros que esten en el vector logros </p>
+</div></div>
+</li>
+<li><h3 id="methods_getactividades">getActividades(id_logro, cb)</h3>
+<div class="getactividades"><div class="getactividades-page"><p>Este metodo se lo usa para hacer la consulta de las actividades de un logro </p>
+<pre><code>    function getActividades(id_logro, cb) {
+        actividadData.findActividadesByLogro(id_logro).success(function(actividades) {
+            cb(actividades);
+            //$scope.logros = logros;
+        }).error(function(error) {
+            console.log(&#39;Error: &#39; + error);
+            cb([]);
+        });
+    }
+</code></pre></div><h5 id="methods_getactividades_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>id_logro</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="getactividades-page"><p>id_logro es un entero unico que identifica un logro en la base de datos</p>
+</div></td></tr><tr><td>cb</td><td><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="getactividades-page"><p>cb es el callback donde se pasaran un vector que contiene las actividades que se consulten</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getactividadesbylogros">getActividadesByLogros(logros, cb)</h3>
+<div class="getactividadesbylogros"><div class="getactividadesbylogros-page"><p>Este metodo se lo usa para hacer la consulta de las actividades de los logros que se pasen en el vector</p>
+</div><h5 id="methods_getactividadesbylogros_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>logros</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="getactividadesbylogros-page"><p>logros es un vector que contiene Objetos tipos logro</p>
+</div></td></tr><tr><td>cb</td><td><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="getactividadesbylogros-page"><p>cb es el callback donde se pasaran un vector que contiene las actividades que se consulten</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getlogros">getLogros(id_materia, id_periodo, cb)</h3>
+<div class="getlogros"><div class="getlogros-page"><p>Este metodo se lo usa para hacer la consulta de los logros de un periodo y de una materia</p>
+</div><h5 id="methods_getlogros_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>id_materia</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="getlogros-page"><p>id_materia es un entero unico que identifica una materia en la base de datos</p>
+</div></td></tr><tr><td>id_periodo</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="getlogros-page"><p>id_periodo es un entero unico que identifica un periodo en la base de datos</p>
+</div></td></tr><tr><td>cb</td><td><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="getlogros-page"><p>cb es el callback donde se pasaran un vector que contiene los logros que se consulten</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getmateriasylogros">getMateriasYLogros(materia)</h3>
+<div class="getmateriasylogros"><div class="getmateriasylogros-page"><p>Este metodo se lo usa en el momento que un usuario hace click en una materia y carge las notas de esa materia</p>
+</div><h5 id="methods_getmateriasylogros_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>materia</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getmateriasylogros-page"><p>materia es un objecto donde contiene todos los datos de una materia</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getnotas">getNotas(id_materia, id_periodo, cb)</h3>
+<div class="getnotas"><div class="getnotas-page"><p>Este metodo se lo usa para hacer la consulta de las notas de un periodo y de una materia</p>
+</div><h5 id="methods_getnotas_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>id_materia</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="getnotas-page"><p>id_materia es un entero unico que identifica una materia en la base de datos</p>
+</div></td></tr><tr><td>id_periodo</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="getnotas-page"><p>id_periodo es un entero unico que identifica un periodo en la base de datos</p>
+</div></td></tr><tr><td>cb</td><td><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="getnotas-page"><p>cb es el callback donde se pasaran un vector que contiene las notas que se consulten</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getnotasactividades">getNotasActividades(cb)</h3>
+<div class="getnotasactividades"><div class="getnotasactividades-page"><p>Este metodo se lo usa para hacer la consulta de las notas de las actividades de el estudiante que esta logeado</p>
+</div><h5 id="methods_getnotasactividades_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>cb</td><td><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="getnotasactividades-page"><p>cb es el callback donde se pasaran un vector que contiene las notas de las actividades que se consulten</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getnotasylogros">getNotasYLogros(materia, periodo)</h3>
+<div class="getnotasylogros"><div class="getnotasylogros-page"><p>Este metodo se lo usa para consultar los logros, actividades, notas de un respectiva materia en un periodo</p>
+</div><h5 id="methods_getnotasylogros_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>materia</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getnotasylogros-page"><p>materia es un objecto donde contiene todos los datos de una materia</p>
+</div></td></tr><tr><td>periodo</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getnotasylogros-page"><p>periodo es un objecto donde contiene todos los datos de una periodo</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getperiodoid">getPeriodoId(index)</h3>
+<div class="getperiodoid"><div class="getperiodoid-page"><p>Este metodo se lo usa en el momento que un usuario hace click en una tab de periodos y carge las notas de ese periodo</p>
+</div><h5 id="methods_getperiodoid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>index</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="getperiodoid-page"><p>index es un entero que contiene la posicion dentro del vector periodos de el periodo que estoy seleccioando
+en las tabs</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_showactividad">showActividad(actividad)</h3>
+<div class="showactividad"><div class="showactividad-page"><p>Este metodo se lo usa para abrir la ventana modal y muestre una actividad en la ventana modal</p>
+</div><h5 id="methods_showactividad_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>actividad</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="showactividad-page"><p>actividad es un objecto donde contiene todos los datos de una actividad</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

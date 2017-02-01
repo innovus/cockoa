@@ -1,0 +1,87 @@
+<h1><code ng:non-bindable="">crudLogrosController</code>
+<div><span class="hint">controller in module <code ng:non-bindable="">docentes</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="docentes-controller-page docentes-controller-crudlogroscontroller-page"><p>Esta es una controllador que maneja la vista principal de el crud de logros de un docente</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/ng.$scope,">$scope,</a></code>
+<div class="docentes-controller-page docentes-controller-crudlogroscontroller-page"><p>$http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter</p>
+</div></li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_btnguardar">btnGuardar()</h3>
+<div class="btnguardar"><div class="btnguardar-page"><p>Este metodo se lo  utiliza cuando hacemos click en el boton guardar y verifica que la suma de porcentajes sea = 100</p>
+</div></div>
+</li>
+<li><h3 id="methods_cancelform">cancelform(logro, index)</h3>
+<div class="cancelform"><div class="cancelform-page"><p>Este metodo se lo utiliza para que despues de dar en el boton agregar logro si deseamos que no se guarde el logro le damos en cancelar
+y se eliminara del vector de logros</p>
+</div><h5 id="methods_cancelform_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>logro</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="cancelform-page"><p>logro es un objeto que tiene los datos de un logro</p>
+</div></td></tr><tr><td>index</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="cancelform-page"><p>index es la posicion en el vector logros</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_checkporcentaje">checkPorcentaje()</h3>
+<div class="checkporcentaje"><div class="checkporcentaje-page"><p>Este metodo retorna true si el porcentaje es = 100</p>
+</div><h5 id="methods_checkporcentaje_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">Boolean</a></td><td><div class="checkporcentaje-page"><p>true si el porcentaje es 100</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_crearlogro">crearLogro()</h3>
+<div class="crearlogro"><div class="crearlogro-page"><p>Cuando el usuario click en el boton agregar se agrega un nuevo logro en la tabla</p>
+</div></div>
+</li>
+<li><h3 id="methods_deletelogro">deleteLogro(logro, index)</h3>
+<div class="deletelogro"><div class="deletelogro-page"><p>Este es el metodo se lo utiliza para eliminar un logro de el vector $scope.logros </p>
+</div><h5 id="methods_deletelogro_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>logro</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="deletelogro-page"><p>logro es un objeto que tiene los datos de un logro</p>
+</div></td></tr><tr><td>index</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="deletelogro-page"><p>index es la posicion en el vector logros de el logro que vamos a eliminar</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getlogros">getLogros(id_carga, cb)</h3>
+<div class="getlogros"><div class="getlogros-page"><p>Este metodo lo utilizamos para obtener los logros de una carga especifica</p>
+</div><h5 id="methods_getlogros_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>id_carga</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="getlogros-page"><p>id_carga pasamos el identificador de una carga</p>
+</div></td></tr><tr><td>cb</td><td><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="getlogros-page"><p>cb a esta funcion le pasamos un vector de logros consultados</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getperiodoid">getPeriodoId(index)</h3>
+<div class="getperiodoid"><div class="getperiodoid-page"><p>Este metodo se lo usa en el momento que un usuario hace click en una tab de periodos y carge las inasistencias de ese periodo</p>
+</div><h5 id="methods_getperiodoid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>index</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="getperiodoid-page"><p>index es un entero que contiene la posicion dentro del vector periodos de el periodo que estoy seleccioando
+en las tabs</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_open">open(size, id_logro)</h3>
+<div class="open"><div class="open-page"><p>Este metodo se lo usa en el momento que un usuario hace click en actividades para abrir un modal y consulte las actividades de el logro el cual se le pasa</p>
+</div><h5 id="methods_open_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>size</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="open-page"><p>size es el tamaño de la ventana modal puede ser &quot;lg&quot; o &quot;sm&quot;</p>
+</div></td></tr><tr><td>id_logro</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="open-page"><p>id_logro es el id de el logro que vamos a consultar</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_seleccionarcarga">seleccionarCarga(carga)</h3>
+<div class="seleccionarcarga"><div class="seleccionarcarga-page"><p>Este metodo que reutilizamos siempre que vamos a consultar los logros y el listado de estudiantes de una carga</p>
+</div><h5 id="methods_seleccionarcarga_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>carga</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="seleccionarcarga-page"><p>carga mandamos un objeto tipo Carga</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_selectcurso">selectCurso(carga)</h3>
+<div class="selectcurso"><div class="selectcurso-page"><p>Este metodo se lo usa en el momento que un usuario hace click en una materia para que 
+cargen el listado de estudiantes de el curso que el selecciona con las inasistencias de los estudiantes</p>
+</div><h5 id="methods_selectcurso_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>carga</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="selectcurso-page"><p>carga mandamos un objeto tipo Carga</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_updatelogro">updateLogro(data, logro)</h3>
+<div class="updatelogro"><div class="updatelogro-page"><p>Este es el metodo para guardar los datos de el logro modificado temporalmente</p>
+</div><h5 id="methods_updatelogro_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>data</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="updatelogro-page"><p>data es el logro con los datos que se van a actualizar</p>
+</div></td></tr><tr><td>logro</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="updatelogro-page"><p>logro es el logro que se va a actualizar</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_validarporcentaje">validarPorcentaje(data)</h3>
+<div class="validarporcentaje"><div class="validarporcentaje-page"><p>Este es el metodo para validar si un porcentaje esta entre el 100% y si se ingresan numeros </p>
+</div><h5 id="methods_validarporcentaje_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>data</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="validarporcentaje-page"><p>data el el porcentaje que vamos a validar</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_validarporcentajetotal">validarPorcentajeTotal()</h3>
+<div class="validarporcentajetotal"><div class="validarporcentajetotal-page"><p>Este metodo lo reutilizamos para validar el porcentaje total</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>

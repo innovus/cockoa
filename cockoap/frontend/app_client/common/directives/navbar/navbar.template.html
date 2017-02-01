@@ -1,0 +1,55 @@
+<!--
+    navbar
+-->
+<div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">
+            Toggle navigation
+        </span>
+        <span class="icon-bar">
+        </span>
+        <span class="icon-bar">
+        </span>
+        <span class="icon-bar">
+        </span>
+    </button>
+    <a class="navbar-brand" href="#">
+        Cockoa
+    </a>
+</div>
+<!-- cierra navbar-->
+<!--aqui ponemos el menu de arriba  -->
+<ul class="nav navbar-top-links navbar-right">
+    <li ng-repeat="opcion in opciones">
+        <a href="{{ opcion.ruta }}">
+            {{ opcion.nombre_opcion }}
+        </a>
+    </li>
+    <!--
+        <li>
+            <a href="/#/docentes/inasistencias">
+                Asistencia
+            </a>
+        </li>
+        <li>
+            <a href="/#/docentes/notas">
+                Notas
+            </a>
+        </li>
+        <li>
+            <a href="/#/docentes/logros">
+                Logros
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                Perfil
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                Ayuda
+            </a>
+        </li>
+        -->
+</ul>

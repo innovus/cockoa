@@ -1,0 +1,58 @@
+<h1><code ng:non-bindable="">inasistenciaController</code>
+<div><span class="hint">controller in module <code ng:non-bindable="">docentes</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="docentes-controller-page docentes-controller-inasistenciacontroller-page"><p>Esta es una controllador que maneja la vista de inasistencia de un docente </p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/ng.$scope,">$scope,</a></code>
+<div class="docentes-controller-page docentes-controller-inasistenciacontroller-page"><p>$http, $uibModal, $log, $filter, CONFIG, periodoData, inasistenciaData, estudianteData</p>
+</div></li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_addinasistencia">addInasistencia(fecha)</h3>
+<div class="addinasistencia"><div class="addinasistencia-page"><p>Este metodo se lo utiliza para agregar inasistencias</p>
+</div><h5 id="methods_addinasistencia_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>fecha</td><td><a href="" class="label type-hint type-hint-date">Date</a></td><td><div class="addinasistencia-page"><p>fecha se lo utiliza para mandar la fecha de las inasistencias que se agregaran</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getcursos">getCursos(id_curso, cb)</h3>
+<div class="getcursos"><div class="getcursos-page"><p>Este metodo se lo utiliza para consultar los estudiantes de un curso en las base de  datos</p>
+</div><h5 id="methods_getcursos_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>id_curso</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="getcursos-page"><p>id_curso aqui pasamos el id de curso</p>
+</div></td></tr><tr><td>cb</td><td><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="getcursos-page"><p>cb a este callback  se pasa el vector de los estudiantes consultados</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getinasistencias">getInasistencias(id_carga, cb)</h3>
+<div class="getinasistencias"><div class="getinasistencias-page"><p>Este metodo se lo utiliza para consultar las inasistencias de un curso en un periodo</p>
+</div><h5 id="methods_getinasistencias_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>id_carga</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="getinasistencias-page"><p>id_carga aqui pasamos el id de la carga</p>
+</div></td></tr><tr><td>cb</td><td><a href="" class="label type-hint type-hint-function">Function</a></td><td><div class="getinasistencias-page"><p>cb a este callback  se pasa las inasistencias consultadas</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getperiodoid">getPeriodoId(index)</h3>
+<div class="getperiodoid"><div class="getperiodoid-page"><p>Este metodo se lo usa en el momento que un usuario hace click en una tab de periodos y carge las inasistencias de ese periodo</p>
+</div><h5 id="methods_getperiodoid_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>index</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="getperiodoid-page"><p>index es un entero que contiene la posicion dentro del vector periodos de el periodo que estoy seleccioando
+en las tabs</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_open">open(size, id_carga, id_estudiante)</h3>
+<div class="open"><div class="open-page"><p>Este metodo se lo usa en el momento que un usuario hace click en la cantidad de faltas y mira las faltas de un estudiante espevcifico en una ventama modal</p>
+</div><h5 id="methods_open_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>size</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="open-page"><p>size es el tamaño de la ventana modal puede ser &quot;lg&quot; o &quot;sm&quot;</p>
+</div></td></tr><tr><td>id_carga</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="open-page"><p>id_carga es el id de la carga que vamos a consultar</p>
+</div></td></tr><tr><td>id_estudiante</td><td><a href="" class="label type-hint type-hint-int">Int</a></td><td><div class="open-page"><p>es el es el id de el estudiante que vamos a consultar</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_seleccionarcarga">seleccionarCarga(carga)</h3>
+<div class="seleccionarcarga"><div class="seleccionarcarga-page"><p>Este metodo que reutilizamos siempre que vamos a consultar las inasistencias y el listado de estudiantes de una carga</p>
+</div><h5 id="methods_seleccionarcarga_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>carga</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="seleccionarcarga-page"><p>carga mandamos un objeto tipo Carga</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_selectcurso">selectCurso(carga)</h3>
+<div class="selectcurso"><div class="selectcurso-page"><p>Este metodo se lo usa en el momento que un usuario hace click en una materia para que 
+cargen el listado de estudiantes de el curso que el selecciona con las inasistencias de los estudiantes</p>
+</div><h5 id="methods_selectcurso_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>carga</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="selectcurso-page"><p>carga mandamos un objeto tipo Carga</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

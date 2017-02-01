@@ -1,0 +1,134 @@
+<navigation>
+</navigation>
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="/img/avatar04.png" class="img-circle" alt="User Image"/>
+            </div>
+            <div class="pull-left info">
+                <p>
+                    {{ primer_nombre }} {{ primer_apellido }}
+                </p>
+                <small>
+                    Identificación: {{ numero_documento }}
+                </small>
+                <!--<a href="#"><i class="fa fa-circle text-success"></i> En linea</a>-->
+            </div>
+        </div>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li class="header">
+                Materias
+            </li>
+            <li  class="treeview" ng-repeat="materia in materias">
+                <a>
+                    <span>
+                        {{ materia.nombre_materia }}
+                    </span>
+                    <i class="fa fa-angle-left pull-right">
+                    </i>
+                </a>
+                <ul class="treeview-menu">
+                    <li ng-repeat="carga in materia.cargas">
+                        <a href="#" ng-click="selectCurso(carga)">
+                            {{ carga.grado }}-{{ carga.grupo }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
+<div class="wrapper">
+    <div class="content-wrapper">
+        <div container>
+            <section class="content-header">
+                <h1>
+                    {{ cargaSeleccionada.nombre_materia }}
+                    {{ cargaSeleccionada.grado }}-{{ cargaSeleccionada.grupo }}
+                </h1>
+            </section>
+            <section class="content">
+                <uib-tabset  active="activeTabIndex">
+                    <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{ periodo.numero_periodo }}" ng-click="getPeriodoId($index)">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            Listado {{ cargaSeleccionada.nombre_materia }}
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div id="estudiantes">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo" colspan="1">
+                                                                </th>
+                                                                <th>
+                                                                    No
+                                                                </th>
+                                                                <th>
+                                                                    Codigo
+                                                                </th>
+                                                                <th>
+                                                                    Nombres
+                                                                </th>
+                                                                <th>
+                                                                    Faltas
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="estudiante in estudiantes">
+                                                                <th ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo">
+                                                                    <input type="checkbox" checklist-model="selected.ids_estudiantes" checklist-value="estudiante.id_estudiante"/>
+                                                                </th>
+                                                                <th>
+                                                                    {{ $index + 1 }}
+                                                                </th>
+                                                                <th>
+                                                                    {{ estudiante.id_estudiante }}
+                                                                </th>
+                                                                <th>
+                                                                    {{ estudiante.nombrecompleto }}
+                                                                </th>
+                                                                <th>
+                                                                    <a href="#" ng-click="open('lg',cargaSeleccionada.id_carga_docente,estudiante.id_estudiante)">
+                                                                        {{ estudiante.inasistencias }}
+                                                                    </a>
+                                                                </th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!-- /.col-lg-6 (nested) -->
+                                            </div>
+                                            <!-- /.row (nested) -->
+                                        </div>
+                                        <!-- /.panel-body -->
+                                    </div>
+                                    <!-- /.panel -->
+                                    <div ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo" class="input-group">
+                                        <input type="date" ng-model="fechaInasistencia" class="form-control" aria-label="Fecha"/>
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-default" type="submit" ng-click="addInasistencia(fechaInasistencia)">
+                                                Agregar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.col-lg-12 -->
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </section>
+        </div>
+    </div>
+</div>

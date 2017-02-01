@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">
+        Logro {{ ($index + 1) }}
+    </h3>
+    <h5>
+        <span class="md-subhead">
+            Porcentaje: {{ logro.porcentaje_logro }} %
+        </span>
+    </h5>
+</div>
+<div class="modal-body" id="modal-body">
+    <span>
+        {{ logro.descripcion_logro || 'Ingresa una descripcion' }}
+    </span>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="ok()">
+            Cerrar
+        </button>
+    </div>
+</div>

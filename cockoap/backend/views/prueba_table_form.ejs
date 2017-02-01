@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html ng-app="docentes">
+<head>
+  <title>Test</title>
+
+  <link href="../stylesheets/bootstrap.css" rel="stylesheet">
+  <link href="../stylesheets/style.css" rel="stylesheet">
+
+
+  <!-- Css j -->
+  <link href="../stylesheets/metisMenu.min.css" rel="stylesheet">
+
+
+  <!-- Custom CSS -->
+  <link href="../stylesheets/sb-admin-2.css" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <link href="../stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+<body ng-controller="docentes_notasController">
+  <div id="wrapper">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <% include navbar %>
+      <!-- barra lateral -->
+      <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+          <ul class="nav" id="side-menu">
+            <li ng-repeat="carga in cargas"><a ng-click="selectCurso(carga)">{{carga.grado}}-{{carga.grupo}}, {{carga.nombre_materia}} </a></li>
+          </ul>
+        </div>
+      </div>
+      
+    </nav>  
+
+
+
+
+    <div id="page-wrapper">
+
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">Estudiantes</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+      </div>
+      <hr />
+
+      <uib-tabset  active="activeTabIndex">
+      <uib-tab index="$index" ng-repeat="periodo in periodos" heading="Periodo {{periodo.numero_periodo}}" ng-click="getPeriodoId($index)">
+
+      <div class="row">
+        <div class="col-lg-12">
+
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              Listado
+            </div>
+            <div class="panel-body">
+
+              <div class="row">
+
+               <div id="estudiantes">
+
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th rowspan="2">Cod</th>
+                      <th rowspan="2">Nombres y Apellidos</th>
+                     
+                      <th ng-repeat="logro in logros " colspan = "{{logro.actividades.length + 1}}">Logro {{$index + 1}} </th>
+                      
+                    </tr>
+                    <tr>
+                          
+                        <th ng-repeat="cabecera in cabeceras track by $index">{{cabecera}} 
+                          <form editable-form name="nameform" onaftersave="saveColumn('porcentaje_actividad')" ng-show="visible">
+                            <button type="submit" ng-disabled="nameform.$waiting" class="btn btn-primary">save</button>
+                            <button type="button" ng-disabled="nameform.$waiting" ng-click="nameform.$cancel()" class="btn btn-default">cancel</button>
+                          </form>  
+                          <button class="btn btn-default" ng-show="!visible" ng-click="nameform.$show()">
+                           <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                          </button>
+                        </th>
+                  
+                    </tr>
+
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="estudiante in estudiantes">
+                     <td>{{estudiante.id_estudiante}}</td>
+                     <td>{{estudiante.nombrecompleto}}</td>
+                     <td ng-repeat="nota in estudiante.notas track by $index">{{nota}}</td>
+
+
+                     
+                   </tr>
+
+              </tbody>
+            </table>
+
+
+
+
+          </div>
+
+
+          <!-- /.col-lg-6 (nested) -->
+        </div>
+        <!-- /.row (nested) -->
+
+
+      </div>
+      <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+
+
+  </div>
+  <!-- /.col-lg-12 -->
+</div>
+</uib-tab>
+</uib-tabset>
+
+
+
+
+
+
+
+
+
+<section id="app-body" >
+  <div id="Carga">
+
+    <div ng-grid ="gridOptions">
+    </div>
+    <ul>
+
+    </ul>
+
+  </div>
+
+
+</section>
+
+</div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
+<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.2.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-resource.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-cookies.js"></script>
+<script src="http://cdn.jsdelivr.net/angular.checklist-model/0.1.3/checklist-model.min.js"></script>
+<script src='../javascripts/scripts/controllers/prueba_controller.js'></script>
+
+<script src="../javascripts/j/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="../javascripts/j/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../javascripts/j/metisMenu.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="../javascripts/j/sb-admin-2.js"></script>
+
+</body>
+</html>
