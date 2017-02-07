@@ -117,7 +117,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.inflateMenu(R.menu.navigation_with_teacher);
 
-
+        String s = "";
+        s = sessionManager.getUser();
 
         if(sessionManager.getUser().equals("7")){
             navigationView.getMenu().clear();
@@ -218,10 +219,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout.closeDrawer(GravityCompat.START);
         }*/ else if (id == R.id.nav_logOut) {
 
-            sessionManager = new SessionManager(getApplication());
+
             new EliminarTokenFirebaseAsyntask(this).execute(FirebaseInstanceId.getInstance().getToken());
             //sessionManager.logoutUser();
-            finish();
+
 
         }else if (id== R.id.nav_calificaciones_profesor){
             item.setChecked(true);

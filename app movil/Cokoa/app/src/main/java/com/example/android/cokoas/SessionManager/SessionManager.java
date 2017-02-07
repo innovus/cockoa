@@ -1,12 +1,9 @@
 package com.example.android.cokoas.SessionManager;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
-import com.example.android.cokoas.Activities.LoginActivity;
 
 /**
  * Created by ASUS on 07/06/2016.
@@ -94,6 +91,7 @@ public class SessionManager {
         editor.clear();
         editor.commit();
 
+        /*
         // After logout redirect user to Loing Activity
         Intent i = new Intent(_context, LoginActivity.class);
         // Closing all the Activities
@@ -104,7 +102,7 @@ public class SessionManager {
 
         // Staring LoginActivity Activity
         _context.startActivity(i);
-
+*/
     }
 
 

@@ -58,7 +58,7 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
         progressDialog.setMessage("Cargando...");
         progressDialog.setIndeterminate(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
     }

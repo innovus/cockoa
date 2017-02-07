@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -157,8 +158,9 @@ public class LoginMovilAsyntask extends AsyncTask<String, Void, String[]> {
             if (result[0].equals("500")) {
                 editCodigo = (EditText) activity.findViewById(R.id.input_codigo);
                 int position = editCodigo.length();
-                Log.v("position", "Json String  " + position);
                 editCodigo.setSelection(position);
+                Button button = (Button) activity.findViewById(R.id.codigo_sign_in_button);
+                button.setClickable(true);
                 Toast toast1 =
                         Toast.makeText(activity, "Datos Incorrectos. Vuelve a intentarlo.", Toast.LENGTH_SHORT);
                 toast1.show();

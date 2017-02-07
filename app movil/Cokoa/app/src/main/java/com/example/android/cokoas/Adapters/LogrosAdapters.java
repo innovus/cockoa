@@ -28,7 +28,7 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView  numeroLogro,descLogro,numeroPerido,porcentajeLogro,nombreMaterias;
+        public TextView  numeroLogro,descLogro,porcentajeLogro,nombreMaterias;
 
         Logro logro;
 
@@ -36,7 +36,6 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
             super(itemView);
             numeroLogro = (TextView) itemView.findViewById(R.id.txt_num_logro);
             descLogro = (TextView) itemView.findViewById(R.id.text_des_logro);
-            numeroPerido = (TextView) itemView.findViewById(R.id.text_numero_periodo);
             porcentajeLogro = (TextView) itemView.findViewById(R.id.txt_porcentaje_logro_estudiante);
             nombreMaterias = (TextView) activity.findViewById(R.id.txtNombreMateria);
 
@@ -70,12 +69,6 @@ public class LogrosAdapters extends RecyclerView.Adapter<LogrosAdapters.ViewHold
 
         viewHolder.numeroLogro.setText("Logro "+Integer.toString(position+1));
         viewHolder.descLogro.setText(logros.get(position).getDesc_logro());
-        if (logros.get(position).getNota_logro() < 0) {
-            viewHolder.numeroPerido.setText("---");
-        }else{
-            viewHolder.numeroPerido.setText(String.valueOf(logros.get(position).getNota_logro()));
-        }
-
         viewHolder.porcentajeLogro.setText(logros.get(position).getLogroPorcentaje()+"%");
 
         //viewHolder.feed = materia.get(position);

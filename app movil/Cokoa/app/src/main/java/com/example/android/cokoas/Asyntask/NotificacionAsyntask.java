@@ -1,10 +1,12 @@
 package com.example.android.cokoas.Asyntask;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 
 import com.example.android.cokoas.Adapters.NotificacionAdapters;
 import com.example.android.cokoas.AppConstants.AppConstants;
@@ -36,11 +38,25 @@ public class NotificacionAsyntask extends AsyncTask<Void, Void, ArrayList<Notifi
     String serverUrls = AppConstants.serverUrl;
     private Activity activity;
     private final String LOG_TAG = NotificacionAsyntask.class.getSimpleName();
+    ProgressDialog progressDialog;
 
     public NotificacionAsyntask(Activity activity) {
         super();
         this.activity = activity;
     }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setGravity(Gravity.CENTER);
+        progressDialog.show();
+    }
+
     @Override
     protected ArrayList<Notificacion> doInBackground(Void... params) {
 
@@ -183,6 +199,8 @@ public class NotificacionAsyntask extends AsyncTask<Void, Void, ArrayList<Notifi
             mRecyclerView.setLayoutManager(mLayoutManager);
             mAdapter = new NotificacionAdapters(notificacions, activity);
             mRecyclerView.setAdapter(mAdapter);
+            progressDialog.dismiss();
         }
+        progressDialog.dismiss();
     }
 }

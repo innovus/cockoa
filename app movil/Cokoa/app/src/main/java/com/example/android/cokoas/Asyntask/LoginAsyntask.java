@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.android.cokoas.AppConstants.AppConstants;
 import com.example.android.cokoas.MainActivity;
-import com.example.android.cokoas.R;
 import com.example.android.cokoas.SessionManager.SessionManager;
 
 import org.json.JSONException;
@@ -30,7 +28,7 @@ import java.net.URL;
  */
 public class LoginAsyntask extends AsyncTask<String, Void, String[]> {
     SessionManager sessionManager;
-    private EditText editCodigo, editPassword;
+   // private EditText editCodigo, editPassword;
     private Activity activity;
     // String serverUrls = com.acarolabs.a3dent.AppConstants.serverUrl;
     static String serverUrls = AppConstants.serverLoginMovil;
@@ -155,27 +153,27 @@ public class LoginAsyntask extends AsyncTask<String, Void, String[]> {
     protected void onPostExecute(String[] result) {
         if (result != null) {
             if (result[0].equals("500")) {
-                editCodigo = (EditText) activity.findViewById(R.id.input_codigo);
-                int position = editCodigo.length();
-                Log.v("position", "Json String  " + position);
-                editCodigo.setSelection(position);
+                //editCodigo = (EditText) activity.findViewById(R.id.input_codigo);
+               // int position = editCodigo.length();
+               // Log.v("position", "Json String  " + position);
+                //editCodigo.setSelection(position);
                 Toast toast1 =
                         Toast.makeText(activity, "Datos Incorrectos. Vuelve a intentarlo.", Toast.LENGTH_SHORT);
                 toast1.show();
             } else {
-                editCodigo = (EditText) activity.findViewById(R.id.input_codigo);
-                editPassword = (EditText) activity.findViewById(R.id.input_password);
+                //editCodigo = (EditText) activity.findViewById(R.id.input_codigo);
+                //editPassword = (EditText) activity.findViewById(R.id.input_password);
                 sessionManager = new SessionManager(activity.getApplication());
-                sessionManager.createLoginSession(result[0], editCodigo.getText().toString(), editPassword.getText().toString(), result[1]);
+                sessionManager.createLoginSession(result[0], sessionManager.getCodigo(), sessionManager.getPassword(), result[1]);
 
                 Intent intent = new Intent(activity, MainActivity.class);
                 activity.startActivity(intent);
                 activity.finish();
             }
         } else {
-            editCodigo = (EditText) activity.findViewById(R.id.input_codigo);
+          /*  editCodigo = (EditText) activity.findViewById(R.id.input_codigo);
             int position = editCodigo.length();
-            editCodigo.setSelection(position);
+            editCodigo.setSelection(position);*/
             Toast toast1 =
                     Toast.makeText(activity, "No se ha podido establecer conexión", Toast.LENGTH_SHORT);
             toast1.show();

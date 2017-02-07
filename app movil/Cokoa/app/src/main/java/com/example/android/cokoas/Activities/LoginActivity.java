@@ -3,6 +3,7 @@ package com.example.android.cokoas.Activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -44,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
 
         if(sessionManager.connectionCheck(this)) {
             if (editCodigo.getText().length() > 0 && editPassword.getText().length() > 0) {
+                Button button = (Button) findViewById(R.id.codigo_sign_in_button);
+                button.setClickable(false);
                 new LoginMovilAsyntask(this).execute(editCodigo.getText().toString(), editPassword.getText().toString());
 
 

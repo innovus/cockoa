@@ -39,16 +39,8 @@ public class MateriaAdapters extends RecyclerView.Adapter<MateriaAdapters.ViewHo
     //cuando se conecta
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.nameArea.setText(materia.get(position).getNombre_materia());
+        viewHolder.nombreMateria.setText(materia.get(position).getNombre_materia());
         viewHolder.name1Docente.setText(materia.get(position).getNombre1_docente() + materia.get(position).getNombre2_docente() + materia.get(position).getApellido1_docente() + materia.get(position).getApellido2_docente());
-        double v = materia.get(position).getNotaPeriodo1();
-
-        String s = String.valueOf(v);
-        viewHolder.txtperiodo1.setText(s);
-        viewHolder.txtperiodo2.setText(String.valueOf(materia.get(position).getNotaPeriodo2()));
-        viewHolder.txtperiodo3.setText(String.valueOf(materia.get(position).getNotaPeriodo3()));
-        viewHolder.txtperiodo4.setText(String.valueOf(materia.get(position).getNotaPeriodo4()));
-        viewHolder.promedio.setText(String.valueOf(materia.get(position).getPromedio()));
         viewHolder.feed = materia.get(position);
     }
 
@@ -58,18 +50,13 @@ public class MateriaAdapters extends RecyclerView.Adapter<MateriaAdapters.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView nameArea, name1Docente,txtperiodo1,txtperiodo2,txtperiodo3,txtperiodo4,promedio;
+        public TextView nombreMateria, name1Docente;
         public Materia feed;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            nameArea = (TextView) itemView.findViewById(R.id.id_text_prueba_fragment);
+            nombreMateria = (TextView) itemView.findViewById(R.id.id_text_prueba_fragment);
             name1Docente = (TextView) itemView.findViewById(R.id.id_text_nombre_docente);
-            txtperiodo1 = (TextView) itemView.findViewById(R.id.txtPeriodo1);
-            txtperiodo2 = (TextView) itemView.findViewById(R.id.txtPeriodo2);
-            txtperiodo3 = (TextView) itemView.findViewById(R.id.txtPeriodo3);
-            txtperiodo4 = (TextView) itemView.findViewById(R.id.txtPeriodo4);
-            promedio = (TextView) itemView.findViewById(R.id.txtPromedio);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,7 +64,6 @@ public class MateriaAdapters extends RecyclerView.Adapter<MateriaAdapters.ViewHo
                     intent.putExtra("id_materia", feed.getId_materia());
                     intent.putExtra("nombre_materia", feed.getNombre_materia());
                     intent.putExtra("periodo_actual",feed.getPeriodo_actual());
-                    intent.putExtra("promedio",feed.getPromedio());
                     activity.startActivity(intent);
                 }
             });

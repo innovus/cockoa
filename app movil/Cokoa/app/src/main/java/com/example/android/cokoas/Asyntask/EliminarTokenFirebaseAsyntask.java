@@ -2,10 +2,12 @@ package com.example.android.cokoas.Asyntask;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Gravity;
 
+import com.example.android.cokoas.Activities.LoginActivity;
 import com.example.android.cokoas.AppConstants.AppConstants;
 import com.example.android.cokoas.SessionManager.SessionManager;
 
@@ -42,7 +44,7 @@ public class EliminarTokenFirebaseAsyntask extends AsyncTask<String ,Void, Void>
         progressDialog.setMessage("Cargando...");
         progressDialog.setIndeterminate(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
         progressDialog.getWindow().setGravity(Gravity.CENTER);
         progressDialog.show();
     }
@@ -127,5 +129,10 @@ public class EliminarTokenFirebaseAsyntask extends AsyncTask<String ,Void, Void>
         sessionManager = new SessionManager(activity.getApplication());
         sessionManager.logoutUser();
         progressDialog.dismiss();
+        Intent intent = new Intent(activity, LoginActivity.class);
+        activity.startActivity(intent);
+
+        activity.finish();
+
     }
 }

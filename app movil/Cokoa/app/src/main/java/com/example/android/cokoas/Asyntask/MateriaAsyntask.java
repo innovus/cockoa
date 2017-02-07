@@ -65,63 +65,8 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
 
     @Override
     protected ArrayList<Materia> doInBackground(Void... params) {
-        ArrayList<Materia> unos = uno();
+        return uno();
 
-        if(uno()!=null){
-            if(doss()!=null){
-                ArrayList<Logro> dosss = doss();
-
-                for (int i = 0; i < unos.size(); i++) {
-                    int countPer = 0;
-                    int countPer2 = 0;
-                    int countPer3 = 0;
-                    int countPer4 = 0;
-                    double porcentajeLogro = 0;
-                    double porcentajeLogro2 = 0;
-                    double porcentajeLogro3 = 0;
-                    double porcentajeLogro4 = 0;
-                    for (int j = 0; j < dosss.size(); j++) {
-                        if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("1")))) {
-                            double porcentaje = dosss.get(j).getPorcentajeLogro() / 100;
-                            double suma = dosss.get(j).getNota_logro() * porcentaje;
-                            porcentajeLogro = porcentajeLogro + suma;
-                            countPer = countPer + 1;
-                        }
-                        if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("2")))) {
-                            double porcentaje = dosss.get(j).getPorcentajeLogro() / 100;
-                            double suma = dosss.get(j).getNota_logro() * porcentaje;
-                            porcentajeLogro2 = porcentajeLogro2 + suma;
-                            countPer2 = countPer2 + 1;
-                        }
-                        if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("3")))) {
-                            double porcentaje = dosss.get(j).getPorcentajeLogro() / 100;
-                            double suma = dosss.get(j).getNota_logro() * porcentaje;
-                            porcentajeLogro3 = porcentajeLogro3 + suma;
-                            countPer3 = countPer3 + 1;
-                        }
-                        if ((unos.get(i).getId_materia().equals(dosss.get(j).getId_materia()) && (dosss.get(j).getNumero_periodo().equals("4")))) {
-                            double porcentaje = dosss.get(j).getPorcentajeLogro() / 100;
-                            double suma = dosss.get(j).getNota_logro() * porcentaje;
-                            porcentajeLogro4 = porcentajeLogro4 + suma;
-                            countPer4 = countPer4 + 1;
-                        }
-                    }
-                    unos.get(i).setNotaPeriodo1(porcentajeLogro);
-                    unos.get(i).setNotaPeriodo2(porcentajeLogro2);
-                    unos.get(i).setNotaPeriodo3(porcentajeLogro3);
-                    unos.get(i).setNotaPeriodo4(porcentajeLogro4);
-
-                    int num = Integer.parseInt(unos.get(i).getPeriodo_actual());
-                    unos.get(i).setPromedio((porcentajeLogro + porcentajeLogro2 + porcentajeLogro3 + porcentajeLogro4) / num);
-
-                }
-                return unos;
-            }else{
-                return uno();
-            }
-
-        }
-      return null;
     }
 
 
@@ -407,7 +352,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
                 materia.setApellido2_docente(apellido2_docente);
                 materia.setNombre_materia(title);
                 areaArrayList.add(materia);
-
+                //andrea
             }
 
             return areaArrayList;

@@ -57,7 +57,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
         progressDialog.setMessage("Cargando...");
         progressDialog.setIndeterminate(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
         progressDialog.getWindow().setGravity(Gravity.CENTER);
         progressDialog.show();
     }
@@ -70,35 +70,8 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
         if(params[1].equals("true")){
             if(id_periodos()!=null){
                 ArrayList<String> a = id_periodos();
-                Log.v("id_periodos", "entro:"+a.get(0));
                 int numero = Integer.parseInt(params[2]);
-                ArrayList<String> s = notaLogro(materia,a.get(numero-1));
-                String s1=s.get(0);
-                try {
-                    JSONObject jsonObject = new JSONObject(s1);
-                    ArrayList<Logro> logroArrayList= logros(materia,a.get(numero-1),nombreMateria);
-                   // String s2=jsonObject.getString("47703");
-                    for (int i=0;i<logroArrayList.size();i++){
-
-                        String id_logro = logroArrayList.get(i).getId_logro();
-                        if(!jsonObject.isNull(id_logro)){
-                            String notaLogro=jsonObject.getString(id_logro);
-                            double v = Double.parseDouble(notaLogro);
-                            logroArrayList.get(i).setNota_logro(v);
-                        }else{
-
-                           // logroArrayList.get(i).setNota_logro(-4.0);
-
-                        }
-                    }
-
-                    return logroArrayList;
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return null;
-                }
+                return logros(materia,a.get(numero-1),nombreMateria);
 
 
 
@@ -116,39 +89,13 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
 
                     String id_periodo = idPeridoActual();
 
-                    ArrayList<String> s = notaLogro(materia,id_periodo);
-                    String s1=s.get(0);
-                    try {
-                        JSONObject jsonObject = new JSONObject(s1);
-                        ArrayList<Logro> logroArrayList= logros(materia,id_periodo,nombreMateria);
-                        // String s2=jsonObject.getString("47703");
-                        for (int i=0;i<logroArrayList.size();i++){
 
-                            String id_logro = logroArrayList.get(i).getId_logro();
-                            if(!jsonObject.isNull(id_logro)){
-                                String notaLogro=jsonObject.getString(id_logro);
-                                double v = Double.parseDouble(notaLogro);
-                                logroArrayList.get(i).setNota_logro(v);
-                            }else{
 
-                                logroArrayList.get(i).setNota_logro(-1);
-
-                            }
-                        }
-
-                        return logroArrayList;
-                    /*for (int i=0;i<logroArrayList.size();i++){
-                        logroArrayList.get(i).setNota_logro(String.valueOf(jsonObject.getString(logroArrayList.get(i).getId_logro())));
-                    }*/
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
+                    return logros(materia,id_periodo,nombreMateria);
 
 
 
-                    //return logros(materia,id_periodo);
+
                 }
             }
 
@@ -158,7 +105,6 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
 
 
 
-        //String id_a = a.get(0);
 
 
 
@@ -167,116 +113,7 @@ public class LogrosAsyntask extends AsyncTask<String, Void, ArrayList<Logro>> {
 
     }
 
-    public ArrayList<String> notaLogro(String id_materia,String id_periodo){
 
-        sessionManager = new SessionManager(activity.getApplication());
-        // Estos dos deben ser declarados fuera de la try / catch
-        // Fin de que puedan ser cerradas en el bloque finally .
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
-
-        // Contendra las respuesta del JSON en un Araylist
-        String forecastJsonStr = null;
-
-        try {
-            // Construir la dirección URL para el appi materias
-            // Posibles parámetros están disponibles en la página de la API de materias del liceo.
-            ///materias/:id_materia/logros/periodos/:id_periodo
-            // URL url = new URL(serverUrls + "estudiantes/materias/logros/" + params[0]);
-            URL url = new URL(serverUrls + "estudiantes/materias/"+id_materia+"/notas/periodos/"+id_periodo);///materias/:id_materia/notas/periodos/:id_periodo
-
-            //Crear el request para el liceo, abre una conexión
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            String token = sessionManager.getKeyToken();
-            Log.v("tokenSessionManager", "Json String" + token);
-            urlConnection.setRequestProperty("Authorization", "Bearer " + token);
-            urlConnection.connect();
-
-            // lee Respons de entrada en una cadena
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
-                // Nothing to do.
-                return null;
-            }
-
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Ya que es JSON , la adición de una nueva línea no es necesario ( no afectará el análisis sintáctico )
-                // De modo hace que la depuración sea mucho más fácil
-                // Búfer para la depuración.
-                buffer.append(line + "\n");
-            }
-
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                return null;
-            }
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                return null;
-            }
-            forecastJsonStr = buffer.toString();
-
-            Log.v("notaLogros", "Json String" + forecastJsonStr);
-
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
-            // Si el código no consiguió con éxito los datos del logro,
-            int statuss = 0;
-            try {
-                statuss = urlConnection.getResponseCode();
-                Log.v("status", "Json String" + statuss);
-                if (statuss == 400) {
-                    ArrayList a = new ArrayList();
-                    a.add(0, "400");
-                    return a;
-                }
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error ", e);
-                }
-            }
-        }
-        try {
-            return getNotaLOgro(forecastJsonStr);
-            //return  null;
-        } catch (JSONException e) {
-            Log.e("error", e.getMessage(), e);
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
-    public ArrayList<String> getNotaLOgro(String notaLogroJs)throws JSONException{
-
-
-
-        if(notaLogroJs!=null) {
-            ArrayList<String> strings = new ArrayList<>();
-            strings.add(0,notaLogroJs);
-
-          return strings;
-
-        }
-        return null;
-    }
 
     public ArrayList<String> id_periodos(){
         sessionManager = new SessionManager(activity.getApplication());
