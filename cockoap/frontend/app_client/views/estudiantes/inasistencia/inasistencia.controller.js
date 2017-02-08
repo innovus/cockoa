@@ -103,12 +103,17 @@
         if($rootScope.notificacion != undefined || $rootScope.notificacion != null){
             console.log("nunca entro")
             console.log($rootScope.notificacion.guia)
-             materiaData.findMateriasByActividad($rootScope.notificacion.guia).success(function(data) {
-                $rootScope.notificacion == null;
-                console.log(data);
-                getInasistenciasByMateria(data);
-
-                console.log($scope.materias)
+             inasistenciaData.findInasistenciasEstudianteByCarga($rootScope.notificacion.guia).success(function(materia) {
+                console.log(materia);
+                 inasistenciaData.findInasistenciasByMateria(materia[0].id_materia).success(function(data){
+                    $rootScope.notificacion == null;
+                    console.log(data);
+                    getInasistenciasByMateria(data[0]);
+                    console.log($scope.materias)
+                }).error(function(error){
+                    console.log('Error: ' + data);
+                });
+              
             }).error(function(data) {
                 console.log('Error: ' + data);
             });

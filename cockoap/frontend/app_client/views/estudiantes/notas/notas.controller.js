@@ -339,8 +339,8 @@
                 myutils.showWait();
                 console.log(materia)
                 getLogros(materia.id_materia, periodo.id_periodo, function(logros) {
-                getNotas(materia.id_materia, periodo.id_periodo, function(notas) {
-                    $scope.notas = notas;
+               // getNotas(materia.id_materia, periodo.id_periodo, function(notas) {
+                   // $scope.notas = notas;
                     $scope.logros = logros;
                     console.log('notas')
                     console.log($scope.notas);
@@ -349,16 +349,28 @@
 
                             $scope.notasactividades = notasactividades;
                             console.log(notasactividades)
+
+                            //recorre logros
                             $scope.logros.forEach(function(logro, index) {
                                    
+                                    //saqueme las actividades que pertenecen a este logro
                                     selected = $filter('filter')(actividades, {
                                         id_logro: logro.id_logro
                                     });
+
+                                    //asignnele esas actividades a el logro
                                     $scope.logros[index].actividades = selected;
+                                    var suma = 0;
+
+                                    //recorrame esas actividades
                                     $scope.logros[index].actividades.forEach(function(actividad, j) {
-                                        console.log("recorrer atividades")
-                                        console.log($scope.notasactividades)
-                                        console.log(actividad)
+                                        
+                                        var porcentaje = parseFloat(actividad.porcentaje_actividad); 
+                                        var nota = 0;
+
+
+
+                                        //filtre en notas actividades solamente la nota de esa actividad
                                         selectedna = $filter('filter')($scope.notasactividades, {
                                             id_actividad: actividad.id_actividad
                                         });
@@ -367,14 +379,21 @@
                                             $scope.logros[index].actividades[j].nota = '-'
                                         } else {
                                             console.log(selectedna)
-                                            $scope.logros[index].actividades[j].nota = selectedna[0].nota_actividad
+                                            $scope.logros[index].actividades[j].nota = selectedna[0].nota_actividad;
+                                            nota = parseFloat(selectedna[0].nota_actividad);
+
                                         }
+
+                                        var valor = (nota * porcentaje)/100;
+                                        suma = valor + suma;
                                     }); //cierra foreach actividades
-                                    if (typeof $scope.notas[$scope.logros[index].id_logro] === 'undefined') {
+                                    suma = Math.round(suma * 100) / 100;
+                                    
+                                 /*   if (typeof $scope.notas[$scope.logros[index].id_logro] === 'undefined') {
                                         $scope.logros[index].nota = ' - ';
-                                    } else {
-                                        $scope.logros[index].nota = $scope.notas[$scope.logros[index].id_logro];
-                                    }
+                                    } else {*/
+                                        $scope.logros[index].nota = suma;
+                                    //}
                                 }) //cierra foreach logros
                             calcularNotaFinal();
                             myutils.hideWait();
@@ -383,7 +402,7 @@
                     }); //cierra getActividadesByLogros
                     console.log("cierra for y scope logros")
                     console.log($scope.logros)
-                }); //cierra getNotas
+             //   }); //cierra getNotas
                 
             }); //Cierra getLogros
             }

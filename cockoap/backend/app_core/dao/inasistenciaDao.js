@@ -13,8 +13,8 @@ var queryFindInasistenciasByCarga = "SELECT nombre_materia, nombre1, nombre2, ap
     "JOIN persona ON persona.identificacion = docente.identificacion  "+ 
     "WHERE id_carga = $id_carga";*/
 
-var queryFindInasistenciasEstudianteByCarga ="SELECT * FROM inasistencia NATURAL "+
-    "JOIN carga_docente NATURAL JOIN docente JOIN persona ON docente.identificacion = persona.identificacion "+
+var queryFindInasistenciasEstudianteByCarga ="SELECT * FROM inasistencia "+
+    "JOIN carga_docente on inasistencia.id_carga = carga_docente.id_carga_docente NATURAL JOIN docente JOIN persona ON docente.identificacion = persona.identificacion "+
     "NATURAL JOIN materia NATURAL JOIN periodo WHERE id_carga_docente=$id_carga AND id_estudiante=$id_estudiante order by fecha_inasistencia desc ";
 
 

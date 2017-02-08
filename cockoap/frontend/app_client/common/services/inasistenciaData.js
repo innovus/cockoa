@@ -15,6 +15,11 @@
         var findInasistenciasByMateria = function(id_materia) {
             return $http.get(CONFIG.http_address + '/inasistencias/materias/' + id_materia,{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
         }
+
+        var findInasistenciasEstudianteByCarga = function(id_carga){
+            return $http.get(CONFIG.http_address + '/inasistencias/estudiante/carga/' + id_carga,{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
+
+        } 
         var updateEstadoInasistencia = function(inasistencia) {
             return $http({
                 method: 'PUT',
@@ -32,6 +37,7 @@
             findInasistenciasByCarga: findInasistenciasByCarga,
             findInasistenciasByMateria: findInasistenciasByMateria,
             updateEstadoInasistencia: updateEstadoInasistencia,
+            findInasistenciasEstudianteByCarga: findInasistenciasEstudianteByCarga,
         };
     }
 })();
