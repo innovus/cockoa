@@ -352,7 +352,7 @@ public class MateriaAsyntask extends AsyncTask<Void, Void, ArrayList<Materia>> {
                 materia.setApellido2_docente(apellido2_docente);
                 materia.setNombre_materia(title);
                 areaArrayList.add(materia);
-                //andrea
+
             }
 
             return areaArrayList;
