@@ -546,7 +546,7 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
             actividad.porcentaje_actividad = actividad.porcentaje_actividad.toString().replace(/\,/g, '.');
             sumatoria = sumatoria + parseFloat(actividad.porcentaje_actividad);
         });
-        if (sumatoria == 100) {
+        if (sumatoria == 100 || sumatoria == 0) {
             return true
         } else {
             return false
@@ -766,7 +766,7 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         console.log(sumatoria);
         $scope.isPorcentajeCien = checkPorcentaje();
         console.log($scope.isPorcentajeCien)
-        if (sumatoria != 100 || sumatoria != 0) {
+        if (sumatoria != 100 && sumatoria != 0) {
             console.log("sumatoria")
             console.log(sumatoria);
         } else {

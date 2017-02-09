@@ -32,9 +32,9 @@
         var getToken = function() {
             //return $cookieStore.get("udenar");
             //profesor
-             return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6IjNkYTQxZjZiNDJiMjJhYzc4MGFkNWQ3NDk1Y2E5NmY2IiwiaGFzaHIiOiJjMTg4ZDU0MjlkZTcwODBkMWRhY2Y1MTM2M2QxODc5YSIsImV4cCI6MTQ4NjY3MzIyNSwiaWF0IjoxNDg2MDY4NDI1fQ.t8ZqryLp7eL6B_3l1vidwKHSjwcxyCGy_iMzu3uoPsg";
+            //return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6IjNkYTQxZjZiNDJiMjJhYzc4MGFkNWQ3NDk1Y2E5NmY2IiwiaGFzaHIiOiJjMTg4ZDU0MjlkZTcwODBkMWRhY2Y1MTM2M2QxODc5YSIsImV4cCI6MTQ4NjY3MzIyNSwiaWF0IjoxNDg2MDY4NDI1fQ.t8ZqryLp7eL6B_3l1vidwKHSjwcxyCGy_iMzu3uoPsg";
             //estudiante
-            //return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6ImRlNzM1NjI2N2JlNGI5N2EwYjZhMDBiYzdlNTk3ZDlmIiwiaGFzaHIiOiJmNDVkZjA4YjIyYzljMTlmNWZkYmY4ZjgxN2E1ZDJlOSIsImV4cCI6MTQ4NzExMTA0NSwiaWF0IjoxNDg2NTA2MjQ1fQ.Wxc8ZqX4jxq9Vi8A0PXr0gBPo-33yDcFS0OLNZmvq4k";
+            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6ImRlNzM1NjI2N2JlNGI5N2EwYjZhMDBiYzdlNTk3ZDlmIiwiaGFzaHIiOiJmNDVkZjA4YjIyYzljMTlmNWZkYmY4ZjgxN2E1ZDJlOSIsImV4cCI6MTQ4NzExMTA0NSwiaWF0IjoxNDg2NTA2MjQ1fQ.Wxc8ZqX4jxq9Vi8A0PXr0gBPo-33yDcFS0OLNZmvq4k";
         };
         var getCookieToken = function() {
             return $cookieStore.get("udenar");

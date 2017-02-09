@@ -225,10 +225,17 @@
          * 
          */
         var getPeriodoId = function(index) {
+            console.log("entro a get periodo id")
+            if ($scope.cargaSeleccionada != null || $scope.cargaSeleccionada != undefined) {
+                console.log("muestra el wait")
+                myutils.showWait();
+            }
+            
             $scope.periodoSeleccionado = $scope.periodos[index];
             console.log("periodo seleccionado")
             console.log($scope.periodoSeleccionado)
             periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
+                console.log("find cargas")
                 $scope.cargas = data;
                 var encontrado = false;
                 //hace la busqueda si existe la misma carga en las nuevas cargas de este periodo
@@ -250,6 +257,36 @@
         var cambiarNota = function() {
             getNotasActividades($scope.cargaSeleccionada.id_carga_docente, function(notas_actividades) {});
         }
+
+        /** 
+        * @ngdoc method
+        * @name selectCurso
+        * @methodOf docentes.controller:crudLogrosController
+        * @param {Object} carga carga mandamos un objeto tipo Carga 
+        * 
+        *
+        * @description
+        * 
+        * Este metodo se lo usa en el momento que un usuario hace click en una materia para que 
+        * cargen el listado de estudiantes de el curso que el selecciona con las inasistencias de los estudiantes
+        * 
+        * 
+        */
+        var selectCurso = function(carga) {
+            myutils.showWait();
+            for (var i = 0; i < $scope.periodos.length; i++) {
+                //entra cuando el periodo actual es encontrado en el vector
+                // console.log(data[i].id_periodo)
+                console.log($scope.periodoActual)
+                if ($scope.periodos[i].id_periodo == $scope.periodoActual.id_periodo) {
+                    //selecciona el periodo actual en las tabs
+                    $scope.activeTabIndex = i;
+                    //
+                    $scope.periodoSeleccionado = $scope.periodos[i];
+                }
+            }
+            seleccionarCarga(carga);
+        }
         /**
          * @ngdoc method
          * @name seleccionarCarga
@@ -263,8 +300,9 @@
          * 
          */
         var seleccionarCarga = function(carga) {
+            //myutils.showWait();
             $scope.data_received = false;
-            myutils.showWait();
+            
             $scope.status = true;
             $scope.cabeceras = [];
             $scope.cargaSeleccionada = carga;
@@ -760,9 +798,7 @@
             var suma = 0;
             var cant = selected.length
             selected.forEach(function(nota, h) {
-                console.log(suma)
                 var porcentaje = parseFloat(nota.porcentaje_actividad);
-                console.log(nota);
                 var notap = parseFloat(nota.nota_actividad);
                 var valor = (notap * porcentaje) / 100;
                 suma = suma + valor;
@@ -814,21 +850,18 @@
          * @param {Estudiante} Pasamos en formato Json un estudiante para asignarle la nota final
          */
         var calcularNotaFinal = function(estudiante) {
-            console.log(estudiante);
+        
             selected = $filter('filter')(estudiante.cabeceras, {
                 tipo: 0
             })
-            console.log(selected)
             var promedio = 0;
             selected.forEach(function(logro, index) {
                 if (logro.nota != "-") {
-                    console.log("entro al if ")
-                    console.log(logro.nota)
+
                     var nota = parseFloat(logro.nota);
                     var porcentaje = parseFloat(logro.porcentaje);
                     var valor = (nota * porcentaje) / 100;
                     promedio = promedio + valor;
-                    console.log(promedio)
                 }
             })
             estudiante.notafinal = Math.round(promedio * 100) / 100;
@@ -886,6 +919,7 @@
         $scope.getPeriodoId = getPeriodoId;
         $scope.open = open;
         $scope.showActividad = showActividad;
+        $scope.selectCurso = selectCurso;
     } // body...     
 })();
 //---------------------------------------------------
