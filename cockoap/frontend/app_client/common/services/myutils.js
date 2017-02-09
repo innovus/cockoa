@@ -1,4 +1,14 @@
 (function() {
+    /**
+     * @ngdoc service
+     * @name docentes.service: myutils
+     * @requires $mdDialog
+     * @requires $rootScope
+     * 
+     * @description 
+     * 
+     * servicio que permite mostrar una animacion de cargando mientras se hace la consulta de datos
+     */
     angular.module('docentes').service('myutils', myutils);
     myutils.$inject = ['$mdDialog', '$rootScope'];
 
@@ -15,8 +25,9 @@
         }
 
         function showWait() {
+            console.log("show")
             $mdDialog.show({
-                controller: 'waitCtrl',
+                controller: 'waitController',
                 template: '<md-dialog id="plz_wait" style="background-color:transparent;box-shadow:none">' + '<div layout="row" layout-sm="column" layout-align="center center" aria-label="wait">' + '<md-progress-circular md-mode="indeterminate" ></md-progress-circular>' + '</div>' + '</md-dialog>',
                 parent: angular.element(document.body),
                 clickOutsideToClose: false,

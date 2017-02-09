@@ -1,13 +1,33 @@
 (function() {
+
+    /**
+     * @ngdoc service
+     * @name docentes.service: logroData
+     * @requires $http
+     * @requires CONFIG
+     * @requires autentificacion
+     * 
+     * @description 
+     * 
+     * servicio que permite hacer consultas de la tabla logro de la base de datos
+     */
     angular.module("docentes").service("logroData", logroData);
-    logroData.$inject = ['$http', 'CONFIG','autenticacion'];
+    logroData.$inject = ['$http', 'CONFIG', 'autenticacion'];
 
     function logroData($http, CONFIG, autenticacion) {
         var findLogrosByCarga = function(id_carga) {
-            return $http.get(CONFIG.http_address + '/api/docentes/cargas/' + id_carga + '/logros',{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
+            return $http.get(CONFIG.http_address + '/api/docentes/cargas/' + id_carga + '/logros', {
+                headers: {
+                    Authorization: 'Bearer ' + autenticacion.getToken()
+                }
+            })
         };
         var findLogrosByMateriaAndPeriodo = function(id_materia, id_periodo) {
-            return $http.get(CONFIG.http_address + '/estudiantes/materias/' + id_materia + '/logros/periodos/' + id_periodo,{ headers:{Authorization : 'Bearer '+autenticacion.getToken()} })
+            return $http.get(CONFIG.http_address + '/estudiantes/materias/' + id_materia + '/logros/periodos/' + id_periodo, {
+                headers: {
+                    Authorization: 'Bearer ' + autenticacion.getToken()
+                }
+            })
         }
         var updateDescripcionLogro = function(logro) {
             return $http({
@@ -15,7 +35,7 @@
                 url: CONFIG.http_address + '/api/docentes/logros/descripcion',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization' : 'Bearer '+autenticacion.getToken(),
+                    'Authorization': 'Bearer ' + autenticacion.getToken(),
                 },
                 data: logro
             })
@@ -26,7 +46,7 @@
                 url: CONFIG.http_address + '/api/docentes/logros/porcentajes',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization' : 'Bearer '+autenticacion.getToken(),
+                    'Authorization': 'Bearer ' + autenticacion.getToken(),
                 },
                 data: logros
             })
@@ -37,7 +57,7 @@
                 url: CONFIG.http_address + '/api/docentes/logros/' + id_logro,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization' : 'Bearer '+autenticacion.getToken(),
+                    'Authorization': 'Bearer ' + autenticacion.getToken(),
                 }
             })
         }
@@ -47,7 +67,7 @@
                 url: CONFIG.http_address + '/api/docentes/logros',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization' : 'Bearer '+autenticacion.getToken(),
+                    'Authorization': 'Bearer ' + autenticacion.getToken(),
                 },
                 data: logro
             })
@@ -58,7 +78,7 @@
                 url: CONFIG.http_address + '/api/docentes/logros/guardar',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization' : 'Bearer '+autenticacion.getToken(),
+                    'Authorization': 'Bearer ' + autenticacion.getToken(),
                 },
                 data: {
                     logrosEliminados: logrosEliminados,

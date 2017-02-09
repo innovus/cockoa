@@ -6,16 +6,15 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="/img/avatar04.png" class="img-circle" alt="User Image"/>
+                 <img ng-src="/img/fotografias/{{perfil.id_docente}}.jpg" fallback-src="/img/avatar04.png" class="img-circle" alt=""/>
             </div>
             <div class="pull-left info">
-                <p>
-                    {{ primer_nombre }} {{ primer_apellido }}
+                 <p>
+                    {{ perfil.primer_nombre }} {{ perfil.primer_apellido }}
                 </p>
                 <small>
-                    Identificación: {{ numero_documento }}
+                    Identificación: {{ perfil.numero_documento }}
                 </small>
-                <!--<a href="#"><i class="fa fa-circle text-success"></i> En linea</a>-->
             </div>
         </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->
@@ -124,7 +123,7 @@
                                         <span ng-show="!isPorcentajeCien">
                                         </span>
                                     </div>
-                                    <button ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo"  class="btn btn-default" ng-click="crearLogro()" ng-show = "cargaSeleccionada != null">
+                                    <button ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo &&  cargaSeleccionada != undefined" "  class="btn btn-default" ng-click="crearLogro() ">
                                         Agregar
                                     </button>
                                     <div ng-show="periodoSeleccionado.id_periodo == periodoActual.id_periodo"  class="modal-footer">

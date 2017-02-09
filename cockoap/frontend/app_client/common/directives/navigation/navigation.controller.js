@@ -1,8 +1,8 @@
 (function() {
     angular.module("docentes").controller("navigationCtrl", navigationCtrl);
-    navigationCtrl.$inject = ["$scope","$location", "$window", "autenticacion",'$cookieStore', '$log', 'CONFIG'];
+    navigationCtrl.$inject = ["$rootScope","$scope","$location", "$window", "autenticacion",'$cookieStore', '$log', 'CONFIG'];
 
-    function navigationCtrl($scope,$location, $window, autenticacion,$cookieStore, $log, CONFIG) {
+    function navigationCtrl($rootScope,$scope,$location, $window, autenticacion,$cookieStore, $log, CONFIG) {
        /* var navvm = this;
         navvm.currentPath = $location.path();
         navvm.isLoggedIn = false;
@@ -40,12 +40,29 @@
                     $scope.isLoggedIn=true;
                     console.log($scope.currentUser)
                    autenticacion.obtenerRutas().success(function(data){
+                    console.log("rutas")
+                    console.log(data)
                          $log.debug(data);
                          $scope.opciones=data;
                     }).error(function(error){
                          console.log(error);
                          $log.debug(error);   
                     });
+                    autenticacion.getPerfil().success(function(perfil) {
+                        $scope.perfil = perfil;
+                        $rootScope.perfil = perfil;
+                        $rootScope.perfil.primer_nombre = $scope.currentUser.primer_nombre;
+                        $rootScope.perfil.primer_apellido = $scope.currentUser.primer_apellido;
+                        $rootScope.perfil.numero_documento = $scope.currentUser.numero_documento;
+                        console.log("este es perfil")
+                        console.log(perfil)
+                        $scope.isLoggedIn = true;
+                        console.log("no entreo nunca")
+                    }).error(function(err) {
+                        console.log("este es error del perfil")
+                        console.log(err)
+                        $log.log(error);
+                    })
                 }    
             });
         };

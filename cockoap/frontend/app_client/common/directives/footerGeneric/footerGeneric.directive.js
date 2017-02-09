@@ -1,7 +1,7 @@
 (function() {
     /** 
      * @ngdoc directive
-     * @name compras.directive:footerGeneric
+     * @name docentes.directive:footerGeneric
      * @restrict EA
      * @description
      * 

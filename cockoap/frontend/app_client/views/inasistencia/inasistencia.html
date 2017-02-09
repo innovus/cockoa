@@ -6,16 +6,15 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="/img/avatar04.png" class="img-circle" alt="User Image"/>
+                 <img ng-src="/img/fotografias/{{perfil.id_docente}}.jpg" fallback-src="/img/avatar04.png"  class="img-circle" alt=""/>
             </div>
             <div class="pull-left info">
-                <p>
-                    {{ primer_nombre }} {{ primer_apellido }}
+                 <p>
+                    {{ perfil.primer_nombre }} {{ perfil.primer_apellido }}
                 </p>
                 <small>
-                    Identificación: {{ numero_documento }}
+                    Identificación: {{ perfil.numero_documento }}
                 </small>
-                <!--<a href="#"><i class="fa fa-circle text-success"></i> En linea</a>-->
             </div>
         </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->

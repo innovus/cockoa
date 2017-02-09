@@ -77,7 +77,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 
                        
-                        <img src="/img/fotografias/{{perfil.id_estudiante}}.jpg" onerror=" this.src = '/img/avatar04.png'" class="user-image" alt="User Image"/>
+                        <img ng-src="/img/fotografias/{{perfil.id_estudiante}}.jpg" fallback-src="/img/avatar04.png"   class="user-image" alt=""/>
                         <span class="hidden-xs">
                             {{ currentUser.primer_nombre }} {{ currentUser.primer_apellido }}
                         </span>
@@ -85,7 +85,7 @@
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="/img/fotografias/{{perfil.id_estudiante}}.jpg" onerror=" this.src = '/img/avatar04.png'" class="img-circle" alt="User Image"/>
+                            <img ng-src="/img/fotografias/{{perfil.id_estudiante}}.jpg"  fallback-src="/img/avatar04.png" class="img-circle" alt=""/>
                             <p>
                                 {{ currentUser.primer_nombre }} {{ currentUser.primer_apellido }}
                                 <small>

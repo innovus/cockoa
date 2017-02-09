@@ -5,15 +5,6 @@ NG_DOCS={
   "pages": [
     {
       "section": "api",
-      "id": "compras.directive:footerGeneric",
-      "shortName": "footerGeneric",
-      "type": "directive",
-      "moduleName": "compras",
-      "shortDescription": "Esta es una directiva del pie de pagina",
-      "keywords": "api compras de del directiva directive ea es esta pagina pie una"
-    },
-    {
-      "section": "api",
       "id": "docentes.controller:actividadesModalController",
       "shortName": "actividadesModalController",
       "type": "controller",
@@ -46,7 +37,7 @@ NG_DOCS={
       "type": "controller",
       "moduleName": "docentes",
       "shortDescription": "Esta es una controllador que maneja la vista de inasistencia de un docente ",
-      "keywords": "$filter $http $log $scope $uibmodal addinasistencia agregar agregaran api aqui base callback cantidad carga carge cargen cb click con config consultadas consultados consultar contiene controllador controller curso datos de del dentro docente docentes el en entero es ese espevcifico esta este estoy estudiante estudiantedata estudiantes faltas fecha getcursos getinasistencias getperiodoid hace id_carga id_curso id_estudiante inasistencia inasistenciadata inasistencias la las lg listado lo los mandamos mandar maneja materia method metodo mira modal momento objeto open para pasa pasamos periodo periododata periodos posicion puede reutilizamos se seleccioando selecciona seleccionarcarga selectcurso ser siempre size sm tab tabs tama tipo una usa usuario utiliza vamos vector ventama ventana vista"
+      "keywords": "$filter $http $log $scope $uibmodal addinasistencia agregar agregaran api aqui base callback cantidad carga carge cargen cb click con config consultadas consultados consultar contiene controllador controller curso datos de del dentro docente docentes el en entero es ese espevcifico esta este estoy estudiante estudiantedata estudiantes faltas fecha getcursos getinasistencias getperiodoid hace id_carga id_curso id_estudiante inasistencia inasistenciadata inasistencias la las lg listado lo los mandamos mandar maneja materia method metodo mira modal momento myutils objeto open para pasa pasamos periodo periododata periodos posicion puede reutilizamos se seleccioando selecciona seleccionarcarga selectcurso ser siempre size sm tab tabs tama tipo una usa usuario utiliza vamos vector ventama ventana vista"
     },
     {
       "section": "api",
@@ -104,6 +95,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "docentes.directive:footerGeneric",
+      "shortName": "footerGeneric",
+      "type": "directive",
+      "moduleName": "docentes",
+      "shortDescription": "Esta es una directiva del pie de pagina",
+      "keywords": "api de del directiva directive docentes ea es esta pagina pie una"
+    },
+    {
+      "section": "api",
       "id": "docentes.directive:navbar",
       "shortName": "navbar",
       "type": "directive",
@@ -122,12 +122,102 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "docentes.service: actividadData",
+      "shortName": "actividadData",
+      "type": "service",
+      "moduleName": "docentes",
+      "shortDescription": "servicio que permite hacer consultas de la tabla actividad de la base de datos",
+      "keywords": "$http $q actividad actividaddata api autentificacion base config consultas datos de docentes hacer la permite service servicio tabla"
+    },
+    {
+      "section": "api",
       "id": "docentes.service: autenticacion",
       "shortName": "autenticacion",
       "type": "service",
       "moduleName": "docentes",
       "shortDescription": "servicio que permite la comunicacion con el web service de autenticacion",
       "keywords": "$http $window api autenticacion cliente comunicacion con config de del docentes el en gettoken guardado guardar la local method navegador permite savetoken se service servicio storage token va web"
+    },
+    {
+      "section": "api",
+      "id": "docentes.service: estudianteData",
+      "shortName": "estudianteData",
+      "type": "service",
+      "moduleName": "docentes",
+      "shortDescription": "servicio que permite hacer consultas de la tabla estudiante de la base de datos",
+      "keywords": "$http api autentificacion base config consultas datos de docentes estudiante estudiantedata hacer la permite service servicio tabla"
+    },
+    {
+      "section": "api",
+      "id": "docentes.service: inasistenciaData",
+      "shortName": "inasistenciaData",
+      "type": "service",
+      "moduleName": "docentes",
+      "shortDescription": "servicio que permite hacer consultas de la tabla inasistencia de la base de datos",
+      "keywords": "$http api autentificacion base config consultas datos de docentes hacer inasistencia inasistenciadata la permite service servicio tabla"
+    },
+    {
+      "section": "api",
+      "id": "docentes.service: logroData",
+      "shortName": "logroData",
+      "type": "service",
+      "moduleName": "docentes",
+      "shortDescription": "servicio que permite hacer consultas de la tabla logro de la base de datos",
+      "keywords": "$http api autentificacion base config consultas datos de docentes hacer la logro logrodata permite service servicio tabla"
+    },
+    {
+      "section": "api",
+      "id": "docentes.service: materiaData",
+      "shortName": "materiaData",
+      "type": "service",
+      "moduleName": "docentes",
+      "shortDescription": "servicio que permite hacer consultas de la tabla materia de la base de datos",
+      "keywords": "$http api autentificacion base config consultas datos de docentes hacer la materia materiadata permite service servicio tabla"
+    },
+    {
+      "section": "api",
+      "id": "docentes.service: myutils",
+      "shortName": "myutils",
+      "type": "service",
+      "moduleName": "docentes",
+      "shortDescription": "servicio que permite mostrar una animacion de cargando mientras se hace la consulta de datos",
+      "keywords": "$mddialog $rootscope animacion api cargando consulta datos de docentes hace la mientras mostrar myutils permite se service servicio una"
+    },
+    {
+      "section": "api",
+      "id": "docentes.service: nota_actividadData",
+      "shortName": "nota_actividadData",
+      "type": "service",
+      "moduleName": "docentes",
+      "shortDescription": "servicio que permite hacer consultas de la tabla nota_actividad de la base de datos",
+      "keywords": "$http api autentificacion base config consultas datos de docentes hacer la nota_actividad nota_actividaddata permite service servicio tabla"
+    },
+    {
+      "section": "api",
+      "id": "docentes.service: nota_logroData",
+      "shortName": "nota_logroData",
+      "type": "service",
+      "moduleName": "docentes",
+      "shortDescription": "servicio que permite hacer consultas de la tabla nota_logro de la base de datos",
+      "keywords": "$http api autentificacion base config consultas datos de docentes hacer la nota_logro nota_logrodata permite service servicio tabla"
+    },
+    {
+      "section": "api",
+      "id": "docentes.service: notificacionData",
+      "shortName": "notificacionData",
+      "type": "service",
+      "moduleName": "docentes",
+      "shortDescription": "servicio que permite hacer consultas de la tabla notificacion de la base de datos",
+      "keywords": "$http api autentificacion base config consultas datos de docentes hacer la notificacion notificaciondata permite service servicio tabla"
+    },
+    {
+      "section": "api",
+      "id": "docentes.service: periodoData",
+      "shortName": "periodoData",
+      "type": "service",
+      "moduleName": "docentes",
+      "shortDescription": "servicio que permite hacer consultas de la tabla periodo de la base de datos",
+      "keywords": "$http api autentificacion base config consultas datos de docentes hacer la periodo periododata permite service servicio tabla"
     }
   ],
   "apis": {

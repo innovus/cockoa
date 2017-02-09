@@ -2,17 +2,16 @@ var app = angular.module('docentes'); //creamos el modulo pokedex y le pasamos a
 app.run(function(editableOptions) {
     editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
-
-    /** 
-     * @ngdoc controller
-     * @name docentes.controller:crudLogrosController
-     * @requires $scope, $http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter
-     * @description
-     * 
-     * Esta es una controllador que maneja la vista principal de el crud de logros de un docente
-     * 
-    */
-app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookieStore', '$cookies', 'CONFIG', 'periodoData', 'actividadData', 'logroData', '$mdBottomSheet', '$mdToast', '$timeout', '$filter','myutils', function($scope, $http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter,myutils) {
+/** 
+ * @ngdoc controller
+ * @name docentes.controller:crudLogrosController
+ * @requires $scope, $http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter
+ * @description
+ * 
+ * Esta es una controllador que maneja la vista principal de el crud de logros de un docente
+ * 
+ */
+app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookieStore', '$cookies', 'CONFIG', 'periodoData', 'actividadData', 'logroData', '$mdBottomSheet', '$mdToast', '$timeout', '$filter', 'myutils', function($scope, $http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter, myutils) {
     $scope.periodos = [];
     $scope.periodoSeleccionado = null;
     $scope.activeTabIndex = 0;
@@ -37,7 +36,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             $scope.periodos = data;
             console.log("succes findPeriodos")
             console.log($scope.periodos)
-                //recorre el vector de todos los periodos 
+            //recorre el vector de todos los periodos 
             for (var i = 0; i < data.length; i++) {
                 //entra cuando el periodo actual es encontrado en el vector
                 // console.log(data[i].id_periodo)
@@ -53,23 +52,23 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
                         $scope.cargas = data;
                         //recorremos las cargas para organizarlas para el acordeon del sliderbar por materias
                         angular.forEach(data, function(carga) {
-                                var selected = [];
-                                //primero validamos si el id de la materia ya esta en materias
-                                filtro = $filter('filter')($scope.materias, {
+                            var selected = [];
+                            //primero validamos si el id de la materia ya esta en materias
+                            filtro = $filter('filter')($scope.materias, {
+                                id_materia: carga.id_materia
+                            });
+                            //me hace un busqueda por id_materia
+                            if (filtro[0] == undefined) {
+                                selected = $filter('filter')(data, {
                                     id_materia: carga.id_materia
                                 });
-                                //me hace un busqueda por id_materia
-                                if (filtro[0] == undefined) {
-                                    selected = $filter('filter')(data, {
-                                        id_materia: carga.id_materia
-                                    });
-                                    $scope.materias.push({
-                                        'id_materia': carga.id_materia,
-                                        'nombre_materia': carga.nombre_materia,
-                                        'cargas': selected
-                                    })
-                                }
-                            }) //cierra forEach
+                                $scope.materias.push({
+                                    'id_materia': carga.id_materia,
+                                    'nombre_materia': carga.nombre_materia,
+                                    'cargas': selected
+                                })
+                            }
+                        }) //cierra forEach
                     }).error(function(data) {
                         console.log('Error: ' + data);
                     });
@@ -84,23 +83,24 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         console.log(error);
     });
     /** 
-        * @ngdoc method
-        * @name open
-        * @methodOf docentes.controller:crudLogrosController
-        * @param {String} size size es el tamaño de la ventana modal puede ser "lg" o "sm" 
-        * @param {Int} id_logro id_logro es el id de el logro que vamos a consultar
-        * 
-        *
-        * @description
-        * 
-        * Este metodo se lo usa en el momento que un usuario hace click en actividades para abrir un modal y consulte las actividades de el logro el cual se le pasa
-        * 
-    */
-
+     * @ngdoc method
+     * @name open
+     * @methodOf docentes.controller:crudLogrosController
+     * @param {String} size size es el tamaño de la ventana modal puede ser "lg" o "sm" 
+     * @param {Int} id_logro id_logro es el id de el logro que vamos a consultar
+     * 
+     *
+     * @description
+     * 
+     * Este metodo se lo usa en el momento que un usuario hace click en actividades para abrir un modal y consulte las actividades de el logro el cual se le pasa
+     * 
+     */
     var open = function(size, id_logro) {
         //$http.get(CONFIG.http_address+'/api/docentes/logros/'+id_logro+'/actividades/')
+         myutils.showWait();
         var modalInstance = null;
         actividadData.findActividadesByLogro(id_logro).success(function(data) {
+            myutils.hideWait();
             modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: "static",
@@ -114,7 +114,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
                     id_logro: function() {
                         return id_logro
                     },
-                    permisoEdicion: function(){
+                    permisoEdicion: function() {
                         if ($scope.periodoSeleccionado.id_periodo == $scope.periodoActual.id_periodo) return true;
                         else return false;
                     }
@@ -124,20 +124,18 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         }).error(function(error) {
             console.log(error);
         });
-        console.log(modalInstance)
     };
-
     /** 
-        * @ngdoc method
-        * @name crearLogro
-        * @methodOf docentes.controller:crudLogrosController
-        *
-        *
-        * @description
-        * 
-        * Cuando el usuario click en el boton agregar se agrega un nuevo logro en la tabla
-        * 
-    */
+     * @ngdoc method
+     * @name crearLogro
+     * @methodOf docentes.controller:crudLogrosController
+     *
+     *
+     * @description
+     * 
+     * Cuando el usuario click en el boton agregar se agrega un nuevo logro en la tabla
+     * 
+     */
     var crearLogro = function() {
         console.log("entreo a create")
         $scope.inserted = {
@@ -154,20 +152,19 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     /////////////////////
     //////// fin trae cargas
     ///////form editable 
-
-     /** 
-        * @ngdoc method
-        * @name updateLogro
-        * @methodOf docentes.controller:crudLogrosController
-        *
-        * @param {Object} data data es el logro con los datos que se van a actualizar
-        * @param {Object} logro logro es el logro que se va a actualizar
-        *
-        * @description
-        * 
-        * Este es el metodo para guardar los datos de el logro modificado temporalmente
-        * 
-    */
+    /** 
+     * @ngdoc method
+     * @name updateLogro
+     * @methodOf docentes.controller:crudLogrosController
+     *
+     * @param {Object} data data es el logro con los datos que se van a actualizar
+     * @param {Object} logro logro es el logro que se va a actualizar
+     *
+     * @description
+     * 
+     * Este es el metodo para guardar los datos de el logro modificado temporalmente
+     * 
+     */
     var updateLogro = function(data, logro) {
         console.log(data);
         console.log(logro)
@@ -181,31 +178,28 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         console.log("logro con tipo")
         console.log(logro)
     };
-
-
     /** 
-        * @ngdoc method
-        * @name validarPorcentaje
-        * @methodOf docentes.controller:crudLogrosController
-        *
-        * @param {Int} data data el el porcentaje que vamos a validar 
-        *
-        * @description
-        * 
-        * Este es el metodo para validar si un porcentaje esta entre el 100% y si se ingresan numeros 
-        * 
-    */
-
+     * @ngdoc method
+     * @name validarPorcentaje
+     * @methodOf docentes.controller:crudLogrosController
+     *
+     * @param {Int} data data el el porcentaje que vamos a validar 
+     *
+     * @description
+     * 
+     * Este es el metodo para validar si un porcentaje esta entre el 100% y si se ingresan numeros 
+     * 
+     */
     var validarPorcentaje = function(data) {
         console.log("entro enbefore")
         console.log(data);
         // console.log(actividad)
         console.log("union")
-            //angular.extend(actividad, data );
-            //console.log(actividad)
+        //angular.extend(actividad, data );
+        //console.log(actividad)
         console.log("antes");
         console.log(data);
-        data = data.toString().replace(/\,/g,'.'); 
+        data = data.toString().replace(/\,/g, '.');
         console.log(data)
         if (isNaN(data)) {
             return "Debe ingresar un numero";
@@ -215,24 +209,22 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             console.log("no entro")
         }
     }
-
-
     /** 
-        * @ngdoc method
-        * @name deleteLogro
-        * @methodOf docentes.controller:crudLogrosController
-        *
-        * @param {Object} logro logro es un objeto que tiene los datos de un logro 
-        * @param {Int} index index es la posicion en el vector logros de el logro que vamos a eliminar
-        *
-        *
-        * @description
-        * 
-        * Este es el metodo se lo utiliza para eliminar un logro de el vector $scope.logros 
-        * 
-    */
-
+     * @ngdoc method
+     * @name deleteLogro
+     * @methodOf docentes.controller:crudLogrosController
+     *
+     * @param {Object} logro logro es un objeto que tiene los datos de un logro 
+     * @param {Int} index index es la posicion en el vector logros de el logro que vamos a eliminar
+     *
+     *
+     * @description
+     * 
+     * Este es el metodo se lo utiliza para eliminar un logro de el vector $scope.logros 
+     * 
+     */
     var deleteLogro = function(logro, index) {
+        console.log("entro a eliminar")
         if (logro.id_logro != undefined) {
             $scope.logrosPorEliminar.push(logro);
         }
@@ -240,22 +232,21 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         $scope.logros.splice(index, 1);
         $scope.isPorcentajeCien = checkPorcentaje();
     }
-
     /** 
-        * @ngdoc method
-        * @name cancelform
-        * @methodOf docentes.controller:crudLogrosController
-        *
-        * @param {Object} logro logro es un objeto que tiene los datos de un logro 
-        * @param {Int} index index es la posicion en el vector logros 
-        *
-        *
-        * @description
-        * 
-        * Este metodo se lo utiliza para que despues de dar en el boton agregar logro si deseamos que no se guarde el logro le damos en cancelar
-        * y se eliminara del vector de logros
-        * 
-    */
+     * @ngdoc method
+     * @name cancelform
+     * @methodOf docentes.controller:crudLogrosController
+     *
+     * @param {Object} logro logro es un objeto que tiene los datos de un logro 
+     * @param {Int} index index es la posicion en el vector logros 
+     *
+     *
+     * @description
+     * 
+     * Este metodo se lo utiliza para que despues de dar en el boton agregar logro si deseamos que no se guarde el logro le damos en cancelar
+     * y se eliminara del vector de logros
+     * 
+     */
     var cancelform = function(logro, index) {
         if (logro.descripcion_logro == null) {
             $scope.logros.splice(index, 1);
@@ -265,140 +256,124 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     };
     ////////
     //funcion que se la usa cuando le da click en un tab
-
     /** 
-        * @ngdoc method
-        * @name getPeriodoId
-        * @methodOf docentes.controller:crudLogrosController
-        *
-        * @param {Int} index index es un entero que contiene la posicion dentro del vector periodos de el periodo que estoy seleccioando 
-        * en las tabs
-        *
-        * @description
-        * 
-        * Este metodo se lo usa en el momento que un usuario hace click en una tab de periodos y carge las inasistencias de ese periodo
-        * 
-        * 
-    */
+     * @ngdoc method
+     * @name getPeriodoId
+     * @methodOf docentes.controller:crudLogrosController
+     *
+     * @param {Int} index index es un entero que contiene la posicion dentro del vector periodos de el periodo que estoy seleccioando 
+     * en las tabs
+     *
+     * @description
+     * 
+     * Este metodo se lo usa en el momento que un usuario hace click en una tab de periodos y carge las inasistencias de ese periodo
+     * 
+     * 
+     */
     var getPeriodoId = function(index) {
-        
         $scope.periodoSeleccionado = $scope.periodos[index];
+        if ($scope.cargaSeleccionada != null || $scope.cargaSeleccionada != undefined) {
+                myutils.showWait();
+            }
         //$http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodoSeleccionado.id_periodo)
-
         periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
+            console.log("fin cargas by perdip")
             $scope.cargas = data;
             var encontrado = false;
-            if($scope.cargaSeleccionada != null || $scope.cargaSeleccionada != undefined ){
-                myutils.showWait();
-                
-             }
+            
             //hace la busqueda si existe la misma carga en las nuevas cargas de este periodo
             //para dejarla seleccionada con las nuevas
+
             for (var i = 0; i < data.length; i++) {
                 (function(i) {
-                    if($scope.cargaSeleccionada != null || $scope.cargaSeleccionada != undefined ){
+                    if ($scope.cargaSeleccionada != null || $scope.cargaSeleccionada != undefined) {
                         if (data[i].nombre_materia == $scope.cargaSeleccionada.nombre_materia && data[i].id_curso == $scope.cargaSeleccionada.id_curso) {
                             $scope.cargaSeleccionada = data[i];
                             encontrado = true;
                         }
                     }
-                    
                 })(i);
             }
+            console.log("despues del for")
             if (encontrado == false) {
                 console.log(encontrado)
                 $scope.cargaSeleccionada = null;
-            }else{
+            } else {
+                console.log("carga")
                 seleccionarCarga($scope.cargaSeleccionada);
-
             }
-            
-
         }).error(function(data) {
             console.log('Error: ' + data);
         });
     };
-
-    
     /** 
-        * @ngdoc method
-        * @name selectCurso
-        * @methodOf docentes.controller:crudLogrosController
-        * @param {Object} carga carga mandamos un objeto tipo Carga 
-        * 
-        *
-        * @description
-        * 
-        * Este metodo se lo usa en el momento que un usuario hace click en una materia para que 
-        * cargen el listado de estudiantes de el curso que el selecciona con las inasistencias de los estudiantes
-        * 
-        * 
-        */
+     * @ngdoc method
+     * @name selectCurso
+     * @methodOf docentes.controller:crudLogrosController
+     * @param {Object} carga carga mandamos un objeto tipo Carga 
+     * 
+     *
+     * @description
+     * 
+     * Este metodo se lo usa en el momento que un usuario hace click en una materia para que 
+     * cargen el listado de estudiantes de el curso que el selecciona con las inasistencias de los estudiantes
+     * 
+     * 
+     */
     var selectCurso = function(carga) {
         myutils.showWait();
-        
-            for (var i = 0; i < $scope.periodos.length; i++) {
-                //entra cuando el periodo actual es encontrado en el vector
-                // console.log(data[i].id_periodo)
-                console.log($scope.periodoActual)
-                if ($scope.periodos[i].id_periodo == $scope.periodoActual.id_periodo) {
-                    //selecciona el periodo actual en las tabs
-                    $scope.activeTabIndex = i;
-                    //
-                    $scope.periodoSeleccionado = $scope.periodos[i];
-                }
+        for (var i = 0; i < $scope.periodos.length; i++) {
+            //entra cuando el periodo actual es encontrado en el vector
+            // console.log(data[i].id_periodo)
+            console.log($scope.periodoActual)
+            if ($scope.periodos[i].id_periodo == $scope.periodoActual.id_periodo) {
+                //selecciona el periodo actual en las tabs
+                $scope.activeTabIndex = i;
+                //
+                $scope.periodoSeleccionado = $scope.periodos[i];
             }
+        }
         seleccionarCarga(carga);
-    
     }
-
-
     /** 
-        * @ngdoc method
-        * @name seleccionarCarga
-        * @methodOf docentes.controller:crudLogrosController
-        * @param {Object} carga carga mandamos un objeto tipo Carga 
-        * 
-        *
-        * @description
-        * 
-        * Este metodo que reutilizamos siempre que vamos a consultar los logros y el listado de estudiantes de una carga
-        * 
-        * 
-        */
+     * @ngdoc method
+     * @name seleccionarCarga
+     * @methodOf docentes.controller:crudLogrosController
+     * @param {Object} carga carga mandamos un objeto tipo Carga 
+     * 
+     *
+     * @description
+     * 
+     * Este metodo que reutilizamos siempre que vamos a consultar los logros y el listado de estudiantes de una carga
+     * 
+     * 
+     */
     function seleccionarCarga(carga) {
-        
-
-         
-
         $scope.cargaSeleccionada = carga;
         getLogros(carga.id_carga_docente, function(logros) {
+            console.log('logros')
             $scope.logros = logros;
             console.log($scope.logros);
             $scope.isPorcentajeCien = checkPorcentaje();
             myutils.hideWait();
-            
-
         }); //CIERRA GET LOGROS
     } //CIERA FUNCION SELECIONAR CARGA
-
-
     /** 
-        * @ngdoc method
-        * @name getLogros 
-        * @methodOf docentes.controller:crudLogrosController
-        *
-        *
-        * @param {Int} id_carga id_carga pasamos el identificador de una carga
-        * @param {Function} cb cb a esta funcion le pasamos un vector de logros consultados
-        * 
-        *
-        * @description
-        * 
-        * Este metodo lo utilizamos para obtener los logros de una carga especifica
-        * 
-        * 
-        */
+     * @ngdoc method
+     * @name getLogros 
+     * @methodOf docentes.controller:crudLogrosController
+     *
+     *
+     * @param {Int} id_carga id_carga pasamos el identificador de una carga
+     * @param {Function} cb cb a esta funcion le pasamos un vector de logros consultados
+     * 
+     *
+     * @description
+     * 
+     * Este metodo lo utilizamos para obtener los logros de una carga especifica
+     * 
+     * 
+     */
     function getLogros(id_carga, cb) {
         // $http.get(CONFIG.http_address+'/api/docentes/cargas/'+id_carga+'/logros')
         logroData.findLogrosByCarga(id_carga).success(function(logros) {
@@ -409,24 +384,23 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             cb([]);
         });
     }
-
-    
     /** 
-        * @ngdoc method
-        * @name btnGuardar
-        * @methodOf docentes.controller:crudLogrosController
-        *
-        *
-        * 
-        *
-        * @description
-        * 
-        * Este metodo se lo  utiliza cuando hacemos click en el boton guardar y verifica que la suma de porcentajes sea = 100
-        * 
-        * 
-        * 
-        */
+     * @ngdoc method
+     * @name btnGuardar
+     * @methodOf docentes.controller:crudLogrosController
+     *
+     *
+     * 
+     *
+     * @description
+     * 
+     * Este metodo se lo  utiliza cuando hacemos click en el boton guardar y verifica que la suma de porcentajes sea = 100
+     * 
+     * 
+     * 
+     */
     var btnGuardar = function() {
+
         console.log("logros por eliminar");
         console.log($scope.logrosPorEliminar)
         console.log("logros");
@@ -452,31 +426,28 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             console.log($scope.logrosPorEliminar)
             console.log("actividaes")
             console.log($scope.logros)
+            myutils.showWait();
             logroData.saveLogros($scope.logrosPorEliminar, $scope.logros).success(function(mensaje) {
                 console.log(mensaje);
                 seleccionarCarga($scope.cargaSeleccionada);
+                myutils.hideWait();
                 swal("Ok...", "logros Guardados!", "success");
             }).error(function(error) {
-                if (error == "todos vacios"){
+                myutils.hideWait();
+                if (error == "todos vacios") {
                     console.log("entro al if")
                     swal("Oops...", "No tienes ningun Cambio", "error");
-
-                }else{
-                      if (error.name == "SequelizeForeignKeyConstraintError" && error.parent.table == "nota_logro") {
-                    swal("Oops...", "Debe eliminar primero las notas de los estudiantes", "error");
-                } else if (error.name == "SequelizeForeignKeyConstraintError" && error.parent.table == "actividad") {
-                    swal("Oops...", "Debe eliminar primero las actividades", "error");
                 } else {
-                    swal("Oops...", "Algo Salio mal", "error");
+                    if (error.name == "SequelizeForeignKeyConstraintError" && error.parent.table == "nota_logro") {
+                        swal("Oops...", "Debe eliminar primero las notas de los estudiantes", "error");
+                    } else if (error.name == "SequelizeForeignKeyConstraintError" && error.parent.table == "actividad") {
+                        swal("Oops...", "Debe eliminar primero las actividades", "error");
+                    } else {
+                        swal("Oops...", "Algo Salio mal", "error");
+                    }
                 }
-
-                }
-               
-              
-
                 seleccionarCarga($scope.cargaSeleccionada);
                 $scope.logrosPorEliminar = [];
-
             });
         }
         //  console.log(editableForm)
@@ -484,25 +455,25 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     };
     //returna true si el porcentaje es = 100 si es diferente retorna false
     /** 
-        * @ngdoc method
-        * @name checkPorcentaje
-        * @methodOf docentes.controller:crudLogrosController
-        *
-        * @description
-        * 
-        * Este metodo retorna true si el porcentaje es = 100
-        * 
-        * @return {Boolean} true si el porcentaje es 100
-        * 
-        */
+     * @ngdoc method
+     * @name checkPorcentaje
+     * @methodOf docentes.controller:crudLogrosController
+     *
+     * @description
+     * 
+     * Este metodo retorna true si el porcentaje es = 100
+     * 
+     * @return {Boolean} true si el porcentaje es 100
+     * 
+     */
     function checkPorcentaje() {
         var sumatoria = 0;
         angular.forEach($scope.logros, function(logro) {
-            logro.porcentaje_logro = logro.porcentaje_logro.toString().replace(/\,/g,'.'); 
+            logro.porcentaje_logro = logro.porcentaje_logro.toString().replace(/\,/g, '.');
             sumatoria = sumatoria + parseFloat(logro.porcentaje_logro);
             console.log(parseFloat(logro.porcentaje_logro));
         });
-        if (sumatoria == 100) {
+        if (sumatoria == 100 || sumatoria == 0) {
             console.log("return true")
             console.log(sumatoria);
             return true
@@ -512,46 +483,42 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             return false
         }
     }
-
     /** 
-        * @ngdoc method
-        * @name validarPorcentajeTotal
-        * @methodOf docentes.controller:crudLogrosController
-        *
-        * @description
-        * 
-        * Este metodo lo reutilizamos para validar el porcentaje total
-        * 
-        */
+     * @ngdoc method
+     * @name validarPorcentajeTotal
+     * @methodOf docentes.controller:crudLogrosController
+     *
+     * @description
+     * 
+     * Este metodo lo reutilizamos para validar el porcentaje total
+     * 
+     */
     var validarPorcentajeTotal = function() {
         console.log("nunca entro")
         $scope.isPorcentajeCien = checkPorcentaje();
     }
-
     $scope.open = open;
     $scope.crearLogro = crearLogro;
     $scope.updateLogro = updateLogro;
     $scope.validarPorcentaje = validarPorcentaje;
-    $scope.deleteLogro = $scope.deleteLogro;
+    $scope.deleteLogro = deleteLogro;
     $scope.cancelform = cancelform;
     $scope.getPeriodoId = getPeriodoId;
     $scope.selectCurso = selectCurso;
-    $scope.btnGuardar =btnGuardar;
-    $scope.validarPorcentajeTotal= validarPorcentajeTotal;
-
+    $scope.btnGuardar = btnGuardar;
+    $scope.validarPorcentajeTotal = validarPorcentajeTotal;
 }]);
-
- /** 
-     * @ngdoc controller
-     * @name docentes.controller:actividadesModalController
-     * @requires $http, $scope, $q, $uibModalInstance, actividades, id_logro,permisoEdicion, actividadData
-     * @description
-     * 
-     * Esta es una controllador que maneja la vista en detalle de las actividades, se la utiliza cuando se le da click en 
-     * ver actividades y carga una ventana modal con las actividades de un logro 
-     * 
-    */
-app.controller('actividadesModalController', function($http, $scope, $q, $uibModalInstance, actividades, id_logro,permisoEdicion, actividadData) {
+/** 
+ * @ngdoc controller
+ * @name docentes.controller:actividadesModalController
+ * @requires $http, $scope, $q, $uibModalInstance, actividades, id_logro,permisoEdicion, actividadData
+ * @description
+ * 
+ * Esta es una controllador que maneja la vista en detalle de las actividades, se la utiliza cuando se le da click en 
+ * ver actividades y carga una ventana modal con las actividades de un logro 
+ * 
+ */
+app.controller('actividadesModalController', function($http, $scope, $q, $uibModalInstance, actividades, id_logro, permisoEdicion, actividadData) {
     $scope.actividades = actividades;
     $scope.id_logro = id_logro;
     $scope.permisoEdicion = permisoEdicion;
@@ -561,25 +528,23 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
     console.log("en el modulo modal")
     console.log($scope.actividades);
     //returna true si el porcentaje es = 100 si es diferente retorna false
-
-     /** 
-        * @ngdoc method
-        * @name checkPorcentaje
-        * @methodOf docentes.controller:actividadesModalController
-        *
-        * @description
-        * 
-        * Este metodo retorna true si el porcentaje es = 100
-        * 
-        * @return {Boolean} true si el porcentaje es 100
-        * 
-        */
+    /** 
+     * @ngdoc method
+     * @name checkPorcentaje
+     * @methodOf docentes.controller:actividadesModalController
+     *
+     * @description
+     * 
+     * Este metodo retorna true si el porcentaje es = 100
+     * 
+     * @return {Boolean} true si el porcentaje es 100
+     * 
+     */
     function checkPorcentaje() {
         var sumatoria = 0;
         angular.forEach($scope.actividades, function(actividad) {
-            actividad.porcentaje_actividad = actividad.porcentaje_actividad.toString().replace(/\,/g,'.'); 
+            actividad.porcentaje_actividad = actividad.porcentaje_actividad.toString().replace(/\,/g, '.');
             sumatoria = sumatoria + parseFloat(actividad.porcentaje_actividad);
-
         });
         if (sumatoria == 100) {
             return true
@@ -587,20 +552,17 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
             return false
         }
     }
-
     /** 
-        * @ngdoc method
-        * @name saveColumn
-        * @methodOf docentes.controller:actividadesModalController
-        *
-        * @param {Object} column column pasamos el identificador de una carga
-        *        
-        * @description
-        * 
-        * 
-        */
-
-    
+     * @ngdoc method
+     * @name saveColumn
+     * @methodOf docentes.controller:actividadesModalController
+     *
+     * @param {Object} column column pasamos el identificador de una carga
+     *        
+     * @description
+     * 
+     * 
+     */
     var saveColumn = function(column) {
         console.log(column)
         var results = [];
@@ -632,19 +594,17 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
     };
     // add user
     //tipo: 0 es para saber que es un dato para insertar
-
-
     /** 
-        * @ngdoc method
-        * @name addActividad
-        * @methodOf docentes.controller:actividadesModalController
-        *       
-        * @description
-        * 
-        * Este metodo aggrega una actividad vacia para que este lista para agregar datos y agregarla en la db
-        * 
-        * 
-        */
+     * @ngdoc method
+     * @name addActividad
+     * @methodOf docentes.controller:actividadesModalController
+     *       
+     * @description
+     * 
+     * Este metodo aggrega una actividad vacia para que este lista para agregar datos y agregarla en la db
+     * 
+     * 
+     */
     var addActividad = function() {
         $scope.inserted = {
             //id_actividad: 100,
@@ -657,21 +617,18 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         $scope.actividades.push($scope.inserted);
         $scope.isPorcentajeCien = checkPorcentaje();
     };
-
-
     /** 
-        * @ngdoc method
-        * @name updateActividad
-        * @methodOf docentes.controller:actividadesModalController
-        *
-        * @param {Object} data data es la actividad con los datos que se van a actualizar
-        * @param {Object} actividad actividad es la actividad que se va a actualizar
-        * @description
-        * 
-        * Este es el metodo para guardar los datos de la actividad modificado temporalmente 
-        * 
-        */
-
+     * @ngdoc method
+     * @name updateActividad
+     * @methodOf docentes.controller:actividadesModalController
+     *
+     * @param {Object} data data es la actividad con los datos que se van a actualizar
+     * @param {Object} actividad actividad es la actividad que se va a actualizar
+     * @description
+     * 
+     * Este es el metodo para guardar los datos de la actividad modificado temporalmente 
+     * 
+     */
     var updateActividad = function(data, actividad) {
         console.log(data);
         console.log(actividad)
@@ -686,21 +643,20 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         console.log("actividad con tipo")
         console.log(actividad)
     };
-
     /** 
-        * @ngdoc method
-        * @name deleteActividad
-        * @methodOf docentes.controller:actividadesModalController
-        *
-        * @param {Object} actividad actividad es un objeto que tiene los datos de un actividad 
-        * @param {Int} index index es la posicion en el vector actividades de el actividad que se va a eliminar
-        *
-        *
-        * @description
-        * 
-        * Este es el metodo se lo utiliza para eliminar un actividad de el vector $scope.actividades 
-        * 
-    */
+     * @ngdoc method
+     * @name deleteActividad
+     * @methodOf docentes.controller:actividadesModalController
+     *
+     * @param {Object} actividad actividad es un objeto que tiene los datos de un actividad 
+     * @param {Int} index index es la posicion en el vector actividades de el actividad que se va a eliminar
+     *
+     *
+     * @description
+     * 
+     * Este es el metodo se lo utiliza para eliminar un actividad de el vector $scope.actividades 
+     * 
+     */
     var deleteActividad = function(actividad, index) {
         if (actividad.id_actividad != undefined) {
             $scope.actividadesPorEliminar.push(actividad);
@@ -709,28 +665,25 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         $scope.actividades.splice(index, 1);
         $scope.isPorcentajeCien = checkPorcentaje();
     }
-
-
     /** 
-        * @ngdoc method
-        * @name validarPorcentaje
-        * @methodOf docentes.controller:actividadesModalController
-        *
-        * @param {Int} data data el el porcentaje que vamos a validar 
-        *
-        * @description
-        * 
-        * Este es el metodo para validar si un porcentaje esta entre el 100% y si se ingresan numeros 
-        * 
-    */
-    
+     * @ngdoc method
+     * @name validarPorcentaje
+     * @methodOf docentes.controller:actividadesModalController
+     *
+     * @param {Int} data data el el porcentaje que vamos a validar 
+     *
+     * @description
+     * 
+     * Este es el metodo para validar si un porcentaje esta entre el 100% y si se ingresan numeros 
+     * 
+     */
     var validarPorcentaje = function(data) {
         console.log(data);
         // console.log(actividad)
         console.log("union")
-            //angular.extend(actividad, data );
-            //console.log(actividad)
-        data = data.toString().replace(/\,/g,'.'); 
+        //angular.extend(actividad, data );
+        //console.log(actividad)
+        data = data.toString().replace(/\,/g, '.');
         if (isNaN(data)) {
             return "Debe ingresar un numero";
             console.log("entro")
@@ -740,20 +693,20 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         }
     }
     /** 
-        * @ngdoc method
-        * @name validarPorcentajeTotal
-        * @methodOf docentes.controller:actividadesModalController
-        *
-        * @description
-        * 
-        * Este metodo lo reutilizamos para validar el porcentaje total
-        * 
-        */
+     * @ngdoc method
+     * @name validarPorcentajeTotal
+     * @methodOf docentes.controller:actividadesModalController
+     *
+     * @description
+     * 
+     * Este metodo lo reutilizamos para validar el porcentaje total
+     * 
+     */
     var validarPorcentajeTotal = function() {
-            console.log("nunca entro")
-            $scope.isPorcentajeCien = checkPorcentaje();
-        }
-        //esta funcion la usamos cuando le damos ok en una actividad
+        console.log("nunca entro")
+        $scope.isPorcentajeCien = checkPorcentaje();
+    }
+    //esta funcion la usamos cuando le damos ok en una actividad
     var guardarActividadTemporal = function(data, actividad) {
         console.log(data);
         console.log(actividad)
@@ -762,20 +715,20 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         console.log(actividad)
     }
     /** 
-        * @ngdoc method
-        * @name cancelform
-        * @methodOf docentes.controller:actividadesModalController
-        *
-        * @param {Object} actividad actividad es un objeto que tiene los datos de una actividad 
-        * @param {Int} index index es la posicion en el vector actividades 
-        *
-        *
-        * @description
-        * 
-        * Este metodo se lo utiliza para que despues de dar en el boton agregar actividad si deseamos que no se guarde la actividad le damos en cancelar
-        * y se eliminara del vector de actividades
-        * 
-    */
+     * @ngdoc method
+     * @name cancelform
+     * @methodOf docentes.controller:actividadesModalController
+     *
+     * @param {Object} actividad actividad es un objeto que tiene los datos de una actividad 
+     * @param {Int} index index es la posicion en el vector actividades 
+     *
+     *
+     * @description
+     * 
+     * Este metodo se lo utiliza para que despues de dar en el boton agregar actividad si deseamos que no se guarde la actividad le damos en cancelar
+     * y se eliminara del vector de actividades
+     * 
+     */
     var cancelform = function(actividad, index) {
         if (actividad.descripcion_actividad == null) {
             $scope.actividades.splice(index, 1);
@@ -783,18 +736,16 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         console.log(actividad)
         console.log(index)
     };
-
-     /** 
-        * @ngdoc method
-        * @name ok
-        * @methodOf docentes.controller:actividadesModalController
-        * @description
-        * 
-        * Este metodo cierra el modal cuando le de en ok y valida que todo este bien antes de hacer la transaccion
-        * 
-        * 
-        */
-    
+    /** 
+     * @ngdoc method
+     * @name ok
+     * @methodOf docentes.controller:actividadesModalController
+     * @description
+     * 
+     * Este metodo cierra el modal cuando le de en ok y valida que todo este bien antes de hacer la transaccion
+     * 
+     * 
+     */
     var ok = function() {
         console.log($scope.isPorcentajeCien)
         console.log("actividades por eliminar");
@@ -815,7 +766,7 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         console.log(sumatoria);
         $scope.isPorcentajeCien = checkPorcentaje();
         console.log($scope.isPorcentajeCien)
-        if (sumatoria != 100) {
+        if (sumatoria != 100 || sumatoria != 0) {
             console.log("sumatoria")
             console.log(sumatoria);
         } else {
@@ -835,29 +786,27 @@ app.controller('actividadesModalController', function($http, $scope, $q, $uibMod
         //  console.log(editableForm)
         // $uibModalInstance.close();
     };
-
     /** 
-        * @ngdoc method
-        * @name cancel
-        * @methodOf docentes.controller:actividadesModalController
-        * @description
-        * 
-        * Este metodo cierra el modal cuando le de en boton cancelar
-        * 
-        * 
-        */
-
+     * @ngdoc method
+     * @name cancel
+     * @methodOf docentes.controller:actividadesModalController
+     * @description
+     * 
+     * Este metodo cierra el modal cuando le de en boton cancelar
+     * 
+     * 
+     */
     var cancel = function() {
         $uibModalInstance.dismiss('cancel');
     };
     $scope.saveColumn = saveColumn;
     $scope.addActividad = addActividad;
     $scope.updateActividad = updateActividad;
-    $scope.deleteActividad  = deleteActividad ;
-    $scope.validarPorcentaje  = validarPorcentaje ;
+    $scope.deleteActividad = deleteActividad;
+    $scope.validarPorcentaje = validarPorcentaje;
     $scope.validarPorcentajeTotal = validarPorcentajeTotal;
     $scope.guardarActividadTemporal = guardarActividadTemporal;
-    $scope.cancelform  = cancelform ;
+    $scope.cancelform = cancelform;
     $scope.ok = ok
     $scope.cancel = cancel
 });

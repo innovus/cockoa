@@ -1,8 +1,6 @@
 //una function javascript q se llama asi misma
 (function() {
-
     var app = angular.module('docentes'); //creamos el modulo pokedex y le pasamos array con las dependencias
-
     /** 
      * @ngdoc controller
      * @name docentes.controller:showActividadEstudianteController
@@ -11,7 +9,7 @@
      * 
      * Esta es una controllador para consultar la actividad en detalle 
      * 
-    */
+     */
     app.controller('showActividadEstudianteController', ['$scope', '$uibModalInstance', 'actividad', function($scope, $uibModalInstance, actividad) {
         $scope.actividad = actividad
         console.log("ya en el modal")
@@ -23,8 +21,6 @@
             $uibModalInstance.dismiss('cancel');
         };
     }]);
-
-
     /** 
      * @ngdoc controller
      * @name docentes.controller:estudiantes_notasController
@@ -33,8 +29,8 @@
      * 
      * Esta es una controllador que maneja la vista principal de notas de un estudiante
      * 
-    */
-    app.controller('estudiantes_notasController', ['$rootScope','$scope', '$http', '$filter', '$cookieStore', '$cookies', 'periodoData', 'materiaData', 'logroData', 'actividadData', 'nota_actividadData', 'nota_logroData', '$uibModal','myutils', function($rootScope,$scope, $http, $filter, $cookieStore, $cookies, periodoData, materiaData, logroData, actividadData, nota_actividadData, nota_logroData, $uibModal,myutils) {
+     */
+    app.controller('estudiantes_notasController', ['$rootScope', '$scope', '$http', '$filter', '$cookieStore', '$cookies', 'periodoData', 'materiaData', 'logroData', 'actividadData', 'nota_actividadData', 'nota_logroData', '$uibModal', 'myutils', function($rootScope, $scope, $http, $filter, $cookieStore, $cookies, periodoData, materiaData, logroData, actividadData, nota_actividadData, nota_logroData, $uibModal, myutils) {
         console.log($rootScope.notificacion);
         $scope.materiaSeleccionada = null;
         $scope.periodos = [];
@@ -42,111 +38,97 @@
         $scope.periodoSeleccionado = null;
         $scope.activeTabIndex = 0;
         $scope.notaFinal = 0;
-        
         periodoData.findPeriodos().success(function(data) {
             //Trae el periodo Actual
-        periodoData.findPeriodoActual().success(function(actual) {
-            $scope.periodoActual = actual[0];
-            $scope.periodos = data;
-            for (var i = 0; i < data.length; i++) {
-                (function(i) {
-                    if (data[i].id_periodo == $scope.periodoActual.id_periodo) {
-                        $scope.activeTabIndex = i;
-                        $scope.periodoSeleccionado = $scope.periodos[i];
-                    }
-                })(i);
-            }
-            console.log(data);
-        }).error(function(error) {
-            console.log(error);
-        });
-            
+            periodoData.findPeriodoActual().success(function(actual) {
+                $scope.periodoActual = actual[0];
+                $scope.periodos = data;
+                for (var i = 0; i < data.length; i++) {
+                    (function(i) {
+                        if (data[i].id_periodo == $scope.periodoActual.id_periodo) {
+                            $scope.activeTabIndex = i;
+                            $scope.periodoSeleccionado = $scope.periodos[i];
+                        }
+                    })(i);
+                }
+                console.log(data);
+            }).error(function(error) {
+                console.log(error);
+            });
         }).error(function(error) {
             console.log(error);
             $scope.periodos = [];
         });
-
         materiaData.findMateriasByEstudiante().success(function(data) {
             $scope.materias = data;
             console.log($scope.materias);
         }).error(function(data) {
             console.log('Error: ' + data);
         });
-
-        if($rootScope.notificacion != undefined || $rootScope.notificacion != null){
+        if ($rootScope.notificacion != undefined || $rootScope.notificacion != null) {
             console.log("nunca entro")
             console.log($rootScope.notificacion.guia)
-             materiaData.findMateriasByActividad($rootScope.notificacion.guia).success(function(data) {
+            materiaData.findMateriasByActividad($rootScope.notificacion.guia).success(function(data) {
                 $rootScope.notificacion == null;
                 console.log(data[0]);
                 getMateriasYLogros(data[0]);
-
                 console.log($scope.materias)
             }).error(function(data) {
                 console.log('Error: ' + data);
             });
-
-
         }
-
-        
         /** 
-        * @ngdoc method
-        * @name getPeriodoId
-        * @methodOf docentes.controller:estudiantes_notasController 
-        * @param {Int} index index es un entero que contiene la posicion dentro del vector periodos de el periodo que estoy seleccioando 
-        * en las tabs
-        *
-        * @description
-        * 
-        * Este metodo se lo usa en el momento que un usuario hace click en una tab de periodos y carge las notas de ese periodo
-        * 
-        * 
-        */ 
-        
+         * @ngdoc method
+         * @name getPeriodoId
+         * @methodOf docentes.controller:estudiantes_notasController 
+         * @param {Int} index index es un entero que contiene la posicion dentro del vector periodos de el periodo que estoy seleccioando 
+         * en las tabs
+         *
+         * @description
+         * 
+         * Este metodo se lo usa en el momento que un usuario hace click en una tab de periodos y carge las notas de ese periodo
+         * 
+         * 
+         */
         var getPeriodoId = function(index) {
             $scope.periodoSeleccionado = $scope.periodos[index];
             getNotasYLogros($scope.materiaSeleccionada, $scope.periodoSeleccionado);
             console.log("selecciono periodo" + $scope.periodoSeleccionado);
         };
-
         /** 
-        * @ngdoc method
-        * @name getMateriasYLogros
-        * @methodOf docentes.controller:estudiantes_notasController 
-        * @param {Object} materia materia es un objecto donde contiene todos los datos de una materia
-        * 
-        *
-        * @description
-        * 
-        * Este metodo se lo usa en el momento que un usuario hace click en una materia y carge las notas de esa materia
-        * 
-        * 
-        */ 
-
+         * @ngdoc method
+         * @name getMateriasYLogros
+         * @methodOf docentes.controller:estudiantes_notasController 
+         * @param {Object} materia materia es un objecto donde contiene todos los datos de una materia
+         * 
+         *
+         * @description
+         * 
+         * Este metodo se lo usa en el momento que un usuario hace click en una materia y carge las notas de esa materia
+         * 
+         * 
+         */
         var getMateriasYLogros = function(materia) {
             $scope.materiaSeleccionada = materia;
             console.log($scope.materiaSeleccionada)
             console.log($scope.periodoSeleccionado)
-
             getNotasYLogros($scope.materiaSeleccionada, $scope.periodoSeleccionado);
         };
-
         /** 
-        * @ngdoc method
-        * @name getLogros
-        * @methodOf docentes.controller:estudiantes_notasController 
-        * @param {Int} id_materia id_materia es un entero unico que identifica una materia en la base de datos
-        * @param {Int} id_periodo id_periodo es un entero unico que identifica un periodo en la base de datos
-        * @param {Function} cb cb es el callback donde se pasaran un vector que contiene los logros que se consulten 
-        *
-        *
-        * @description
-        * 
-        * Este metodo se lo usa para hacer la consulta de los logros de un periodo y de una materia
-        * 
-        * 
-        */ 
+         * @ngdoc method
+         * @name getLogros
+         * @methodOf docentes.controller:estudiantes_notasController 
+         * @param {Int} id_materia id_materia es un entero unico que identifica una materia en la base de datos
+         * @param {Int} id_periodo id_periodo es un entero unico que identifica un periodo en la base de datos
+         * @param {Function} cb cb es el callback donde se pasaran un vector que contiene los logros que se consulten 
+         *
+         *
+         * @description
+         * 
+         * Este metodo se lo usa para hacer la consulta de los logros de un periodo y de una materia
+         * 
+         * 
+         */
         function getLogros(id_materia, id_periodo, cb) {
             logroData.findLogrosByMateriaAndPeriodo(id_materia, id_periodo).success(function(logros) {
                 cb(logros);
@@ -156,22 +138,21 @@
                 cb([]);
             });
         }
-
         /** 
-        * @ngdoc method
-        * @name getNotas
-        * @methodOf docentes.controller:estudiantes_notasController 
-        * @param {Int} id_materia id_materia es un entero unico que identifica una materia en la base de datos
-        * @param {Int} id_periodo id_periodo es un entero unico que identifica un periodo en la base de datos
-        * @param {Function} cb cb es el callback donde se pasaran un vector que contiene las notas que se consulten 
-        *
-        *
-        * @description
-        * 
-        * Este metodo se lo usa para hacer la consulta de las notas de un periodo y de una materia
-        * 
-        * 
-        */ 
+         * @ngdoc method
+         * @name getNotas
+         * @methodOf docentes.controller:estudiantes_notasController 
+         * @param {Int} id_materia id_materia es un entero unico que identifica una materia en la base de datos
+         * @param {Int} id_periodo id_periodo es un entero unico que identifica un periodo en la base de datos
+         * @param {Function} cb cb es el callback donde se pasaran un vector que contiene las notas que se consulten 
+         *
+         *
+         * @description
+         * 
+         * Este metodo se lo usa para hacer la consulta de las notas de un periodo y de una materia
+         * 
+         * 
+         */
         function getNotas(id_materia, id_periodo, cb) {
             nota_logroData.findNotasLogrosByMateriaAndPeriodo(id_materia, id_periodo).success(function(notas) {
                 cb(notas);
@@ -181,7 +162,6 @@
                 cb({});
             });
         }
-
         /** 
         * @ngdoc method
         * @name getActividades
@@ -205,23 +185,21 @@
                 cb([]);
             });
         }
-        */ 
-
+        */
         /** 
-        * @ngdoc method
-        * @name getActividadesByLogros
-        * @methodOf docentes.controller:estudiantes_notasController 
-        * @param {Array} logros logros es un vector que contiene Objetos tipos logro 
-        * @param {Function} cb cb es el callback donde se pasaran un vector que contiene las actividades que se consulten 
-        *
-        *
-        * @description
-        * 
-        * Este metodo se lo usa para hacer la consulta de las actividades de los logros que se pasen en el vector
-        * 
-        * 
-        */ 
-
+         * @ngdoc method
+         * @name getActividadesByLogros
+         * @methodOf docentes.controller:estudiantes_notasController 
+         * @param {Array} logros logros es un vector que contiene Objetos tipos logro 
+         * @param {Function} cb cb es el callback donde se pasaran un vector que contiene las actividades que se consulten 
+         *
+         *
+         * @description
+         * 
+         * Este metodo se lo usa para hacer la consulta de las actividades de los logros que se pasen en el vector
+         * 
+         * 
+         */
         function getActividadesByLogros(logros, cb) {
             console.log(JSON.stringify(logros));
             actividadData.findActividadesByLogros(logros).success(function(actividades) {
@@ -234,21 +212,20 @@
                 cb([]);
             });
         }
-
         /** 
-        * @ngdoc method
-        * @name getNotasActividades
-        * @methodOf docentes.controller:estudiantes_notasController 
-        * @param {Function} cb cb es el callback donde se pasaran un vector que contiene las notas de las actividades que se consulten 
-        *
-        *
-        * @description
-        * 
-        * Este metodo se lo usa para hacer la consulta de las notas de las actividades de el estudiante que esta logeado
-        * 
-        * 
-        */ 
-        function getNotasActividades(id_materia,cb) {
+         * @ngdoc method
+         * @name getNotasActividades
+         * @methodOf docentes.controller:estudiantes_notasController 
+         * @param {Function} cb cb es el callback donde se pasaran un vector que contiene las notas de las actividades que se consulten 
+         *
+         *
+         * @description
+         * 
+         * Este metodo se lo usa para hacer la consulta de las notas de las actividades de el estudiante que esta logeado
+         * 
+         * 
+         */
+        function getNotasActividades(id_materia, cb) {
             nota_actividadData.findNotasActividadByEstudianteAndLogro(id_materia).success(function(notas) {
                 cb(notas);
                 //$scope.logros = logros;
@@ -257,19 +234,18 @@
                 cb({});
             });
         }
-
         /** 
-        * @ngdoc method
-        * @name calcularNotaFinal
-        * @methodOf docentes.controller:estudiantes_notasController 
-        *
-        *
-        * @description
-        * 
-        * Este metodo se lo usa para calcular la nota final de los logros que esten en el vector logros 
-        * 
-        * 
-        */ 
+         * @ngdoc method
+         * @name calcularNotaFinal
+         * @methodOf docentes.controller:estudiantes_notasController 
+         *
+         *
+         * @description
+         * 
+         * Este metodo se lo usa para calcular la nota final de los logros que esten en el vector logros 
+         * 
+         * 
+         */
         function calcularNotaFinal() {
             var promedio = 0;
             $scope.logros.forEach(function(logro, i) {
@@ -285,20 +261,19 @@
             })
             $scope.notaFinal = Math.round(promedio * 100) / 100;
         }
-
         /** 
-        * @ngdoc method
-        * @name showActividad
-        * @methodOf docentes.controller:estudiantes_notasController 
-        * @param {Object} actividad actividad es un objecto donde contiene todos los datos de una actividad
-        *
-        *
-        * @description
-        * 
-        * Este metodo se lo usa para abrir la ventana modal y muestre una actividad en la ventana modal
-        * 
-        * 
-        */ 
+         * @ngdoc method
+         * @name showActividad
+         * @methodOf docentes.controller:estudiantes_notasController 
+         * @param {Object} actividad actividad es un objecto donde contiene todos los datos de una actividad
+         *
+         *
+         * @description
+         * 
+         * Este metodo se lo usa para abrir la ventana modal y muestre una actividad en la ventana modal
+         * 
+         * 
+         */
         $scope.showActividad = function(actividad) {
             var modalInstance = null;
             modalInstance = $uibModal.open({
@@ -314,102 +289,84 @@
                 }
             });
         }
-
         /** 
-        * @ngdoc method
-        * @name getNotasYLogros
-        * @methodOf docentes.controller:estudiantes_notasController 
-        * @param {Object} materia materia es un objecto donde contiene todos los datos de una materia
-        * @param {Object} periodo periodo es un objecto donde contiene todos los datos de una periodo
-        *
-        *
-        * @description
-        * 
-        * Este metodo se lo usa para consultar los logros, actividades, notas de un respectiva materia en un periodo
-        * 
-        * 
-        */
+         * @ngdoc method
+         * @name getNotasYLogros
+         * @methodOf docentes.controller:estudiantes_notasController 
+         * @param {Object} materia materia es un objecto donde contiene todos los datos de una materia
+         * @param {Object} periodo periodo es un objecto donde contiene todos los datos de una periodo
+         *
+         *
+         * @description
+         * 
+         * Este metodo se lo usa para consultar los logros, actividades, notas de un respectiva materia en un periodo
+         * 
+         * 
+         */
         function getNotasYLogros(materia, periodo) {
-            
             $scope.materiaSeleccionada = materia;
             $scope.logros = [];
             $scope.notas = {};
             $scope.notasactividades = {};
-            if(materia != null || materia != undefined){
+            if (materia != null || materia != undefined) {
                 myutils.showWait();
                 console.log(materia)
                 getLogros(materia.id_materia, periodo.id_periodo, function(logros) {
-               // getNotas(materia.id_materia, periodo.id_periodo, function(notas) {
-                   // $scope.notas = notas;
+                    // getNotas(materia.id_materia, periodo.id_periodo, function(notas) {
+                    // $scope.notas = notas;
                     $scope.logros = logros;
                     console.log('notas')
                     console.log($scope.notas);
                     getActividadesByLogros(logros, function(actividades) {
-                        getNotasActividades(materia.id_materia,function(notasactividades) {
-
+                        getNotasActividades(materia.id_materia, function(notasactividades) {
                             $scope.notasactividades = notasactividades;
                             console.log(notasactividades)
-
                             //recorre logros
                             $scope.logros.forEach(function(logro, index) {
-                                   
-                                    //saqueme las actividades que pertenecen a este logro
-                                    selected = $filter('filter')(actividades, {
-                                        id_logro: logro.id_logro
+                                //saqueme las actividades que pertenecen a este logro
+                                selected = $filter('filter')(actividades, {
+                                    id_logro: logro.id_logro
+                                });
+                                //asignnele esas actividades a el logro
+                                $scope.logros[index].actividades = selected;
+                                var suma = 0;
+                                //recorrame esas actividades
+                                $scope.logros[index].actividades.forEach(function(actividad, j) {
+                                    var porcentaje = parseFloat(actividad.porcentaje_actividad);
+                                    var nota = 0;
+                                    //filtre en notas actividades solamente la nota de esa actividad
+                                    selectedna = $filter('filter')($scope.notasactividades, {
+                                        id_actividad: actividad.id_actividad
                                     });
-
-                                    //asignnele esas actividades a el logro
-                                    $scope.logros[index].actividades = selected;
-                                    var suma = 0;
-
-                                    //recorrame esas actividades
-                                    $scope.logros[index].actividades.forEach(function(actividad, j) {
-                                        
-                                        var porcentaje = parseFloat(actividad.porcentaje_actividad); 
-                                        var nota = 0;
-
-
-
-                                        //filtre en notas actividades solamente la nota de esa actividad
-                                        selectedna = $filter('filter')($scope.notasactividades, {
-                                            id_actividad: actividad.id_actividad
-                                        });
+                                    console.log(selectedna)
+                                    if (typeof selectedna === 'undefined' || selectedna.length == 0) {
+                                        $scope.logros[index].actividades[j].nota = '-'
+                                    } else {
                                         console.log(selectedna)
-                                        if (typeof selectedna === 'undefined' || selectedna.length == 0) {
-                                            $scope.logros[index].actividades[j].nota = '-'
-                                        } else {
-                                            console.log(selectedna)
-                                            $scope.logros[index].actividades[j].nota = selectedna[0].nota_actividad;
-                                            nota = parseFloat(selectedna[0].nota_actividad);
-
-                                        }
-
-                                        var valor = (nota * porcentaje)/100;
-                                        suma = valor + suma;
-                                    }); //cierra foreach actividades
-                                    suma = Math.round(suma * 100) / 100;
-                                    
-                                 /*   if (typeof $scope.notas[$scope.logros[index].id_logro] === 'undefined') {
-                                        $scope.logros[index].nota = ' - ';
-                                    } else {*/
-                                        $scope.logros[index].nota = suma;
-                                    //}
-                                }) //cierra foreach logros
+                                        $scope.logros[index].actividades[j].nota = selectedna[0].nota_actividad;
+                                        nota = parseFloat(selectedna[0].nota_actividad);
+                                    }
+                                    var valor = (nota * porcentaje) / 100;
+                                    suma = valor + suma;
+                                }); //cierra foreach actividades
+                                suma = Math.round(suma * 100) / 100;
+                                /*   if (typeof $scope.notas[$scope.logros[index].id_logro] === 'undefined') {
+                                       $scope.logros[index].nota = ' - ';
+                                   } else {*/
+                                $scope.logros[index].nota = suma;
+                                //}
+                            }) //cierra foreach logros
                             calcularNotaFinal();
                             myutils.hideWait();
-
                         }); //cierrra getnotasActividades
                     }); //cierra getActividadesByLogros
                     console.log("cierra for y scope logros")
                     console.log($scope.logros)
-             //   }); //cierra getNotas
-                
-            }); //Cierra getLogros
+                    //   }); //cierra getNotas
+                }); //Cierra getLogros
             }
-            
         } //cierra getNotasYLogros
-
-        $scope.getPeriodoId  = getPeriodoId;
+        $scope.getPeriodoId = getPeriodoId;
         $scope.getMateriasYLogros = getMateriasYLogros;
     }]);
 })();
@@ -421,4 +378,3 @@ function delNull(item) {
         return item;
     }
 }
-

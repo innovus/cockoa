@@ -53,16 +53,11 @@ var autorizacion= function(req,res,next){
   console.log(process.env.ARGUS);
   //var ip= codificarIp("190.157.30.117");
    var ip= codificarIp(req.ip);
-   console.log("si entro a autorizacion")
-
-
-  console.log("ip")
-  console.log(ip);
   ip = ip.replace('..ffff.','');
-  console.log(ip)
+
   if (req.headers.authorization && req.headers.authorization.search('Bearer ') === 0) {
       var token = req.headers.authorization.split(' ')[1];
-      console.log(token)
+    
       var data= {
         token: token,
         ip:ip
@@ -78,13 +73,10 @@ var autorizacion= function(req,res,next){
                 Respuesta.sendJsonResponse(res,500,{"error":"existe un error en la autenticacion de la sesion"});
             }
             else if(httpResponse.statusCode==200){
-              console.log("entro a 200")
 
                 return next();
             }
             else{
-              console.log("entro aqui")
-
                 Respuesta.sendJsonResponse(res,500,body);
             }
         }
@@ -96,8 +88,7 @@ var autorizacion= function(req,res,next){
 };
 
 function getTokenData(token){
-  console.log("token")
-  console.log(token)
+
 
    console.log(process.env.TOKENINFO); 
    var deferred= Q.defer();
@@ -117,8 +108,6 @@ function getTokenData(token){
               deferred.reject(err);
           }
           else if(httpResponse.statusCode==200){
-              console.log("respuestaaaaa:");
-              console.log(body)
   
               deferred.resolve(JSON.parse(body));
           } 

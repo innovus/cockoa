@@ -6,7 +6,7 @@
      * @restrict EA
      * @description
      * 
-     * Esta es una directiva en para la abrra superior de los docentes
+     * Esta es una directiva para ubicar la barra superior de los docentes
      * 
     */
     angular.module('docentes').directive('navbar', navbar);
