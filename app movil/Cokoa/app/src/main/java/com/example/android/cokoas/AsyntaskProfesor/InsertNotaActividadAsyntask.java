@@ -1,10 +1,12 @@
 package com.example.android.cokoas.AsyntaskProfesor;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 
 import com.example.android.cokoas.AppConstants.AppConstants;
@@ -25,15 +27,31 @@ import java.net.URL;
 /**
  * Created by ASUS on 10/08/2016.
  */
-public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
+public class InsertNotaActividadAsyntask extends AsyncTask<String, Void, String> {
     SessionManager sessionManager;
     private Activity activity;
+    ProgressDialog progressDialog;
     String serverUrls = AppConstants.serverUrl;
     private final String LOG_TAG = InsertNotaActividadAsyntask.class.getSimpleName();
+
     public InsertNotaActividadAsyntask(Activity activity) {
         super();
         this.activity = activity;
     }
+
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setGravity(Gravity.CENTER);
+        progressDialog.show();
+    }
+
     @Override
     protected String doInBackground(String... params) {
         sessionManager = new SessionManager(activity.getApplication());
@@ -48,7 +66,7 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
         try {
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("id_actividad",params[0]);
+            jsonParam.put("id_actividad", params[0]);
             jsonParam.put("nota_actividad", params[1]);//id_estudiante
             jsonParam.put("id_estudiante", params[2]);
             jsonArray.put(jsonParam);
@@ -129,12 +147,13 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
                     Log.e(LOG_TAG, "Error ", e);
                 }
             }
-        } try {
+        }
+        try {
             /*int statuss = 0;
             statuss = urlConnection.getResponseCode();
             return Integer.toString(statuss);*/
             return getStatuss(forecastJsonStr);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -142,8 +161,8 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
         return null;
     }
 
-    public static String getStatuss(String statussJson)throws JSONException{
-        if(statussJson!=null){
+    public static String getStatuss(String statussJson) throws JSONException {
+        if (statussJson != null) {
 
             String s = "1";
             JSONObject jsonObject = new JSONObject(statussJson);
@@ -157,8 +176,9 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        if(s!=null){
-            if(s.equals("0")){
+        if (s != null) {
+            if (s.equals("0")) {
+                progressDialog.dismiss();
                 Snackbar.make(activity.findViewById(android.R.id.content), "Se ingreso correctamente la calificación", Snackbar.LENGTH_LONG)
                         .setAction("", new View.OnClickListener() {
                             @Override
@@ -167,7 +187,8 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
                         })
                         .setActionTextColor(Color.YELLOW)
                         .show();
-            }else {
+            } else {
+                progressDialog.dismiss();
                 Snackbar.make(activity.findViewById(android.R.id.content), "No se ingreso la calificación", Snackbar.LENGTH_LONG)
                         .setAction("", new View.OnClickListener() {
                             @Override
@@ -177,7 +198,8 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
                         .setActionTextColor(Color.YELLOW)
                         .show();
             }
-        }else {
+        } else {
+            progressDialog.dismiss();
             Snackbar.make(activity.findViewById(android.R.id.content), "No se ingreso la calificación", Snackbar.LENGTH_LONG)
                     .setAction("", new View.OnClickListener() {
                         @Override
@@ -187,7 +209,7 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String,Void,String> {
                     .setActionTextColor(Color.YELLOW)
                     .show();
         }
-
+        progressDialog.dismiss();
 
     }
 }

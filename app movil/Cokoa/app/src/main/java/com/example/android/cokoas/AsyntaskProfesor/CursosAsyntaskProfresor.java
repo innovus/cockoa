@@ -1,14 +1,18 @@
 package com.example.android.cokoas.AsyntaskProfesor;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.ExpandableListView;
 
-import com.example.android.cokoas.AdaptersProfesor.CusosProfesorAdapters;
+import com.example.android.cokoas.AdaptersProfesor.CalificacionesExpandableListViewAdapter;
 import com.example.android.cokoas.AppConstants.AppConstants;
+import com.example.android.cokoas.ModelsProfesor.CursoProfesor;
 import com.example.android.cokoas.ModelsProfesor.CursosProfesor;
+import com.example.android.cokoas.ModelsProfesor.MateriaProfesor;
 import com.example.android.cokoas.R;
 import com.example.android.cokoas.SessionManager.SessionManager;
 
@@ -31,6 +35,9 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    ProgressDialog progressDialog;
+    private ExpandableListView expandableListView;
+    private CalificacionesExpandableListViewAdapter calificacionesExpandableListViewAdapter;
     SessionManager sessionManager;
     String serverUrls = AppConstants.serverUrl;
     private final String LOG_TAG = CursosAsyntaskProfresor.class.getSimpleName();
@@ -41,6 +48,18 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
     public CursosAsyntaskProfresor(Activity activity) {
         super();
         this.activity = activity;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setGravity(Gravity.CENTER);
+        progressDialog.show();
     }
 
 
@@ -141,7 +160,7 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
     @Override
     protected void onPostExecute(ArrayList<CursosProfesor> cursosProfesors) {
         if(cursosProfesors!=null){
-            ArrayList arrayList = new ArrayList();
+           /* ArrayList arrayList = new ArrayList();
             arrayList = cursosProfesors;
             Log.v("revisar json ", "Revisar erro" + cursosProfesors);
             Log.v("revisar json ", "Revisar error" + arrayList.size());
@@ -152,8 +171,49 @@ public class CursosAsyntaskProfresor extends AsyncTask<Void, Void, ArrayList<Cur
                 mLayoutManager = new LinearLayoutManager(activity);
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mAdapter = new CusosProfesorAdapters(cursosProfesors, activity);
-                mRecyclerView.setAdapter(mAdapter);
+                mRecyclerView.setAdapter(mAdapter);*/
+            expandableListView = (ExpandableListView) activity.findViewById(R.id.expandableListView2);
+            MateriaGroup(cursosProfesors);
+            progressDialog.dismiss();
         }
+        progressDialog.dismiss();
+    }
+
+    private void MateriaGroup(ArrayList<CursosProfesor> cursosProfesorss){
+
+
+        ArrayList<MateriaProfesor> materiaProfesors = new ArrayList<MateriaProfesor>();
+        ArrayList<CursoProfesor> cursoProfesors;
+        String nombreMAteria = " ";
+        for (int i = 0;i<cursosProfesorss.size();i++){
+            MateriaProfesor materiaProfesor = new MateriaProfesor();
+
+            if(!cursosProfesorss.get(i).getNombreMateria().equals(nombreMAteria)){
+                nombreMAteria=cursosProfesorss.get(i).getNombreMateria();
+                materiaProfesor.setNombreMateria(cursosProfesorss.get(i).getNombreMateria());
+                cursoProfesors = new ArrayList<CursoProfesor>();
+
+                for (int i1 = 0;i1<cursosProfesorss.size();i1++){
+                    if(nombreMAteria.equals(cursosProfesorss.get(i1).getNombreMateria())){
+                        CursoProfesor cursoProfesor = new CursoProfesor();
+                        cursoProfesor.setIdCcurso(cursosProfesorss.get(i1).getId_Curso());
+                        cursoProfesor.setIdCargaProfesor(cursosProfesorss.get(i1).getIdCargaDocente());
+                        cursoProfesor.setGrado(cursosProfesorss.get(i1).getGrado());
+                        cursoProfesor.setCurso(cursosProfesorss.get(i1).getCurso());
+                        cursoProfesor.setNombreMateria(cursosProfesorss.get(i1).getNombreMateria());
+                        cursoProfesors.add(cursoProfesor);
+                    }
+
+                }
+                materiaProfesor.setCursoProfesors(cursoProfesors);
+                materiaProfesors.add(materiaProfesor);
+
+            }
+
+        }
+        calificacionesExpandableListViewAdapter = new CalificacionesExpandableListViewAdapter(activity,materiaProfesors);
+        expandableListView.setAdapter(calificacionesExpandableListViewAdapter);
+
     }
 
     public ArrayList<CursosProfesor> getCursosMateriaProfesor(String ArrayListCursoProfesores) throws JSONException {

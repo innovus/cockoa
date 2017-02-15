@@ -120,7 +120,7 @@ public class NotasActividadAsyntask extends AsyncTask<String,Void,ArrayList<Nota
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
             //http://localhost:3000/estudiantes/materias/notalogro/1-200
-            URL url = new URL(serverUrls + "estudiantes/logros/"+idLogro+"/actividades");
+            URL url = new URL(serverUrls + "estudiantes/logros/"+idLogro+"/actividades");// "estudiantes/logro/"+idLogro+"/notas/actividad/");
             //Crear el request para el liceo, abre una conexión
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

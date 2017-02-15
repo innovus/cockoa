@@ -7,7 +7,7 @@ public class AppConstants {
     static String ipUdenar = "190.254.4.19";
     static String ipAutentic = "190.254.4.19:4006/loginmovil";
     static String ipDarInfoUsuario = "190.254.4.19:4006/darinfousuario";
-    static String ipHome = "90.1.1.151";
+    static String ipHome = "192.168.1.6";
     static String url = "campus.udenar.edu.co";
     public static final String serverUrls = "http://"+ipHome+":3001/";//autentificacion
     public static final String serverLoginMovil = "http://190.254.4.19:4006/";

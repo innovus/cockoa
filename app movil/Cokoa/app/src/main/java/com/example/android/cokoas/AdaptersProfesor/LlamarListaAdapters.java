@@ -61,8 +61,7 @@ public class LlamarListaAdapters extends RecyclerView.Adapter<LlamarListaAdapter
             grado = (TextView) itemView.findViewById(R.id.id_text_grado_materia_profesor);
 
 
-//            img.setImageResource(R.drawable.ic_book_black_24dp);
-            //img.setImageResource(R.drawable.my_image);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

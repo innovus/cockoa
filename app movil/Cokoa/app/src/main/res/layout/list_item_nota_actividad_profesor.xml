@@ -61,17 +61,23 @@
             android:layout_height="match_parent">
 
 
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                card_view:cardBackgroundColor="#4597c3"
+                card_view:cardCornerRadius="3dp">
             <TextView
                 android:gravity="center"
-                android:background="?android:attr/selectableItemBackground"
                 android:text="Calificar"
+                android:textColor="#ffffff"
+                android:layout_margin="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorAccent" />
 
+
+</android.support.v7.widget.CardView>
 
 
         </LinearLayout>

@@ -1,10 +1,12 @@
 package com.example.android.cokoas.AsyntaskProfesor;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 
 import com.example.android.cokoas.AdaptersProfesor.InsertarInasistenciaAdapters;
 import com.example.android.cokoas.AppConstants.AppConstants;
@@ -32,6 +34,7 @@ public class ListaInasistenciaAsyntask extends AsyncTask<String,Void,ArrayList<E
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SessionManager sessionManager;
+    ProgressDialog progressDialog;
     String serverUrls = AppConstants.serverUrl;
     private final String LOG_TAG = ListaInasistenciaAsyntask.class.getSimpleName();
 
@@ -41,6 +44,18 @@ public class ListaInasistenciaAsyntask extends AsyncTask<String,Void,ArrayList<E
     public ListaInasistenciaAsyntask(Activity activity) {
         super();
         this.activity = activity;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setGravity(Gravity.CENTER);
+        progressDialog.show();
     }
 
     @Override
@@ -247,7 +262,9 @@ public class ListaInasistenciaAsyntask extends AsyncTask<String,Void,ArrayList<E
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mAdapter = new InsertarInasistenciaAdapters(estudianteCursos, activity);
                 mRecyclerView.setAdapter(mAdapter);
+            progressDialog.dismiss();
         }
+        progressDialog.dismiss();
     }
 
     public ArrayList<EstudianteCurso> getEstudianteCursoProfesor(String ArrayListEstudianteCurso) throws JSONException {

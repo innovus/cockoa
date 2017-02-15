@@ -1,10 +1,12 @@
 package com.example.android.cokoas.AsyntaskProfesor;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 
 import com.example.android.cokoas.AdaptersProfesor.EstudianteCursoAdapters;
 import com.example.android.cokoas.AppConstants.AppConstants;
@@ -33,6 +35,7 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SessionManager sessionManager;
+    ProgressDialog progressDialog;
     String serverUrls = AppConstants.serverUrl;
     private final String LOG_TAG = EstudianteNotaActividadProfesorAsyntask.class.getSimpleName();
     private Activity activity;
@@ -40,6 +43,18 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
     public EstudianteNotaActividadProfesorAsyntask(Activity activity) {
         super();
         this.activity = activity;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setGravity(Gravity.CENTER);
+        progressDialog.show();
     }
 
     @Override
@@ -346,6 +361,7 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
     protected void onPostExecute(ArrayList<EstudianteCurso> estudianteCursos) {
         super.onPostExecute(estudianteCursos);
         if(estudianteCursos!=null){
+
              mRecyclerView = (RecyclerView) activity.findViewById(R.id.recycler_estudiantes_actividad_logro_materia_profesor);
                 mRecyclerView.setHasFixedSize(true);
                 //usR UN ADMINISTRADOR PARA LINEARLAYOUT
@@ -353,6 +369,8 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mAdapter = new EstudianteCursoAdapters(estudianteCursos, activity);
                 mRecyclerView.setAdapter(mAdapter);
+            progressDialog.dismiss();
         }
+        progressDialog.dismiss();
     }
 }

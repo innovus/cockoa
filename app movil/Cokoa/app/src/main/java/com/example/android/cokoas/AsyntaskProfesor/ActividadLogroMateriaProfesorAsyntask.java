@@ -1,12 +1,14 @@
 package com.example.android.cokoas.AsyntaskProfesor;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 
 import com.example.android.cokoas.AdaptersProfesor.ActividadLogroMateriaProfesorAdapter;
@@ -35,6 +37,7 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<String, Voi
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     SessionManager sessionManager;
+    ProgressDialog progressDialog;
     String serverUrls = AppConstants.serverUrl;
     private final String LOG_TAG = ActividadLogroMateriaProfesorAsyntask.class.getSimpleName();
     private Activity activity;
@@ -42,6 +45,18 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<String, Voi
     public ActividadLogroMateriaProfesorAsyntask(Activity activity) {
         super();
         this.activity = activity;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setGravity(Gravity.CENTER);
+        progressDialog.show();
     }
 
     @Override
@@ -171,8 +186,6 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<String, Voi
         super.onPostExecute(actividadLogroProfesors);
         if(actividadLogroProfesors!=null){
 
-            Log.v("tokenSessionManager", "cantidad de actividades" + actividadLogroProfesors.size());
-
             if(actividadLogroProfesors.size()>0){
                 mRecyclerView = (RecyclerView) activity.findViewById(R.id.recycler_actividad_logro_materia_profesor);
                 mRecyclerView.setHasFixedSize(true);
@@ -181,7 +194,9 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<String, Voi
                 mRecyclerView.setLayoutManager(mLayoutManager);//LogroMateriaProfesorAdapter
                 mAdapter = new ActividadLogroMateriaProfesorAdapter(actividadLogroProfesors, activity);
                 mRecyclerView.setAdapter(mAdapter);
+                progressDialog.dismiss();
             }else{
+                progressDialog.dismiss();
                 Snackbar.make(activity.findViewById(android.R.id.content), "Aun no asigna actividades a este logro", Snackbar.LENGTH_LONG)
                         .setAction("", new View.OnClickListener() {
                             @Override
@@ -204,6 +219,8 @@ public class ActividadLogroMateriaProfesorAsyntask extends AsyncTask<String, Voi
                     })
                     .setActionTextColor(Color.YELLOW)
                     .show();
+            progressDialog.dismiss();
         }
+        progressDialog.dismiss();
     }
 }
