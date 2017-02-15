@@ -516,10 +516,10 @@ function getNotasActividadbyLogro(req, res) {
         //solamente si el rol es de un estudiante
         if(decoded.rol == 7){
             EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
-                console.log(estudiante[0].id_estudiante)
+                console.log(estudiante[0].id_estudiante);
 
                        Nota_actividadDao.findNotaActividadLogrobyEstudiante(estudiante[0].id_estudiante, req.params.id_logro).then(function(data) {
-        console.log("la fucnion salio bn" + data)
+        console.log("la fucnion salio bnNNNN");
         if ((data.length <= 0) || (!data)) {
             return Respuesta.status(400).json({});
         } else {
