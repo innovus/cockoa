@@ -213,7 +213,6 @@ function addInasistencias (req,res){
 
                 //encuentra el toquen de cada estudiante
                 DispositivoDao.findTokenByEstudiantes(notificaciones).then(function(tokens){
-                    console.log("succes by token by");
                     var registrations_ids=[];
                     console.log(tokens);
 

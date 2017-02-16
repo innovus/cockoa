@@ -341,7 +341,6 @@ function insertNota(req, res) {
 
                     //encuentra el toquen de cada estudiante
                     DispositivoDao.findTokenByEstudiantes(notificaciones).then(function(tokens){
-                        
 
                         if((tokens.length!=0)||(tokens)){
                             var json = null;
@@ -349,10 +348,13 @@ function insertNota(req, res) {
 
                             //recorre el body para sacar el id de cada estudiante
                             req.body.forEach(function(nota,index){
+                                 var mensajeNotificacion = 'Se ha ingresado una nueva nota de ' + nota.nota_actividad + ' en ' + nombre_materia[0].nombre_materia;
+               
 
                                 ////hace un filtro x id de estudiante para sacar los token
                                 var tokensByEstudiante = tokens.filter(function(token){
-                                    return (token.id_estudiante == id_estudiante );
+
+                                    return (token.id_estudiante == nota.id_estudiante );
                                 });
                                 //valido q el studiante tenga token
                                 if((tokensByEstudiante.length!=0)||(tokensByEstudiante)){
