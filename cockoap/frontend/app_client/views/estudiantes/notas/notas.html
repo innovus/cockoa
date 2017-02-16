@@ -96,19 +96,23 @@
                                                     <td>
                                                         <md-card-title>
                                                             <md-card-title-text>
-                                                                <span class="md-headline">
+                                                                <!--<span class="md-headline">
                                                                     Logro {{ $index + 1 }}
                                                                 </span>
+                                                                -->
                                                                 <span class="md-subhead">
-                                                                    {{ logro.porcentaje_logro }} %
+                                                                   {{ $index + 1 }}. {{ logro.descripcion_logro }} ({{ logro.porcentaje_logro }} %)
                                                                 </span>
                                                             </md-card-title-text>
                                                         </md-card-title>
+                                                        <!--
                                                         <md-card-content>
                                                             <p>
-                                                                {{ logro.descripcion_logro }}
+
+                                                                
                                                             </p>
                                                         </md-card-content>
+                                                        -->
                                                     </td>
                                                     <th style="vertical-align: inherit;">
                                                         <table class="table  table-bordered col-md-4 abajo">

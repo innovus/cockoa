@@ -193,40 +193,42 @@ function getCantidadInasistenciasCarga(req,res){
 
 //funcion que recibe un arreglo de inasistencias y las agrega en la base de datos
 function addInasistencias (req,res){
-    console.log("body add inasistencias")
-    console.log(req.body)
-    InasistenciaDao.addInasistencias(req.body)
-    .then(function(){
-        
+    //agrega inasistencias
+    InasistenciaDao.addInasistencias(req.body).then(function(){
+
+        //encuentra la materia de la q vamos a agregar la inasistencia
         MateriaDao.findMateriaByCargaDocente(req.body[0].id_carga).then(function(nombre_materia){
             var notificaciones = [];
-            var fecha = new Date(req.body[0].fecha_inasistencia)
+            var fecha = new Date(req.body[0].fecha_inasistencia);
             var mensajeNotificacion = 'Se agrego una nueva inasistencia el dia  '+fecha.toLocaleDateString() + ' en ' +nombre_materia[0].nombre_materia;
 
-        //recorremos inasistencias para crear el arreglo de notificaciones por cada inassistencia agregada
-        req.body.forEach(function(inasistencia,index){
-            var notificacion = {'id_tipo_notificacion':1,'mensaje_notificacion':mensajeNotificacion,'id_estudiante':inasistencia.id_estudiante,'guia':inasistencia.id_carga,'nombre_materia':nombre_materia[0].nombre_materia};
-            notificaciones.push(notificacion);
-        });
-        console.log("notificaciones")
-        console.log(notificaciones);
-         NotificacionDao.insertarNotificaciones(notificaciones)
-         .then(function(data){
+            //recorremos inasistencias para crear el arreglo de notificaciones por cada inassistencia agregada
+            req.body.forEach(function(inasistencia,index){
+                var notificacion = {'id_tipo_notificacion':1,'mensaje_notificacion':mensajeNotificacion,'id_estudiante':inasistencia.id_estudiante,'guia':inasistencia.id_carga,'nombre_materia':nombre_materia[0].nombre_materia};
+                notificaciones.push(notificacion);
+            });
 
+            // inserta las notificaciones
+            NotificacionDao.insertarNotificaciones(notificaciones).then(function(data){
 
-            DispositivoDao.findTokenByEstudiantes(notificaciones)   
-                .then(function(tokens){
-                    console.log("succes by token by")
+                //encuentra el toquen de cada estudiante
+                DispositivoDao.findTokenByEstudiantes(notificaciones).then(function(tokens){
+                    console.log("succes by token by");
                     var registrations_ids=[];
-                    console.log(tokens)
+                    console.log(tokens);
 
+                    //s
                     if((tokens.length!=0)||(tokens)){
                         var json = null;
                         
+                        //recorre tokens y los ahreha a el vector de registration_ids
                         tokens.forEach(function(token,index){
                             registrations_ids.push(token.token_dispositivo);
                         });
-                        var json = { "registration_ids": registrations_ids,
+
+                        //crea el json para enviar la notificacion
+                        var json = {
+                            "registration_ids": registrations_ids,
                             "notification":{
                                 "title":"Inasistencia",
                                 "body":mensajeNotificacion,
@@ -239,55 +241,51 @@ function addInasistencias (req,res){
                                 "tipo":"1",
                                 "nombre_materia": nombre_materia[0].nombre_materia
                             }
-                        }
-                    var options = {
-                    uri: 'https://fcm.googleapis.com/fcm/send',
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "key=AIzaSyDdDo5XLcuuJyQh_crrOdXjYSfYDbsnogU"
-                    },
-                    json: json
-                };
-                console.log(options)
-                request(options, function (error, response, body) {
-                    console.log("entro al request")
-                    //console.log(response)
-                    console.log(body)
-                    console.log(error)
-                    /*if (!error && response.statusCode == 200) {
-                        console.log(body.id) // Print the shortened url.
-                    }*/
-                });
-                }
+                        };
+                        var options = {
+                            uri: 'https://fcm.googleapis.com/fcm/send',
+                            method: 'POST',
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": "key=AIzaSyDdDo5XLcuuJyQh_crrOdXjYSfYDbsnogU"
+                            },
+                            json: json
+                        };
+                        console.log(options);
+                        request(options, function (error, response, body) {
+                            console.log("entro al request");
+                            //console.log(response)
+                            console.log(body);
+                            console.log(error);
+                            /*if (!error && response.statusCode == 200) {
+                             console.log(body.id) // Print the shortened url.
+                            }*/
+                        });
+                    }// cierra if
+                //cathc findTokenByEstudiantes
                 }).catch(function(error){
-                    console.log("error token by sttudiantes")
+                    console.log("error token by sttudiantes");
                     console.log(error);
-                })
+                });
+            //catch insertarNotificaciones
+            }).catch(function(error){
+                console.log("error notificacion");
+                console.log(error);
+            });
 
+            //manda la respuesta
+            respuesta.sendJsonResponse(res,200,{'mensaje':'Inasistencias insertada'});
 
-                
-                console.log("se envio notificacion")
-
-            console.log("se envio notificacion")
-
-        }).catch(function(error){
-            console.log("error notificacion")
-            console.log(error)
-        })
-
-        //manda la respuesta
-        respuesta.sendJsonResponse(res,200,{'mensaje':'Inasistencias insertada'});
-
+        //catch findMateriaByCargaDocente    
         }).catch(function(error) {
-            console.log(error)
+            console.log(error);
             Respuesta.sendJsonResponse(res, 500, {
                 'status': 1,
                 'msg': error
             });
         });
 
-
+    // catch addInasistencias
     }).catch(function(error){
         respuesta.sendJsonResponse(res,500,[]);
         console.log("Error" , error.message || error);

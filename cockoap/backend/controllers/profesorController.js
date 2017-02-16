@@ -315,92 +315,117 @@ function insertNota(req, res) {
             })
         })
     } else if (req.params.table == "actividades") {
+
+        //inserta las notas
         Nota_actividadDao.insertNotasActividades(req.body).then(function() {
 
             //se consume este para saber la materia a la que pertenece la nota
             MateriaDao.findMateriaByActividad(req.body[0].id_actividad).then(function(nombre_materia){
-                console.log(nombre_materia)
-                var mensajeNotificacion = 'Se ha ingresado una nueva nota de ' + req.body[0].nota_actividad + ' en ' + nombre_materia[0].nombre_materia;
-            var notificacion = {
-                'id_tipo_notificacion': 2,
-                'mensaje_notificacion': mensajeNotificacion,
-                'id_estudiante': req.body[0].id_estudiante,
-                'guia': req.body[0].id_actividad,
-                'nombre_materia': nombre_materia[0].nombre_materia,
-            }
-            console.log(notificacion)
-            NotificacionDao.insertarNotificacion(notificacion).then(function(data) {
-                console.log("exito notificacion insert")
-                DispositivoDao.findTokenByEstudiante(req.body[0].id_estudiante).then(function(tokens) {
-                    var registrations_ids = [];
-                    console.log(tokens)
-                    if ((tokens.length != 0) || (tokens)) {
-                        var json = null;
-                        tokens.forEach(function(token, index) {
-                            registrations_ids.push(token.token_dispositivo);
-                        });
-                        var json = {
-                            "registration_ids": registrations_ids,
-                            "notification": {
-                                "title": "Nueva Nota",
-                                "body": mensajeNotificacion,
-                                "icon" : "ic_border_color_white_24dp",
-                                "sound" : "defaull",
-                                "click_action":"OPEN_ACTIVITY_1"
-                            },
-                            "data": {
-                                "guia": req.body[0].id_actividad,
-                                "tipo": "2",
-                                "nombre_materia": nombre_materia[0].nombre_materia
-                            }
-                        }
-                        var options = {
-                            uri: 'https://fcm.googleapis.com/fcm/send',
-                            method: 'POST',
-                            headers: {
-                                "Content-Type": "application/json",
-                                "Authorization": "key=AIzaSyDdDo5XLcuuJyQh_crrOdXjYSfYDbsnogU"
-                            },
-                            json: json
-                        };
-                        console.log(options)
-                        request(options, function(error, response, body) {
-                            //console.log(response)
-                            console.log(body)
-                            console.log(error)
-                                /*if (!error && response.statusCode == 200) {
-                                    console.log(body.id) // Print the shortened url.
-                                }*/
-                        });
-                    }
+                var notificaciones = [];
+
+                req.body.forEach(function(nota,index){
+                     var mensajeNotificacion = 'Se ha ingresado una nueva nota de ' + nota.nota_actividad + ' en ' + nombre_materia[0].nombre_materia;
+               
+                    var notificacion = {
+                        'id_tipo_notificacion':2,
+                        'mensaje_notificacion':mensajeNotificacion,
+                        'id_estudiante':nota.id_estudiante,
+                        'guia':nota.id_actividad,
+                        'nombre_materia':nombre_materia[0].nombre_materia
+                    };
+                    notificaciones.push(notificacion);
+                });  
+
+                // inserta las notificaciones
+                NotificacionDao.insertarNotificaciones(notificaciones).then(function(data){
+
+                    //encuentra el toquen de cada estudiante
+                    DispositivoDao.findTokenByEstudiantes(notificaciones).then(function(tokens){
+                        
+
+                        if((tokens.length!=0)||(tokens)){
+                            var json = null;
+                            var registrations_ids = [];
+
+                            //recorre el body para sacar el id de cada estudiante
+                            req.body.forEach(function(nota,index){
+
+                                ////hace un filtro x id de estudiante para sacar los token
+                                var tokensByEstudiante = tokens.filter(function(token){
+                                    return (token.id_estudiante == id_estudiante );
+                                });
+                                //valido q el studiante tenga token
+                                if((tokensByEstudiante.length!=0)||(tokensByEstudiante)){
+                                    //recorro los tokens d ese estudiante
+                                    tokensByEstudiante.forEach(function(token, i) {
+                                        registrations_ids.push(token.token_dispositivo);
+                                    });
+                                    var json = {
+                                        "registration_ids": registrations_ids,
+                                        "notification": {
+                                            "title": "Nueva Nota",
+                                            "body": mensajeNotificacion,
+                                            "icon" : "ic_border_color_white_24dp",
+                                            "sound" : "defaull",
+                                            "click_action":"OPEN_ACTIVITY_1"
+                                        },
+                                        "data": {
+                                            "guia": req.body[0].id_actividad,
+                                            "tipo": "2",
+                                            "nombre_materia": nombre_materia[0].nombre_materia
+                                        }
+                                    }
+                                    var options = {
+                                        uri: 'https://fcm.googleapis.com/fcm/send',
+                                        method: 'POST',
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                            "Authorization": "key=AIzaSyDdDo5XLcuuJyQh_crrOdXjYSfYDbsnogU"
+                                        },
+                                        json: json
+                                    };
+
+                                    request(options, function(error, response, body) {
+                                        console.log(body)
+                                        console.log(error)
+                                    });
+
+                                }//cierra el if
+
+                            }); //cierra el for recorrer el body 
+                            
+                        }//cierra el if
+
+                    }).catch(function(error) {
+                        console.log(error);
+                    });
+
+
                 }).catch(function(error) {
-                    console.log(error);
-                })
-                console.log("se envio notificacion")
+                    console.log("error notificacion")
+                    console.log(error)
+                });
+
+                Respuesta.sendJsonResponse(res, 200, {
+                    'status': 0,
+                    'msg': 'Todos los ingresos correctos'
+                });
             }).catch(function(error) {
-                console.log("error notificacion")
                 console.log(error)
-            })
-            Respuesta.sendJsonResponse(res, 200, {
-                'status': 0,
-                'msg': 'Todos los ingresos correctos'
-            })
-        }).catch(function(error) {
+                Respuesta.sendJsonResponse(res, 500, {
+                    'status': 1,
+                    'msg': error
+                });
+            });
+        }).catch(function(error){
             console.log(error)
             Respuesta.sendJsonResponse(res, 500, {
                 'status': 1,
                 'msg': error
             });
         });
-    }).catch(function(error){
-        console.log(error)
-        Respuesta.sendJsonResponse(res, 500, {
-                'status': 1,
-                'msg': error
-            });
-    });
 
-    }
+    }//cierra else
 }
 
 function updateNota(req, res) {

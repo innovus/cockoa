@@ -421,6 +421,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
         if (sumatoria != 100) {
             console.log("sumatoria")
             console.log(sumatoria);
+            swal("Oops...", "El porcentaje debe ser 100%", "error");
         } else {
             console.log("eliminados")
             console.log($scope.logrosPorEliminar)
