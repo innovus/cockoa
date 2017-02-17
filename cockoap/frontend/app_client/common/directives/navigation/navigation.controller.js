@@ -22,11 +22,12 @@
                return bandera;
             };*/
 
-     $scope.currentPath= $location.path();
+        $rootScope.ruta = null;
+        $scope.currentPath= $location.path();
         $scope.isLoggedIn= false;
         $scope.currentUser=null;
         $scope.rutaInicio=CONFIG.http_seguridad;
-        $scope.opciones=null;
+        $rootScope.opciones=null;
 
 
         var init= function(){
@@ -43,7 +44,8 @@
                     console.log("rutas")
                     console.log(data)
                          $log.debug(data);
-                         $scope.opciones=data;
+                         $rootScope.opciones=data;
+                         
                     }).error(function(error){
                          console.log(error);
                          $log.debug(error);   

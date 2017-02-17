@@ -57,7 +57,7 @@
                     </ul>
                 </li>
                 <li ng-repeat="opcion in opciones">
-                    <a href="{{ opcion.ruta }}">
+                    <a  id="{{opcion.seleccionado}}" href="{{ opcion.ruta }}">
                         {{ opcion.nombre_opcion }}
                     </a>
                 </li>

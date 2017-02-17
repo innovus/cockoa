@@ -11,7 +11,7 @@ app.run(function(editableOptions) {
  * Esta es una controllador que maneja la vista principal de el crud de logros de un docente
  * 
  */
-app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookieStore', '$cookies', 'CONFIG', 'periodoData', 'actividadData', 'logroData', '$mdBottomSheet', '$mdToast', '$timeout', '$filter', 'myutils', function($scope, $http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter, myutils) {
+app.controller('crudLogrosController', ['$rootScope','$scope', '$http', '$uibModal', '$cookieStore', '$cookies', 'CONFIG', 'periodoData', 'actividadData', 'logroData', '$mdBottomSheet', '$mdToast', '$timeout', '$filter', 'myutils', function($rootScope,$scope, $http, $uibModal, $cookieStore, $cookies, CONFIG, periodoData, actividadData, logroData, $mdBottomSheet, $mdToast, $timeout, $filter, myutils) {
     $scope.periodos = [];
     $scope.periodoSeleccionado = null;
     $scope.activeTabIndex = 0;
@@ -25,6 +25,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
     };
     $scope.logrosPorEliminar = [];
     $scope.isPorcentajeCien = true;
+    
     //Trae el periodo Actual
     //periodoData.findPeriodoActual()
     //$http.get(CONFIG.http_address+'/api/todos/periodos/actual')
@@ -36,6 +37,7 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
             $scope.periodos = data;
             console.log("succes findPeriodos")
             console.log($scope.periodos)
+            console.log($rootScope.opciones);
             //recorre el vector de todos los periodos 
             for (var i = 0; i < data.length; i++) {
                 //entra cuando el periodo actual es encontrado en el vector
@@ -52,6 +54,19 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
                         $scope.cargas = data;
                         //recorremos las cargas para organizarlas para el acordeon del sliderbar por materias
                         angular.forEach(data, function(carga) {
+                            
+                            console.log($rootScope.opciones);
+
+                            ruta = $filter('filter')($rootScope.opciones, {
+                                id_opcion: 34
+                            });
+                            console.log(ruta)
+                            var indexRuta = $rootScope.opciones.indexOf(ruta[0]);
+                            $rootScope.opciones[indexRuta].seleccionado = "seleccionado";
+                            console.log($rootScope.opciones)
+
+
+
                             var selected = [];
                             //primero validamos si el id de la materia ya esta en materias
                             filtro = $filter('filter')($scope.materias, {
@@ -68,16 +83,21 @@ app.controller('crudLogrosController', ['$scope', '$http', '$uibModal', '$cookie
                                     'cargas': selected
                                 })
                             }
+
                         }) //cierra forEach
+                        //manejamos las rutas
+                            
                     }).error(function(data) {
                         console.log('Error: ' + data);
                     });
                 } //cierra el if
+
             } //cierra for
         }).error(function(error) {
             console.log(error);
             $scope.periodos = []
         }); //cierra error findPeriodos
+
     }).error(function(error) {
         console.log("entro al error del controller")
         console.log(error);

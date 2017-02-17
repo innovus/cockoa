@@ -13,7 +13,7 @@
     //definimos el primer controlador, le pasamos el nombre
     //del controlador y le pasamos una function javascript
     //Agregamos el objecto pokemon asociado al controlador
-    app.controller('inasistenciaEstudianteController', ['$rootScope', '$scope', '$http', '$cookieStore', 'materiaData', 'inasistenciaData', 'myutils', function($rootScope, $scope, $http, $cookieStore, materiaData, inasistenciaData, myutils) {
+    app.controller('inasistenciaEstudianteController', ['$rootScope', '$scope', '$http', '$cookieStore', 'materiaData', 'inasistenciaData', 'myutils','$filter', function($rootScope, $scope, $http, $cookieStore, materiaData, inasistenciaData, myutils,$filter) {
         $scope.materia_seleccionada = null;
         $scope.inasistencias = null;
         console.log("notificacion")
@@ -85,6 +85,31 @@
         materiaData.findMateriasWithInasistenciaByEstudiante().success(function(data) {
             $scope.materias = data;
             console.log($scope.materias)
+
+
+            //metodo q usamos para cambiar el color de la ruta done nos
+            $rootScope.$watch("opciones",function(newValue,oldValue) {
+                if (newValue===oldValue) {
+                    $rootScope.opciones.forEach(function(opcion, i) {
+                
+                        if(opcion.id_opcion == 35){
+                            opcion.seleccionado ="seleccionado";
+                        }else{
+                            opcion.seleccionado ="no";
+                        }
+                    });
+                    return ;
+                }
+                $rootScope.opciones.forEach(function(opcion, i) {
+                
+                    if(opcion.id_opcion == 35){
+                        opcion.seleccionado ="seleccionado";
+                    }else{
+                        opcion.seleccionado ="no";
+                    }
+                });  
+            });
+            
         }).error(function(data) {
             console.log('Error: ' + data);
         });

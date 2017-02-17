@@ -347,21 +347,34 @@ function insertNota(req, res) {
                             var registrations_ids = [];
 
                             //recorre el body para sacar el id de cada estudiante
+                            var h = 0;
                             req.body.forEach(function(nota,index){
+                                var registrations_ids = [];
                                  var mensajeNotificacion = 'Se ha ingresado una nueva nota de ' + nota.nota_actividad + ' en ' + nombre_materia[0].nombre_materia;
-               
+                                 console.log("recorriendo el body mensaje notifi")
+                                 console.log(mensajeNotificacion);
 
                                 ////hace un filtro x id de estudiante para sacar los token
                                 var tokensByEstudiante = tokens.filter(function(token){
-
+                                    console.log("metodo")
+                                    console.log(token.id_estudiante);
+                                    console.log(nota.id_estudiante);
                                     return (token.id_estudiante == nota.id_estudiante );
                                 });
+                                
                                 //valido q el studiante tenga token
-                                if((tokensByEstudiante.length!=0)||(tokensByEstudiante)){
+                                if(tokensByEstudiante.length!=0){
+                                    h++;
+                                    console.log(h)
+
+                                    console.log("tokenByEtudiante");
+                                    console.log(tokensByEstudiante)
                                     //recorro los tokens d ese estudiante
                                     tokensByEstudiante.forEach(function(token, i) {
                                         registrations_ids.push(token.token_dispositivo);
                                     });
+                                    console.log("registrations_ids")
+                                    console.log(registrations_ids)
                                     var json = {
                                         "registration_ids": registrations_ids,
                                         "notification": {
@@ -377,6 +390,8 @@ function insertNota(req, res) {
                                             "nombre_materia": nombre_materia[0].nombre_materia
                                         }
                                     }
+                                    console.log("json")
+                                    console.log(json)
                                     var options = {
                                         uri: 'https://fcm.googleapis.com/fcm/send',
                                         method: 'POST',

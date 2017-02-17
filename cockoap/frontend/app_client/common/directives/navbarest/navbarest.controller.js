@@ -13,6 +13,7 @@
 
     function navbarestCtrl($rootScope, $scope, $location, notificacionData, $filter, $window, autenticacion, $cookieStore, $log, CONFIG) {
         console.log("hizo algo")
+        $rootScope.ruta = null;
         $scope.notificaciones = [];
         $scope.cantidadNotificaciones = 0;
         $scope.notificacionesPendientes = [];
@@ -21,6 +22,7 @@
         $scope.currentUser = null;
         $scope.perfil = null;
         $scope.rutaInicio = CONFIG.http_seguridad;
+        $rootScope.opciones = null;
         $scope.opciones = null;
         cargarNotificaciones();
         var init = function() {
@@ -32,7 +34,9 @@
                     console.log("q pasa")
                     autenticacion.obtenerRutas().success(function(data) {
                         $log.debug(data);
+                        $rootScope.opciones = data;
                         $scope.opciones = data;
+
                     }).error(function(error) {
                         console.log(error);
                         $log.debug(error);
@@ -113,14 +117,15 @@
                 cargarNotificaciones();
             }
             if (notificacion.id_tipo_notificacion == 2) {
-                console.log(notificacion);
-                console.log("entro al if")
+               
                 $rootScope.notificacion = notificacion;
+                $rootScope.ruta = "notas";
                 $location.path('/estudiantes/notas');
             } else {
                 console.log(notificacion);
                 console.log("entro al else")
                 $rootScope.notificacion = notificacion;
+                $rootScope.ruta = "inasistencias";
                 $location.path('/estudiantes/inasistencias');
             }
         }

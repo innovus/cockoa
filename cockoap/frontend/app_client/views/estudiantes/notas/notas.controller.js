@@ -61,7 +61,35 @@
         });
         materiaData.findMateriasByEstudiante().success(function(data) {
             $scope.materias = data;
-            console.log($scope.materias);
+            console.log($rootScope.opciones);
+
+            $rootScope.$watch("opciones",function(newValue,oldValue) {
+                if (newValue===oldValue) {
+                    $rootScope.opciones.forEach(function(opcion, i) {
+                
+                        if(opcion.id_opcion == 34){
+                            opcion.seleccionado ="seleccionado";
+                        }else{
+                            opcion.seleccionado ="no";
+                        }
+                    });
+                    return ;
+                }
+                $rootScope.opciones.forEach(function(opcion, i) {
+                
+                    if(opcion.id_opcion == 34){
+                        opcion.seleccionado ="seleccionado";
+                    }else{
+                        opcion.seleccionado ="no";
+                    }
+                });  
+            });
+            
+   
+
+
+                          
+
         }).error(function(data) {
             console.log('Error: ' + data);
         });

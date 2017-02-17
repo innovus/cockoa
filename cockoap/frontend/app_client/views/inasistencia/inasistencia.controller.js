@@ -80,6 +80,7 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
                     });
                 } //cierra el if
             } //cierra for
+            
         }).error(function(error) {
             console.log(error);
             $scope.periodos = []
