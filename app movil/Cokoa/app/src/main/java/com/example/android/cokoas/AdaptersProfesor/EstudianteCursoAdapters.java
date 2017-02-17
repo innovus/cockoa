@@ -1,22 +1,17 @@
 package com.example.android.cokoas.AdaptersProfesor;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.graphics.Color;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,6 +42,7 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_estudiante_curso_profesor, viewGroup, false);
+
         return new ViewHolder(v);
     }
 
@@ -56,7 +52,7 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
         viewHolder.codigoEstudiante.setText(estudianteCursos.get(position).getCodigoEstudiante());
         viewHolder.nombreEstudiante.setText(estudianteCursos.get(position).getNombreEstudiante());
 
-        if(TextUtils.isEmpty(estudianteCursos.get(position).getNotaEstudiante())){
+        if (TextUtils.isEmpty(estudianteCursos.get(position).getNotaEstudiante())) {
             viewHolder.notaEstudiante.setHint("---");
         } else {
             viewHolder.notaEstudiante.setText(estudianteCursos.get(position).getNotaEstudiante());
@@ -69,7 +65,7 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
         viewHolder.estudianteCurso = estudianteCursos.get(position);
         viewHolder.cbSelect.setOnCheckedChangeListener(null);
         final int[] auc = {0};
-
+/*
         viewHolder.cbSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -88,13 +84,13 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
 
                                             Log.v("revisar json ", "postsf" + estudianteCursos.get(position).getIdActividad());
                                             sessionManager = new SessionManager(activity);
-                                            if(sessionManager.connectionCheck(activity)) {
-                                                new InsertNotaActividadAsyntask(activity).execute(estudianteCursos.get(position).getIdActividad(),viewHolder.notaEstudiante.getText().toString(), viewHolder.codigoEstudiante.getText().toString());
+                                            if (sessionManager.connectionCheck(activity)) {
+                                                new InsertNotaActividadAsyntask(activity).execute(estudianteCursos.get(position).getIdActividad(), viewHolder.notaEstudiante.getText().toString(), viewHolder.codigoEstudiante.getText().toString());
                                                 viewHolder.notaEstudiante.setFocusable(false);
                                                 viewHolder.notaEstudiante.setCursorVisible(false);
                                                 viewHolder.linearLayout.setVisibility(View.GONE);
                                                 viewHolder.cbSelect.setVisibility(View.GONE);
-                                            }else {
+                                            } else {
                                                 auc[0] = 1;
                                                 viewHolder.cbSelect
                                                         .setChecked(false);
@@ -131,7 +127,7 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
 
 
             }
-        });
+        });*/
 
         viewHolder.notaEstudiante.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         InputFilter[] FilterArray = new InputFilter[1];
@@ -152,19 +148,30 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
                     try {
                         float number = Float.parseFloat(added_number);
                         if (number >= 0 && number <= 5) {
-                            viewHolder.linearLayout.setVisibility(View.VISIBLE);
-                            viewHolder.cbSelect.setVisibility(View.VISIBLE);
-
+                          //  viewHolder.linearLayout.setVisibility(View.VISIBLE);
+                           // viewHolder.cbSelect.setVisibility(View.VISIBLE);
+                           // new InsertNotaActividadAsyntask(activity).execute(estudianteCursos.get(position).getIdActividad(), viewHolder.notaEstudiante.getText().toString(), viewHolder.codigoEstudiante.getText().toString());
+                            estudianteCursos.get(position).setNotaEstudiante(added_number);
+                            estudianteCursos.get(position).setNotaActividad(true);
                         } else {
                             viewHolder.notaEstudiante.setText("");
-                            viewHolder.linearLayout.setVisibility(View.GONE);
-                            viewHolder.cbSelect.setVisibility(View.GONE);
+                            estudianteCursos.get(position).setNotaEstudiante("");
+                            estudianteCursos.get(position).setNotaActividad(false);
+                          //  viewHolder.linearLayout.setVisibility(View.GONE);
+                           // viewHolder.cbSelect.setVisibility(View.GONE);
                             // Toast.makeText(getApplication(), "Not more than 5", Toast.LENGTH_SHORT).show();
                         }
                     } catch (NumberFormatException e) {
                         viewHolder.notaEstudiante.setText("");
+                        estudianteCursos.get(position).setNotaActividad(false);
                     }
+                }else {
+                   // viewHolder.notaEstudiante.setText("");
+                    estudianteCursos.get(position).setNotaEstudiante("");
+                    estudianteCursos.get(position).setNotaActividad(false);
                 }
+
+
             }
 
             @Override
@@ -173,6 +180,8 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
 
             }
         });
+
+
 
     }
 
@@ -183,6 +192,7 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView numeroLista, codigoEstudiante, nombreEstudiante;
+        final Button buttonAgregarNotaActividad ;
         EditText notaEstudiante;
         LinearLayout linearLayout;
         public CheckBox cbSelect;
@@ -196,7 +206,17 @@ public class EstudianteCursoAdapters extends RecyclerView.Adapter<EstudianteCurs
             notaEstudiante = (EditText) itemView.findViewById(R.id.edit_text_nota_estudiante);
             cbSelect = (CheckBox) itemView.findViewById(R.id.cbSelect);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.liner);
+            buttonAgregarNotaActividad = (Button) activity.findViewById(R.id.btnAgregarNotaActividad);
 
+            buttonAgregarNotaActividad.setVisibility(View.VISIBLE);
+            buttonAgregarNotaActividad.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final ArrayList<EstudianteCurso> estudianteCursosx = estudianteCursos;
+                    new InsertNotaActividadAsyntask(activity,estudianteCursosx.get(0).getIdActividad(),estudianteCursosx.get(0).getIdCurso(),estudianteCursosx.get(0).getIdCargaDocente()).execute(estudianteCursosx);
+
+                }
+            });
 
         }
 

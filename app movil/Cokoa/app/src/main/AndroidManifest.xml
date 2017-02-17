@@ -14,6 +14,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,13 +23,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.LogrosActivity"
             android:label="Logros"
             android:theme="@style/AppTheme" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.NotasActivity"
             android:label="Nota Actividad"
             android:theme="@style/AppTheme">
@@ -39,6 +43,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".Activities.InasistenciaMateriaActivity"
             android:label="Inasistencia"
             android:theme="@style/AppTheme">
@@ -48,14 +53,19 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityProfesor.EstudiantesCursoActivity" />
         <activity
+            android:screenOrientation="portrait"
+            android:name=".ActivityProfesor.EstudiantesCursoActivity" />
+        <activity
+            android:screenOrientation="portrait"
             android:name=".ActivityProfesor.LogrosMateriaEstudianteProfesorActivity"
             android:label="Logros" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ActivityProfesor.LlamarListaActivity"
             android:label="LLamar lista" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ActivityProfesor.InsertarNotaActividadActivity"
             android:label="Calificar actividad" />
 
@@ -78,7 +88,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Activities.LoginActivity"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".Activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">+</activity>
     </application>
 

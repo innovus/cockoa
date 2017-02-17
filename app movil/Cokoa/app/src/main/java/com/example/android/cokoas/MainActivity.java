@@ -1,6 +1,7 @@
 package com.example.android.cokoas;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -14,10 +15,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.android.cokoas.Activities.LoginActivity;
 import com.example.android.cokoas.Asyntask.EliminarTokenFirebaseAsyntask;
 import com.example.android.cokoas.Fragments.AsistenciaFragment;
 import com.example.android.cokoas.Fragments.CalificacionesFragment;
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return super.onOptionsItemSelected(item);
     }
-
+*/
 
 
     public AlertDialog createSimpleDialog() {
@@ -241,6 +242,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             sessionManager = new SessionManager(getApplication());
             sessionManager.logoutUser();
+            Intent intent = new Intent(this, LoginActivity.class);
+            this.startActivity(intent);
             finish();
 
         }

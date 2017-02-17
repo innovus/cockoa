@@ -261,6 +261,19 @@
 
         </LinearLayout>
 
+        <Button
+            android:layout_marginTop="14dp"
+            android:id="@+id/btnAgregarNotaActividad"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:background="#4597c3"
+            android:gravity="center"
+            android:padding="14dp"
+            android:textColor="#ffffff"
+            android:text="Agregar calificaciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     </LinearLayout>

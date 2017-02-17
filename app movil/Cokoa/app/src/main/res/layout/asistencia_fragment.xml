@@ -41,7 +41,7 @@
                         android:padding="20dp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="         Materiassss         "
+                        android:text="         Materias         "
                         android:textSize="18sp" />
                 </android.support.v7.widget.CardView>
             </LinearLayout>

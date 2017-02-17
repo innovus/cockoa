@@ -59,8 +59,8 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
 
     @Override
     protected ArrayList<EstudianteCurso> doInBackground(String... params) {
-        if(estudianteCursos(params[1])!=null){
-            ArrayList<EstudianteCurso> estudianteCursos = estudianteCursos(params[1]);
+        if(estudianteCursos(params[1],params[2])!=null){
+            ArrayList<EstudianteCurso> estudianteCursos = estudianteCursos(params[1],params[2]);
             if(notaActividadProfesors(params[2])!=null){
                 ArrayList<NotaActividadProfesor> notaActividadProfesors = notaActividadProfesors(params[2]);
                 for(int i=0;i<estudianteCursos.size();i++){
@@ -92,7 +92,7 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
        return null;
     }
 
-    public ArrayList<EstudianteCurso> estudianteCursos(String params){
+    public ArrayList<EstudianteCurso> estudianteCursos(String params,String idCargaDocente){
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -173,7 +173,7 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
             }
         }
         try {
-            return getEstudianteCursoProfesor(forecastJsonStr,params);
+            return getEstudianteCursoProfesor(forecastJsonStr,params,idCargaDocente);
             //return  null;
         } catch (JSONException e) {
             Log.e("error", e.getMessage(), e);
@@ -181,7 +181,7 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
         }
         return null;
     }
-    public ArrayList<EstudianteCurso> getEstudianteCursoProfesor(String ArrayListEstudianteCurso,String params) throws JSONException {
+    public ArrayList<EstudianteCurso> getEstudianteCursoProfesor(String ArrayListEstudianteCurso,String params,String idCargaDocente) throws JSONException {
         if (ArrayListEstudianteCurso != null) {
             // Ahora tenemos una cadena que representa todas las areas en formato JSON .
             // Afortunadamente análisis es fácil: constructor toma la cadena JSON y lo convierte
@@ -231,6 +231,8 @@ public class EstudianteNotaActividadProfesorAsyntask extends AsyncTask<String, V
 
                 String codigo = areas.getString("id_estudiante");
                 estudianteCurso.setCodigoEstudiante(codigo);
+                estudianteCurso.setIdCurso(params);
+                estudianteCurso.setIdCargaDocente(idCargaDocente);
 
                // estudianteCurso.setIdActividad(params);
 

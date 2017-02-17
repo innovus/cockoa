@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,7 @@ public class ActividadLogroMateriaProfesorAdapter extends RecyclerView.Adapter<A
                     panelInsertarNota.setVisibility(View.VISIBLE);
                     sessionManager = new SessionManager(activity);
                     if(sessionManager.connectionCheck(activity)) {
+                        Log.v("status", "EstudianteNotaActividadProfesorAsyntask: " + actividadLogroProfesor.getIdActividad().toString()+" "+actividadLogroProfesor.getIdCurso()+" "+actividadLogroProfesor.getIdCargaDocente());
                         new EstudianteNotaActividadProfesorAsyntask(activity).execute(actividadLogroProfesor.getIdActividad().toString(),actividadLogroProfesor.getIdCurso(),actividadLogroProfesor.getIdCargaDocente());
                     }else{
                         Snackbar.make(activity.findViewById(android.R.id.content), "Comprueba la conexión de red o inténtalo de nuevo más tarde", Snackbar.LENGTH_LONG)

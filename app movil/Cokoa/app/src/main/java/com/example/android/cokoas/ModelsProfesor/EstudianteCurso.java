@@ -14,6 +14,24 @@ public class EstudianteCurso {
     private String idActividad;
 
     private String idCargaDocente;
+    private boolean notaActividad;
+    private String idCurso;
+
+    public String getIdCurso() {
+        return idCurso;
+    }
+
+    public void setIdCurso(String idCurso) {
+        this.idCurso = idCurso;
+    }
+
+    public boolean isNotaActividad() {
+        return notaActividad;
+    }
+
+    public void setNotaActividad(boolean notaActividad) {
+        this.notaActividad = notaActividad;
+    }
 
     public String getIdCargaDocente() {
         return idCargaDocente;

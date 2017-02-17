@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.View;
 
 import com.example.android.cokoas.AppConstants.AppConstants;
+import com.example.android.cokoas.ModelsProfesor.EstudianteCurso;
 import com.example.android.cokoas.SessionManager.SessionManager;
 
 import org.json.JSONArray;
@@ -23,20 +24,25 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by ASUS on 10/08/2016.
  */
-public class InsertNotaActividadAsyntask extends AsyncTask<String, Void, String> {
+public class InsertNotaActividadAsyntask extends AsyncTask<ArrayList<EstudianteCurso>, Void, String> {
     SessionManager sessionManager;
     private Activity activity;
     ProgressDialog progressDialog;
+    private final String idActivida,idCurso,cargaDocente;
     String serverUrls = AppConstants.serverUrl;
     private final String LOG_TAG = InsertNotaActividadAsyntask.class.getSimpleName();
 
-    public InsertNotaActividadAsyntask(Activity activity) {
+    public InsertNotaActividadAsyntask(Activity activity,String idActivida,String idCurso,String cargaDocente) {
         super();
         this.activity = activity;
+        this.idActivida=idActivida;
+        this.idCurso=idCurso;
+        this.cargaDocente=cargaDocente;
     }
 
 
@@ -53,7 +59,10 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String, Void, String>
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected String doInBackground(ArrayList<EstudianteCurso>... params) {
+        ArrayList<EstudianteCurso> estudianteCursos = params[0];
+
+
         sessionManager = new SessionManager(activity.getApplication());
         // Estos dos deben ser declarados fuera de la try / catch
         // Fin de que puedan ser cerradas en el bloque finally .
@@ -64,12 +73,45 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String, Void, String>
         String forecastJsonStr = null;
 
         try {
+            /*for (int i = 0; i < estudianteCursos.size(); i++) {
+            EstudianteCurso estudianteCurso = estudianteCursos.get(i);
+            if (estudianteCurso.isInasistencia() == true) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+
+                    jsonObject.put("id_estudiante", Integer.parseInt(estudianteCurso.getCodigoEstudiante()));
+                    jsonObject.put("estado_inasistencia", 1);
+                    jsonObject.put("fecha_inasistencia", estudianteCurso.getFecha());
+                    jsonObject.put("id_carga", estudianteCurso.getIdCargaDocente());
+                    jsonArray.put(jsonObject);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }*/
+
+
             JSONArray jsonArray = new JSONArray();
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("id_actividad", params[0]);
+            for (int i = 0; i < estudianteCursos.size(); i++) {
+                EstudianteCurso estudianteCurso = estudianteCursos.get(i);
+                if (estudianteCurso.isNotaActividad() == true) {
+                    JSONObject jsonParam = new JSONObject();
+                    jsonParam.put("id_actividad", estudianteCurso.getIdActividad());
+                    jsonParam.put("nota_actividad", estudianteCurso.getNotaEstudiante());
+                    jsonParam.put("id_estudiante", estudianteCurso.getCodigoEstudiante());
+                    jsonArray.put(jsonParam);
+                }
+            }
+
+            Log.v("Arrait", "arregloNOtas" + jsonArray);
+
+           /* jsonParam.put("id_actividad", params[0]);
             jsonParam.put("nota_actividad", params[1]);//id_estudiante
             jsonParam.put("id_estudiante", params[2]);
-            jsonArray.put(jsonParam);
+            jsonArray.put(jsonParam);*/
 
             // Construir la dirección URL para el appi materias
             // Posibles parámetros están disponibles en la página de la API de materias del liceo.
@@ -187,6 +229,8 @@ public class InsertNotaActividadAsyntask extends AsyncTask<String, Void, String>
                         })
                         .setActionTextColor(Color.YELLOW)
                         .show();
+
+                new EstudianteNotaActividadProfesorAsyntask(activity).execute(idActivida,idCurso,cargaDocente);
             } else {
                 progressDialog.dismiss();
                 Snackbar.make(activity.findViewById(android.R.id.content), "No se ingreso la calificación", Snackbar.LENGTH_LONG)
