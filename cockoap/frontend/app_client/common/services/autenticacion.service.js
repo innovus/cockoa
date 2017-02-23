@@ -32,9 +32,9 @@
         var getToken = function() {
             //return $cookieStore.get("udenar");
             //profesor
-            //return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6IjNkYTQxZjZiNDJiMjJhYzc4MGFkNWQ3NDk1Y2E5NmY2IiwiaGFzaHIiOiJjMTg4ZDU0MjlkZTcwODBkMWRhY2Y1MTM2M2QxODc5YSIsImV4cCI6MTQ4NzgyMDc4OCwiaWF0IjoxNDg3MjE1OTg4fQ.59YQjedRTNu7F-XscqOwkM4D7UhPCoiUXtJlRbPzX1k";
+            //return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6IjNkYTQxZjZiNDJiMjJhYzc4MGFkNWQ3NDk1Y2E5NmY2IiwiaGFzaHIiOiJjMTg4ZDU0MjlkZTcwODBkMWRhY2Y1MTM2M2QxODc5YSIsImV4cCI6MTQ4ODQyNzAzOSwiaWF0IjoxNDg3ODIyMjM5fQ.meZI431WwnMzljL1sOKmvl8DkGDZ9OadpkiK85qHGCY";
             //estudiante
-           return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6ImRlNzM1NjI2N2JlNGI5N2EwYjZhMDBiYzdlNTk3ZDlmIiwiaGFzaHIiOiJmNDVkZjA4YjIyYzljMTlmNWZkYmY4ZjgxN2E1ZDJlOSIsImV4cCI6MTQ4Nzk2OTEwNCwiaWF0IjoxNDg3MzY0MzA0fQ.bgVafHiZ1ldQ_uvrfR0bmFCm938qVbbkI0TgmvH-qmU"
+           return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJoYXNoaSI6ImRlNzM1NjI2N2JlNGI5N2EwYjZhMDBiYzdlNTk3ZDlmIiwiaGFzaHIiOiJmNDVkZjA4YjIyYzljMTlmNWZkYmY4ZjgxN2E1ZDJlOSIsImV4cCI6MTQ4ODQ3MjM4NiwiaWF0IjoxNDg3ODY3NTg2fQ.f46kfJ-VQl97J8GFhSKqivpCFr_2GhWZoTiuMgqZmuk"
         };
         var getCookieToken = function() {
             return $cookieStore.get("udenar");
@@ -57,7 +57,11 @@
             });
         };
         var logout = function() {
-            return $http.post(CONFIG.http_seguridad + "/logout");
+            return $http.post(CONFIG.http_seguridad + "/logout", null, {
+                    headers: {
+                        Authorization: 'Bearer ' + getToken()
+                    }
+                });
         };
         var isLoggedIn = function(callback) {
             var token = getToken();

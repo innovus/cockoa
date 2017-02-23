@@ -52,21 +52,34 @@ app.controller('crudLogrosController', ['$rootScope','$scope', '$http', '$uibMod
                     //$http.get(CONFIG.http_address+'/api/docentes/cargas/periodos/'+ $scope.periodoSeleccionado.id_periodo)
                     periodoData.findCargasByPeriodo($scope.periodoSeleccionado.id_periodo).success(function(data) {
                         $scope.cargas = data;
+
+
+                        $rootScope.$watch("opciones",function(newValue,oldValue) {
+                            if (newValue===oldValue) {
+                                $rootScope.opciones.forEach(function(opcion, i) {
+                
+                                    if(opcion.id_opcion == 33){
+                                        opcion.seleccionado ="seleccionado";
+                                    }else{
+                                        opcion.seleccionado ="no";
+                                    }
+                                });
+                                return ;
+                            }
+                            $rootScope.opciones.forEach(function(opcion, i) {
+                
+                                if(opcion.id_opcion == 33){
+                                    opcion.seleccionado ="seleccionado";
+                                }else{
+                                    opcion.seleccionado ="no";
+                                }           
+                            });  
+                        });
+
+                        console.log(data);
                         //recorremos las cargas para organizarlas para el acordeon del sliderbar por materias
                         angular.forEach(data, function(carga) {
                             
-                            console.log($rootScope.opciones);
-
-                            ruta = $filter('filter')($rootScope.opciones, {
-                                id_opcion: 34
-                            });
-                            console.log(ruta)
-                            var indexRuta = $rootScope.opciones.indexOf(ruta[0]);
-                            $rootScope.opciones[indexRuta].seleccionado = "seleccionado";
-                            console.log($rootScope.opciones)
-
-
-
                             var selected = [];
                             //primero validamos si el id de la materia ya esta en materias
                             filtro = $filter('filter')($scope.materias, {

@@ -21,6 +21,8 @@ function getPeriodosDisponibles(req, res) {
     console.log(queri)
     db.many(queri)*/
     PeriodoDao.findPeriodosDisponibles(fecha_actual).then(function(data) {
+        console.log("perdiodos disponibles");
+        console.log(data)
         Respuesta.sendJsonResponse(res, 200, data);
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
@@ -79,6 +81,8 @@ function getPeriodoActual(req, res) {
     var fecha_actual = String(anio + "-" + mes + "-" + dia);
     console.log(fecha_actual)
     PeriodoDao.findPeriodoActual(fecha_actual).then(function(data) {
+        console.log("periodo actual")
+        console.log(data);
         Respuesta.sendJsonResponse(res, 200, data);
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {

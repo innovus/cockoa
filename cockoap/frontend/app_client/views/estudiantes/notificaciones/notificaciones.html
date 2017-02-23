@@ -65,14 +65,14 @@
                         </md-card-title-text>
                     </md-card-title>
                     <md-list class="md-dense" flex="">
-                        <md-list-item ng-class='{notificacionp: notificacion.estado_notificacion == "0" }' class="md-3-line" ng-repeat="notificacion in notificaciones" ng-click="clickNotificacion(notificacion)">
+                        <md-list-item ng-class='{notificacionp: notificacion.estado_notificacion == "0" }' class="md-3-line" ng-repeat="notificacionn in notificaciones" ng-click="clickNotificacion(notificacionn)">
                             <img ng-src="{{ item.face }}?{{ $index }}" class="md-avatar" alt="{{ item.who }}"/>
                             <div class="md-list-item-text" layout="column">
                                 <h4>
-                                    {{ notificacion.fecha_notificacion | date : format : shortDate }}
+                                    {{ notificacionn.fecha_notificacion | date : format : shortDate }}
                                 </h5>
                                 <p>
-                                    {{ notificacion.mensaje_notificacion }}
+                                    {{ notificacionn.mensaje_notificacion }}
                                 </p>
                             </div>
                             <md-divider>

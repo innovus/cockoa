@@ -10,7 +10,7 @@ var app = angular.module('docentes'); //creamos date modulo pokedex y le pasamos
  * Esta es una controllador que maneja la vista de inasistencia de un docente 
  * 
  */
-app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log', '$filter', 'CONFIG', 'periodoData', 'inasistenciaData', 'estudianteData', 'myutils', function($scope, $http, $uibModal, $log, $filter, CONFIG, periodoData, inasistenciaData, estudianteData, myutils) {
+app.controller('inasistenciaController', ['$rootScope','$scope', '$http', '$uibModal', '$log', '$filter', 'CONFIG', 'periodoData', 'inasistenciaData', 'estudianteData', 'myutils', function($rootScope,$scope, $http, $uibModal, $log, $filter, CONFIG, periodoData, inasistenciaData, estudianteData, myutils) {
     $scope.inasistenciasEstudiante = [];
     $scope.estudiantes = [];
     $scope.fechaInasistencia = new Date();
@@ -54,6 +54,29 @@ app.controller('inasistenciaController', ['$scope', '$http', '$uibModal', '$log'
                         $scope.cargas = data;
                         console.log("cargas")
                         console.log($scope.cargas)
+
+                        $rootScope.$watch("opciones",function(newValue,oldValue) {
+                            if (newValue===oldValue) {
+                                $rootScope.opciones.forEach(function(opcion, i) {
+                
+                                    if(opcion.id_opcion == 31){
+                                        opcion.seleccionado ="seleccionado";
+                                    }else{
+                                        opcion.seleccionado ="no";
+                                    }
+                                });
+                                return ;
+                            }
+                            $rootScope.opciones.forEach(function(opcion, i) {
+                
+                                if(opcion.id_opcion == 31){
+                                    opcion.seleccionado ="seleccionado";
+                                }else{
+                                    opcion.seleccionado ="no";
+                                }           
+                            });  
+                        });
+
                         //recorremos las cargas para organizarlas para el acordeon del sliderbar por materias
                         angular.forEach(data, function(carga) {
                             var selected = [];

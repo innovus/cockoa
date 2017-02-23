@@ -190,14 +190,23 @@ function getNotaLogrosMaterias(req, res) {
 function getMateriasEstudiante(req, res) {
 
 
+
     var token=req.headers.authorization.split(' ')[1];
     FuncionesSeguridad.getTokenData(token).then(function(decoded){
 
         //solamente si el rol es de un estudiante
         if(decoded.rol == 7){
+             var hoy = new Date();
+            var dia = hoy.getDate();
+            var mes = hoy.getMonth() +10;
+            var anio = hoy.getFullYear() -1;
+            var fecha_actual = String(anio + "-" + mes + "-" + dia);
+            console.log(fecha_actual);
+
             EstudianteDao.findEstudianteByIdUsuario(decoded.id).then(function(estudiante){
                 console.log(estudiante[0].id_estudiante)
-                MateriaDao.findMateriasByEstudiante(estudiante[0].id_estudiante).then(function(data) {
+                MateriaDao.findMateriasByEstudiante(fecha_actual,estudiante[0].id_estudiante).then(function(data) {
+                    console.log("la data de")
                     console.log(data)
                     Respuesta.sendJsonResponse(res, 200, data);
                     console.log("la fucnion salio bn" + data)

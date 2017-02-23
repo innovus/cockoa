@@ -66,7 +66,7 @@
                 } else {
                     console.log("no existe la cookie");
                 }
-                $window.location = "http://localhost:4000";
+                $window.location = "http://campus.udenar.edu.co:4006";
             }).error(function(data) {
                 alert("hubo un error en la cerrada  de la sesion");
             });
@@ -114,7 +114,7 @@
                 }).error(function(error) {
                     console.log(error);
                 });
-                cargarNotificaciones();
+                //cargarNotificaciones();
             }
             if (notificacion.id_tipo_notificacion == 2) {
                

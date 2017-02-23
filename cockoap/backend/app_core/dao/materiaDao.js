@@ -13,7 +13,7 @@ var queryFindMateriasByEstudiante = "SELECT id_materia, persona.nombre1,nombre2,
 	"WHERE id_estado_anio_lectivo = 1 and periodo.numero_periodo = "+
 	"(SELECT  count(numero_periodo) as numero_periodos FROM periodo "+
 		"NATURAL JOIN anio_lectivo  WHERE id_estado_anio_lectivo = 1 "+
-		"and fecha_inicio_periodo <= '7/10/2016') "+
+		"and fecha_inicio_periodo <= $fecha_actual) "+
     "AND estudiante.id_estudiante = $id_estudiante";
 
     var queryFindMateriaByActividad = "SELECT nombre_materia "+ 
@@ -60,8 +60,8 @@ var queries={
 	}
 };
 
-var findMateriasByEstudiante = function(id_estudiante){
-	return sequelize.query(queries.materia.findMateriasByEstudiante,{bind:{id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT})
+var findMateriasByEstudiante = function(fecha_actual,id_estudiante){
+	return sequelize.query(queries.materia.findMateriasByEstudiante,{bind:{fecha_actual:fecha_actual,id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT})
 };
 var findMateriasWithInasistenciaByEstudiante = function (id_estudiante){
 	return sequelize.query(queries.materia.findMateriasWithInasistenciaByEstudiante, {bind:{id_estudiante:id_estudiante},type:sequelize.QueryTypes.SELECT})

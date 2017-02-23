@@ -83,6 +83,7 @@ function getCursosMateriasPorPeriodo(req, res) {
     carga_docenteDao.findCursosMateriasByPeriodo(req.params.id_periodo, docente[0].id_docente).then(function(data) {
         Respuesta.sendJsonResponse(res, 200, data);
         console.log("la fucnion salio bn" + data)
+        console.log(data);
     }).catch(function(err) {
         if (err.message == 'No data returned from the query.') {
             Respuesta.sendJsonResponse(res, 200, []);

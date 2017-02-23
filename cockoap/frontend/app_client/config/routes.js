@@ -6,7 +6,6 @@
     config.$inject=['$routeProvider','$locationProvider'];
     function config($routeProvider, $locationProvider){
         $routeProvider
-        
         .when("/docentes/notas",{
             templateUrl: "/views/notas/notas.html",
             controller: "docentesNotasController"
@@ -38,12 +37,7 @@
             templateUrl: "/views/estudiantes/notificaciones/notificaciones.html",
             controller: "notificacionesController"
 
-        })
-
-        
-
-        
-        .otherwise({redirectTo:"/docentes/notas"});
+        });
 
         $locationProvider.html5Mode({
           enabled: true,
